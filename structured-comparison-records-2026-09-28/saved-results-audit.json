@@ -1,0 +1,11 @@
+{
+  "complete": true,
+  "trials_per_phase": 30,
+  "identical_request_payloads": true,
+  "accepted_checks_pass": true,
+  "raw_response_links_complete": true,
+  "comparison_links_complete": true,
+  "comparisons": 3,
+  "after_code_hashes_match": true,
+  "primary_database_sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025"
+}

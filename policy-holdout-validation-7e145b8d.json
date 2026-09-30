@@ -1,0 +1,1423 @@
+{
+  "model": "gemma4:e4b",
+  "source_text": "# Fictional laboratory policy fixture\n\nThis document is a synthetic evaluation source, not an operational policy.\n\n| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |\n\nVibration can exceed the warning threshold.\n",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "temperature": 0.2,
+  "planned": 12,
+  "cases": [
+    {
+      "seed": 11,
+      "name": "overdue",
+      "question": "What happens when calibration is overdue?",
+      "expected": "inspection_required",
+      "accepted": true,
+      "correct": true,
+      "result": {
+        "task_id": "721fb79a-1763-4398-a641-da448abcb4cb",
+        "question": "What happens when calibration is overdue?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "inspection_required",
+        "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+        "citation": {
+          "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3",
+          "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+          "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+          "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "inspection_required | Calibration is overdue "
+            },
+            "context_sha256": "7c9716cf00e748a5ac1e0d9173ffafe612d2160252b294dbfd523134b3669a9d",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 70,
+            "prompt_tokens": 302,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4513872375
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "inspection_required",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when calibration is overdue?",
+              "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+            },
+            "context_sha256": "878462072a405880d3e65890d366b89528ac70d85f36acf29e528bc98fad95f6",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 233,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1952942500
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "inspection_required",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "line": 5,
+              "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+              "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+              "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when calibration is overdue?",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "supported_answer",
+            "task_id": "721fb79a-1763-4398-a641-da448abcb4cb",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 11,
+      "name": "open_seal",
+      "question": "What happens when the seal is open?",
+      "expected": "locked",
+      "accepted": true,
+      "correct": true,
+      "result": {
+        "task_id": "f093763e-9bc6-40b0-a714-8ddfdc29b9e4",
+        "question": "What happens when the seal is open?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "locked",
+        "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+        "citation": {
+          "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3",
+          "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+          "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+          "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "locked",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "| locked | The seal is open |"
+            },
+            "context_sha256": "42e80313cbdde888662b3c48ec5acc37bd89099f96073ff9c13afe9e25aa32a7",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 68,
+            "prompt_tokens": 303,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4445145958
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "locked",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "locked",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when the seal is open?",
+              "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+            },
+            "context_sha256": "b8cad2038a315f56d6aa4fa3a61cded1dcb370850be26f5fe3d2fbcbfed4bb0d",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 13,
+            "prompt_tokens": 234,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1841703333
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "locked",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "line": 5,
+              "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+              "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+              "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when the seal is open?",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "supported_answer",
+            "task_id": "f093763e-9bc6-40b0-a714-8ddfdc29b9e4",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 11,
+      "name": "trigger_only",
+      "question": "What happens when vibration exceeds the warning threshold?",
+      "expected": null,
+      "accepted": false,
+      "correct": false,
+      "result": {
+        "task_id": "4b2eaa20-689f-4240-9460-a590d1488891",
+        "question": "What happens when vibration exceeds the warning threshold?",
+        "model": "gemma4:e4b",
+        "status": "unsupported_output",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:236",
+              "outcome": "not_found_in_source",
+              "quote": "Vibration can exceed the warning threshold."
+            },
+            "context_sha256": "be1db260944dada56d73774ba1ae831e0e971dfe7ed51e0dd7f29b2963d06de9",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 73,
+            "prompt_tokens": 283,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4578715709
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:236",
+            "outcome": "not_found_in_source",
+            "quote": "Vibration can exceed the warning threshold."
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when vibration exceeds the warning threshold?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "unsupported_output",
+            "task_id": "4b2eaa20-689f-4240-9460-a590d1488891",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 11,
+      "name": "missing_manufacturer",
+      "question": "Who manufactured the seal?",
+      "expected": null,
+      "accepted": false,
+      "correct": false,
+      "result": {
+        "task_id": "0e876253-eb50-4017-8d4e-0cb7ee3bb530",
+        "question": "Who manufactured the seal?",
+        "model": "gemma4:e4b",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": false,
+          "support_answer_anchored": false,
+          "answers_agree": false
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "The seal is open",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "locked | The seal is open"
+            },
+            "context_sha256": "d7052b1eea5290520acaf6ecbae7050972a693bf7abe1d9b2013c9cb922e54a3",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 70,
+            "prompt_tokens": 245,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4477589250
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "The seal is open",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "locked | The seal is open"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "outcome": "not_found_in_source"
+            },
+            "context": {
+              "question": "Who manufactured the seal?",
+              "quote": "locked | The seal is open"
+            },
+            "context_sha256": "329d20af2aeb8dd22933505a0b8ccf6d02f3be3d8d484bcf1759a7c0c4aea156",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 17,
+            "prompt_tokens": 152,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1741982000
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": false,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": false,
+            "support_answered": false
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "checks": {
+              "answers_agree": false,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": false,
+              "support_answered": false
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Who manufactured the seal?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "needs_review",
+            "task_id": "0e876253-eb50-4017-8d4e-0cb7ee3bb530",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 29,
+      "name": "overdue",
+      "question": "What happens when calibration is overdue?",
+      "expected": "inspection_required",
+      "accepted": true,
+      "correct": true,
+      "result": {
+        "task_id": "8c29c653-6caf-4052-8897-1c823d38f694",
+        "question": "What happens when calibration is overdue?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "inspection_required",
+        "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+        "citation": {
+          "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3",
+          "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+          "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+          "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "inspection_required | Calibration is overdue "
+            },
+            "context_sha256": "7c9716cf00e748a5ac1e0d9173ffafe612d2160252b294dbfd523134b3669a9d",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 70,
+            "prompt_tokens": 302,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4422972709
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "inspection_required",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when calibration is overdue?",
+              "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+            },
+            "context_sha256": "878462072a405880d3e65890d366b89528ac70d85f36acf29e528bc98fad95f6",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 233,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1954749125
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "inspection_required",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "line": 5,
+              "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+              "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+              "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when calibration is overdue?",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "supported_answer",
+            "task_id": "8c29c653-6caf-4052-8897-1c823d38f694",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 29,
+      "name": "open_seal",
+      "question": "What happens when the seal is open?",
+      "expected": "locked",
+      "accepted": true,
+      "correct": true,
+      "result": {
+        "task_id": "70244c17-2df0-410f-bfe5-745951778a7c",
+        "question": "What happens when the seal is open?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "locked",
+        "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+        "citation": {
+          "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3",
+          "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+          "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+          "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "locked",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "| locked | The seal is open |"
+            },
+            "context_sha256": "42e80313cbdde888662b3c48ec5acc37bd89099f96073ff9c13afe9e25aa32a7",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 68,
+            "prompt_tokens": 303,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4352594459
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "locked",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "locked",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when the seal is open?",
+              "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+            },
+            "context_sha256": "b8cad2038a315f56d6aa4fa3a61cded1dcb370850be26f5fe3d2fbcbfed4bb0d",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 13,
+            "prompt_tokens": 234,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1851584666
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "locked",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "line": 5,
+              "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+              "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+              "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when the seal is open?",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "supported_answer",
+            "task_id": "70244c17-2df0-410f-bfe5-745951778a7c",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 29,
+      "name": "trigger_only",
+      "question": "What happens when vibration exceeds the warning threshold?",
+      "expected": null,
+      "accepted": false,
+      "correct": false,
+      "result": {
+        "task_id": "44a2e727-aab8-46aa-8787-28f90aaca346",
+        "question": "What happens when vibration exceeds the warning threshold?",
+        "model": "gemma4:e4b",
+        "status": "unsupported_output",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:236",
+              "outcome": "not_found_in_source",
+              "quote": "Vibration can exceed the warning threshold."
+            },
+            "context_sha256": "be1db260944dada56d73774ba1ae831e0e971dfe7ed51e0dd7f29b2963d06de9",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 73,
+            "prompt_tokens": 283,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4563336167
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:236",
+            "outcome": "not_found_in_source",
+            "quote": "Vibration can exceed the warning threshold."
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when vibration exceeds the warning threshold?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "unsupported_output",
+            "task_id": "44a2e727-aab8-46aa-8787-28f90aaca346",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 29,
+      "name": "missing_manufacturer",
+      "question": "Who manufactured the seal?",
+      "expected": null,
+      "accepted": false,
+      "correct": false,
+      "result": {
+        "task_id": "acfadc9c-33fc-4672-80fd-4d4b3f8073e2",
+        "question": "Who manufactured the seal?",
+        "model": "gemma4:e4b",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": false,
+          "support_answer_anchored": false,
+          "answers_agree": false
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "The seal is open",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "locked | The seal is open"
+            },
+            "context_sha256": "d7052b1eea5290520acaf6ecbae7050972a693bf7abe1d9b2013c9cb922e54a3",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 70,
+            "prompt_tokens": 245,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 3795262833
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "The seal is open",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "locked | The seal is open"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "outcome": "not_found_in_source"
+            },
+            "context": {
+              "question": "Who manufactured the seal?",
+              "quote": "locked | The seal is open"
+            },
+            "context_sha256": "329d20af2aeb8dd22933505a0b8ccf6d02f3be3d8d484bcf1759a7c0c4aea156",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 17,
+            "prompt_tokens": 152,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1759215875
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": false,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": false,
+            "support_answered": false
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "checks": {
+              "answers_agree": false,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": false,
+              "support_answered": false
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Who manufactured the seal?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "needs_review",
+            "task_id": "acfadc9c-33fc-4672-80fd-4d4b3f8073e2",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 47,
+      "name": "overdue",
+      "question": "What happens when calibration is overdue?",
+      "expected": "inspection_required",
+      "accepted": true,
+      "correct": true,
+      "result": {
+        "task_id": "66f65a89-ef21-494f-bbee-65eeda9ac3c2",
+        "question": "What happens when calibration is overdue?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "inspection_required",
+        "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+        "citation": {
+          "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3",
+          "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+          "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+          "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "inspection_required | Calibration is overdue "
+            },
+            "context_sha256": "7c9716cf00e748a5ac1e0d9173ffafe612d2160252b294dbfd523134b3669a9d",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 70,
+            "prompt_tokens": 302,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4448551042
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "inspection_required",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when calibration is overdue?",
+              "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+            },
+            "context_sha256": "878462072a405880d3e65890d366b89528ac70d85f36acf29e528bc98fad95f6",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 233,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1935039750
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "inspection_required",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "line": 5,
+              "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+              "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+              "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when calibration is overdue?",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "supported_answer",
+            "task_id": "66f65a89-ef21-494f-bbee-65eeda9ac3c2",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 47,
+      "name": "open_seal",
+      "question": "What happens when the seal is open?",
+      "expected": "locked",
+      "accepted": true,
+      "correct": true,
+      "result": {
+        "task_id": "a9e9d1c3-2cb0-4b09-9495-7e0b1844899a",
+        "question": "What happens when the seal is open?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "locked",
+        "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+        "citation": {
+          "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3",
+          "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+          "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+          "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "locked",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "| locked | The seal is open |"
+            },
+            "context_sha256": "42e80313cbdde888662b3c48ec5acc37bd89099f96073ff9c13afe9e25aa32a7",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 68,
+            "prompt_tokens": 303,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4319858625
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "locked",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "locked",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when the seal is open?",
+              "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |"
+            },
+            "context_sha256": "b8cad2038a315f56d6aa4fa3a61cded1dcb370850be26f5fe3d2fbcbfed4bb0d",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 13,
+            "prompt_tokens": 234,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1860144334
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "locked",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "line": 5,
+              "path": "<workspace>/work/policy-holdout/7e145b8d-0be1-4537-9cc6-7263269dd4ba/policy.md",
+              "sha256": "8d0a903aa617cbbe87009d6babf71be9eb75b8ad92a41f77f3ceebc6f646a6c2",
+              "source_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when the seal is open?",
+            "quote": "| Resulting status | Trigger |\n|---|---|\n| inspection_required | Calibration is overdue |\n| locked | The seal is open |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "supported_answer",
+            "task_id": "a9e9d1c3-2cb0-4b09-9495-7e0b1844899a",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 47,
+      "name": "trigger_only",
+      "question": "What happens when vibration exceeds the warning threshold?",
+      "expected": null,
+      "accepted": false,
+      "correct": false,
+      "result": {
+        "task_id": "758f907b-2553-4d4e-b6b7-4676e703c52c",
+        "question": "What happens when vibration exceeds the warning threshold?",
+        "model": "gemma4:e4b",
+        "status": "unsupported_output",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:236",
+              "outcome": "not_found_in_source",
+              "quote": "Vibration can exceed the warning threshold."
+            },
+            "context_sha256": "be1db260944dada56d73774ba1ae831e0e971dfe7ed51e0dd7f29b2963d06de9",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 73,
+            "prompt_tokens": 283,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4622791250
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:236",
+            "outcome": "not_found_in_source",
+            "quote": "Vibration can exceed the warning threshold."
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when vibration exceeds the warning threshold?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "unsupported_output",
+            "task_id": "758f907b-2553-4d4e-b6b7-4676e703c52c",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 47,
+      "name": "missing_manufacturer",
+      "question": "Who manufactured the seal?",
+      "expected": null,
+      "accepted": false,
+      "correct": false,
+      "result": {
+        "task_id": "76ba1bcd-d0be-4a44-ba7e-383de1170791",
+        "question": "Who manufactured the seal?",
+        "model": "gemma4:e4b",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": false,
+          "support_answer_anchored": false,
+          "answers_agree": false
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "The seal is open",
+              "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+              "outcome": "answered",
+              "quote": "locked | The seal is open"
+            },
+            "context_sha256": "d7052b1eea5290520acaf6ecbae7050972a693bf7abe1d9b2013c9cb922e54a3",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 70,
+            "prompt_tokens": 245,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 3819559375
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "The seal is open",
+            "chunk_id": "f5f93652-e7d5-4f61-bb96-ee754b78ccd3:115",
+            "outcome": "answered",
+            "quote": "locked | The seal is open"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "outcome": "not_found_in_source"
+            },
+            "context": {
+              "question": "Who manufactured the seal?",
+              "quote": "locked | The seal is open"
+            },
+            "context_sha256": "329d20af2aeb8dd22933505a0b8ccf6d02f3be3d8d484bcf1759a7c0c4aea156",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 17,
+            "prompt_tokens": 152,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1742971375
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": false,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": false,
+            "support_answered": false
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "checks": {
+              "answers_agree": false,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": false,
+              "support_answered": false
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Who manufactured the seal?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "needs_review",
+            "task_id": "76ba1bcd-d0be-4a44-ba7e-383de1170791",
+            "temperature": 0.2
+          }
+        }
+      ]
+    }
+  ],
+  "status": "failed",
+  "metrics": {
+    "completed": 12,
+    "false_accepts": 0,
+    "false_rejects": 0,
+    "correct_accepts": 6,
+    "not_found_findings": 0,
+    "errors": 0
+  }
+}

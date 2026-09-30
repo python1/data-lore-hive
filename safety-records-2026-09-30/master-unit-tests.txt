@@ -1,0 +1,17 @@
+....................................................................................................................................................................<repo>/sync_agent.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b057c40>
+  def critical(error):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/sync_agent.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b186980>
+  def critical(error):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/sync_agent.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b1854e0>
+  def critical(error):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/sync_agent.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b1863e0>
+  def critical(error):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..................
+----------------------------------------------------------------------
+Ran 182 tests in 2.324s
+
+OK

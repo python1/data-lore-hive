@@ -1,0 +1,746 @@
+{
+  "table_source": {
+    "summary_source": "<agent-tmp>/a18e63d1-ba2e-4ad5-8c39-4db6c4aed19a/scratchpad/table-run/2adf1acc-8f64-43f4-9672-344933c38b09/summary.json",
+    "prior_record": "structured-table-validation-4a0208d6.json",
+    "total_wall_clock_s": 116.113,
+    "overall_peaks": {
+      "peak_tree_rss_mb": 63.9,
+      "peak_ollama_rss_mb": 8916.2,
+      "rss_samples": 445
+    },
+    "answers": [
+      {
+        "seed": 11,
+        "case": "review_policy",
+        "question": "What happens when the model calculation disagrees?",
+        "status": "supported_answer",
+        "answer": "needs_review",
+        "wall_clock_s": 27.913,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 841,
+        "tokens_out": 199,
+        "model_time_s": 27.612,
+        "peak_tree_rss_mb": 63.9,
+        "peak_ollama_rss_mb": 8916.2,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 841,
+        "prior_tokens_out": 199
+      },
+      {
+        "seed": 11,
+        "case": "replication_support",
+        "question": "Does this project support peer replication?",
+        "status": "supported_answer",
+        "answer": "It does not provide peer replication",
+        "wall_clock_s": 8.069,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 865,
+        "tokens_out": 118,
+        "model_time_s": 7.814,
+        "peak_tree_rss_mb": 62.5,
+        "peak_ollama_rss_mb": 4338.6,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 777,
+        "prior_tokens_out": 121
+      },
+      {
+        "seed": 11,
+        "case": "absent_temperature",
+        "question": "What is the reservoir water temperature in Celsius?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 6.487,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 1092,
+        "tokens_out": 44,
+        "model_time_s": 6.006,
+        "peak_tree_rss_mb": 52.6,
+        "peak_ollama_rss_mb": 4330.3,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 1004,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 11,
+        "case": "absent_ip",
+        "question": "What is the hive server IP address?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 5.687,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 731,
+        "tokens_out": 43,
+        "model_time_s": 5.327,
+        "peak_tree_rss_mb": 48.8,
+        "peak_ollama_rss_mb": 4325.1,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 643,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 11,
+        "case": "absent_manufacturer",
+        "question": "Who manufactured the reservoir?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 6.511,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 1250,
+        "tokens_out": 44,
+        "model_time_s": 6.241,
+        "peak_tree_rss_mb": 60.8,
+        "peak_ollama_rss_mb": 4333.0,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 996,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 11,
+        "case": "no_keyword_match",
+        "question": "Platypus habitat?",
+        "status": "needs_review",
+        "answer": "",
+        "wall_clock_s": 0.106,
+        "model_calls": 0,
+        "calls_by_cookie": [],
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "model_time_s": 0.0,
+        "peak_tree_rss_mb": 39.4,
+        "peak_ollama_rss_mb": 4333.1,
+        "prior_status": "needs_review",
+        "prior_model_calls": 0,
+        "prior_tokens_in": 0,
+        "prior_tokens_out": 0
+      },
+      {
+        "seed": 29,
+        "case": "review_policy",
+        "question": "What happens when the model calculation disagrees?",
+        "status": "supported_answer",
+        "answer": "needs_review",
+        "wall_clock_s": 9.495,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 841,
+        "tokens_out": 199,
+        "model_time_s": 9.25,
+        "peak_tree_rss_mb": 60.9,
+        "peak_ollama_rss_mb": 4372.3,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 841,
+        "prior_tokens_out": 199
+      },
+      {
+        "seed": 29,
+        "case": "replication_support",
+        "question": "Does this project support peer replication?",
+        "status": "supported_answer",
+        "answer": "It does not provide peer replication",
+        "wall_clock_s": 8.536,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 865,
+        "tokens_out": 121,
+        "model_time_s": 8.201,
+        "peak_tree_rss_mb": 53.9,
+        "peak_ollama_rss_mb": 4337.1,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 777,
+        "prior_tokens_out": 121
+      },
+      {
+        "seed": 29,
+        "case": "absent_temperature",
+        "question": "What is the reservoir water temperature in Celsius?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 5.312,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 1092,
+        "tokens_out": 38,
+        "model_time_s": 5.071,
+        "peak_tree_rss_mb": 60.0,
+        "peak_ollama_rss_mb": 4346.0,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 1004,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 29,
+        "case": "absent_ip",
+        "question": "What is the hive server IP address?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 4.447,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 731,
+        "tokens_out": 44,
+        "model_time_s": 4.188,
+        "peak_tree_rss_mb": 60.9,
+        "peak_ollama_rss_mb": 4342.0,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 643,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 29,
+        "case": "absent_manufacturer",
+        "question": "Who manufactured the reservoir?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 3.1,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 1250,
+        "tokens_out": 44,
+        "model_time_s": 2.871,
+        "peak_tree_rss_mb": 55.9,
+        "peak_ollama_rss_mb": 4349.4,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 996,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 29,
+        "case": "no_keyword_match",
+        "question": "Platypus habitat?",
+        "status": "needs_review",
+        "answer": "",
+        "wall_clock_s": 0.089,
+        "model_calls": 0,
+        "calls_by_cookie": [],
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "model_time_s": 0.0,
+        "peak_tree_rss_mb": 53.7,
+        "peak_ollama_rss_mb": 4341.6,
+        "prior_status": "needs_review",
+        "prior_model_calls": 0,
+        "prior_tokens_in": 0,
+        "prior_tokens_out": 0
+      },
+      {
+        "seed": 47,
+        "case": "review_policy",
+        "question": "What happens when the model calculation disagrees?",
+        "status": "supported_answer",
+        "answer": "needs_review",
+        "wall_clock_s": 9.223,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 841,
+        "tokens_out": 199,
+        "model_time_s": 9.022,
+        "peak_tree_rss_mb": 60.8,
+        "peak_ollama_rss_mb": 4371.8,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 841,
+        "prior_tokens_out": 199
+      },
+      {
+        "seed": 47,
+        "case": "replication_support",
+        "question": "Does this project support peer replication?",
+        "status": "supported_answer",
+        "answer": "It does not provide peer replication",
+        "wall_clock_s": 7.747,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 865,
+        "tokens_out": 121,
+        "model_time_s": 7.53,
+        "peak_tree_rss_mb": 60.4,
+        "peak_ollama_rss_mb": 4372.9,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 777,
+        "prior_tokens_out": 127
+      },
+      {
+        "seed": 47,
+        "case": "absent_temperature",
+        "question": "What is the reservoir water temperature in Celsius?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 5.342,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 1092,
+        "tokens_out": 38,
+        "model_time_s": 5.119,
+        "peak_tree_rss_mb": 59.1,
+        "peak_ollama_rss_mb": 4349.4,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 1004,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 47,
+        "case": "absent_ip",
+        "question": "What is the hive server IP address?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 4.462,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 731,
+        "tokens_out": 43,
+        "model_time_s": 4.217,
+        "peak_tree_rss_mb": 58.3,
+        "peak_ollama_rss_mb": 4346.4,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 643,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 47,
+        "case": "absent_manufacturer",
+        "question": "Who manufactured the reservoir?",
+        "status": "not_found_in_source",
+        "answer": "",
+        "wall_clock_s": 3.064,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 1250,
+        "tokens_out": 44,
+        "model_time_s": 2.837,
+        "peak_tree_rss_mb": 60.0,
+        "peak_ollama_rss_mb": 4352.7,
+        "prior_status": "not_found_in_source",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 996,
+        "prior_tokens_out": 44
+      },
+      {
+        "seed": 47,
+        "case": "no_keyword_match",
+        "question": "Platypus habitat?",
+        "status": "needs_review",
+        "answer": "",
+        "wall_clock_s": 0.093,
+        "model_calls": 0,
+        "calls_by_cookie": [],
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "model_time_s": 0.0,
+        "peak_tree_rss_mb": 54.9,
+        "peak_ollama_rss_mb": 4350.7,
+        "prior_status": "needs_review",
+        "prior_model_calls": 0,
+        "prior_tokens_in": 0,
+        "prior_tokens_out": 0
+      }
+    ]
+  },
+  "prose_holdout": {
+    "summary_source": "<agent-tmp>/a18e63d1-ba2e-4ad5-8c39-4db6c4aed19a/scratchpad/prose-run/c05d54e7-e896-4200-8f31-524bbfcb53c2/summary.json",
+    "prior_record": "structured-prose-validation-baaeb1ee.json",
+    "total_wall_clock_s": 19.936,
+    "overall_peaks": {
+      "peak_tree_rss_mb": 50.2,
+      "peak_ollama_rss_mb": 4351.1,
+      "rss_samples": 77
+    },
+    "answers": [
+      {
+        "seed": 11,
+        "case": "prose_outcome",
+        "question": "What happens when calibration is overdue?",
+        "status": "supported_answer",
+        "answer": "inspection_required",
+        "wall_clock_s": 7.388,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 443,
+        "tokens_out": 126,
+        "model_time_s": 7.258,
+        "peak_tree_rss_mb": 49.7,
+        "peak_ollama_rss_mb": 4351.1,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 434,
+        "prior_tokens_out": 117
+      },
+      {
+        "seed": 29,
+        "case": "prose_outcome",
+        "question": "What happens when calibration is overdue?",
+        "status": "supported_answer",
+        "answer": "inspection_required",
+        "wall_clock_s": 6.12,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 443,
+        "tokens_out": 126,
+        "model_time_s": 5.96,
+        "peak_tree_rss_mb": 49.7,
+        "peak_ollama_rss_mb": 4340.9,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 434,
+        "prior_tokens_out": 119
+      },
+      {
+        "seed": 47,
+        "case": "prose_outcome",
+        "question": "What happens when calibration is overdue?",
+        "status": "supported_answer",
+        "answer": "inspection_required",
+        "wall_clock_s": 6.111,
+        "model_calls": 2,
+        "calls_by_cookie": [
+          "cookie-solver",
+          "cookie-support"
+        ],
+        "tokens_in": 443,
+        "tokens_out": 128,
+        "model_time_s": 5.984,
+        "peak_tree_rss_mb": 50.2,
+        "peak_ollama_rss_mb": 4326.1,
+        "prior_status": "supported_answer",
+        "prior_model_calls": 2,
+        "prior_tokens_in": 434,
+        "prior_tokens_out": 117
+      }
+    ]
+  },
+  "raw_timing": {
+    "table_source": {
+      "mode": "support",
+      "argv": [
+        "--model",
+        "gemma4:e4b",
+        "--seeds",
+        "11",
+        "29",
+        "47",
+        "--temperature",
+        "0.2",
+        "--baseline",
+        "support-seeded-0564edb2-adjudicated.json",
+        "--state-dir",
+        "<agent-tmp>/a18e63d1-ba2e-4ad5-8c39-4db6c4aed19a/scratchpad/table-run"
+      ],
+      "total_wall_clock_s": 116.113,
+      "sampling_interval_s": 0.2,
+      "answers": [
+        {
+          "seed": 11,
+          "question": "What happens when the model calculation disagrees?",
+          "wall_clock_s": 27.913,
+          "started": 1790447615.839199,
+          "ended": 1790447643.752214,
+          "peak_tree_rss_mb": 63.9,
+          "peak_ollama_rss_mb": 8916.2,
+          "rss_samples": 105
+        },
+        {
+          "seed": 11,
+          "question": "Does this project support peer replication?",
+          "wall_clock_s": 8.069,
+          "started": 1790447643.757388,
+          "ended": 1790447651.826112,
+          "peak_tree_rss_mb": 62.5,
+          "peak_ollama_rss_mb": 4338.6,
+          "rss_samples": 31
+        },
+        {
+          "seed": 11,
+          "question": "What is the reservoir water temperature in Celsius?",
+          "wall_clock_s": 6.487,
+          "started": 1790447651.831041,
+          "ended": 1790447658.317929,
+          "peak_tree_rss_mb": 52.6,
+          "peak_ollama_rss_mb": 4330.3,
+          "rss_samples": 24
+        },
+        {
+          "seed": 11,
+          "question": "What is the hive server IP address?",
+          "wall_clock_s": 5.687,
+          "started": 1790447658.3232331,
+          "ended": 1790447664.0105112,
+          "peak_tree_rss_mb": 48.8,
+          "peak_ollama_rss_mb": 4325.1,
+          "rss_samples": 22
+        },
+        {
+          "seed": 11,
+          "question": "Who manufactured the reservoir?",
+          "wall_clock_s": 6.511,
+          "started": 1790447664.017281,
+          "ended": 1790447670.527877,
+          "peak_tree_rss_mb": 60.8,
+          "peak_ollama_rss_mb": 4333.0,
+          "rss_samples": 25
+        },
+        {
+          "seed": 11,
+          "question": "Platypus habitat?",
+          "wall_clock_s": 0.106,
+          "started": 1790447670.5345569,
+          "ended": 1790447670.6401181,
+          "peak_tree_rss_mb": 39.4,
+          "peak_ollama_rss_mb": 4333.1,
+          "rss_samples": 1
+        },
+        {
+          "seed": 29,
+          "question": "What happens when the model calculation disagrees?",
+          "wall_clock_s": 9.495,
+          "started": 1790447670.643646,
+          "ended": 1790447680.138419,
+          "peak_tree_rss_mb": 60.9,
+          "peak_ollama_rss_mb": 4372.3,
+          "rss_samples": 36
+        },
+        {
+          "seed": 29,
+          "question": "Does this project support peer replication?",
+          "wall_clock_s": 8.536,
+          "started": 1790447680.144285,
+          "ended": 1790447688.680663,
+          "peak_tree_rss_mb": 53.9,
+          "peak_ollama_rss_mb": 4337.1,
+          "rss_samples": 34
+        },
+        {
+          "seed": 29,
+          "question": "What is the reservoir water temperature in Celsius?",
+          "wall_clock_s": 5.312,
+          "started": 1790447688.685791,
+          "ended": 1790447693.997536,
+          "peak_tree_rss_mb": 60.0,
+          "peak_ollama_rss_mb": 4346.0,
+          "rss_samples": 20
+        },
+        {
+          "seed": 29,
+          "question": "What is the hive server IP address?",
+          "wall_clock_s": 4.447,
+          "started": 1790447694.004808,
+          "ended": 1790447698.451259,
+          "peak_tree_rss_mb": 60.9,
+          "peak_ollama_rss_mb": 4342.0,
+          "rss_samples": 17
+        },
+        {
+          "seed": 29,
+          "question": "Who manufactured the reservoir?",
+          "wall_clock_s": 3.1,
+          "started": 1790447698.4598558,
+          "ended": 1790447701.560042,
+          "peak_tree_rss_mb": 55.9,
+          "peak_ollama_rss_mb": 4349.4,
+          "rss_samples": 13
+        },
+        {
+          "seed": 29,
+          "question": "Platypus habitat?",
+          "wall_clock_s": 0.089,
+          "started": 1790447701.566089,
+          "ended": 1790447701.655551,
+          "peak_tree_rss_mb": 53.7,
+          "peak_ollama_rss_mb": 4341.6,
+          "rss_samples": 1
+        },
+        {
+          "seed": 47,
+          "question": "What happens when the model calculation disagrees?",
+          "wall_clock_s": 9.223,
+          "started": 1790447701.6598191,
+          "ended": 1790447710.882766,
+          "peak_tree_rss_mb": 60.8,
+          "peak_ollama_rss_mb": 4371.8,
+          "rss_samples": 36
+        },
+        {
+          "seed": 47,
+          "question": "Does this project support peer replication?",
+          "wall_clock_s": 7.747,
+          "started": 1790447710.8880699,
+          "ended": 1790447718.634809,
+          "peak_tree_rss_mb": 60.4,
+          "peak_ollama_rss_mb": 4372.9,
+          "rss_samples": 29
+        },
+        {
+          "seed": 47,
+          "question": "What is the reservoir water temperature in Celsius?",
+          "wall_clock_s": 5.342,
+          "started": 1790447718.64242,
+          "ended": 1790447723.984447,
+          "peak_tree_rss_mb": 59.1,
+          "peak_ollama_rss_mb": 4349.4,
+          "rss_samples": 20
+        },
+        {
+          "seed": 47,
+          "question": "What is the hive server IP address?",
+          "wall_clock_s": 4.462,
+          "started": 1790447723.991185,
+          "ended": 1790447728.4535522,
+          "peak_tree_rss_mb": 58.3,
+          "peak_ollama_rss_mb": 4346.4,
+          "rss_samples": 18
+        },
+        {
+          "seed": 47,
+          "question": "Who manufactured the reservoir?",
+          "wall_clock_s": 3.064,
+          "started": 1790447728.460046,
+          "ended": 1790447731.5238988,
+          "peak_tree_rss_mb": 60.0,
+          "peak_ollama_rss_mb": 4352.7,
+          "rss_samples": 13
+        },
+        {
+          "seed": 47,
+          "question": "Platypus habitat?",
+          "wall_clock_s": 0.093,
+          "started": 1790447731.530213,
+          "ended": 1790447731.623677,
+          "peak_tree_rss_mb": 54.9,
+          "peak_ollama_rss_mb": 4350.7,
+          "rss_samples": 1
+        }
+      ],
+      "overall": {
+        "peak_tree_rss_mb": 63.9,
+        "peak_ollama_rss_mb": 8916.2,
+        "rss_samples": 445
+      }
+    },
+    "prose_holdout": {
+      "mode": "prose",
+      "argv": [
+        "<agent-tmp>/a18e63d1-ba2e-4ad5-8c39-4db6c4aed19a/scratchpad/prose-run"
+      ],
+      "total_wall_clock_s": 19.936,
+      "sampling_interval_s": 0.2,
+      "answers": [
+        {
+          "seed": 11,
+          "question": "What happens when calibration is overdue?",
+          "wall_clock_s": 7.388,
+          "started": 1790447742.846786,
+          "ended": 1790447750.235245,
+          "peak_tree_rss_mb": 49.7,
+          "peak_ollama_rss_mb": 4351.1,
+          "rss_samples": 28
+        },
+        {
+          "seed": 29,
+          "question": "What happens when calibration is overdue?",
+          "wall_clock_s": 6.12,
+          "started": 1790447750.2369778,
+          "ended": 1790447756.357312,
+          "peak_tree_rss_mb": 49.7,
+          "peak_ollama_rss_mb": 4340.9,
+          "rss_samples": 25
+        },
+        {
+          "seed": 47,
+          "question": "What happens when calibration is overdue?",
+          "wall_clock_s": 6.111,
+          "started": 1790447756.358541,
+          "ended": 1790447762.469576,
+          "peak_tree_rss_mb": 50.2,
+          "peak_ollama_rss_mb": 4326.1,
+          "rss_samples": 24
+        }
+      ],
+      "overall": {
+        "peak_tree_rss_mb": 50.2,
+        "peak_ollama_rss_mb": 4351.1,
+        "rss_samples": 77
+      }
+    }
+  },
+  "environment": {
+    "git_commit": "2e7db08ab281435a769568a88496b3438bb27eee",
+    "ollama": "0.32.14",
+    "model": "gemma4:e4b",
+    "model_digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+    "machine": "Apple M1 Pro, 16 GB, macOS 26.3.1"
+  },
+  "notes": {
+    "wall_clock_s": "Per answer: knowledge.py subprocess duration (table) or in-process answer_question duration (prose); includes Python startup/retrieval/support subprocess",
+    "tokens": "Sum of Ollama prompt_eval_count / eval_count over the answer's model_call events",
+    "peak_tree_rss_mb": "Max sampled RSS sum of evaluator process tree (incl. knowledge.py and support_cookie.py children) during the answer window; ps sampled every 0.2 s, short-lived peaks can be missed",
+    "peak_ollama_rss_mb": "Max sampled RSS of ollama + llama-server processes during the answer window; on Apple unified memory, GPU-resident weights may be partly or not reflected in RSS",
+    "prior_*": "Same metrics from the previous record for the same seed/question"
+  }
+}

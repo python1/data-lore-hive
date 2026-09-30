@@ -1,0 +1,13 @@
+{
+  "primary_sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+  "experimental_branch_preserved": "c93a174eef330e7827c6250a2b1d93745e8cd1ad",
+  "production_implementation_unchanged_during_measurement": true,
+  "files": {
+    "safety-records-2026-09-30/measure.py": "7674666eb167c90ec4a73c4560e35a3566dbd79054a9fdb3469937a7330ea6d5",
+    "safety-records-2026-09-30/traps.json": "55a017e1005921d9fe943c0ed10df25cf02b1bb856743d682f77c79ff1a6dce7",
+    "safety-records-2026-09-30/production-tests.txt": "af2748e76ead139244e289360c8784865d5d14b52daeae59b0594e6d5672b9b6",
+    "safety-records-2026-09-30/live-30.json": "36b8572cf9571dd4b33acc8f047a0444d0305bce1c55d78cb1f10cb953be036e",
+    "safety-records-2026-09-30/trap-events.json": "bd65733cf0b0039937fd81f1ac9204c1e3ce222e5cc33bb75523cd101919cb60",
+    "safety-records-2026-09-30/unit-tests.txt": "89fe507c5afadf7a15bc83bdeb4dfe41eabe224a0bccb5992fb3a600cc0b3f39"
+  }
+}

@@ -1,0 +1,1309 @@
+{
+  "started_utc": "2026-09-28T00:32:25.966070+00:00",
+  "prior_records": {
+    "question-routing-audit.json": "632abd908d0c977d5847a0c7f1b9fa23b67aa4ec37352899f73425861ad642fd",
+    "policy-parser-limitations-observed.json": "f56e5c4a107d3b4aa7af07ff965c0a88c2e27db0d1e8b92d80e0cbe17f322154",
+    "abstention-format-validation-b3acd7b3.json": "36378aaa8e7ef1cbc023ca38fd9314bacb90c349a56bba7143e7073cd4224c79",
+    "preserved-prose-replay-fa52a8fe.json": "e9a84b924caf9ff8282dcc4fa4f12f22f674bdfce13f80cfd9077c6b9b1fe6f6",
+    "prose-policy-validation-2147ce73.json": "4aef6bf1537a9a3030d5ab8078ddde0c2b504b492eac3ee7ce9c50b805fc6124",
+    "question-routing-attempt-4.json": "38ff46af6fd7d0d02468b8d5c5109ea8b863ca3e98090e2adfdeb0508191e234",
+    "table-context-validation-40eddada.json": "2af8a177ca84e58815c6752348c468bc8839df3b508ec975436837d24a6a39b6",
+    "absence-confirmation-live-query.json": "6d9c702df2cf0cc3317ad58e7aec4d88c7e0719db05aa000c94b389256ae9d8a",
+    "structured-policy-complete-record.json": "02a777a954f0df2fe7804667d48bdc5722a41546f96ff30674142aaff0030540",
+    "support-seeded-0564edb2-raw.json": "f7daa22baae7c8d0ffa7608866b8da6026873bc0c99a3742a15e6e726f65e3a8",
+    "question-routing-attempt-3.json": "3cecefb329b8a30e11af7ef07152f485a40e19d1a091e3411db8cf6317b024cc",
+    "support-meaning-rerun-4c9252b8.json": "467212e9e5340a7e72b16404f7dc9e84b07af76af9df1025d316a7e5738060eb",
+    "question-routing-attempt-2.json": "7c2dceece9c2a29d614366b280f8f8e2b485e88176781fe2b8109371d7edf1b8",
+    "verifier-v2-validation.json": "e7bde6eb00b9fbced6cafb559c09b703cfcb96cd9a34b6937fe5415eafe98993",
+    "survivability-step-1-2026-09-27.json": "e6618d9149a16ad892d5c8af9f7cca0f467c28f18f3fd8c66ddcf5debef22594",
+    "survivability-coverage-2026-09-27.json": "d5c5b8c88cbec40fe0f56061580b7cb64251180907f2c394479db99542255560",
+    "rerun-2026-09-26-prose-unplanned-246ffdb1.json": "0bc63daa5117bedfc2698a89428af529e762bbb6eadf86dc87b3eac70aedca6d",
+    "source-memory-query-2.json": "d788acc6f0796f6509c377b2e598d43899a7cb623366dc891c2de293ab8d31d8",
+    "source-memory-query-1.json": "f3207bd7991b509b50b8b0f5c7a007eb83feb4db31175e89cbd85e55d55823d3",
+    "question-routing-attempt-1.json": "ddd0607da9e876abbf3eb68a6f3d0863a4ac9f28d6915480d539b54891f0725c",
+    "prose-nonanswer-unfixed-e7a6c871.json": "0f376aaf9ed4f01ff4d46a880829f3257351d5ca8dc015ca7067710502514dc5",
+    "outcome-selection-attempt-1.json": "de9e7910eaa45f9c02d60dc8382ba5ecb4d320cbaef469f897cd0df60a039311",
+    "batch-validation-1d3dc0b9.json": "f092ab8414ce53594359d86b3f10f4a0f0d347c71714cf4879295d315c3a9efc",
+    "support-seeded-0564edb2-adjudicated.json": "abf3ef70d7f0d6e4da74630a1b68b196c3f1995372a74cd461479636182fcbe4",
+    "structured-prose-diagnostic.json": "3314082fb75669b876d08777214f29a16bc9d10a1e67f5beadbc29a49b902811",
+    "rerun-2026-09-26-prose-c05d54e7.json": "ef04c650c23c1a43679bf6e0f148c75e19e6334e889433457772135f87a96d59",
+    "prose-current-validation-ab0af95d.json": "d78c6236ab2d0aba6f9f52d2de5077bc446cacb84ca12d17b4325b816844ded5",
+    "question-routing-final.json": "8b826dab508cd377b0af1565f8783c65632280fb2133961dab3364d0a1da4e25",
+    "gemma-validation.json": "37aad764dbca42ff8db053f62cac96ea5a3d8d4a5b233cc46f53054fcefe8950",
+    "structured-policy-notfound-8f814944.json": "ec30f83d6de5e16488f432c99ca22e6bb85f96e0220a2a6f372eaa659fbb85e4",
+    "policy-holdout-validation-7e145b8d.json": "61ffc80509e28ee8f86d3a240e28d020e914d49331df58a766e66f4508a350bc",
+    "historical-quote-support-replay.json": "e325fe7653c519d9fb692ec0a3f5e45373c97af52a57f4a911fcc09eca228c0c",
+    "seven-reservoir-test.json": "fb328509ca255f63b4405499631c91ef01528f0db564716f93fe038dbfb150df",
+    "rerun-2026-09-26-measurements.json": "5c31be70562ab1d6c92a4578608d54d9fad696e1dbdc00b2f4a0ce4114d01382",
+    "source-memory-validation.json": "200a6c5b020adb7ffc731aab2616fcbf62231adcc0a7036d6d5ef9cf06b4a013",
+    "structured-prose-validation-baaeb1ee.json": "a0c7fb456cceb53392f009c31a680be6c8065a8fa66639bd51383a38ab70ef9d",
+    "condition-slot-validation.json": "f4fc40f1d8850a558f6be8d65b7aeca14086dbde2163916f61f102e63a25ab7b",
+    "rerun-2026-09-26-table-source-2adf1acc.json": "b782c40c9df1f453d0965abadedf7f7af8a8aeee96fd4ad8a0b07fef6686a9ea",
+    "absence-confirmation-validation.json": "42e301515bdc2f65d040cbc1fab023c35d69dc6d3c46cd74bd83de393a17aee5",
+    "structured-table-validation-4a0208d6.json": "98314d79b4212b54bd92074409655c451877761b6162bdc1aabad8bb46a36a46"
+  },
+  "original_primary_sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+  "original_source_access": "knowledge.read_source raises AssertionError for the entire query drill; recovery-only reader is required",
+  "before": [
+    {
+      "task_id": "39c08f2e-8c40-4403-97ac-08886a9822ed",
+      "question": "What happens when the model calculation disagrees?",
+      "status": "needs_review",
+      "reason": "invalid_source_recovery",
+      "detail": "[Errno 2] No such file or directory: '<workspace>/work/source-recovery/clean-machine/recovered'"
+    },
+    {
+      "task_id": "7c9212a3-0182-4a7d-908b-66bdb56583c1",
+      "question": "What is the minimum Python version required?",
+      "status": "needs_review",
+      "reason": "invalid_source_recovery",
+      "detail": "[Errno 2] No such file or directory: '<workspace>/work/source-recovery/clean-machine/recovered'"
+    },
+    {
+      "task_id": "6a1ab704-8705-42a5-8539-c07f63fe4528",
+      "question": "Who manufactured the reservoir?",
+      "status": "needs_review",
+      "reason": "invalid_source_recovery",
+      "detail": "[Errno 2] No such file or directory: '<workspace>/work/source-recovery/clean-machine/recovered'"
+    }
+  ],
+  "after": [
+    {
+      "task_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "question": "What happens when the model calculation disagrees?",
+      "model": "gemma4:e4b",
+      "status": "supported_answer",
+      "excluded_sources": [],
+      "policy": "quote-support-v2",
+      "seed": 11,
+      "temperature": 0.2,
+      "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+      "question_route": "policy",
+      "requested_slot": "outcome",
+      "checks": {
+        "solver_answer_anchored": true,
+        "solver_value_in_requested_role": true,
+        "support_value_in_requested_role": true,
+        "support_answered": true,
+        "support_answer_anchored": true,
+        "answers_agree": true
+      },
+      "answer": "needs_review",
+      "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+      "citation": {
+        "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+        "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+        "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+        "line": 38,
+        "original_path": "<repo>/README.md"
+      }
+    },
+    {
+      "task_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+      "question": "What is the minimum Python version required?",
+      "model": "gemma4:e4b",
+      "status": "supported_answer",
+      "excluded_sources": [],
+      "policy": "quote-support-v2",
+      "seed": 11,
+      "temperature": 0.2,
+      "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+      "question_route": "general",
+      "checks": {
+        "solver_answer_anchored": true,
+        "support_answered": true,
+        "support_answer_anchored": true,
+        "answers_agree": true
+      },
+      "answer": "Python 3.10 or newer",
+      "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+      "citation": {
+        "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+        "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+        "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+        "line": 7,
+        "original_path": "<repo>/README.md"
+      }
+    },
+    {
+      "task_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "question": "Who manufactured the reservoir?",
+      "model": "gemma4:e4b",
+      "status": "not_found_in_source",
+      "excluded_sources": [],
+      "policy": "quote-support-v2",
+      "seed": 11,
+      "temperature": 0.2,
+      "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+      "question_route": "general",
+      "absence_checks": {
+        "evidence_available": true,
+        "support_confirms_not_found": true,
+        "evidence_still_current": true
+      },
+      "finding_id": "94fbf261-7a87-4e24-b688-211557eacff3"
+    }
+  ],
+  "replica_before": {
+    "manifest": {
+      "version": 1,
+      "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+      "bytes": 86016,
+      "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+      "event_count": 26,
+      "first_sequence": 1,
+      "last_sequence": 26,
+      "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+      "source_snapshots": 4
+    },
+    "generations": 2,
+    "stored_bytes": 144049
+  },
+  "restored": {
+    "version": 1,
+    "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+    "bytes": 86016,
+    "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+    "event_count": 26,
+    "first_sequence": 1,
+    "last_sequence": 26,
+    "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+    "source_snapshots": 4
+  },
+  "original_rows_sha256": "1ad9b7977ceddcf6eea205ea5573e47f9456f2b1606115b2c56ec832df00f583",
+  "source_manifest": {
+    "version": 1,
+    "sources": {
+      "34b686a2-8e9a-4aeb-a22b-cf1056115034": {
+        "path": "sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+        "original_path": "<repo>/README.md",
+        "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+      }
+    }
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "id": "05d55276-ef27-4152-9529-d8a175f37205",
+      "run_id": "0ff1c36c-28a3-4b89-be3d-9f663b7546c0",
+      "cookie": "cookie-ingester",
+      "kind": "source_ingested",
+      "recorded_at": "2026-09-25T05:29:34.003395+00:00",
+      "payload": {
+        "path": "<repo>/README.md",
+        "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+        "source_uri": "file://<repo>/README.md",
+        "supersedes": null,
+        "text": "# Data & Lore: first hive experiment\n\nThis runnable prototype tests one narrow idea: a cookie records a fact, a second cookie uses it, and a third checks the answer against its source. Each cookie runs in a separate Python process. Shared SQLite memory preserves the evidence and outcome between process lifetimes.\n\nThis is a local coordination experiment with a scripted mode and an optional Ollama model mode. It is not a distributed deployment. Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.\n\n## Run\n\nFrom this folder:\n\n```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```\n\nTo use the Gemma model installed on this MacBook:\n\n```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```\n\nOllama must be running at `127.0.0.1:11434`. Each worker makes its own model request: extraction, problem solving, and source review. Workers run sequentially and share one model runtime; these are separate roles, not three model copies or independent intelligences. The adapter uses Ollama's [chat API](https://docs.ollama.com/api/chat) with structured JSON output. The deterministic source and arithmetic checks still gate promotion even if the model incorrectly approves a result.\n\nNo model is downloaded. Requests bypass proxy settings and target only the loopback endpoint. The arithmetic demo sends synthetic fixture/task data; the source-memory commands below send excerpts from files you explicitly ingest. Each request caps context at 4,096 tokens and output at 256 tokens with a 180-second HTTP timeout, and requests a one-minute keep-alive. These settings bound individual calls, not system-wide CPU/GPU or power consumption. Model call records include the returned JSON, model name, context hash and reported timing/token counts. Invalid responses and network failures stop the run; they do not silently fall back to scripted answers. Failed runs may leave partial events and no final report.\n\nThe scripted demo produces **360 litres \u2014 verified**. Its fault-injection demo produces **361 litres \u2014 disputed** and exits with code 2 intentionally. Model runs can also require review. Each run writes a unique source fixture and JSON report plus a persistent `memory.sqlite3` into `state/`. Use `--state-dir /path/to/folder` to choose another location. Use `--capacity 37 --count 7` to change both the synthetic source and question.\n\n## Verification policy v2\n\nA live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\n\n`needs_review` is a recorded state, not an automatic human-review queue. Model/network failures still abort without promotion. This policy is specific to exact arithmetic from a structured fixture; it does not settle open-ended factual disagreements or interpret contradictory natural-language reasoning. All workers still use the same model and share its potential weaknesses.\n\nRun the repeatable six-case evaluation:\n\n```bash\npython3 evaluate.py\npython3 evaluate.py --model gemma4:e4b\n```\n\nIt tests 120 \u00d7 7, 37 \u00d7 7, and 123 \u00d7 13, each with a normal and deliberately altered answer. Each invocation creates a fresh directory containing every run and a progressively saved `summary.json`, including failures. A case passes only if the answer, promotion behavior, status, and process exit code match expectations. The evaluation exits 1 if any case fails. Six cases are a regression sample, not a reliability benchmark.\n\nThe saved `verifier-v2-validation.json` records a successful live run using `gemma4:e4b`: all six cases passed, including the previous 840-litre regression. All 16 automated tests also passed. The earlier failure reports remain unchanged.\n\n## What the cookies share\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.\n\nThe source contains a fictional 120-litre reservoir. Verification demonstrates agreement with that fixture, not real-world truth. Lore here is a record of what happened during the experiment, not a universal rule.\n\n## Memory semantics and limits\n\nEvents are append-only through SQLite triggers: verification adds an event rather than rewriting an earlier claim. Run IDs isolate experiments. Original disputed results remain inspectable. The database owner can bypass the triggers; these are an application guardrail, not cryptographic identity or protection against hostile hosts. Hashes detect changes relative to a stored snapshot; they do not establish source trust.\n\nThe arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.\n\nWorkers exit after their task. No idle daemon remains. Power use has not been measured.\n\n## Source memory across tasks\n\n`knowledge.py` adds persistent ingestion of local `.txt` and `.md` files. It stores their UTF-8 text, paths and SHA-256 hashes in append-only events. Separate process invocations can query the same database without repeating ingestion or relying on model conversation history.\n\n```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```\n\nThe default database is `knowledge.sqlite3`. To choose a shared database path, put `--db /path/to/memory.sqlite3` before the subcommand. `ask` also accepts `--report result.json` to save its output. The database's parent directory must already exist.\n\nRetrieval ranks paragraphs by keyword overlap and sends the top three excerpts to the local model. Gemma selects an exact quote, limited to 400 characters. Code verifies the quote against the selected excerpt and rechecks the source hash after inference. Successful output includes the source version, path, hash and line number. The returned excerpt may need interpretation: relevance is model-selected, and neither source truth nor completeness is established by finding an exact quote. This deliberately extractive first version does not generate synthesized factual answers or promote excerpts into verified working knowledge.\n\n| Query status | Meaning |\n|---|---|\n| `source_excerpt` | A model-selected quote matches a current ingested source exactly |\n| `insufficient_evidence` | No keyword candidate, or the model declined to select an answer |\n| `unsupported_output` | The model invented a quote, selected an invalid excerpt, or violated quote limits |\n| `stale_source` | The selected source changed or became unreadable during inference |\n\nChanged/missing sources detected before inference are excluded and listed under `excluded_sources`. Re-run `ingest` after editing a source to make a new version available; previous snapshots remain in history. Unchanged repeat ingestion is deduplicated. Only the latest ingested version of each file participates in new queries, and the original file must remain accessible for freshness checks. These checks capture file state at the check time, not a guarantee against subsequent edits.\n\nIngestion is explicit and limited to 256,000 bytes per file; there is no folder crawling, PDF parsing, web fetching, semantic search, or external communication. Keyword retrieval can miss relevant evidence. Conflicting documents are not reconciled, and identical quotes can be misleading out of context. Source text is treated as data and never executed. This is a trusted local prototype, not an authenticated multi-user memory service. Each completed query gets its own task ID and stored result event; model/network errors stop the query and may leave partial history.\n\n## Next implementation boundary\n\nNext, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+        "trust": "User-selected source; content not independently corroborated"
+      }
+    },
+    {
+      "sequence": 2,
+      "id": "61436eac-f02d-43b0-bb41-e5c6430d593a",
+      "run_id": "d42f4fc2-e78c-4a79-8b87-7aad8de5873f",
+      "cookie": "cookie-reader",
+      "kind": "model_call",
+      "recorded_at": "2026-09-25T05:29:55.694453+00:00",
+      "payload": {
+        "answer": {
+          "chunk_id": "05d55276-ef27-4152-9529-d8a175f37205:3210",
+          "quote": "| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "5c7d4442bfc22fa194cca26d0ee44a303a35903ddfc5774d335392a3abb5253a",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "output_tokens": 81,
+        "prompt_tokens": 511,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 15394365709
+      }
+    },
+    {
+      "sequence": 3,
+      "id": "91894690-06f7-4ebb-b1cd-0b75f50a1549",
+      "run_id": "d42f4fc2-e78c-4a79-8b87-7aad8de5873f",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-25T05:29:55.698592+00:00",
+      "payload": {
+        "citation": {
+          "chunk_id": "05d55276-ef27-4152-9529-d8a175f37205:3210",
+          "line": 40,
+          "path": "<repo>/README.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "source_id": "05d55276-ef27-4152-9529-d8a175f37205"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "question": "What happens when the model calculation disagrees?",
+        "quote": "| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+        "status": "source_excerpt",
+        "task_id": "d42f4fc2-e78c-4a79-8b87-7aad8de5873f"
+      }
+    },
+    {
+      "sequence": 4,
+      "id": "9022591f-3779-4cb3-88be-42494f0eacd2",
+      "run_id": "51df194b-1649-4fa4-882d-c0ac124d122c",
+      "cookie": "cookie-reader",
+      "kind": "model_call",
+      "recorded_at": "2026-09-25T05:30:10.921579+00:00",
+      "payload": {
+        "answer": {
+          "chunk_id": "05d55276-ef27-4152-9529-d8a175f37205:5993",
+          "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+        },
+        "context_sha256": "a7fc6149356cac60dedb5e0e3b9c5e1aeb89b80e72a7aa42ffd5550c2fc13dd1",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "output_tokens": 91,
+        "prompt_tokens": 528,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 5567923833
+      }
+    },
+    {
+      "sequence": 5,
+      "id": "d4b9a1d9-e8bf-4b67-9b18-8a5c6f299f5f",
+      "run_id": "51df194b-1649-4fa4-882d-c0ac124d122c",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-25T05:30:10.927721+00:00",
+      "payload": {
+        "citation": {
+          "chunk_id": "05d55276-ef27-4152-9529-d8a175f37205:5993",
+          "line": 67,
+          "path": "<repo>/README.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "source_id": "05d55276-ef27-4152-9529-d8a175f37205"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "question": "Does this project support peer replication?",
+        "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+        "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+        "status": "source_excerpt",
+        "task_id": "51df194b-1649-4fa4-882d-c0ac124d122c"
+      }
+    },
+    {
+      "sequence": 6,
+      "id": "bcc36139-e156-4bef-805b-7dfa60616a0c",
+      "run_id": "0bf773c0-d9cd-4705-bcc4-a821b99abb8c",
+      "cookie": "cookie-ingester",
+      "kind": "source_ingested",
+      "recorded_at": "2026-09-25T05:55:39.233726+00:00",
+      "payload": {
+        "path": "<repo>/README.md",
+        "sha256": "aeb706700b737ffdedae08379e94c307f01295c7c18421acbf2a8a8f873515d3",
+        "source_uri": "file://<repo>/README.md",
+        "supersedes": "05d55276-ef27-4152-9529-d8a175f37205",
+        "text": "# Data & Lore: first hive experiment\n\nThis runnable prototype tests one narrow idea: a cookie records a fact, a second cookie uses it, and a third checks the answer against its source. Each cookie runs in a separate Python process. Shared SQLite memory preserves the evidence and outcome between process lifetimes.\n\nThis is a local coordination experiment with a scripted mode and an optional Ollama model mode. It is not a distributed deployment. Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.\n\n## Run\n\nFrom this folder:\n\n```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```\n\nTo use the Gemma model installed on this MacBook:\n\n```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```\n\nOllama must be running at `127.0.0.1:11434`. Each worker makes its own model request: extraction, problem solving, and source review. Workers run sequentially and share one model runtime; these are separate roles, not three model copies or independent intelligences. The adapter uses Ollama's [chat API](https://docs.ollama.com/api/chat) with structured JSON output. The deterministic source and arithmetic checks still gate promotion even if the model incorrectly approves a result.\n\nNo model is downloaded. Requests bypass proxy settings and target only the loopback endpoint. The arithmetic demo sends synthetic fixture/task data; the source-memory commands below send excerpts from files you explicitly ingest. Each request caps context at 4,096 tokens and output at 384 tokens with a 180-second HTTP timeout, and requests a one-minute keep-alive. These settings bound individual calls, not system-wide CPU/GPU or power consumption. Model call records include the returned JSON, model name, context hash and reported timing/token counts. Invalid responses and network failures stop the run; they do not silently fall back to scripted answers. Failed runs may leave partial events and no final report.\n\nThe scripted demo produces **360 litres \u2014 verified**. Its fault-injection demo produces **361 litres \u2014 disputed** and exits with code 2 intentionally. Model runs can also require review. Each run writes a unique source fixture and JSON report plus a persistent `memory.sqlite3` into `state/`. Use `--state-dir /path/to/folder` to choose another location. Use `--capacity 37 --count 7` to change both the synthetic source and question.\n\n## Verification policy v2\n\nA live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\n\n`needs_review` is a recorded state, not an automatic human-review queue. Model/network failures still abort without promotion. This policy is specific to exact arithmetic from a structured fixture; it does not settle open-ended factual disagreements or interpret contradictory natural-language reasoning. All workers still use the same model and share its potential weaknesses.\n\nRun the repeatable six-case evaluation:\n\n```bash\npython3 evaluate.py\npython3 evaluate.py --model gemma4:e4b\n```\n\nIt tests 120 \u00d7 7, 37 \u00d7 7, and 123 \u00d7 13, each with a normal and deliberately altered answer. Each invocation creates a fresh directory containing every run and a progressively saved `summary.json`, including failures. A case passes only if the answer, promotion behavior, status, and process exit code match expectations. The evaluation exits 1 if any case fails. Six cases are a regression sample, not a reliability benchmark.\n\nThe saved `verifier-v2-validation.json` records a successful live run using `gemma4:e4b`: all six cases passed, including the previous 840-litre regression. All 16 automated tests also passed. The earlier failure reports remain unchanged.\n\n## What the cookies share\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.\n\nThe source contains a fictional 120-litre reservoir. Verification demonstrates agreement with that fixture, not real-world truth. Lore here is a record of what happened during the experiment, not a universal rule.\n\n## Memory semantics and limits\n\nEvents are append-only through SQLite triggers: verification adds an event rather than rewriting an earlier claim. Run IDs isolate experiments. Original disputed results remain inspectable. The database owner can bypass the triggers; these are an application guardrail, not cryptographic identity or protection against hostile hosts. Hashes detect changes relative to a stored snapshot; they do not establish source trust.\n\nThe arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.\n\nWorkers exit after their task. No idle daemon remains. Power use has not been measured.\n\n## Source memory across tasks\n\n`knowledge.py` adds persistent ingestion of local `.txt` and `.md` files. It stores their UTF-8 text, paths and SHA-256 hashes in append-only events. Separate process invocations can query the same database without repeating ingestion or relying on model conversation history.\n\n```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```\n\nThe default database is `knowledge.sqlite3`. To choose a shared database path, put `--db /path/to/memory.sqlite3` before the subcommand. `ask` also accepts `--report result.json` to save its output. The database's parent directory must already exist.\n\nRetrieval ranks paragraphs by keyword overlap and sends the top three excerpts to the local solver. The solver now returns an answer with an exact quote or an explicit not-found finding. A separate support-cookie process receives only the question and quote and must independently answer or abstain. Deterministic anchor checks and agreement checks gate delivery. See [SUPPORT-CHECK.md](SUPPORT-CHECK.md) for the full policy, three-seed evaluation, and remaining false rejects.\n\n| Query status | Meaning |\n|---|---|\n| `supported_answer` | Exact quote, source freshness, answer anchor and independent support passed |\n| `not_found_in_source` | No answer found in retrieved excerpts; persisted as a finding, CLI exit 0 |\n| `needs_review` | Support abstained/disagreed/failed or an anchor failed; answer withheld |\n| `unsupported_output` | Solver output or quotation violated the contract |\n| `stale_source` | The selected source changed or became unreadable during inference |\n\nThe old `source_excerpt` and `insufficient_evidence` statuses remain in historical reports. Current results use the statuses above. Source truth is not independently established, and open-ended synthesized claims are not promoted into verified working knowledge.\n\nChanged/missing sources detected before inference are excluded and listed under `excluded_sources`. Re-run `ingest` after editing a source to make a new version available; previous snapshots remain in history. Unchanged repeat ingestion is deduplicated. Only the latest ingested version of each file participates in new queries, and the original file must remain accessible for freshness checks. These checks capture file state at the check time, not a guarantee against subsequent edits.\n\nIngestion is explicit and limited to 256,000 bytes per file; there is no folder crawling, PDF parsing, web fetching, semantic search, or external communication. Keyword retrieval can miss relevant evidence. Conflicting documents are not reconciled, and identical quotes can be misleading out of context. Source text is treated as data and never executed. This is a trusted local prototype, not an authenticated multi-user memory service. Each completed query gets its own task ID and stored result event; model/network errors stop the query and may leave partial history.\n\n## Next implementation boundary\n\nNext, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+        "trust": "User-selected source; content not independently corroborated"
+      }
+    },
+    {
+      "sequence": 7,
+      "id": "a8c5f32f-b336-4a5e-a34f-a7a11cabf6c6",
+      "run_id": "57b83e96-7172-44c6-a0df-7dc90eb293d4",
+      "cookie": "cookie-ingester",
+      "kind": "source_ingested",
+      "recorded_at": "2026-09-25T07:41:59.475015+00:00",
+      "payload": {
+        "path": "<repo>/README.md",
+        "sha256": "bd6957a55ea6ee7f3abec797fd9b3ebc513b66f861613afdad58305efbb26557",
+        "source_uri": "file://<repo>/README.md",
+        "supersedes": "bcc36139-e156-4bef-805b-7dfa60616a0c",
+        "text": "# Data & Lore: first hive experiment\n\nLatest development: [table-aware answer selection and evaluation](TABLE-CONTEXT.md). The original 18-case source regression now has zero false accepts and zero false rejects. Additional policy tests reveal remaining abstention-contract issues; those results are preserved separately.\n\nThis runnable prototype tests one narrow idea: a cookie records a fact, a second cookie uses it, and a third checks the answer against its source. Each cookie runs in a separate Python process. Shared SQLite memory preserves the evidence and outcome between process lifetimes.\n\nThis is a local coordination experiment with a scripted mode and an optional Ollama model mode. It is not a distributed deployment. Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.\n\n## Run\n\nFrom this folder:\n\n```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```\n\nTo use the Gemma model installed on this MacBook:\n\n```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```\n\nOllama must be running at `127.0.0.1:11434`. Each worker makes its own model request: extraction, problem solving, and source review. Workers run sequentially and share one model runtime; these are separate roles, not three model copies or independent intelligences. The adapter uses Ollama's [chat API](https://docs.ollama.com/api/chat) with structured JSON output. The deterministic source and arithmetic checks still gate promotion even if the model incorrectly approves a result.\n\nNo model is downloaded. Requests bypass proxy settings and target only the loopback endpoint. The arithmetic demo sends synthetic fixture/task data; the source-memory commands below send excerpts from files you explicitly ingest. Each request caps context at 4,096 tokens and output at 384 tokens with a 180-second HTTP timeout, and requests a one-minute keep-alive. These settings bound individual calls, not system-wide CPU/GPU or power consumption. Model call records include the returned JSON, model name, context hash and reported timing/token counts. Invalid responses and network failures stop the run; they do not silently fall back to scripted answers. Failed runs may leave partial events and no final report.\n\nThe scripted demo produces **360 litres \u2014 verified**. Its fault-injection demo produces **361 litres \u2014 disputed** and exits with code 2 intentionally. Model runs can also require review. Each run writes a unique source fixture and JSON report plus a persistent `memory.sqlite3` into `state/`. Use `--state-dir /path/to/folder` to choose another location. Use `--capacity 37 --count 7` to change both the synthetic source and question.\n\n## Verification policy v2\n\nA live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\n\n`needs_review` is a recorded state, not an automatic human-review queue. Model/network failures still abort without promotion. This policy is specific to exact arithmetic from a structured fixture; it does not settle open-ended factual disagreements or interpret contradictory natural-language reasoning. All workers still use the same model and share its potential weaknesses.\n\nRun the repeatable six-case evaluation:\n\n```bash\npython3 evaluate.py\npython3 evaluate.py --model gemma4:e4b\n```\n\nIt tests 120 \u00d7 7, 37 \u00d7 7, and 123 \u00d7 13, each with a normal and deliberately altered answer. Each invocation creates a fresh directory containing every run and a progressively saved `summary.json`, including failures. A case passes only if the answer, promotion behavior, status, and process exit code match expectations. The evaluation exits 1 if any case fails. Six cases are a regression sample, not a reliability benchmark.\n\nThe saved `verifier-v2-validation.json` records a successful live run using `gemma4:e4b`: all six cases passed, including the previous 840-litre regression. All 16 automated tests also passed. The earlier failure reports remain unchanged.\n\n## What the cookies share\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.\n\nThe source contains a fictional 120-litre reservoir. Verification demonstrates agreement with that fixture, not real-world truth. Lore here is a record of what happened during the experiment, not a universal rule.\n\n## Memory semantics and limits\n\nEvents are append-only through SQLite triggers: verification adds an event rather than rewriting an earlier claim. Run IDs isolate experiments. Original disputed results remain inspectable. The database owner can bypass the triggers; these are an application guardrail, not cryptographic identity or protection against hostile hosts. Hashes detect changes relative to a stored snapshot; they do not establish source trust.\n\nThe arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.\n\nWorkers exit after their task. No idle daemon remains. Power use has not been measured.\n\n## Source memory across tasks\n\n`knowledge.py` adds persistent ingestion of local `.txt` and `.md` files. It stores their UTF-8 text, paths and SHA-256 hashes in append-only events. Separate process invocations can query the same database without repeating ingestion or relying on model conversation history.\n\n```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```\n\nThe default database is `knowledge.sqlite3`. To choose a shared database path, put `--db /path/to/memory.sqlite3` before the subcommand. `ask` also accepts `--report result.json` to save its output. The database's parent directory must already exist.\n\nRetrieval ranks paragraphs by keyword overlap and sends the top three excerpts to the local solver. The solver now returns an answer with an exact quote or an explicit not-found finding. A separate support-cookie process receives only the question and quote and must independently answer or abstain. Deterministic anchor checks and agreement checks gate delivery. See [SUPPORT-CHECK.md](SUPPORT-CHECK.md) for the full policy, three-seed evaluation, and remaining false rejects.\n\n| Query status | Meaning |\n|---|---|\n| `supported_answer` | Exact quote, source freshness, answer anchor and independent support passed |\n| `not_found_in_source` | No answer found in retrieved excerpts; persisted as a finding, CLI exit 0 |\n| `needs_review` | Support abstained/disagreed/failed or an anchor failed; answer withheld |\n| `unsupported_output` | Solver output or quotation violated the contract |\n| `stale_source` | The selected source changed or became unreadable during inference |\n\nThe old `source_excerpt` and `insufficient_evidence` statuses remain in historical reports. Current results use the statuses above. Source truth is not independently established, and open-ended synthesized claims are not promoted into verified working knowledge.\n\nChanged/missing sources detected before inference are excluded and listed under `excluded_sources`. Re-run `ingest` after editing a source to make a new version available; previous snapshots remain in history. Unchanged repeat ingestion is deduplicated. Only the latest ingested version of each file participates in new queries, and the original file must remain accessible for freshness checks. These checks capture file state at the check time, not a guarantee against subsequent edits.\n\nIngestion is explicit and limited to 256,000 bytes per file; there is no folder crawling, PDF parsing, web fetching, semantic search, or external communication. Keyword retrieval can miss relevant evidence. Conflicting documents are not reconciled, and identical quotes can be misleading out of context. Source text is treated as data and never executed. This is a trusted local prototype, not an authenticated multi-user memory service. Each completed query gets its own task ID and stored result event; model/network errors stop the query and may leave partial history.\n\n## Next implementation boundary\n\nNext, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+        "trust": "User-selected source; content not independently corroborated"
+      }
+    },
+    {
+      "sequence": 8,
+      "id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+      "run_id": "168672dc-f25f-4796-bc38-cf332d32b4ba",
+      "cookie": "cookie-ingester",
+      "kind": "source_ingested",
+      "recorded_at": "2026-09-27T20:54:48.873699+00:00",
+      "payload": {
+        "path": "<repo>/README.md",
+        "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+        "source_uri": "file://<repo>/README.md",
+        "supersedes": "a8c5f32f-b336-4a5e-a34f-a7a11cabf6c6",
+        "text": "# Data & Lore: first hive experiment\n\nLatest development: [table-aware answer selection and evaluation](TABLE-CONTEXT.md). The original 18-case source regression now has zero false accepts and zero false rejects. Additional policy tests reveal remaining abstention-contract issues; those results are preserved separately.\n\nThis runnable prototype tests one narrow idea: a cookie records a fact, a second cookie uses it, and a third checks the answer against its source. Each cookie runs in a separate Python process. Shared SQLite memory preserves the evidence and outcome between process lifetimes.\n\nThis is a local coordination experiment with a scripted mode and an optional Ollama model mode. It is not a distributed deployment. Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.\n\n## Run\n\nFrom this folder:\n\n```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```\n\nTo use the Gemma model installed on this MacBook:\n\n```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```\n\nOllama must be running at `127.0.0.1:11434`. Each worker makes its own model request: extraction, problem solving, and source review. Workers run sequentially and share one model runtime; these are separate roles, not three model copies or independent intelligences. The adapter uses Ollama's [chat API](https://docs.ollama.com/api/chat) with structured JSON output. The deterministic source and arithmetic checks still gate promotion even if the model incorrectly approves a result.\n\nNo model is downloaded. Requests bypass proxy settings and target only the loopback endpoint. The arithmetic demo sends synthetic fixture/task data; the source-memory commands below send excerpts from files you explicitly ingest. Each request caps context at 4,096 tokens and output at 384 tokens with a 180-second HTTP timeout, and requests a one-minute keep-alive. These settings bound individual calls, not system-wide CPU/GPU or power consumption. Model call records include the returned JSON, model name, context hash and reported timing/token counts. Invalid responses and network failures stop the run; they do not silently fall back to scripted answers. Failed runs may leave partial events and no final report.\n\nThe scripted demo produces **360 litres \u2014 verified**. Its fault-injection demo produces **361 litres \u2014 disputed** and exits with code 2 intentionally. Model runs can also require review. Each run writes a unique source fixture and JSON report plus a persistent `memory.sqlite3` into `state/`. Use `--state-dir /path/to/folder` to choose another location. Use `--capacity 37 --count 7` to change both the synthetic source and question.\n\n## Verification policy v2\n\nA live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\n\n`needs_review` is a recorded state, not an automatic human-review queue. Model/network failures still abort without promotion. This policy is specific to exact arithmetic from a structured fixture; it does not settle open-ended factual disagreements or interpret contradictory natural-language reasoning. All workers still use the same model and share its potential weaknesses.\n\nRun the repeatable six-case evaluation:\n\n```bash\npython3 evaluate.py\npython3 evaluate.py --model gemma4:e4b\n```\n\nIt tests 120 \u00d7 7, 37 \u00d7 7, and 123 \u00d7 13, each with a normal and deliberately altered answer. Each invocation creates a fresh directory containing every run and a progressively saved `summary.json`, including failures. A case passes only if the answer, promotion behavior, status, and process exit code match expectations. The evaluation exits 1 if any case fails. Six cases are a regression sample, not a reliability benchmark.\n\nThe saved `verifier-v2-validation.json` records a successful live run using `gemma4:e4b`: all six cases passed, including the previous 840-litre regression. All 16 automated tests also passed. The earlier failure reports remain unchanged.\n\n## What the cookies share\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.\n\nThe source contains a fictional 120-litre reservoir. Verification demonstrates agreement with that fixture, not real-world truth. Lore here is a record of what happened during the experiment, not a universal rule.\n\n## Memory semantics and limits\n\nEvents are append-only through SQLite triggers: verification adds an event rather than rewriting an earlier claim. Run IDs isolate experiments. Original disputed results remain inspectable. The database owner can bypass the triggers; these are an application guardrail, not cryptographic identity or protection against hostile hosts. Hashes detect changes relative to a stored snapshot; they do not establish source trust.\n\nThe arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.\n\nWorkers exit after their task. No idle daemon remains. Power use has not been measured.\n\n## Source memory across tasks\n\n`knowledge.py` adds persistent ingestion of local `.txt` and `.md` files. It stores their UTF-8 text, paths and SHA-256 hashes in append-only events. Separate process invocations can query the same database without repeating ingestion or relying on model conversation history.\n\n```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```\n\nThe default database is `knowledge.sqlite3`. To choose a shared database path, put `--db /path/to/memory.sqlite3` before the subcommand. `ask` also accepts `--report result.json` to save its output. The database's parent directory must already exist.\n\nRetrieval ranks paragraphs by keyword overlap and sends the top three excerpts to the local solver. The solver now returns an answer with an exact quote or an explicit not-found finding. A separate support-cookie process receives only the question and quote and must independently answer or abstain. Deterministic anchor checks and agreement checks gate delivery. See [SUPPORT-CHECK.md](SUPPORT-CHECK.md) for the full policy, three-seed evaluation, and remaining false rejects.\n\n| Query status | Meaning |\n|---|---|\n| `supported_answer` | Exact quote, source freshness, answer anchor and independent support passed |\n| `not_found_in_source` | No answer found in retrieved excerpts; persisted as a finding, CLI exit 0 |\n| `needs_review` | Support abstained/disagreed/failed or an anchor failed; answer withheld |\n| `unsupported_output` | Solver output or quotation violated the contract |\n| `stale_source` | The selected source changed or became unreadable during inference |\n\nThe old `source_excerpt` and `insufficient_evidence` statuses remain in historical reports. Current results use the statuses above. Source truth is not independently established, and open-ended synthesized claims are not promoted into verified working knowledge.\n\nChanged/missing sources detected before inference are excluded and listed under `excluded_sources`. Re-run `ingest` after editing a source to make a new version available; previous snapshots remain in history. Unchanged repeat ingestion is deduplicated. Only the latest ingested version of each file participates in new queries, and the original file must remain accessible for freshness checks. These checks capture file state at the check time, not a guarantee against subsequent edits.\n\nIngestion is explicit and limited to 256,000 bytes per file; there is no folder crawling, PDF parsing, web fetching, semantic search, or external communication. Keyword retrieval can miss relevant evidence. Conflicting documents are not reconciled, and identical quotes can be misleading out of context. Source text is treated as data and never executed. This is a trusted local prototype, not an authenticated multi-user memory service. Each completed query gets its own task ID and stored result event; model/network errors stop the query and may leave partial history.\n\n## Next implementation boundary\n\nNext, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n\n## Current checkpoint\n\nSee [CHECKPOINT.md](CHECKPOINT.md) for the current routing behavior, measured results and known limits. Earlier sections and validation records remain as project history.\n",
+        "trust": "User-selected source; content not independently corroborated"
+      }
+    },
+    {
+      "sequence": 9,
+      "id": "58b5bfca-8285-41d3-8fb4-77c169056bca",
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-27T20:55:10.813204+00:00",
+      "payload": {
+        "answer": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "7496cb1dda0521075031d1813d852b18afff9a672caaa19a00538f876c1c8802",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 168,
+        "prompt_tokens": 606,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 21880765583
+      }
+    },
+    {
+      "sequence": 10,
+      "id": "8312ed48-8020-4eac-a41f-ea3c36650ce6",
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "cookie": "cookie-solver",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-27T20:55:10.817301+00:00",
+      "payload": {
+        "raw": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 11,
+      "id": "80b85785-e75c-4945-a249-12dc55c6f14e",
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-27T20:55:10.818515+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+        "outcome": "answered",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+      }
+    },
+    {
+      "sequence": 12,
+      "id": "e4e9c80d-4d11-4b4d-99e3-887795ee8170",
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-27T20:55:13.528064+00:00",
+      "payload": {
+        "answer": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "context": {
+          "question": "What happens when the model calculation disagrees?",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "25c59ab0744e95e4e3feadb6c20be2edd4af8de9299431014f936b26a123d4e1",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 31,
+        "prompt_tokens": 235,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 2562640583
+      }
+    },
+    {
+      "sequence": 13,
+      "id": "135c8b23-7bae-4db0-8451-6d89bbf14531",
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "cookie": "cookie-support",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-27T20:55:13.529656+00:00",
+      "payload": {
+        "raw": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 14,
+      "id": "6705fe3f-771e-491e-bd7c-ba10743c699e",
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-27T20:55:13.531312+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "solver_value_in_requested_role": true,
+        "support_answer_anchored": true,
+        "support_answered": true,
+        "support_value_in_requested_role": true
+      }
+    },
+    {
+      "sequence": 15,
+      "id": "4f4e7dfa-0a96-40c8-a05a-99832100df59",
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-27T20:55:13.532793+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_answer_anchored": true,
+          "support_answered": true,
+          "support_value_in_requested_role": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "line": 38,
+          "path": "<repo>/README.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What happens when the model calculation disagrees?",
+        "question_route": "policy",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "requested_slot": "outcome",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 11,
+        "status": "supported_answer",
+        "task_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 16,
+      "id": "9a7f9383-b6f9-4f3f-8073-9afc481dbe60",
+      "run_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-27T20:55:19.631662+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "outcome": "answered",
+          "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+        },
+        "context_sha256": "16f05e5b6fe46406673c3df326f12d1e7e51662cd8e6221a11533b9ca5845d37",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 95,
+        "prompt_tokens": 556,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 6077894333
+      }
+    },
+    {
+      "sequence": 17,
+      "id": "4256e52e-9c2b-4f56-b70c-5110837ce5b0",
+      "run_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-27T20:55:19.634432+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+        "outcome": "answered",
+        "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+      }
+    },
+    {
+      "sequence": 18,
+      "id": "f36c3464-9bf8-4860-9550-c2c1fec41b5d",
+      "run_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-27T20:55:21.423146+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "outcome": "answered"
+        },
+        "context": {
+          "question": "What is the minimum Python version required?",
+          "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+        },
+        "context_sha256": "35f15a85cb60f9c04cbaad05ae5314caf985544b85f025e8e9b1eb6becf535b5",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 215,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1673510959
+      }
+    },
+    {
+      "sequence": 19,
+      "id": "7fc7d2ab-af9f-4876-9ab7-05200c687244",
+      "run_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-27T20:55:21.425408+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "support_answer_anchored": true,
+        "support_answered": true
+      }
+    },
+    {
+      "sequence": 20,
+      "id": "b596ee2c-bd7b-4457-ab3c-669f1b7703f4",
+      "run_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-27T20:55:21.427490+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "support_answer_anchored": true,
+          "support_answered": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "line": 7,
+          "path": "<repo>/README.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What is the minimum Python version required?",
+        "question_route": "general",
+        "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 11,
+        "status": "supported_answer",
+        "task_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 21,
+      "id": "283be94b-222b-4ca4-a472-58247d9cb188",
+      "run_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-27T20:55:25.057552+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "chunk_id": "",
+          "outcome": "not_found_in_source",
+          "quote": ""
+        },
+        "context_sha256": "9b869fc89ee5085a339e2d39634b59f74ef7b076126a0e2767dd45213db9085f",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 27,
+        "prompt_tokens": 711,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 3613187000
+      }
+    },
+    {
+      "sequence": 22,
+      "id": "07620fb5-8530-4fdd-bf57-60507d092559",
+      "run_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-27T20:55:25.058947+00:00",
+      "payload": {
+        "answer": "",
+        "chunk_id": "",
+        "outcome": "not_found_in_source",
+        "quote": ""
+      }
+    },
+    {
+      "sequence": 23,
+      "id": "e0ad7dfb-0564-464d-bda9-c7da16db2689",
+      "run_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-27T20:55:27.825266+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "outcome": "not_found_in_source"
+        },
+        "context": {
+          "question": "Who manufactured the reservoir?",
+          "quote": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge."
+        },
+        "context_sha256": "4d0dae696c523903705352c888ec200556a7c17b0575ee7544860743145b679b",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 539,
+        "purpose": "independent_answer_search",
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 2679196750
+      }
+    },
+    {
+      "sequence": 24,
+      "id": "ebe00668-ac9a-4e84-a83b-30d98becab20",
+      "run_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "cookie": "cookie-support",
+      "kind": "absence_check",
+      "recorded_at": "2026-09-27T20:55:27.826502+00:00",
+      "payload": {
+        "checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "confirmation_id": "e0ad7dfb-0564-464d-bda9-c7da16db2689"
+      }
+    },
+    {
+      "sequence": 25,
+      "id": "1501d465-6da6-4775-9b42-349cae355637",
+      "run_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "cookie": "cookie-solver",
+      "kind": "source_finding",
+      "recorded_at": "2026-09-27T20:55:27.827280+00:00",
+      "payload": {
+        "absence_check_id": "ebe00668-ac9a-4e84-a83b-30d98becab20",
+        "confirmation_id": "e0ad7dfb-0564-464d-bda9-c7da16db2689",
+        "excluded_sources": [],
+        "finding": "not_found_in_source",
+        "question": "Who manufactured the reservoir?",
+        "reason": "solver_not_found_in_source",
+        "scope": "Both cookies found no answer in retrieved excerpts; not an exhaustive source or universal absence claim",
+        "searched_chunk_ids": [
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:2793",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:3042",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:5009"
+        ]
+      }
+    },
+    {
+      "sequence": 26,
+      "id": "d7082e3b-9a8b-463f-b235-3e85cb6507fd",
+      "run_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-27T20:55:27.828045+00:00",
+      "payload": {
+        "absence_checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "excluded_sources": [],
+        "finding_id": "1501d465-6da6-4775-9b42-349cae355637",
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "Who manufactured the reservoir?",
+        "question_route": "general",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 11,
+        "status": "not_found_in_source",
+        "task_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 27,
+      "id": "77779245-ec99-4f88-b0d8-1c86904fb7ea",
+      "run_id": "39c08f2e-8c40-4403-97ac-08886a9822ed",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:32:26.479002+00:00",
+      "payload": {
+        "detail": "[Errno 2] No such file or directory: '<workspace>/work/source-recovery/clean-machine/recovered'",
+        "question": "What happens when the model calculation disagrees?",
+        "reason": "invalid_source_recovery",
+        "status": "needs_review",
+        "task_id": "39c08f2e-8c40-4403-97ac-08886a9822ed"
+      }
+    },
+    {
+      "sequence": 28,
+      "id": "8cfec3b6-23a1-436c-a0e6-b3b9a103233f",
+      "run_id": "7c9212a3-0182-4a7d-908b-66bdb56583c1",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:32:26.482533+00:00",
+      "payload": {
+        "detail": "[Errno 2] No such file or directory: '<workspace>/work/source-recovery/clean-machine/recovered'",
+        "question": "What is the minimum Python version required?",
+        "reason": "invalid_source_recovery",
+        "status": "needs_review",
+        "task_id": "7c9212a3-0182-4a7d-908b-66bdb56583c1"
+      }
+    },
+    {
+      "sequence": 29,
+      "id": "4ce86753-5c7e-4ed4-bf47-23826d49c909",
+      "run_id": "6a1ab704-8705-42a5-8539-c07f63fe4528",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:32:26.485645+00:00",
+      "payload": {
+        "detail": "[Errno 2] No such file or directory: '<workspace>/work/source-recovery/clean-machine/recovered'",
+        "question": "Who manufactured the reservoir?",
+        "reason": "invalid_source_recovery",
+        "status": "needs_review",
+        "task_id": "6a1ab704-8705-42a5-8539-c07f63fe4528"
+      }
+    },
+    {
+      "sequence": 30,
+      "id": "e173e63a-f675-4cee-b0ec-377325b86411",
+      "run_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:32:47.998280+00:00",
+      "payload": {
+        "answer": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "7496cb1dda0521075031d1813d852b18afff9a672caaa19a00538f876c1c8802",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 168,
+        "prompt_tokens": 606,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 21427770167
+      }
+    },
+    {
+      "sequence": 31,
+      "id": "aa147036-e3f6-455a-b7ad-81c1ac5343ba",
+      "run_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "cookie": "cookie-solver",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-28T00:32:48.003985+00:00",
+      "payload": {
+        "raw": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 32,
+      "id": "014b5e4b-db8c-4b8f-bfb9-7f1cb5c4c1e6",
+      "run_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:32:48.005310+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+        "outcome": "answered",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+      }
+    },
+    {
+      "sequence": 33,
+      "id": "8b2d9c46-55f4-49d5-9293-3c2b4ef4ed97",
+      "run_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:32:50.646058+00:00",
+      "payload": {
+        "answer": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "context": {
+          "question": "What happens when the model calculation disagrees?",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "25c59ab0744e95e4e3feadb6c20be2edd4af8de9299431014f936b26a123d4e1",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 31,
+        "prompt_tokens": 235,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 2481284458
+      }
+    },
+    {
+      "sequence": 34,
+      "id": "0113d754-4411-4f68-a5a2-b0851d6bd54b",
+      "run_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "cookie": "cookie-support",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-28T00:32:50.648239+00:00",
+      "payload": {
+        "raw": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 35,
+      "id": "dcad0524-8f99-4716-ab34-dcc1c146282a",
+      "run_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-28T00:32:50.650881+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "solver_value_in_requested_role": true,
+        "support_answer_anchored": true,
+        "support_answered": true,
+        "support_value_in_requested_role": true
+      }
+    },
+    {
+      "sequence": 36,
+      "id": "aa4278fd-cf10-434e-8e71-d5da8035d324",
+      "run_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:32:50.653615+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_answer_anchored": true,
+          "support_answered": true,
+          "support_value_in_requested_role": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "line": 38,
+          "original_path": "<repo>/README.md",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What happens when the model calculation disagrees?",
+        "question_route": "policy",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "requested_slot": "outcome",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 11,
+        "status": "supported_answer",
+        "task_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 37,
+      "id": "85f74d21-70b7-4ef2-b704-8e53edf4b38c",
+      "run_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:32:56.840653+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "outcome": "answered",
+          "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+        },
+        "context_sha256": "16f05e5b6fe46406673c3df326f12d1e7e51662cd8e6221a11533b9ca5845d37",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 95,
+        "prompt_tokens": 556,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 6160048125
+      }
+    },
+    {
+      "sequence": 38,
+      "id": "a7712669-9a5f-40cd-bb56-d7cda308eef9",
+      "run_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:32:56.843915+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+        "outcome": "answered",
+        "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+      }
+    },
+    {
+      "sequence": 39,
+      "id": "f044eb61-512a-4d94-9843-d36700dce1a5",
+      "run_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:32:58.671553+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "outcome": "answered"
+        },
+        "context": {
+          "question": "What is the minimum Python version required?",
+          "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+        },
+        "context_sha256": "35f15a85cb60f9c04cbaad05ae5314caf985544b85f025e8e9b1eb6becf535b5",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 215,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1720875167
+      }
+    },
+    {
+      "sequence": 40,
+      "id": "67b2b246-5be8-4de0-9ac5-3dfdb1389406",
+      "run_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-28T00:32:58.673371+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "support_answer_anchored": true,
+        "support_answered": true
+      }
+    },
+    {
+      "sequence": 41,
+      "id": "c9d3afe3-840e-4e40-a890-31320c86edd7",
+      "run_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:32:58.674886+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "support_answer_anchored": true,
+          "support_answered": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "line": 7,
+          "original_path": "<repo>/README.md",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What is the minimum Python version required?",
+        "question_route": "general",
+        "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 11,
+        "status": "supported_answer",
+        "task_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 42,
+      "id": "fbcdc4bf-b830-4882-b51f-edc136d0f13a",
+      "run_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:33:02.890910+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "chunk_id": "",
+          "outcome": "not_found_in_source",
+          "quote": ""
+        },
+        "context_sha256": "9b869fc89ee5085a339e2d39634b59f74ef7b076126a0e2767dd45213db9085f",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 27,
+        "prompt_tokens": 711,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 4199654625
+      }
+    },
+    {
+      "sequence": 43,
+      "id": "2eced421-fa24-4289-ab24-c9294ce44415",
+      "run_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:33:02.891956+00:00",
+      "payload": {
+        "answer": "",
+        "chunk_id": "",
+        "outcome": "not_found_in_source",
+        "quote": ""
+      }
+    },
+    {
+      "sequence": 44,
+      "id": "15885768-ecd1-43cc-b38b-9e2c26c6dc7c",
+      "run_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:33:05.642613+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "outcome": "not_found_in_source"
+        },
+        "context": {
+          "question": "Who manufactured the reservoir?",
+          "quote": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge."
+        },
+        "context_sha256": "4d0dae696c523903705352c888ec200556a7c17b0575ee7544860743145b679b",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 539,
+        "purpose": "independent_answer_search",
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 2641730500
+      }
+    },
+    {
+      "sequence": 45,
+      "id": "d3e7de35-fe6c-430b-b5c3-a24adf976f15",
+      "run_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "cookie": "cookie-support",
+      "kind": "absence_check",
+      "recorded_at": "2026-09-28T00:33:05.645663+00:00",
+      "payload": {
+        "checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "confirmation_id": "15885768-ecd1-43cc-b38b-9e2c26c6dc7c"
+      }
+    },
+    {
+      "sequence": 46,
+      "id": "94fbf261-7a87-4e24-b688-211557eacff3",
+      "run_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "cookie": "cookie-solver",
+      "kind": "source_finding",
+      "recorded_at": "2026-09-28T00:33:05.647684+00:00",
+      "payload": {
+        "absence_check_id": "d3e7de35-fe6c-430b-b5c3-a24adf976f15",
+        "confirmation_id": "15885768-ecd1-43cc-b38b-9e2c26c6dc7c",
+        "excluded_sources": [],
+        "finding": "not_found_in_source",
+        "question": "Who manufactured the reservoir?",
+        "reason": "solver_not_found_in_source",
+        "scope": "Both cookies found no answer in retrieved excerpts; not an exhaustive source or universal absence claim",
+        "searched_chunk_ids": [
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:2793",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:3042",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:5009"
+        ]
+      }
+    },
+    {
+      "sequence": 47,
+      "id": "0123f48b-3308-42e0-ade7-5baadf787edf",
+      "run_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:33:05.649344+00:00",
+      "payload": {
+        "absence_checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "excluded_sources": [],
+        "finding_id": "94fbf261-7a87-4e24-b688-211557eacff3",
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "Who manufactured the reservoir?",
+        "question_route": "general",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 11,
+        "status": "not_found_in_source",
+        "task_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+        "temperature": 0.2
+      }
+    }
+  ],
+  "historical_events_unchanged": true,
+  "new_evidence_links": [
+    {
+      "task_id": "23170d86-01d8-41ff-87d6-422fff0f12b6",
+      "query_event_id": "aa4278fd-cf10-434e-8e71-d5da8035d324",
+      "status": "supported_answer",
+      "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+      "support_event_id": "8b2d9c46-55f4-49d5-9293-3c2b4ef4ed97",
+      "support_check_id": "dcad0524-8f99-4716-ab34-dcc1c146282a"
+    },
+    {
+      "task_id": "c83faee1-a76a-4a74-a072-c40939f28c49",
+      "query_event_id": "c9d3afe3-840e-4e40-a890-31320c86edd7",
+      "status": "supported_answer",
+      "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+      "support_event_id": "f044eb61-512a-4d94-9843-d36700dce1a5",
+      "support_check_id": "67b2b246-5be8-4de0-9ac5-3dfdb1389406"
+    },
+    {
+      "task_id": "bb919ac4-50f6-41d2-8ce2-de302731ea7b",
+      "query_event_id": "0123f48b-3308-42e0-ade7-5baadf787edf",
+      "status": "not_found_in_source",
+      "finding_id": "94fbf261-7a87-4e24-b688-211557eacff3",
+      "confirmation_id": "15885768-ecd1-43cc-b38b-9e2c26c6dc7c",
+      "absence_check_id": "d3e7de35-fe6c-430b-b5c3-a24adf976f15",
+      "source_ids": [
+        "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+      ]
+    }
+  ],
+  "restored_files": [
+    {
+      "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+      "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+      "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+    }
+  ],
+  "replica_after": {
+    "manifest": {
+      "version": 1,
+      "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+      "bytes": 86016,
+      "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+      "event_count": 26,
+      "first_sequence": 1,
+      "last_sequence": 26,
+      "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+      "source_snapshots": 4
+    },
+    "generations": 2,
+    "stored_bytes": 144049
+  },
+  "unit_tests": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "----------------------------------------------------------------------\nRan 93 tests in 0.943s\n\nOK\n"
+  },
+  "status": "passed",
+  "finished_utc": "2026-09-28T00:33:07.087897+00:00",
+  "code_hashes": {
+    "knowledge.py": "afa931251f6814fd8888ac27799928c3d02b95131ce768df299588f63e14d74d",
+    "source_recovery.py": "d26042d64cec97331de1a0902924987d1c23135a8631e23a0c0f507356625d15",
+    "test_source_recovery.py": "68da7bc35a0a45d4d6409a2dd65e9d49236ce6a8ce2aed6c0237d0bafd3d85c1"
+  },
+  "procedure": {
+    "sha256": "c23d19a321401f1ebbf64e43cac8e5df83f3824c11e095c083709f23830e51c0",
+    "text": "from pathlib import Path\nfrom datetime import datetime,timezone\nfrom unittest.mock import patch\nimport json,hashlib,subprocess,sys\nroot=Path.cwd();out=root/'outputs/hive-prototype';work=root/'work/source-recovery'\nsys.path.insert(0,str(out));import replication as r;import knowledge;import source_recovery as sr\nconfig=json.loads((root/'work/replication/client.json').read_text())\nexpected=json.loads((root/'work/replication-coverage/accepted-snapshot/manifest.json').read_text())\nprior={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.json')}\nprimary_sha=r.sha(config['database']);area=work/'clean-machine';area.mkdir();db=area/'knowledge.sqlite3';sources=area/'recovered'\nrecord={'started_utc':datetime.now(timezone.utc).isoformat(),'prior_records':prior,'original_primary_sha256':primary_sha,'original_source_access':'knowledge.read_source raises AssertionError for the entire query drill; recovery-only reader is required','before':[],'after':[]}\ndef save():(work/'drill.json').write_text(json.dumps(record,indent=2)+'\\n')\nrecord['replica_before']=r.transfer(config,'status');assert record['replica_before']['manifest']==expected\nrecord['restored']=r.restore(config,db,expected);assert not sources.exists()\nwith r.database(db) as conn:before=conn.execute('SELECT * FROM events ORDER BY sequence').fetchall()\nrecord['original_rows_sha256']=hashlib.sha256(r.canonical(before)).hexdigest();save()\ncases=[('What happens when the model calculation disagrees?','supported_answer','needs_review'),('What is the minimum Python version required?','supported_answer','Python 3.10 or newer'),('Who manufactured the reservoir?','not_found_in_source',None)]\nwith patch('knowledge.read_source',side_effect=AssertionError('Original source paths must never be accessed')):\n with patch('knowledge.ask',side_effect=AssertionError('No inference before source recovery')):\n  for q,status,answer in cases:\n   result=knowledge.answer_question(db,q,'gemma4:e4b',11,0.2,recovery_root=sources)\n   assert result['status']=='needs_review' and result['reason']=='invalid_source_recovery'\n   record['before'].append(result);save()\n record['source_manifest']=sr.recover(db,sources);save()\n for q,status,answer in cases:\n  result=knowledge.answer_question(db,q,'gemma4:e4b',11,0.2,recovery_root=sources)\n  record['after'].append(result);save();print(q,result['status'],result.get('answer'),flush=True)\n  assert result['status']==status and (answer is None or result['answer']==answer)\n  if status=='supported_answer':\n   citation=result['citation'];assert Path(citation['path']).is_relative_to(sources)\n   assert 'original_path' in citation and r.sha(citation['path'])==citation['sha256']\n  else:assert result['finding_id'] and all(result['absence_checks'].values())\nwith r.database(db,immutable=False) as conn:\n after=conn.execute('SELECT * FROM events ORDER BY sequence').fetchall()\n record['events']=[{**dict(zip(r.COLS,row)),'payload':json.loads(row[-1])} for row in after]\nassert after[:len(before)]==before\nrecord['historical_events_unchanged']=True\nbyid={e['id']:e for e in record['events']}\nproof=[]\nfor result in record['after']:\n task=result['task_id'];events=[e for e in record['events'] if e['run_id']==task]\n query=next(e for e in events if e['kind']=='knowledge_query');assert query['payload']==result\n item={'task_id':task,'query_event_id':query['id'],'status':result['status']}\n if result['status']=='supported_answer':\n  s=next(e for e in events if e['kind']=='model_call' and e['cookie']=='cookie-support')\n  check=next(e for e in events if e['kind']=='support_check')\n  assert all(check['payload'].values()) and s['payload']['context']=={'question':result['question'],'quote':result['quote']}\n  source=byid[result['citation']['source_id']]['payload'];assert result['quote'] in source['text']\n  item.update(source_id=result['citation']['source_id'],support_event_id=s['id'],support_check_id=check['id'])\n else:\n  finding=byid[result['finding_id']]['payload'];confirm=byid[finding['confirmation_id']]['payload'];check=byid[finding['absence_check_id']]['payload']\n  assert confirm['answer']=={'answer':'','outcome':'not_found_in_source'} and all(check['checks'].values()) and check['confirmation_id']==finding['confirmation_id']\n  source_ids={cid.rsplit(':',1)[0] for cid in finding['searched_chunk_ids']};assert source_ids.issubset(record['source_manifest']['sources'])\n  item.update(finding_id=result['finding_id'],confirmation_id=finding['confirmation_id'],absence_check_id=finding['absence_check_id'],source_ids=sorted(source_ids))\n proof.append(item)\nrecord['new_evidence_links']=proof\nrecord['restored_files']=[{'source_id':sid,'path':str(sources/entry['path']),'sha256':r.sha(sources/entry['path'])} for sid,entry in record['source_manifest']['sources'].items()]\nrecord['replica_after']=r.transfer(config,'status');assert record['replica_after']==record['replica_before']\nassert r.sha(config['database'])==primary_sha\nassert all(hashlib.sha256((out/name).read_bytes()).hexdigest()==digest for name,digest in prior.items())\ntests=subprocess.run([sys.executable,'-m','unittest','-q'],cwd=out,capture_output=True,text=True,timeout=120)\nrecord['unit_tests']={'exit':tests.returncode,'stdout':tests.stdout,'stderr':tests.stderr};save();assert tests.returncode==0\nrecord['status']='passed';record['finished_utc']=datetime.now(timezone.utc).isoformat();save()\nprint('Source recovery and all 93 tests passed',flush=True)\n"
+  }
+}

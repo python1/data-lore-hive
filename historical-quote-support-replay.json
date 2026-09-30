@@ -1,0 +1,86 @@
+{
+  "scope": "Additional targeted replay, separate from the 18-case batch",
+  "cases": [
+    {
+      "seed": 11,
+      "question": "Who manufactured the reservoir?",
+      "quote": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.",
+      "response": {
+        "outcome": "not_found_in_source",
+        "answer": ""
+      },
+      "model_call": {
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "answer": {
+          "outcome": "not_found_in_source",
+          "answer": ""
+        },
+        "total_duration_ns": 19041441625,
+        "prompt_tokens": 177,
+        "output_tokens": 17,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "temperature": 0.2,
+          "num_predict": 384,
+          "num_ctx": 4096,
+          "seed": 11
+        }
+      }
+    },
+    {
+      "seed": 29,
+      "question": "Who manufactured the reservoir?",
+      "quote": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.",
+      "response": {
+        "outcome": "not_found_in_source",
+        "answer": ""
+      },
+      "model_call": {
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "answer": {
+          "outcome": "not_found_in_source",
+          "answer": ""
+        },
+        "total_duration_ns": 1471831500,
+        "prompt_tokens": 177,
+        "output_tokens": 17,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "temperature": 0.2,
+          "num_predict": 384,
+          "num_ctx": 4096,
+          "seed": 29
+        }
+      }
+    },
+    {
+      "seed": 47,
+      "question": "Who manufactured the reservoir?",
+      "quote": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.",
+      "response": {
+        "outcome": "not_found_in_source",
+        "answer": ""
+      },
+      "model_call": {
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "answer": {
+          "outcome": "not_found_in_source",
+          "answer": ""
+        },
+        "total_duration_ns": 1279537833,
+        "prompt_tokens": 177,
+        "output_tokens": 17,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "temperature": 0.2,
+          "num_predict": 384,
+          "num_ctx": 4096,
+          "seed": 47
+        }
+      }
+    }
+  ]
+}

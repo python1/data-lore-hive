@@ -1,0 +1,11 @@
+# Prototype checkpoint — 2026-09-25
+
+Tag: `hive-prototype-checkpoint-2026-09-25` (local repository in this folder).
+
+Question-based routing is implemented in both cookies: recognized condition/outcome questions use structured roles; recognized general factual questions use independent source support; unclassified questions go to review. Identity guidance, a constrained general verdict enum, and explicit abstention JSON examples for both cookies complete the change. Source anchoring, requested-role agreement, malformed-output rejection and independent absence confirmation remain enforced.
+
+Current validation: **63 unit tests pass**. The complete 12-trial policy suite (`gemma4:e4b`, seeds 11/29/47, temperature 0.2) yielded **6 correct answers, 6 independently confirmed not-found findings, 0 reviews, 0 false accepts, 0 false rejects, 0 runtime errors**. The target is met. Four earlier failed attempts and all 28 pre-existing JSON records are retained unchanged. See [current record](question-routing-final.json), [audit](question-routing-audit.json), and [detailed results and parser limits](STRUCTURED-POLICY.md).
+
+Known limits: narrow English question prefixes and short keyword heuristics; event-date “when” questions are not distinguished from policy conditions; compound questions are not reliably classified. Policy parsing supports only specific Markdown headers and If/When/Whenever comma clauses; exceptions, outcome-first prose, cross-references, compound conditions and multi-sentence consequences are unsupported or may parse partially. Decimal punctuation can truncate a consequence. Full table quotes are limited to 400 characters. Two cookies on the same model can share errors. Not-found findings cover retrieved excerpts only. This remains a local prototype, without distributed workers or peer replication.
+
+The earlier 36-trial aggregate and prose/table diagnostics are historical; they were not rerun in this change. These tuned regression fixtures are not a general accuracy guarantee. The checkpoint includes code, documentation and JSON evaluation records. Local SQLite memory and Python caches remain on disk but are excluded from Git. No remote repository or push was created.

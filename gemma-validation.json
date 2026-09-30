@@ -1,0 +1,327 @@
+{
+  "model": "gemma4:e4b",
+  "automated_tests_passed": 8,
+  "live_runs": {
+    "correct_answer": {
+      "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+      "status": "verified",
+      "events": [
+        {
+          "sequence": 1,
+          "id": "b166f8f8-f150-4268-89dc-0c7172849516",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-learner",
+          "kind": "data",
+          "recorded_at": "2026-09-25T02:19:38.356765+00:00",
+          "payload": {
+            "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+            "snapshot": {
+              "fixture": "Synthetic reservoir specification",
+              "reservoir_capacity_litres": 120
+            },
+            "source_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "source_uri": "file://<workspace>/work/gemma-hive/source-a81bcfc5-9816-485e-a045-41b3aa342ac1.json"
+          }
+        },
+        {
+          "sequence": 2,
+          "id": "35de4dfb-bfdf-45da-89bc-1837496c6b52",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-learner",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T02:19:54.663480+00:00",
+          "payload": {
+            "answer": {
+              "capacity_litres": 120
+            },
+            "context_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 62,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 15968505083
+          }
+        },
+        {
+          "sequence": 3,
+          "id": "2cd67441-04f3-4751-92b9-a5b944cbb580",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-learner",
+          "kind": "claim",
+          "recorded_at": "2026-09-25T02:19:54.669119+00:00",
+          "payload": {
+            "evidence_id": "b166f8f8-f150-4268-89dc-0c7172849516",
+            "key": "reservoir_capacity_litres",
+            "scope": "This source snapshot only",
+            "status": "unverified",
+            "value": 120
+          }
+        },
+        {
+          "sequence": 4,
+          "id": "936bc9f7-89a3-4e1a-8637-e3a4b4a63ee9",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-solver",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T02:19:56.654150+00:00",
+          "payload": {
+            "answer": {
+              "answer_litres": 360
+            },
+            "context_sha256": "13c586d78b7167d0d13769d0cb1aa868e9b0866ac66451e2e8598241ac320dbd",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 138,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1715045084
+          }
+        },
+        {
+          "sequence": 5,
+          "id": "6ec7a574-5ed4-4a2f-be20-d29d57b7dc07",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-solver",
+          "kind": "result",
+          "recorded_at": "2026-09-25T02:19:56.656147+00:00",
+          "payload": {
+            "answer_litres": 360,
+            "claim_id": "2cd67441-04f3-4751-92b9-a5b944cbb580",
+            "injected_error": false,
+            "method": "Model used retrieved claim",
+            "question": "What is the combined capacity of 3 identical reservoirs?",
+            "reservoir_count": 3,
+            "status": "proposed"
+          }
+        },
+        {
+          "sequence": 6,
+          "id": "c5d28d41-ba27-4f43-a1d2-1dc35c533575",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-verifier",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T02:19:59.427044+00:00",
+          "payload": {
+            "answer": {
+              "reason": "The proposed total capacity (360 litres) is correctly calculated by multiplying the original source reservoir capacity (120 litres) by the reservoir count (3).",
+              "valid": true
+            },
+            "context_sha256": "d16838ae4ebaff9a53b41825a0d5259db006ef53faf930543ef7a5b25199eba6",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 44,
+            "prompt_tokens": 185,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 2658112334
+          }
+        },
+        {
+          "sequence": 7,
+          "id": "7ea5359e-b11a-4991-89ae-0f97f77ff7c2",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-verifier",
+          "kind": "verification",
+          "recorded_at": "2026-09-25T02:19:59.429084+00:00",
+          "payload": {
+            "checks": {
+              "answer_matches_source": true,
+              "claim_link": true,
+              "claim_matches_source": true,
+              "evidence_link": true,
+              "model_agrees": true,
+              "positive_integer_count": true,
+              "snapshot_integrity": true,
+              "source_unchanged": true
+            },
+            "result_id": "6ec7a574-5ed4-4a2f-be20-d29d57b7dc07",
+            "scope": "Consistency with a synthetic source, not proof of real-world truth",
+            "status": "verified"
+          }
+        },
+        {
+          "sequence": 8,
+          "id": "43149e06-b867-44e0-90b2-6b656fd0c08e",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-verifier",
+          "kind": "lore",
+          "recorded_at": "2026-09-25T02:19:59.432501+00:00",
+          "payload": {
+            "lesson": "This run successfully reused another cookie's stored fact.",
+            "scope": "This experiment only; not a universal conclusion",
+            "status": "run_observation",
+            "verification_id": "7ea5359e-b11a-4991-89ae-0f97f77ff7c2"
+          }
+        },
+        {
+          "sequence": 9,
+          "id": "f68110fd-a8dc-494e-acbb-4497781b3512",
+          "run_id": "a81bcfc5-9816-485e-a045-41b3aa342ac1",
+          "cookie": "cookie-verifier",
+          "kind": "working_knowledge",
+          "recorded_at": "2026-09-25T02:19:59.434447+00:00",
+          "payload": {
+            "answer_litres": 360,
+            "result_id": "6ec7a574-5ed4-4a2f-be20-d29d57b7dc07",
+            "scope": "What is the combined capacity of 3 identical reservoirs?",
+            "status": "supported_by_fixture",
+            "verification_id": "7ea5359e-b11a-4991-89ae-0f97f77ff7c2"
+          }
+        }
+      ]
+    },
+    "injected_error": {
+      "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+      "status": "disputed",
+      "events": [
+        {
+          "sequence": 1,
+          "id": "9df2f570-e59e-48e5-b475-7e8904f258a2",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-learner",
+          "kind": "data",
+          "recorded_at": "2026-09-25T02:20:33.992503+00:00",
+          "payload": {
+            "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+            "snapshot": {
+              "fixture": "Synthetic reservoir specification",
+              "reservoir_capacity_litres": 120
+            },
+            "source_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "source_uri": "file://<workspace>/work/gemma-hive-dispute/source-b825f8f4-a8d0-47b1-ae9c-526e13b8903f.json"
+          }
+        },
+        {
+          "sequence": 2,
+          "id": "9740cef4-d2ce-4526-b4dd-56e0164db509",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-learner",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T02:20:35.038719+00:00",
+          "payload": {
+            "answer": {
+              "capacity_litres": 120
+            },
+            "context_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 62,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1030111875
+          }
+        },
+        {
+          "sequence": 3,
+          "id": "d0c8824f-45e0-48e0-9ed6-9c96b9edef29",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-learner",
+          "kind": "claim",
+          "recorded_at": "2026-09-25T02:20:35.040321+00:00",
+          "payload": {
+            "evidence_id": "9df2f570-e59e-48e5-b475-7e8904f258a2",
+            "key": "reservoir_capacity_litres",
+            "scope": "This source snapshot only",
+            "status": "unverified",
+            "value": 120
+          }
+        },
+        {
+          "sequence": 4,
+          "id": "b0647897-c8f3-4a78-8ea0-0cff087676ef",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-solver",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T02:20:36.501984+00:00",
+          "payload": {
+            "answer": {
+              "answer_litres": 360
+            },
+            "context_sha256": "8aecc747c6d16db75f2a6bf2495f212fe9b245d723d3db4db4dc03cb6934caa1",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 138,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1366268250
+          }
+        },
+        {
+          "sequence": 5,
+          "id": "7d32d8bd-825a-4f51-979c-7b983a3f39f7",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-solver",
+          "kind": "result",
+          "recorded_at": "2026-09-25T02:20:36.505816+00:00",
+          "payload": {
+            "answer_litres": 361,
+            "claim_id": "d0c8824f-45e0-48e0-9ed6-9c96b9edef29",
+            "injected_error": true,
+            "method": "Model used retrieved claim",
+            "question": "What is the combined capacity of 3 identical reservoirs?",
+            "reservoir_count": 3,
+            "status": "proposed"
+          }
+        },
+        {
+          "sequence": 6,
+          "id": "d0487b53-cb30-4159-af31-eb7e1d797050",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-verifier",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T02:20:39.903847+00:00",
+          "payload": {
+            "answer": {
+              "reason": "The proposed total capacity (361 litres) does not match the expected calculation (120 litres * 3 = 360 litres) based on the original source capacity (120 litres) and the reservoir count (3).",
+              "valid": false
+            },
+            "context_sha256": "e31ba1da9a0ee453cbe35dd5b70ee39b25f8b724043dbcf1b99d01a86cbd0b39",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 61,
+            "prompt_tokens": 184,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 3284361917
+          }
+        },
+        {
+          "sequence": 7,
+          "id": "2e556424-fb96-4e98-985a-c7b186795ba6",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-verifier",
+          "kind": "verification",
+          "recorded_at": "2026-09-25T02:20:39.906555+00:00",
+          "payload": {
+            "checks": {
+              "answer_matches_source": false,
+              "claim_link": true,
+              "claim_matches_source": true,
+              "evidence_link": true,
+              "model_agrees": false,
+              "positive_integer_count": true,
+              "snapshot_integrity": true,
+              "source_unchanged": true
+            },
+            "result_id": "7d32d8bd-825a-4f51-979c-7b983a3f39f7",
+            "scope": "Consistency with a synthetic source, not proof of real-world truth",
+            "status": "disputed"
+          }
+        },
+        {
+          "sequence": 8,
+          "id": "fef87ac9-480e-4513-bb8e-852f5c6d2b21",
+          "run_id": "b825f8f4-a8d0-47b1-ae9c-526e13b8903f",
+          "cookie": "cookie-verifier",
+          "kind": "lore",
+          "recorded_at": "2026-09-25T02:20:39.908571+00:00",
+          "payload": {
+            "lesson": "This run produced a disputed result; do not promote its answer.",
+            "scope": "This experiment only; not a universal conclusion",
+            "status": "run_observation",
+            "verification_id": "2e556424-fb96-4e98-985a-c7b186795ba6"
+          }
+        }
+      ]
+    }
+  }
+}

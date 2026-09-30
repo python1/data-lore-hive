@@ -1,0 +1,515 @@
+{
+  "started_utc": "2026-09-27T20:56:47.429907+00:00",
+  "population": {
+    "model": "gemma4:e4b",
+    "seed": 11,
+    "temperature": 0.2,
+    "database": "<repo>/knowledge.sqlite3",
+    "ingestion": {
+      "status": "ingested",
+      "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+      "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+    },
+    "queries": [
+      {
+        "question": "What happens when the model calculation disagrees?",
+        "expected_status": "supported_answer",
+        "result": {
+          "task_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+          "question": "What happens when the model calculation disagrees?",
+          "model": "gemma4:e4b",
+          "status": "supported_answer",
+          "excluded_sources": [],
+          "policy": "quote-support-v2",
+          "seed": 11,
+          "temperature": 0.2,
+          "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+          "question_route": "policy",
+          "requested_slot": "outcome",
+          "checks": {
+            "solver_answer_anchored": true,
+            "solver_value_in_requested_role": true,
+            "support_value_in_requested_role": true,
+            "support_answered": true,
+            "support_answer_anchored": true,
+            "answers_agree": true
+          },
+          "answer": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+          "citation": {
+            "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+            "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+            "path": "<repo>/README.md",
+            "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+            "line": 38
+          }
+        }
+      },
+      {
+        "question": "What is the minimum Python version required?",
+        "expected_status": "supported_answer",
+        "result": {
+          "task_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+          "question": "What is the minimum Python version required?",
+          "model": "gemma4:e4b",
+          "status": "supported_answer",
+          "excluded_sources": [],
+          "policy": "quote-support-v2",
+          "seed": 11,
+          "temperature": 0.2,
+          "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+          "question_route": "general",
+          "checks": {
+            "solver_answer_anchored": true,
+            "support_answered": true,
+            "support_answer_anchored": true,
+            "answers_agree": true
+          },
+          "answer": "Python 3.10 or newer",
+          "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+          "citation": {
+            "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+            "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+            "path": "<repo>/README.md",
+            "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+            "line": 7
+          }
+        }
+      },
+      {
+        "question": "Who manufactured the reservoir?",
+        "expected_status": "not_found_in_source",
+        "result": {
+          "task_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+          "question": "Who manufactured the reservoir?",
+          "model": "gemma4:e4b",
+          "status": "not_found_in_source",
+          "excluded_sources": [],
+          "policy": "quote-support-v2",
+          "seed": 11,
+          "temperature": 0.2,
+          "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+          "question_route": "general",
+          "absence_checks": {
+            "evidence_available": true,
+            "support_confirms_not_found": true,
+            "evidence_still_current": true
+          },
+          "finding_id": "1501d465-6da6-4775-9b42-349cae355637"
+        }
+      }
+    ]
+  },
+  "remote_fault_tests": [
+    {
+      "test": "reordering",
+      "valid_recomputed_manifest": {
+        "version": 1,
+        "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+        "bytes": 86016,
+        "sha256": "b4a50e4608f02158334d7aebb09d88165c669ce62f1d27a3241386e113f35523",
+        "event_count": 26,
+        "first_sequence": 1,
+        "last_sequence": 26,
+        "chain_head": "dc762ded823d2a3187745fabe2bb44dcbdb3c308b8335776e4229e5ae5a6d5ab",
+        "source_snapshots": 4
+      },
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Replication refused: History rewrite, deletion, or rollback\n",
+      "accepted_state_unchanged": true
+    },
+    {
+      "test": "modified_event",
+      "valid_recomputed_manifest": {
+        "version": 1,
+        "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+        "bytes": 94208,
+        "sha256": "3350a77c25333299e82647f62d985a1944d128265be1700cec95f83b065637be",
+        "event_count": 26,
+        "first_sequence": 1,
+        "last_sequence": 26,
+        "chain_head": "db1bede12e61d808de4ec6ac467e9a9e84435889b20ccdf73218c3545d0d61a5",
+        "source_snapshots": 4
+      },
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Replication refused: History rewrite, deletion, or rollback\n",
+      "accepted_state_unchanged": true
+    },
+    {
+      "test": "deleted_event",
+      "valid_recomputed_manifest": {
+        "version": 1,
+        "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+        "bytes": 86016,
+        "sha256": "b3f790f7d0753c141913a5c92bcba01f6e62e0fc45013dc7d983dbc577ce5aed",
+        "event_count": 25,
+        "first_sequence": 1,
+        "last_sequence": 25,
+        "chain_head": "f265de54bde4d86b0b82c3cc5ccebf1efbcb52c2f1979609fea14e6839506016",
+        "source_snapshots": 4
+      },
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Replication refused: History rewrite, deletion, or rollback\n",
+      "accepted_state_unchanged": true
+    },
+    {
+      "test": "rollback",
+      "valid_recomputed_manifest": {
+        "version": 1,
+        "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+        "bytes": 57344,
+        "sha256": "80b30334eaf574fc135441cd6e3b145ea27ba12c766b2c600916bce6034e02e4",
+        "event_count": 7,
+        "first_sequence": 1,
+        "last_sequence": 7,
+        "chain_head": "830f000c6ac3192359742cf38aab4d8c5d79979fafb738444ff80002a068ac6a",
+        "source_snapshots": 3
+      },
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Replication refused: History rewrite, deletion, or rollback\n",
+      "accepted_state_unchanged": true
+    }
+  ],
+  "emergency_backup_used": false,
+  "manifest": {
+    "version": 1,
+    "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+    "bytes": 86016,
+    "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+    "event_count": 26,
+    "first_sequence": 1,
+    "last_sequence": 26,
+    "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+    "source_snapshots": 4
+  },
+  "links_before": [
+    {
+      "task_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "query_event_id": "4f4e7dfa-0a96-40c8-a05a-99832100df59",
+      "status": "supported_answer",
+      "source_links": [
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        }
+      ],
+      "answer": "needs_review",
+      "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+      "support_event_id": "e4e9c80d-4d11-4b4d-99e3-887795ee8170",
+      "support_check_id": "6705fe3f-771e-491e-bd7c-ba10743c699e",
+      "support_link_type": "same run_id; no direct support-event foreign key on the supported query",
+      "linked_event_sha256": {
+        "34b686a2-8e9a-4aeb-a22b-cf1056115034": "e7053f0afa8a575826530e87194efcc11c128e1164d30f4cdace3cf60b65ac7b",
+        "58b5bfca-8285-41d3-8fb4-77c169056bca": "f229e1e71615a51ae3479df56988311675e0875e13e183513c2073de2790498d",
+        "8312ed48-8020-4eac-a41f-ea3c36650ce6": "d22e5e53e92120f845002f5a8791f05634fb610824a1ba0f3e05f376d623a743",
+        "80b85785-e75c-4945-a249-12dc55c6f14e": "34e5f0271257b1d58a6a01a64f8163231334c658763f6e80bbee0af89a0bcff1",
+        "e4e9c80d-4d11-4b4d-99e3-887795ee8170": "909127082e1c0340270f0244b2c6cc49f42a804a6e9f1316bafdcfca3f114cc6",
+        "135c8b23-7bae-4db0-8451-6d89bbf14531": "4f867e336c594c0618a5714f0d7710bf36c0c4ca836aa71a12720737558238f0",
+        "6705fe3f-771e-491e-bd7c-ba10743c699e": "57ed364b52d9146e673d45feb599c785328165da099c223a3a35c95005c4a1bf",
+        "4f4e7dfa-0a96-40c8-a05a-99832100df59": "dcb4a650eaea7f222b8f4dc040f297ce18c3726b14ecc7e7fcfedf494ff69d5b"
+      }
+    },
+    {
+      "task_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+      "query_event_id": "b596ee2c-bd7b-4457-ab3c-669f1b7703f4",
+      "status": "supported_answer",
+      "source_links": [
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        }
+      ],
+      "answer": "Python 3.10 or newer",
+      "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+      "support_event_id": "f36c3464-9bf8-4860-9550-c2c1fec41b5d",
+      "support_check_id": "7fc7d2ab-af9f-4876-9ab7-05200c687244",
+      "support_link_type": "same run_id; no direct support-event foreign key on the supported query",
+      "linked_event_sha256": {
+        "34b686a2-8e9a-4aeb-a22b-cf1056115034": "e7053f0afa8a575826530e87194efcc11c128e1164d30f4cdace3cf60b65ac7b",
+        "9a7f9383-b6f9-4f3f-8073-9afc481dbe60": "6c95a650c88dde087f328ede70f9bc7730a51e305a668dd544d7183492077aa3",
+        "4256e52e-9c2b-4f56-b70c-5110837ce5b0": "75089894fbbeabc893d8425a785c0f085f168b12b767b7b2407abdca4197c0d2",
+        "f36c3464-9bf8-4860-9550-c2c1fec41b5d": "023ad1e7f0e1399eacc9f288060a60824ee0d918ee4ecfeb854719d83add6f97",
+        "7fc7d2ab-af9f-4876-9ab7-05200c687244": "746481841bd2fd3c6532ad5d8e890aac3ce7e0dea6fc84211aa7ae2146087a56",
+        "b596ee2c-bd7b-4457-ab3c-669f1b7703f4": "8cd0967c0051a4139fa43c5c8f21e5f0f5491b6a5dbcdfc927452de926241f3c"
+      }
+    },
+    {
+      "task_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "query_event_id": "d7082e3b-9a8b-463f-b235-3e85cb6507fd",
+      "status": "not_found_in_source",
+      "source_links": [
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:2793",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        },
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3042",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        },
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:5009",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        }
+      ],
+      "finding_id": "1501d465-6da6-4775-9b42-349cae355637",
+      "confirmation_id": "e0ad7dfb-0564-464d-bda9-c7da16db2689",
+      "absence_check_id": "ebe00668-ac9a-4e84-a83b-30d98becab20",
+      "support_link_type": "explicit confirmation_id and absence_check_id",
+      "linked_event_sha256": {
+        "34b686a2-8e9a-4aeb-a22b-cf1056115034": "e7053f0afa8a575826530e87194efcc11c128e1164d30f4cdace3cf60b65ac7b",
+        "283be94b-222b-4ca4-a472-58247d9cb188": "4fb50f48e3e7a640e4366bda83fa98c9400103fcef8359be09d91ea448b0ed57",
+        "07620fb5-8530-4fdd-bf57-60507d092559": "75d948421c29267d000d50b9249d8d411f15c8b61030f45eb32a2894518f26de",
+        "e0ad7dfb-0564-464d-bda9-c7da16db2689": "a712e485b02bf7061c5a172249d2126d73d77b7460947268cfe4e4ae092b77e7",
+        "ebe00668-ac9a-4e84-a83b-30d98becab20": "67a6f0e49326d0391b25f85ee0b4810aed9142191cbac70eb03103de75d4ead0",
+        "1501d465-6da6-4775-9b42-349cae355637": "9806b2ec34ad6e345f1cf2316aa5a358ca39970f95ca9774a58f1ab8e947f789",
+        "d7082e3b-9a8b-463f-b235-3e85cb6507fd": "2f91ac531a350793d96d0189eb9e8aaa3a28976b36b51f75097943aa4d7914a1"
+      }
+    }
+  ],
+  "push": {
+    "status": "accepted",
+    "manifest": {
+      "version": 1,
+      "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+      "bytes": 86016,
+      "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+      "event_count": 26,
+      "first_sequence": 1,
+      "last_sequence": 26,
+      "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+      "source_snapshots": 4
+    }
+  },
+  "replica_before_faults": {
+    "manifest": {
+      "version": 1,
+      "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+      "bytes": 86016,
+      "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+      "event_count": 26,
+      "first_sequence": 1,
+      "last_sequence": 26,
+      "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+      "source_snapshots": 4
+    },
+    "generations": 2,
+    "stored_bytes": 144049
+  },
+  "valid_retry": {
+    "status": "unchanged",
+    "manifest": {
+      "version": 1,
+      "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+      "bytes": 86016,
+      "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+      "event_count": 26,
+      "first_sequence": 1,
+      "last_sequence": 26,
+      "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+      "source_snapshots": 4
+    }
+  },
+  "lsof": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "deleted_paths": [
+    "<repo>/knowledge.sqlite3",
+    "<repo>/knowledge.sqlite3-wal",
+    "<repo>/knowledge.sqlite3-shm"
+  ],
+  "primary_absent_before_restore": true,
+  "restored_manifest": {
+    "version": 1,
+    "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+    "bytes": 86016,
+    "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+    "event_count": 26,
+    "first_sequence": 1,
+    "last_sequence": 26,
+    "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+    "source_snapshots": 4
+  },
+  "links_after": [
+    {
+      "task_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "query_event_id": "4f4e7dfa-0a96-40c8-a05a-99832100df59",
+      "status": "supported_answer",
+      "source_links": [
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        }
+      ],
+      "answer": "needs_review",
+      "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+      "support_event_id": "e4e9c80d-4d11-4b4d-99e3-887795ee8170",
+      "support_check_id": "6705fe3f-771e-491e-bd7c-ba10743c699e",
+      "support_link_type": "same run_id; no direct support-event foreign key on the supported query",
+      "linked_event_sha256": {
+        "34b686a2-8e9a-4aeb-a22b-cf1056115034": "e7053f0afa8a575826530e87194efcc11c128e1164d30f4cdace3cf60b65ac7b",
+        "58b5bfca-8285-41d3-8fb4-77c169056bca": "f229e1e71615a51ae3479df56988311675e0875e13e183513c2073de2790498d",
+        "8312ed48-8020-4eac-a41f-ea3c36650ce6": "d22e5e53e92120f845002f5a8791f05634fb610824a1ba0f3e05f376d623a743",
+        "80b85785-e75c-4945-a249-12dc55c6f14e": "34e5f0271257b1d58a6a01a64f8163231334c658763f6e80bbee0af89a0bcff1",
+        "e4e9c80d-4d11-4b4d-99e3-887795ee8170": "909127082e1c0340270f0244b2c6cc49f42a804a6e9f1316bafdcfca3f114cc6",
+        "135c8b23-7bae-4db0-8451-6d89bbf14531": "4f867e336c594c0618a5714f0d7710bf36c0c4ca836aa71a12720737558238f0",
+        "6705fe3f-771e-491e-bd7c-ba10743c699e": "57ed364b52d9146e673d45feb599c785328165da099c223a3a35c95005c4a1bf",
+        "4f4e7dfa-0a96-40c8-a05a-99832100df59": "dcb4a650eaea7f222b8f4dc040f297ce18c3726b14ecc7e7fcfedf494ff69d5b"
+      }
+    },
+    {
+      "task_id": "f47930b9-8ee2-4ba1-8e5d-e1e3a35d0422",
+      "query_event_id": "b596ee2c-bd7b-4457-ab3c-669f1b7703f4",
+      "status": "supported_answer",
+      "source_links": [
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        }
+      ],
+      "answer": "Python 3.10 or newer",
+      "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+      "support_event_id": "f36c3464-9bf8-4860-9550-c2c1fec41b5d",
+      "support_check_id": "7fc7d2ab-af9f-4876-9ab7-05200c687244",
+      "support_link_type": "same run_id; no direct support-event foreign key on the supported query",
+      "linked_event_sha256": {
+        "34b686a2-8e9a-4aeb-a22b-cf1056115034": "e7053f0afa8a575826530e87194efcc11c128e1164d30f4cdace3cf60b65ac7b",
+        "9a7f9383-b6f9-4f3f-8073-9afc481dbe60": "6c95a650c88dde087f328ede70f9bc7730a51e305a668dd544d7183492077aa3",
+        "4256e52e-9c2b-4f56-b70c-5110837ce5b0": "75089894fbbeabc893d8425a785c0f085f168b12b767b7b2407abdca4197c0d2",
+        "f36c3464-9bf8-4860-9550-c2c1fec41b5d": "023ad1e7f0e1399eacc9f288060a60824ee0d918ee4ecfeb854719d83add6f97",
+        "7fc7d2ab-af9f-4876-9ab7-05200c687244": "746481841bd2fd3c6532ad5d8e890aac3ce7e0dea6fc84211aa7ae2146087a56",
+        "b596ee2c-bd7b-4457-ab3c-669f1b7703f4": "8cd0967c0051a4139fa43c5c8f21e5f0f5491b6a5dbcdfc927452de926241f3c"
+      }
+    },
+    {
+      "task_id": "787f9781-c179-42cd-933a-3c4611a2f2bf",
+      "query_event_id": "d7082e3b-9a8b-463f-b235-3e85cb6507fd",
+      "status": "not_found_in_source",
+      "source_links": [
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:2793",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        },
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3042",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        },
+        {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:5009",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564"
+        }
+      ],
+      "finding_id": "1501d465-6da6-4775-9b42-349cae355637",
+      "confirmation_id": "e0ad7dfb-0564-464d-bda9-c7da16db2689",
+      "absence_check_id": "ebe00668-ac9a-4e84-a83b-30d98becab20",
+      "support_link_type": "explicit confirmation_id and absence_check_id",
+      "linked_event_sha256": {
+        "34b686a2-8e9a-4aeb-a22b-cf1056115034": "e7053f0afa8a575826530e87194efcc11c128e1164d30f4cdace3cf60b65ac7b",
+        "283be94b-222b-4ca4-a472-58247d9cb188": "4fb50f48e3e7a640e4366bda83fa98c9400103fcef8359be09d91ea448b0ed57",
+        "07620fb5-8530-4fdd-bf57-60507d092559": "75d948421c29267d000d50b9249d8d411f15c8b61030f45eb32a2894518f26de",
+        "e0ad7dfb-0564-464d-bda9-c7da16db2689": "a712e485b02bf7061c5a172249d2126d73d77b7460947268cfe4e4ae092b77e7",
+        "ebe00668-ac9a-4e84-a83b-30d98becab20": "67a6f0e49326d0391b25f85ee0b4810aed9142191cbac70eb03103de75d4ead0",
+        "1501d465-6da6-4775-9b42-349cae355637": "9806b2ec34ad6e345f1cf2316aa5a358ca39970f95ca9774a58f1ab8e947f789",
+        "d7082e3b-9a8b-463f-b235-3e85cb6507fd": "2f91ac531a350793d96d0189eb9e8aaa3a28976b36b51f75097943aa4d7914a1"
+      }
+    }
+  ],
+  "all_links_identical": true,
+  "byte_identical": true,
+  "history_identical": true,
+  "unit_tests": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "----------------------------------------------------------------------\nRan 81 tests in 0.775s\n\nOK\n"
+  },
+  "replica_after": {
+    "manifest": {
+      "version": 1,
+      "database_id": "2fe11788-7e0e-4591-9373-c01c214f8ce7",
+      "bytes": 86016,
+      "sha256": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+      "event_count": 26,
+      "first_sequence": 1,
+      "last_sequence": 26,
+      "chain_head": "e51439da5b89dfbcd3902736f21c1933395cffd5f05c1dfe0196a73db4760f67",
+      "source_snapshots": 4
+    },
+    "generations": 2,
+    "stored_bytes": 144049
+  },
+  "prior_record_hashes_unchanged": {
+    "question-routing-audit.json": "632abd908d0c977d5847a0c7f1b9fa23b67aa4ec37352899f73425861ad642fd",
+    "policy-parser-limitations-observed.json": "f56e5c4a107d3b4aa7af07ff965c0a88c2e27db0d1e8b92d80e0cbe17f322154",
+    "abstention-format-validation-b3acd7b3.json": "36378aaa8e7ef1cbc023ca38fd9314bacb90c349a56bba7143e7073cd4224c79",
+    "preserved-prose-replay-fa52a8fe.json": "e9a84b924caf9ff8282dcc4fa4f12f22f674bdfce13f80cfd9077c6b9b1fe6f6",
+    "prose-policy-validation-2147ce73.json": "4aef6bf1537a9a3030d5ab8078ddde0c2b504b492eac3ee7ce9c50b805fc6124",
+    "question-routing-attempt-4.json": "38ff46af6fd7d0d02468b8d5c5109ea8b863ca3e98090e2adfdeb0508191e234",
+    "table-context-validation-40eddada.json": "2af8a177ca84e58815c6752348c468bc8839df3b508ec975436837d24a6a39b6",
+    "absence-confirmation-live-query.json": "6d9c702df2cf0cc3317ad58e7aec4d88c7e0719db05aa000c94b389256ae9d8a",
+    "structured-policy-complete-record.json": "02a777a954f0df2fe7804667d48bdc5722a41546f96ff30674142aaff0030540",
+    "support-seeded-0564edb2-raw.json": "f7daa22baae7c8d0ffa7608866b8da6026873bc0c99a3742a15e6e726f65e3a8",
+    "question-routing-attempt-3.json": "3cecefb329b8a30e11af7ef07152f485a40e19d1a091e3411db8cf6317b024cc",
+    "support-meaning-rerun-4c9252b8.json": "467212e9e5340a7e72b16404f7dc9e84b07af76af9df1025d316a7e5738060eb",
+    "question-routing-attempt-2.json": "7c2dceece9c2a29d614366b280f8f8e2b485e88176781fe2b8109371d7edf1b8",
+    "verifier-v2-validation.json": "e7bde6eb00b9fbced6cafb559c09b703cfcb96cd9a34b6937fe5415eafe98993",
+    "survivability-step-1-2026-09-27.json": "e6618d9149a16ad892d5c8af9f7cca0f467c28f18f3fd8c66ddcf5debef22594",
+    "rerun-2026-09-26-prose-unplanned-246ffdb1.json": "0bc63daa5117bedfc2698a89428af529e762bbb6eadf86dc87b3eac70aedca6d",
+    "source-memory-query-2.json": "d788acc6f0796f6509c377b2e598d43899a7cb623366dc891c2de293ab8d31d8",
+    "source-memory-query-1.json": "f3207bd7991b509b50b8b0f5c7a007eb83feb4db31175e89cbd85e55d55823d3",
+    "question-routing-attempt-1.json": "ddd0607da9e876abbf3eb68a6f3d0863a4ac9f28d6915480d539b54891f0725c",
+    "prose-nonanswer-unfixed-e7a6c871.json": "0f376aaf9ed4f01ff4d46a880829f3257351d5ca8dc015ca7067710502514dc5",
+    "outcome-selection-attempt-1.json": "de9e7910eaa45f9c02d60dc8382ba5ecb4d320cbaef469f897cd0df60a039311",
+    "batch-validation-1d3dc0b9.json": "f092ab8414ce53594359d86b3f10f4a0f0d347c71714cf4879295d315c3a9efc",
+    "support-seeded-0564edb2-adjudicated.json": "abf3ef70d7f0d6e4da74630a1b68b196c3f1995372a74cd461479636182fcbe4",
+    "structured-prose-diagnostic.json": "3314082fb75669b876d08777214f29a16bc9d10a1e67f5beadbc29a49b902811",
+    "rerun-2026-09-26-prose-c05d54e7.json": "ef04c650c23c1a43679bf6e0f148c75e19e6334e889433457772135f87a96d59",
+    "prose-current-validation-ab0af95d.json": "d78c6236ab2d0aba6f9f52d2de5077bc446cacb84ca12d17b4325b816844ded5",
+    "question-routing-final.json": "8b826dab508cd377b0af1565f8783c65632280fb2133961dab3364d0a1da4e25",
+    "gemma-validation.json": "37aad764dbca42ff8db053f62cac96ea5a3d8d4a5b233cc46f53054fcefe8950",
+    "structured-policy-notfound-8f814944.json": "ec30f83d6de5e16488f432c99ca22e6bb85f96e0220a2a6f372eaa659fbb85e4",
+    "policy-holdout-validation-7e145b8d.json": "61ffc80509e28ee8f86d3a240e28d020e914d49331df58a766e66f4508a350bc",
+    "historical-quote-support-replay.json": "e325fe7653c519d9fb692ec0a3f5e45373c97af52a57f4a911fcc09eca228c0c",
+    "seven-reservoir-test.json": "fb328509ca255f63b4405499631c91ef01528f0db564716f93fe038dbfb150df",
+    "rerun-2026-09-26-measurements.json": "5c31be70562ab1d6c92a4578608d54d9fad696e1dbdc00b2f4a0ce4114d01382",
+    "source-memory-validation.json": "200a6c5b020adb7ffc731aab2616fcbf62231adcc0a7036d6d5ef9cf06b4a013",
+    "structured-prose-validation-baaeb1ee.json": "a0c7fb456cceb53392f009c31a680be6c8065a8fa66639bd51383a38ab70ef9d",
+    "condition-slot-validation.json": "f4fc40f1d8850a558f6be8d65b7aeca14086dbde2163916f61f102e63a25ab7b",
+    "rerun-2026-09-26-table-source-2adf1acc.json": "b782c40c9df1f453d0965abadedf7f7af8a8aeee96fd4ad8a0b07fef6686a9ea",
+    "absence-confirmation-validation.json": "42e301515bdc2f65d040cbc1fab023c35d69dc6d3c46cd74bd83de393a17aee5",
+    "structured-table-validation-4a0208d6.json": "98314d79b4212b54bd92074409655c451877761b6162bdc1aabad8bb46a36a46"
+  },
+  "finished_utc": "2026-09-27T20:56:51.933435+00:00",
+  "status": "passed",
+  "implementation_commit": "46d059102beed1238e777fc7ea59ed1a314e03a8",
+  "procedure_scripts": {
+    "populate.py": {
+      "sha256": "cb2aa590c5054411fdc33884b2b048f112a91d91fda84b044cee9a1f1a2d1148",
+      "text": "from pathlib import Path\nimport sys,json,hashlib\nroot=Path.cwd();out=root/'outputs/hive-prototype';work=root/'work/replication-coverage'\nsys.path.insert(0,str(out));import knowledge\nconfig=json.loads((root/'work/replication/client.json').read_text());db=Path(config['database'])\nprior={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.json')}\nwith (work/'prior-hashes.json').open('x') as f:json.dump(prior,f,indent=2)\nrecord={'model':'gemma4:e4b','seed':11,'temperature':0.2,'database':str(db),'ingestion':knowledge.ingest(db,out/'README.md'),'queries':[]}\ndef save():(work/'population.json').write_text(json.dumps(record,indent=2)+'\\n')\nsave()\nfor question,status in [('What happens when the model calculation disagrees?','supported_answer'),('What is the minimum Python version required?','supported_answer'),('Who manufactured the reservoir?','not_found_in_source')]:\n result=knowledge.answer_question(db,question,'gemma4:e4b',11,0.2)\n record['queries'].append({'question':question,'expected_status':status,'result':result});save()\n print(question,result,flush=True)\n if result['status']!=status:raise SystemExit('Unexpected result retained; do not proceed to recovery')\n"
+    },
+    "drill.py": {
+      "sha256": "9bd04330b0974ab8d2e35ab933d095cae165aaf7a28088035871c942f3cbe7c5",
+      "text": "from pathlib import Path\nfrom datetime import datetime,timezone\nimport hashlib,io,json,shutil,sqlite3,subprocess,sys\nroot=Path.cwd();out=root/'outputs/hive-prototype';work=root/'work/replication-coverage'\nsys.path.insert(0,str(out));import replication as r;import knowledge;import hive\nconfig=json.loads((root/'work/replication/client.json').read_text());primary=Path(config['database'])\npop=json.loads((work/'population.json').read_text())\nassert len(pop['queries'])==3 and all(q['result']['status']==q['expected_status'] for q in pop['queries'])\nrecord={'started_utc':datetime.now(timezone.utc).isoformat(),'population':pop,'remote_fault_tests':[],'emergency_backup_used':False}\ndef save():(work/'drill.json').write_text(json.dumps(record,indent=2)+'\\n')\ndef links(db):\n with r.database(db) as conn:\n  rows=[dict(zip(r.COLS,row)) for row in conn.execute('SELECT * FROM events ORDER BY sequence')]\n byid={row['id']:row for row in rows};proof=[]\n def payload(eid):return json.loads(byid[eid]['payload'])\n def source_for(chunk_id):\n  sid,offset=chunk_id.rsplit(':',1);source=payload(sid)\n  assert byid[sid]['kind']=='source_ingested'\n  assert hashlib.sha256(source['text'].encode()).hexdigest()==source['sha256']\n  chunk=next(c for c in knowledge.chunks({'id':sid,**source}) if c['chunk_id']==chunk_id)\n  return sid,source,chunk\n for q in pop['queries']:\n  task=q['result']['task_id'];events=[e for e in rows if e['run_id']==task]\n  queries=[e for e in events if e['kind']=='knowledge_query'];assert len(queries)==1\n  query=queries[0];result=json.loads(query['payload']);assert result==q['result']\n  item={'task_id':task,'query_event_id':query['id'],'status':result['status'],'source_links':[]}\n  if result['status']=='supported_answer':\n   citation=result['citation'];sid,source,chunk=source_for(citation['chunk_id'])\n   assert citation['source_id']==sid and citation['sha256']==source['sha256']\n   assert result['quote'] in chunk['text'] and knowledge.anchored(result['answer'],result['quote'])\n   supports=[e for e in events if e['kind']=='model_call' and e['cookie']=='cookie-support']\n   checks=[e for e in events if e['kind']=='support_check'];assert len(supports)==len(checks)==1\n   support=payload(supports[0]['id']);check=payload(checks[0]['id'])\n   assert check and all(value is True for value in check.values())\n   assert support['context']=={'question':q['question'],'quote':result['quote']}\n   assert support['context_sha256']==hive.digest(support['context'])\n   item.update(answer=result['answer'],quote=result['quote'],support_event_id=supports[0]['id'],support_check_id=checks[0]['id'],support_link_type='same run_id; no direct support-event foreign key on the supported query')\n   item['source_links'].append({'source_id':sid,'chunk_id':citation['chunk_id'],'sha256':source['sha256']})\n  else:\n   finding=payload(result['finding_id']);assert finding['finding']=='not_found_in_source'\n   confirm=payload(finding['confirmation_id']);check=payload(finding['absence_check_id'])\n   assert byid[finding['confirmation_id']]['run_id']==task\n   assert byid[finding['confirmation_id']]['cookie']=='cookie-support'\n   assert confirm['purpose']=='independent_answer_search' and confirm['answer']['outcome']=='not_found_in_source' and confirm['answer']['answer']==''\n   assert check['confirmation_id']==finding['confirmation_id'] and all(v is True for v in check['checks'].values())\n   assert confirm['context']['question']==q['question'] and set(confirm['context'])=={'question','quote'}\n   texts=[]\n   for chunk_id in finding['searched_chunk_ids']:\n    sid,source,chunk=source_for(chunk_id);texts.append(chunk['text'])\n    item['source_links'].append({'source_id':sid,'chunk_id':chunk_id,'sha256':source['sha256']})\n   assert '\\n\\n'.join(texts)==confirm['context']['quote']\n   assert confirm['context_sha256']==hive.digest(confirm['context'])\n   item.update(finding_id=result['finding_id'],confirmation_id=finding['confirmation_id'],absence_check_id=finding['absence_check_id'],support_link_type='explicit confirmation_id and absence_check_id')\n  source_ids={s['source_id'] for s in item['source_links']}\n  item['linked_event_sha256']={e['id']:hashlib.sha256(r.canonical(e)).hexdigest() for e in rows if e['run_id']==task or e['id'] in source_ids}\n  proof.append(item)\n return proof\npackage=work/'accepted-snapshot';expected=r.snapshot(primary,package,config['database_id']);record['manifest']=expected\nrecord['links_before']=links(package/'knowledge.sqlite3');save()\nrecord['push']=r.transfer(config,'push',package);assert record['push']['manifest']==expected\nbaseline=r.transfer(config,'status');record['replica_before_faults']=baseline;save()\nfor name in ['reordering','modified_event','deleted_event','rollback']:\n if name=='rollback':\n  attack=root/'work/replication/initial-snapshot'\n else:\n  attack=work/name;attack.mkdir();shutil.copyfile(package/'knowledge.sqlite3',attack/'knowledge.sqlite3')\n  with sqlite3.connect(attack/'knowledge.sqlite3') as conn:\n   if name=='deleted_event':\n    trigger=conn.execute(\"SELECT sql FROM sqlite_master WHERE name='no_delete'\").fetchone()[0]\n    conn.execute('DROP TRIGGER no_delete');conn.execute('DELETE FROM events WHERE sequence=?',(expected['event_count'],));conn.execute(\"UPDATE sqlite_sequence SET seq=? WHERE name='events'\",(expected['event_count']-1,));conn.execute(trigger)\n   else:\n    trigger=conn.execute(\"SELECT sql FROM sqlite_master WHERE name='no_update'\").fetchone()[0];conn.execute('DROP TRIGGER no_update')\n    if name=='modified_event':conn.execute(\"UPDATE events SET cookie='tampered-copy-only' WHERE sequence=1\")\n    else:\n     temporary=expected['event_count']+1\n     conn.execute('UPDATE events SET sequence=? WHERE sequence=1',(temporary,));conn.execute('UPDATE events SET sequence=1 WHERE sequence=2');conn.execute('UPDATE events SET sequence=2 WHERE sequence=?',(temporary,))\n    conn.execute(trigger)\n  (attack/'manifest.json').write_bytes(r.canonical(r.manifest_for(attack/'knowledge.sqlite3',config['database_id'])))\n manifest=r.validate(attack,config['database_id'])\n wire=io.BytesIO();r.send(attack,wire)\n result=subprocess.run(r.ssh_command(config,'push'),input=wire.getvalue(),capture_output=True,timeout=30)\n after=r.transfer(config,'status')\n row={'test':name,'valid_recomputed_manifest':manifest,'exit':result.returncode,'stdout':result.stdout.decode(),'stderr':result.stderr.decode(),'accepted_state_unchanged':after==baseline}\n record['remote_fault_tests'].append(row);save()\n assert result.returncode==1 and 'History rewrite, deletion, or rollback' in row['stderr'] and row['accepted_state_unchanged'],row\n print(name,'REJECTED; accepted state unchanged',flush=True)\nrecord['valid_retry']=r.transfer(config,'push',package);assert record['valid_retry']['status']=='unchanged';save()\nr.restore(config,work/'rehearsal.sqlite3',expected);assert links(work/'rehearsal.sqlite3')==record['links_before']\nemergency=work/'emergency-before-deletion';backup=r.snapshot(primary,emergency,config['database_id']);assert backup==expected\npaths=[Path(str(primary)+s) for s in ('','-wal','-shm','-journal') if Path(str(primary)+s).exists()]\nprobe=subprocess.run(['lsof','-Fpn','--',*[str(p) for p in paths]],capture_output=True,text=True,timeout=30)\nassert probe.returncode==1 and not probe.stdout.strip() and not probe.stderr.strip(),(probe.returncode,probe.stdout,probe.stderr)\nrecord['lsof']={'exit':probe.returncode,'stdout':probe.stdout,'stderr':probe.stderr};record['deleted_paths']=[];save()\nfor path in paths:path.unlink();record['deleted_paths'].append(str(path));save()\nrecord['primary_absent_before_restore']=not primary.exists();assert record['primary_absent_before_restore'];save()\ntry:record['restored_manifest']=r.restore(config,primary,expected)\nexcept Exception:\n if not primary.exists():shutil.copyfile(emergency/'knowledge.sqlite3',primary);record['emergency_backup_used']=True;save()\n raise\nrecord['links_after']=links(primary);record['all_links_identical']=record['links_before']==record['links_after']\nrecord['byte_identical']=r.sha(primary)==expected['sha256'];record['history_identical']=r.inspect(primary)==r.inspect(emergency/'knowledge.sqlite3')\nassert record['all_links_identical'] and record['byte_identical'] and record['history_identical']\ntests=subprocess.run([sys.executable,'-m','unittest','-q'],cwd=out,capture_output=True,text=True,timeout=120)\nrecord['unit_tests']={'exit':tests.returncode,'stdout':tests.stdout,'stderr':tests.stderr};save();assert tests.returncode==0\nrecord['replica_after']=r.transfer(config,'status');assert record['replica_after']==baseline\nprior=json.loads((work/'prior-hashes.json').read_text());assert all(hashlib.sha256((out/name).read_bytes()).hexdigest()==digest for name,digest in prior.items())\nrecord['prior_record_hashes_unchanged']=prior;record['finished_utc']=datetime.now(timezone.utc).isoformat();record['status']='passed';save()\nprint('Recovery, evidence links, all 81 tests: PASSED',flush=True)\n"
+    }
+  },
+  "limits": [
+    "Source-scoped findings, not proof of real-world truth or exhaustive absence.",
+    "Supported-answer support linkage uses shared run_id, not an explicit foreign key.",
+    "Source freshness checks remain enabled; no external source files were deleted during this drill.",
+    "No root access or receiver/code changes were needed; all remote tests used hive-replica on replica CT."
+  ]
+}

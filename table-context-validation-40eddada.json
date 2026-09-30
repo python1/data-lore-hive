@@ -1,0 +1,2713 @@
+{
+  "policy": "quote-support-v2",
+  "model": "gemma4:e4b",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "temperature": 0.2,
+  "planned": 18,
+  "status": "passed",
+  "previous_report_sha256": "f092ab8414ce53594359d86b3f10f4a0f0d347c71714cf4879295d315c3a9efc",
+  "source_sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+  "evaluation_source_text": "# Data & Lore: first hive experiment\n\nThis runnable prototype tests one narrow idea: a cookie records a fact, a second cookie uses it, and a third checks the answer against its source. Each cookie runs in a separate Python process. Shared SQLite memory preserves the evidence and outcome between process lifetimes.\n\nThis is a local coordination experiment with a scripted mode and an optional Ollama model mode. It is not a distributed deployment. Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.\n\n## Run\n\nFrom this folder:\n\n```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```\n\nTo use the Gemma model installed on this MacBook:\n\n```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```\n\nOllama must be running at `127.0.0.1:11434`. Each worker makes its own model request: extraction, problem solving, and source review. Workers run sequentially and share one model runtime; these are separate roles, not three model copies or independent intelligences. The adapter uses Ollama's [chat API](https://docs.ollama.com/api/chat) with structured JSON output. The deterministic source and arithmetic checks still gate promotion even if the model incorrectly approves a result.\n\nNo model is downloaded. Requests bypass proxy settings and target only the loopback endpoint. The arithmetic demo sends synthetic fixture/task data; the source-memory commands below send excerpts from files you explicitly ingest. Each request caps context at 4,096 tokens and output at 256 tokens with a 180-second HTTP timeout, and requests a one-minute keep-alive. These settings bound individual calls, not system-wide CPU/GPU or power consumption. Model call records include the returned JSON, model name, context hash and reported timing/token counts. Invalid responses and network failures stop the run; they do not silently fall back to scripted answers. Failed runs may leave partial events and no final report.\n\nThe scripted demo produces **360 litres \u2014 verified**. Its fault-injection demo produces **361 litres \u2014 disputed** and exits with code 2 intentionally. Model runs can also require review. Each run writes a unique source fixture and JSON report plus a persistent `memory.sqlite3` into `state/`. Use `--state-dir /path/to/folder` to choose another location. Use `--capacity 37 --count 7` to change both the synthetic source and question.\n\n## Verification policy v2\n\nA live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\n\n`needs_review` is a recorded state, not an automatic human-review queue. Model/network failures still abort without promotion. This policy is specific to exact arithmetic from a structured fixture; it does not settle open-ended factual disagreements or interpret contradictory natural-language reasoning. All workers still use the same model and share its potential weaknesses.\n\nRun the repeatable six-case evaluation:\n\n```bash\npython3 evaluate.py\npython3 evaluate.py --model gemma4:e4b\n```\n\nIt tests 120 \u00d7 7, 37 \u00d7 7, and 123 \u00d7 13, each with a normal and deliberately altered answer. Each invocation creates a fresh directory containing every run and a progressively saved `summary.json`, including failures. A case passes only if the answer, promotion behavior, status, and process exit code match expectations. The evaluation exits 1 if any case fails. Six cases are a regression sample, not a reliability benchmark.\n\nThe saved `verifier-v2-validation.json` records a successful live run using `gemma4:e4b`: all six cases passed, including the previous 840-litre regression. All 16 automated tests also passed. The earlier failure reports remain unchanged.\n\n## What the cookies share\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.\n\nThe source contains a fictional 120-litre reservoir. Verification demonstrates agreement with that fixture, not real-world truth. Lore here is a record of what happened during the experiment, not a universal rule.\n\n## Memory semantics and limits\n\nEvents are append-only through SQLite triggers: verification adds an event rather than rewriting an earlier claim. Run IDs isolate experiments. Original disputed results remain inspectable. The database owner can bypass the triggers; these are an application guardrail, not cryptographic identity or protection against hostile hosts. Hashes detect changes relative to a stored snapshot; they do not establish source trust.\n\nThe arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.\n\nWorkers exit after their task. No idle daemon remains. Power use has not been measured.\n\n## Source memory across tasks\n\n`knowledge.py` adds persistent ingestion of local `.txt` and `.md` files. It stores their UTF-8 text, paths and SHA-256 hashes in append-only events. Separate process invocations can query the same database without repeating ingestion or relying on model conversation history.\n\n```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```\n\nThe default database is `knowledge.sqlite3`. To choose a shared database path, put `--db /path/to/memory.sqlite3` before the subcommand. `ask` also accepts `--report result.json` to save its output. The database's parent directory must already exist.\n\nRetrieval ranks paragraphs by keyword overlap and sends the top three excerpts to the local model. Gemma selects an exact quote, limited to 400 characters. Code verifies the quote against the selected excerpt and rechecks the source hash after inference. Successful output includes the source version, path, hash and line number. The returned excerpt may need interpretation: relevance is model-selected, and neither source truth nor completeness is established by finding an exact quote. This deliberately extractive first version does not generate synthesized factual answers or promote excerpts into verified working knowledge.\n\n| Query status | Meaning |\n|---|---|\n| `source_excerpt` | A model-selected quote matches a current ingested source exactly |\n| `insufficient_evidence` | No keyword candidate, or the model declined to select an answer |\n| `unsupported_output` | The model invented a quote, selected an invalid excerpt, or violated quote limits |\n| `stale_source` | The selected source changed or became unreadable during inference |\n\nChanged/missing sources detected before inference are excluded and listed under `excluded_sources`. Re-run `ingest` after editing a source to make a new version available; previous snapshots remain in history. Unchanged repeat ingestion is deduplicated. Only the latest ingested version of each file participates in new queries, and the original file must remain accessible for freshness checks. These checks capture file state at the check time, not a guarantee against subsequent edits.\n\nIngestion is explicit and limited to 256,000 bytes per file; there is no folder crawling, PDF parsing, web fetching, semantic search, or external communication. Keyword retrieval can miss relevant evidence. Conflicting documents are not reconciled, and identical quotes can be misleading out of context. Source text is treated as data and never executed. This is a trusted local prototype, not an authenticated multi-user memory service. Each completed query gets its own task ID and stored result event; model/network errors stop the query and may leave partial history.\n\n## Next implementation boundary\n\nNext, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+  "cases": [
+    {
+      "name": "review_policy",
+      "question": "What happens when the model calculation disagrees?",
+      "seed": 11,
+      "answerable": true,
+      "gold_answers": [
+        "needs review",
+        "needs_review"
+      ],
+      "accepted": true,
+      "correct": true,
+      "retrieval": {
+        "question": "What happens when the model calculation disagrees?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:7096",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 7096,
+            "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+            "score": 4
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 2
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 3210,
+            "text": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+            "score": 2
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"a4bc9372-2a9e-483f-88e0-24480d0aa21d\",\n  \"question\": \"What happens when the model calculation disagrees?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"supported_answer\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 11,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"checks\": {\n    \"solver_answer_anchored\": true,\n    \"support_answered\": true,\n    \"support_answer_anchored\": true,\n    \"answers_agree\": true\n  },\n  \"answer\": \"needs_review\",\n  \"quote\": \"| Status | Meaning | Promotion | CLI exit |\\n|---|---|---|---|\\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\",\n  \"citation\": {\n    \"source_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660\",\n    \"chunk_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660:3210\",\n    \"path\": \"<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 36\n  }\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "a4bc9372-2a9e-483f-88e0-24480d0aa21d",
+        "question": "What happens when the model calculation disagrees?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "needs_review",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "citation": {
+          "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+          "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+          "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "line": 36
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "needs_review",
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+              "outcome": "answered",
+              "quote": "Source checks pass, but the model calculates a different total"
+            },
+            "context_sha256": "f55a1b3fda845fec8e8efae5ddf8e1e088f825f618d155e4395a4c52b95e6e11",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 84,
+            "prompt_tokens": 633,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 18166987834
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "needs_review",
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+            "outcome": "answered",
+            "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "needs_review",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when the model calculation disagrees?",
+              "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+            },
+            "context_sha256": "25c59ab0744e95e4e3feadb6c20be2edd4af8de9299431014f936b26a123d4e1",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 288,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 2203646125
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "needs_review",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+              "line": 36,
+              "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when the model calculation disagrees?",
+            "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "supported_answer",
+            "task_id": "a4bc9372-2a9e-483f-88e0-24480d0aa21d",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "supported_before_delivery": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "replication_support",
+      "question": "Does this project support peer replication?",
+      "seed": 11,
+      "answerable": true,
+      "gold_answers": [
+        "it does not provide peer replication",
+        "no"
+      ],
+      "accepted": true,
+      "correct": true,
+      "retrieval": {
+        "question": "Does this project support peer replication?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:7096",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 7096,
+            "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+            "score": 4
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 5993,
+            "text": "The arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.",
+            "score": 2
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:9811",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 9811,
+            "text": "Next, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"3c9a98d6-6383-4873-a31e-341192f34c18\",\n  \"question\": \"Does this project support peer replication?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"supported_answer\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 11,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"checks\": {\n    \"solver_answer_anchored\": true,\n    \"support_answered\": true,\n    \"support_answer_anchored\": true,\n    \"answers_agree\": true\n  },\n  \"answer\": \"It does not provide peer replication\",\n  \"quote\": \"It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.\",\n  \"citation\": {\n    \"source_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660\",\n    \"chunk_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660:5993\",\n    \"path\": \"<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 67\n  }\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "3c9a98d6-6383-4873-a31e-341192f34c18",
+        "question": "Does this project support peer replication?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "It does not provide peer replication",
+        "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+        "citation": {
+          "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+          "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+          "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "line": 67
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "It does not provide peer replication",
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+              "outcome": "answered",
+              "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+            },
+            "context_sha256": "31f1e6915c03983f51a792df5d1b05d16b913552bb3625e9470c5ca987815f2f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 103,
+            "prompt_tokens": 595,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 7610476375
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "It does not provide peer replication",
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+            "outcome": "answered",
+            "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "It does not provide peer replication",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "Does this project support peer replication?",
+              "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+            },
+            "context_sha256": "04202fc4763bf251b371d5828a37b4fc343704cb14f33f7b081b160dfc5dc1b5",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 18,
+            "prompt_tokens": 182,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1874427083
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "It does not provide peer replication",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+              "line": 67,
+              "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Does this project support peer replication?",
+            "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "supported_answer",
+            "task_id": "3c9a98d6-6383-4873-a31e-341192f34c18",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "supported_before_delivery": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_temperature",
+      "question": "What is the reservoir water temperature in Celsius?",
+      "seed": 11,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "What is the reservoir water temperature in Celsius?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2508,
+            "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 4724,
+            "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"00d06d22-b6e1-4dc2-ac50-2dcc2ed5b4d6\",\n  \"question\": \"What is the reservoir water temperature in Celsius?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 11,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"1571788b-ddc2-40ed-8385-c79669e84d73\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "00d06d22-b6e1-4dc2-ac50-2dcc2ed5b4d6",
+        "question": "What is the reservoir water temperature in Celsius?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "1571788b-ddc2-40ed-8385-c79669e84d73"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "21e5af62e8f797d2bb2c04924846887ad221aa1d4154703b0cdd561233884d4c",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 585,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 3792060166
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "What is the reservoir water temperature in Celsius?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "1571788b-ddc2-40ed-8385-c79669e84d73",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What is the reservoir water temperature in Celsius?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "not_found_in_source",
+            "task_id": "00d06d22-b6e1-4dc2-ac50-2dcc2ed5b4d6",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_ip",
+      "question": "What is the hive server IP address?",
+      "seed": 11,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "What is the hive server IP address?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:0",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 0,
+            "text": "# Data & Lore: first hive experiment",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:587",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 587,
+            "text": "```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:731",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 731,
+            "text": "```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"d165ba75-ee44-4f0f-81de-adf00b89fb62\",\n  \"question\": \"What is the hive server IP address?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 11,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"1f120ae2-9dd0-4d66-8c3d-3b0baf4f6b92\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "d165ba75-ee44-4f0f-81de-adf00b89fb62",
+        "question": "What is the hive server IP address?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "1f120ae2-9dd0-4d66-8c3d-3b0baf4f6b92"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "db5af96bc57caef74b8e21bae7193200d0a22c2ea0813fa6c23134bee44aed06",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 402,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 2960791583
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "What is the hive server IP address?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:0",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:587",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:731"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "1f120ae2-9dd0-4d66-8c3d-3b0baf4f6b92",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What is the hive server IP address?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "not_found_in_source",
+            "task_id": "d165ba75-ee44-4f0f-81de-adf00b89fb62",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_manufacturer",
+      "question": "Who manufactured the reservoir?",
+      "seed": 11,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "Who manufactured the reservoir?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2508,
+            "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 4724,
+            "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"3cdd9b32-100b-4e93-a7a1-fd89abca926d\",\n  \"question\": \"Who manufactured the reservoir?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 11,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"7f361a46-6b49-4aa3-9204-3062ea82f397\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "3cdd9b32-100b-4e93-a7a1-fd89abca926d",
+        "question": "Who manufactured the reservoir?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "7f361a46-6b49-4aa3-9204-3062ea82f397"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "2284e8d8cf01fa647ea9a3d6aa5cef318458d05867fcdde756ae47c52ace309f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 581,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 3432458834
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "Who manufactured the reservoir?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "7f361a46-6b49-4aa3-9204-3062ea82f397",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Who manufactured the reservoir?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "not_found_in_source",
+            "task_id": "3cdd9b32-100b-4e93-a7a1-fd89abca926d",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "no_keyword_match",
+      "question": "Platypus habitat?",
+      "seed": 11,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "Platypus habitat?",
+        "candidates": [],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"effd267b-8e96-4af9-8245-fd5706b4e6ce\",\n  \"question\": \"Platypus habitat?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 11,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"13dd424c-8c32-487a-9fa5-dd2b0bcc0743\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "effd267b-8e96-4af9-8245-fd5706b4e6ce",
+        "question": "Platypus habitat?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "13dd424c-8c32-487a-9fa5-dd2b0bcc0743"
+      },
+      "events": [
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "Platypus habitat?",
+            "reason": "no_retrieval_candidates",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": []
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "13dd424c-8c32-487a-9fa5-dd2b0bcc0743",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Platypus habitat?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "not_found_in_source",
+            "task_id": "effd267b-8e96-4af9-8245-fd5706b4e6ce",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "review_policy",
+      "question": "What happens when the model calculation disagrees?",
+      "seed": 29,
+      "answerable": true,
+      "gold_answers": [
+        "needs review",
+        "needs_review"
+      ],
+      "accepted": true,
+      "correct": true,
+      "retrieval": {
+        "question": "What happens when the model calculation disagrees?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:7096",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 7096,
+            "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+            "score": 4
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 2
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 3210,
+            "text": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+            "score": 2
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"bc84d328-e2a4-4873-8d95-200a7b73e746\",\n  \"question\": \"What happens when the model calculation disagrees?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"supported_answer\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 29,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"checks\": {\n    \"solver_answer_anchored\": true,\n    \"support_answered\": true,\n    \"support_answer_anchored\": true,\n    \"answers_agree\": true\n  },\n  \"answer\": \"needs_review\",\n  \"quote\": \"| Status | Meaning | Promotion | CLI exit |\\n|---|---|---|---|\\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\",\n  \"citation\": {\n    \"source_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660\",\n    \"chunk_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660:3210\",\n    \"path\": \"<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 36\n  }\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "bc84d328-e2a4-4873-8d95-200a7b73e746",
+        "question": "What happens when the model calculation disagrees?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "needs_review",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "citation": {
+          "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+          "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+          "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "line": 36
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "needs_review",
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+              "outcome": "answered",
+              "quote": "Source checks pass, but the model calculates a different total"
+            },
+            "context_sha256": "f55a1b3fda845fec8e8efae5ddf8e1e088f825f618d155e4395a4c52b95e6e11",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 84,
+            "prompt_tokens": 633,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4805243042
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "needs_review",
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+            "outcome": "answered",
+            "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "needs_review",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when the model calculation disagrees?",
+              "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+            },
+            "context_sha256": "25c59ab0744e95e4e3feadb6c20be2edd4af8de9299431014f936b26a123d4e1",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 288,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 2106154625
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "needs_review",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+              "line": 36,
+              "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when the model calculation disagrees?",
+            "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "supported_answer",
+            "task_id": "bc84d328-e2a4-4873-8d95-200a7b73e746",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "supported_before_delivery": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "replication_support",
+      "question": "Does this project support peer replication?",
+      "seed": 29,
+      "answerable": true,
+      "gold_answers": [
+        "it does not provide peer replication",
+        "no"
+      ],
+      "accepted": true,
+      "correct": true,
+      "retrieval": {
+        "question": "Does this project support peer replication?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:7096",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 7096,
+            "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+            "score": 4
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 5993,
+            "text": "The arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.",
+            "score": 2
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:9811",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 9811,
+            "text": "Next, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"61ac975a-cbda-4681-b202-f162aee190d3\",\n  \"question\": \"Does this project support peer replication?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"supported_answer\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 29,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"checks\": {\n    \"solver_answer_anchored\": true,\n    \"support_answered\": true,\n    \"support_answer_anchored\": true,\n    \"answers_agree\": true\n  },\n  \"answer\": \"It does not provide peer replication\",\n  \"quote\": \"It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.\",\n  \"citation\": {\n    \"source_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660\",\n    \"chunk_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660:5993\",\n    \"path\": \"<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 67\n  }\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "61ac975a-cbda-4681-b202-f162aee190d3",
+        "question": "Does this project support peer replication?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "It does not provide peer replication",
+        "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+        "citation": {
+          "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+          "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+          "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "line": 67
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "It does not provide peer replication",
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+              "outcome": "answered",
+              "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+            },
+            "context_sha256": "31f1e6915c03983f51a792df5d1b05d16b913552bb3625e9470c5ca987815f2f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 103,
+            "prompt_tokens": 595,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 5698991416
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "It does not provide peer replication",
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+            "outcome": "answered",
+            "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "It does not provide peer replication",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "Does this project support peer replication?",
+              "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+            },
+            "context_sha256": "04202fc4763bf251b371d5828a37b4fc343704cb14f33f7b081b160dfc5dc1b5",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 18,
+            "prompt_tokens": 182,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1877411166
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "It does not provide peer replication",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+              "line": 67,
+              "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Does this project support peer replication?",
+            "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "supported_answer",
+            "task_id": "61ac975a-cbda-4681-b202-f162aee190d3",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "supported_before_delivery": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_temperature",
+      "question": "What is the reservoir water temperature in Celsius?",
+      "seed": 29,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "What is the reservoir water temperature in Celsius?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2508,
+            "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 4724,
+            "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"5463267d-382c-4860-a700-2de49c315a04\",\n  \"question\": \"What is the reservoir water temperature in Celsius?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 29,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"853d5df7-acd4-4526-bd23-df9ce5d35e98\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "5463267d-382c-4860-a700-2de49c315a04",
+        "question": "What is the reservoir water temperature in Celsius?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "853d5df7-acd4-4526-bd23-df9ce5d35e98"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "21e5af62e8f797d2bb2c04924846887ad221aa1d4154703b0cdd561233884d4c",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 585,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1851313875
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "What is the reservoir water temperature in Celsius?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "853d5df7-acd4-4526-bd23-df9ce5d35e98",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What is the reservoir water temperature in Celsius?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "not_found_in_source",
+            "task_id": "5463267d-382c-4860-a700-2de49c315a04",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_ip",
+      "question": "What is the hive server IP address?",
+      "seed": 29,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "What is the hive server IP address?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:0",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 0,
+            "text": "# Data & Lore: first hive experiment",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:587",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 587,
+            "text": "```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:731",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 731,
+            "text": "```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"7e862760-b73e-41fb-9811-72b125c4c9a3\",\n  \"question\": \"What is the hive server IP address?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 29,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"b8610b34-1030-4604-82a8-af17004cc1f0\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "7e862760-b73e-41fb-9811-72b125c4c9a3",
+        "question": "What is the hive server IP address?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "b8610b34-1030-4604-82a8-af17004cc1f0"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "db5af96bc57caef74b8e21bae7193200d0a22c2ea0813fa6c23134bee44aed06",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 402,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1821672209
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "What is the hive server IP address?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:0",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:587",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:731"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "b8610b34-1030-4604-82a8-af17004cc1f0",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What is the hive server IP address?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "not_found_in_source",
+            "task_id": "7e862760-b73e-41fb-9811-72b125c4c9a3",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_manufacturer",
+      "question": "Who manufactured the reservoir?",
+      "seed": 29,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "Who manufactured the reservoir?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2508,
+            "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 4724,
+            "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"843f91fe-3511-45e6-b5bf-80ef3ee726fb\",\n  \"question\": \"Who manufactured the reservoir?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 29,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"22dd1db6-6eed-46a1-a362-7f3d27637858\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "843f91fe-3511-45e6-b5bf-80ef3ee726fb",
+        "question": "Who manufactured the reservoir?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "22dd1db6-6eed-46a1-a362-7f3d27637858"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "2284e8d8cf01fa647ea9a3d6aa5cef318458d05867fcdde756ae47c52ace309f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 581,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1880202667
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "Who manufactured the reservoir?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "22dd1db6-6eed-46a1-a362-7f3d27637858",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Who manufactured the reservoir?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "not_found_in_source",
+            "task_id": "843f91fe-3511-45e6-b5bf-80ef3ee726fb",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "no_keyword_match",
+      "question": "Platypus habitat?",
+      "seed": 29,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "Platypus habitat?",
+        "candidates": [],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"5cb4c85a-85cc-401e-9b5e-3ba6039b7aba\",\n  \"question\": \"Platypus habitat?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 29,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"652b0c78-55d8-47c7-bfc0-a80506bd68c2\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "5cb4c85a-85cc-401e-9b5e-3ba6039b7aba",
+        "question": "Platypus habitat?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "652b0c78-55d8-47c7-bfc0-a80506bd68c2"
+      },
+      "events": [
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "Platypus habitat?",
+            "reason": "no_retrieval_candidates",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": []
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "652b0c78-55d8-47c7-bfc0-a80506bd68c2",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Platypus habitat?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "not_found_in_source",
+            "task_id": "5cb4c85a-85cc-401e-9b5e-3ba6039b7aba",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "review_policy",
+      "question": "What happens when the model calculation disagrees?",
+      "seed": 47,
+      "answerable": true,
+      "gold_answers": [
+        "needs review",
+        "needs_review"
+      ],
+      "accepted": true,
+      "correct": true,
+      "retrieval": {
+        "question": "What happens when the model calculation disagrees?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:7096",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 7096,
+            "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+            "score": 4
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 2
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 3210,
+            "text": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+            "score": 2
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"11c3495a-b8b5-41c8-81da-5116ead82615\",\n  \"question\": \"What happens when the model calculation disagrees?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"supported_answer\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 47,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"checks\": {\n    \"solver_answer_anchored\": true,\n    \"support_answered\": true,\n    \"support_answer_anchored\": true,\n    \"answers_agree\": true\n  },\n  \"answer\": \"needs_review\",\n  \"quote\": \"| Status | Meaning | Promotion | CLI exit |\\n|---|---|---|---|\\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\",\n  \"citation\": {\n    \"source_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660\",\n    \"chunk_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660:3210\",\n    \"path\": \"<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 36\n  }\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "11c3495a-b8b5-41c8-81da-5116ead82615",
+        "question": "What happens when the model calculation disagrees?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "needs_review",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "citation": {
+          "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+          "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+          "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "line": 36
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "needs_review",
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+              "outcome": "answered",
+              "quote": "Source checks pass, but the model calculates a different total"
+            },
+            "context_sha256": "f55a1b3fda845fec8e8efae5ddf8e1e088f825f618d155e4395a4c52b95e6e11",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 84,
+            "prompt_tokens": 633,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 5034752291
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "needs_review",
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+            "outcome": "answered",
+            "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "needs_review",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when the model calculation disagrees?",
+              "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+            },
+            "context_sha256": "25c59ab0744e95e4e3feadb6c20be2edd4af8de9299431014f936b26a123d4e1",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 288,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 2149613209
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "needs_review",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:3210",
+              "line": 36,
+              "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when the model calculation disagrees?",
+            "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "supported_answer",
+            "task_id": "11c3495a-b8b5-41c8-81da-5116ead82615",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "supported_before_delivery": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "replication_support",
+      "question": "Does this project support peer replication?",
+      "seed": 47,
+      "answerable": true,
+      "gold_answers": [
+        "it does not provide peer replication",
+        "no"
+      ],
+      "accepted": true,
+      "correct": true,
+      "retrieval": {
+        "question": "Does this project support peer replication?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:7096",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 7096,
+            "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+            "score": 4
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 5993,
+            "text": "The arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.",
+            "score": 2
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:9811",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 9811,
+            "text": "Next, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"1ea1f4bd-088e-4e7f-9584-a68a3a0d75b0\",\n  \"question\": \"Does this project support peer replication?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"supported_answer\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 47,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"checks\": {\n    \"solver_answer_anchored\": true,\n    \"support_answered\": true,\n    \"support_answer_anchored\": true,\n    \"answers_agree\": true\n  },\n  \"answer\": \"It does not provide peer replication\",\n  \"quote\": \"It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.\",\n  \"citation\": {\n    \"source_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660\",\n    \"chunk_id\": \"003bf507-3f8c-46d9-9226-a8ddb41e0660:5993\",\n    \"path\": \"<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 67\n  }\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "1ea1f4bd-088e-4e7f-9584-a68a3a0d75b0",
+        "question": "Does this project support peer replication?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "It does not provide peer replication",
+        "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+        "citation": {
+          "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+          "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+          "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+          "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+          "line": 67
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "It does not provide peer replication",
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+              "outcome": "answered",
+              "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+            },
+            "context_sha256": "31f1e6915c03983f51a792df5d1b05d16b913552bb3625e9470c5ca987815f2f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 109,
+            "prompt_tokens": 595,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 5954726917
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "It does not provide peer replication",
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+            "outcome": "answered",
+            "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "It does not provide peer replication",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "Does this project support peer replication?",
+              "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+            },
+            "context_sha256": "04202fc4763bf251b371d5828a37b4fc343704cb14f33f7b081b160dfc5dc1b5",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 18,
+            "prompt_tokens": 182,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1887298083
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "It does not provide peer replication",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:5993",
+              "line": 67,
+              "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Does this project support peer replication?",
+            "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "supported_answer",
+            "task_id": "1ea1f4bd-088e-4e7f-9584-a68a3a0d75b0",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "supported_before_delivery": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_temperature",
+      "question": "What is the reservoir water temperature in Celsius?",
+      "seed": 47,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "What is the reservoir water temperature in Celsius?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2508,
+            "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 4724,
+            "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"6e7ba7ff-d662-4183-8790-4cabcd547f7c\",\n  \"question\": \"What is the reservoir water temperature in Celsius?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 47,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"b9ea27fa-f4bb-4ead-b299-3e1e38c66756\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "6e7ba7ff-d662-4183-8790-4cabcd547f7c",
+        "question": "What is the reservoir water temperature in Celsius?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "b9ea27fa-f4bb-4ead-b299-3e1e38c66756"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "21e5af62e8f797d2bb2c04924846887ad221aa1d4154703b0cdd561233884d4c",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 585,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1845713959
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "What is the reservoir water temperature in Celsius?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "b9ea27fa-f4bb-4ead-b299-3e1e38c66756",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What is the reservoir water temperature in Celsius?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "not_found_in_source",
+            "task_id": "6e7ba7ff-d662-4183-8790-4cabcd547f7c",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_ip",
+      "question": "What is the hive server IP address?",
+      "seed": 47,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "What is the hive server IP address?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:0",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 0,
+            "text": "# Data & Lore: first hive experiment",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:587",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 587,
+            "text": "```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:731",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 731,
+            "text": "```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"8be272da-0bc0-4026-a7a6-c1cc3435d9c4\",\n  \"question\": \"What is the hive server IP address?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 47,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"43a61ff9-2a7b-4d7e-9349-c823e0307f78\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "8be272da-0bc0-4026-a7a6-c1cc3435d9c4",
+        "question": "What is the hive server IP address?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "43a61ff9-2a7b-4d7e-9349-c823e0307f78"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "db5af96bc57caef74b8e21bae7193200d0a22c2ea0813fa6c23134bee44aed06",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 402,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1865789416
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "What is the hive server IP address?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:0",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:587",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:731"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "43a61ff9-2a7b-4d7e-9349-c823e0307f78",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What is the hive server IP address?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "not_found_in_source",
+            "task_id": "8be272da-0bc0-4026-a7a6-c1cc3435d9c4",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "absent_manufacturer",
+      "question": "Who manufactured the reservoir?",
+      "seed": 47,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "Who manufactured the reservoir?",
+        "candidates": [
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2508,
+            "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 2757,
+            "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+            "score": 1
+          },
+          {
+            "chunk_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724",
+            "source_id": "003bf507-3f8c-46d9-9226-a8ddb41e0660",
+            "path": "<workspace>/work/table-context/40eddada-8ecc-4376-b26d-1a65b77e5c65/README-frozen.md",
+            "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+            "offset": 4724,
+            "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+            "score": 1
+          }
+        ],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"f805f4d3-46c9-4b1d-bee6-d30bdf759f0d\",\n  \"question\": \"Who manufactured the reservoir?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 47,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"51795e91-a308-4f47-bf84-84ea36423894\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "f805f4d3-46c9-4b1d-bee6-d30bdf759f0d",
+        "question": "Who manufactured the reservoir?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "51795e91-a308-4f47-bf84-84ea36423894"
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "",
+              "chunk_id": "",
+              "outcome": "not_found_in_source",
+              "quote": ""
+            },
+            "context_sha256": "2284e8d8cf01fa647ea9a3d6aa5cef318458d05867fcdde756ae47c52ace309f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 27,
+            "prompt_tokens": 581,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1894484375
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "",
+            "chunk_id": "",
+            "outcome": "not_found_in_source",
+            "quote": ""
+          }
+        },
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "Who manufactured the reservoir?",
+            "reason": "solver_not_found_in_source",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": [
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2508",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:2757",
+              "003bf507-3f8c-46d9-9226-a8ddb41e0660:4724"
+            ]
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "51795e91-a308-4f47-bf84-84ea36423894",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Who manufactured the reservoir?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "not_found_in_source",
+            "task_id": "f805f4d3-46c9-4b1d-bee6-d30bdf759f0d",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    },
+    {
+      "name": "no_keyword_match",
+      "question": "Platypus habitat?",
+      "seed": 47,
+      "answerable": false,
+      "gold_answers": [],
+      "accepted": false,
+      "correct": false,
+      "retrieval": {
+        "question": "Platypus habitat?",
+        "candidates": [],
+        "excluded_sources": [],
+        "retrieval": "keyword overlap; not semantic search"
+      },
+      "process": {
+        "exit_code": 0,
+        "stdout": "{\n  \"task_id\": \"100ad492-bdd9-4463-a6c6-bdfee85d7532\",\n  \"question\": \"Platypus habitat?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"not_found_in_source\",\n  \"excluded_sources\": [],\n  \"policy\": \"quote-support-v2\",\n  \"seed\": 47,\n  \"temperature\": 0.2,\n  \"scope\": \"Retrieved-source support only; not proof of real-world truth or exhaustive source coverage\",\n  \"finding_id\": \"f1b8ade3-0b0d-4c61-860b-4299eb615fac\"\n}\n",
+        "stderr": ""
+      },
+      "result": {
+        "task_id": "100ad492-bdd9-4463-a6c6-bdfee85d7532",
+        "question": "Platypus habitat?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "finding_id": "f1b8ade3-0b0d-4c61-860b-4299eb615fac"
+      },
+      "events": [
+        {
+          "kind": "source_finding",
+          "cookie": "cookie-solver",
+          "payload": {
+            "excluded_sources": [],
+            "finding": "not_found_in_source",
+            "question": "Platypus habitat?",
+            "reason": "no_retrieval_candidates",
+            "scope": "No answer found in retrieved excerpts; not a universal absence claim",
+            "searched_chunk_ids": []
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "excluded_sources": [],
+            "finding_id": "f1b8ade3-0b0d-4c61-860b-4299eb615fac",
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Platypus habitat?",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "not_found_in_source",
+            "task_id": "100ad492-bdd9-4463-a6c6-bdfee85d7532",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "audit_checks": {
+        "sampling_logged": true,
+        "solver_called_on_candidates": true,
+        "support_context_isolated": true,
+        "withheld_answer_not_exposed": true,
+        "solver_context_matches_baseline": true,
+        "finding_recorded": true,
+        "finding_not_failure": true
+      },
+      "audit_passed": true
+    }
+  ],
+  "definitions": {
+    "false_accept": "Delivered supported_answer on an unanswerable question or with a wrong answer/citation on an answerable question",
+    "false_reject": "Answerable question with no delivered supported_answer, including runtime errors",
+    "correct_answer_rule": "Gold answers: needs_review/needs review; No or the source's exact statement 'It does not provide peer replication'; plus exact quote and citation checks",
+    "sampling": "Three seeds with identical source and prompts, temperature 0.2; same model for both cookies; not independent model populations"
+  },
+  "baseline_report_sha256": "abf3ef70d7f0d6e4da74630a1b68b196c3f1995372a74cd461479636182fcbe4",
+  "implementation_sha256": {
+    "knowledge.py": "b28d221263b7fbec7b2ef8fec4b1f9730e7b89de8dbd18386e838fc6a59b3d30",
+    "support_cookie.py": "fd0b47a9c0718e7333e9feef2b948793f959691c0db38f1530bee4c0c4883bef",
+    "ollama_local.py": "95ed59e1a5b49f05dfe6fb69b2194aacf7291368dd7fc644c41b88fd7bfb7d87"
+  },
+  "metrics": {
+    "completed": 18,
+    "answerable": 6,
+    "unanswerable": 12,
+    "false_accepts": 0,
+    "false_rejects": 0,
+    "correct_accepts": 6,
+    "wrong_accepts_on_answerable": 0,
+    "not_found_findings": 12,
+    "needs_review": 0,
+    "errors": 0,
+    "audit_failures": 0,
+    "statuses": {
+      "supported_answer": 6,
+      "not_found_in_source": 12
+    }
+  },
+  "per_seed": {
+    "11": {
+      "completed": 6,
+      "answerable": 2,
+      "unanswerable": 4,
+      "false_accepts": 0,
+      "false_rejects": 0,
+      "correct_accepts": 2,
+      "wrong_accepts_on_answerable": 0,
+      "not_found_findings": 4,
+      "needs_review": 0,
+      "errors": 0,
+      "audit_failures": 0,
+      "statuses": {
+        "supported_answer": 2,
+        "not_found_in_source": 4
+      }
+    },
+    "29": {
+      "completed": 6,
+      "answerable": 2,
+      "unanswerable": 4,
+      "false_accepts": 0,
+      "false_rejects": 0,
+      "correct_accepts": 2,
+      "wrong_accepts_on_answerable": 0,
+      "not_found_findings": 4,
+      "needs_review": 0,
+      "errors": 0,
+      "audit_failures": 0,
+      "statuses": {
+        "supported_answer": 2,
+        "not_found_in_source": 4
+      }
+    },
+    "47": {
+      "completed": 6,
+      "answerable": 2,
+      "unanswerable": 4,
+      "false_accepts": 0,
+      "false_rejects": 0,
+      "correct_accepts": 2,
+      "wrong_accepts_on_answerable": 0,
+      "not_found_findings": 4,
+      "needs_review": 0,
+      "errors": 0,
+      "audit_failures": 0,
+      "statuses": {
+        "supported_answer": 2,
+        "not_found_in_source": 4
+      }
+    }
+  },
+  "previous_report_unchanged": true,
+  "baseline_report_unchanged": true,
+  "table_context_policy": {
+    "parser_sha256": "138323390f7427aa979b7f2bd3a045c27071639ca4a368c45bf37465592e3a45",
+    "automated_tests_passed": 44,
+    "accepted_output_domain": "Source-derived status labels for recognized policy tables; no changes to agreement or anchor gates"
+  }
+}

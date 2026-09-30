@@ -1,0 +1,16 @@
+{
+  "task_id": "51df194b-1649-4fa4-882d-c0ac124d122c",
+  "question": "Does this project support peer replication?",
+  "model": "gemma4:e4b",
+  "status": "source_excerpt",
+  "excluded_sources": [],
+  "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+  "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+  "citation": {
+    "source_id": "05d55276-ef27-4152-9529-d8a175f37205",
+    "chunk_id": "05d55276-ef27-4152-9529-d8a175f37205:5993",
+    "path": "<repo>/README.md",
+    "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+    "line": 67
+  }
+}

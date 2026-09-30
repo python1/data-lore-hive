@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_end_to_end_reported_pair_and_audit (test_version_comparison.VersionTests.test_end_to_end_reported_pair_and_audit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/test_version_comparison.py", line 48, in test_end_to_end_reported_pair_and_audit
+    self.assertEqual(r['status'],'supported_answer');self.assertTrue(r['checks']['answers_agree'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'needs_review' != 'supported_answer'
+- needs_review
++ supported_answer
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.015s
+
+FAILED (failures=1)

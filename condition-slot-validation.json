@@ -1,0 +1,516 @@
+{
+  "source_text": "# Fictional laboratory policy fixture\n\nThis document is a synthetic evaluation source, not an operational policy.\n\nIf calibration is overdue, the resulting status is inspection_required.\nIf the seal is open, the resulting status is locked.\n\nVibration can exceed the warning threshold.\n",
+  "cases": [
+    {
+      "seed": 11,
+      "result": {
+        "task_id": "5b8eae71-debb-4cc3-9018-bdd2f30166ab",
+        "question": "Under what condition is the status inspection_required?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "requested_slot": "condition",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_value_in_requested_role": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "calibration is overdue",
+        "quote": "If calibration is overdue, the resulting status is inspection_required.",
+        "citation": {
+          "source_id": "52f33654-78f3-4378-9811-55201e2bf30f",
+          "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+          "path": "<workspace>/work/structured-policy/34d25e4f-21fb-4bba-8445-0614b88a835c/policy.md",
+          "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "cookie": "cookie-solver",
+          "kind": "model_call",
+          "payload": {
+            "answer": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "984dd9da192647a758bb84297567bde250bf8c9a0edb46909bed624449323a8f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 95,
+            "prompt_tokens": 276,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 5162950042
+          }
+        },
+        {
+          "cookie": "cookie-solver",
+          "kind": "policy_extraction",
+          "payload": {
+            "raw": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "requested_slot": "condition"
+          }
+        },
+        {
+          "cookie": "cookie-solver",
+          "kind": "source_proposal",
+          "payload": {
+            "answer": "calibration is overdue",
+            "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+            "outcome": "answered",
+            "quote": "If calibration is overdue, the resulting status is inspection_required."
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "model_call",
+          "payload": {
+            "answer": {
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required"
+            },
+            "context": {
+              "question": "Under what condition is the status inspection_required?",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "7ec70743ced155f03644a624aab2b3c9d336524d8a2e2495c2f8456f77df808b",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 23,
+            "prompt_tokens": 166,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1783266917
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "policy_extraction",
+          "payload": {
+            "raw": {
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required"
+            },
+            "requested_slot": "condition"
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "support_check",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "solver_value_in_requested_role": true,
+            "support_answer_anchored": true,
+            "support_answered": true,
+            "support_value_in_requested_role": true
+          }
+        },
+        {
+          "cookie": "cookie-reader",
+          "kind": "knowledge_query",
+          "payload": {
+            "answer": "calibration is overdue",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "solver_value_in_requested_role": true,
+              "support_answer_anchored": true,
+              "support_answered": true,
+              "support_value_in_requested_role": true
+            },
+            "citation": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "line": 5,
+              "path": "<workspace>/work/structured-policy/34d25e4f-21fb-4bba-8445-0614b88a835c/policy.md",
+              "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+              "source_id": "52f33654-78f3-4378-9811-55201e2bf30f"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Under what condition is the status inspection_required?",
+            "quote": "If calibration is overdue, the resulting status is inspection_required.",
+            "requested_slot": "condition",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "supported_answer",
+            "task_id": "5b8eae71-debb-4cc3-9018-bdd2f30166ab",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "passed": true
+    },
+    {
+      "seed": 29,
+      "result": {
+        "task_id": "6f8f2c26-7f6d-4ad3-b7d1-d6b67b86ea12",
+        "question": "Under what condition is the status inspection_required?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "requested_slot": "condition",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_value_in_requested_role": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "calibration is overdue",
+        "quote": "If calibration is overdue, the resulting status is inspection_required.",
+        "citation": {
+          "source_id": "52f33654-78f3-4378-9811-55201e2bf30f",
+          "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+          "path": "<workspace>/work/structured-policy/34d25e4f-21fb-4bba-8445-0614b88a835c/policy.md",
+          "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "cookie": "cookie-solver",
+          "kind": "model_call",
+          "payload": {
+            "answer": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "984dd9da192647a758bb84297567bde250bf8c9a0edb46909bed624449323a8f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 95,
+            "prompt_tokens": 276,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4038533958
+          }
+        },
+        {
+          "cookie": "cookie-solver",
+          "kind": "policy_extraction",
+          "payload": {
+            "raw": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "requested_slot": "condition"
+          }
+        },
+        {
+          "cookie": "cookie-solver",
+          "kind": "source_proposal",
+          "payload": {
+            "answer": "calibration is overdue",
+            "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+            "outcome": "answered",
+            "quote": "If calibration is overdue, the resulting status is inspection_required."
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "model_call",
+          "payload": {
+            "answer": {
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required"
+            },
+            "context": {
+              "question": "Under what condition is the status inspection_required?",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "7ec70743ced155f03644a624aab2b3c9d336524d8a2e2495c2f8456f77df808b",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 23,
+            "prompt_tokens": 166,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1307448292
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "policy_extraction",
+          "payload": {
+            "raw": {
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required"
+            },
+            "requested_slot": "condition"
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "support_check",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "solver_value_in_requested_role": true,
+            "support_answer_anchored": true,
+            "support_answered": true,
+            "support_value_in_requested_role": true
+          }
+        },
+        {
+          "cookie": "cookie-reader",
+          "kind": "knowledge_query",
+          "payload": {
+            "answer": "calibration is overdue",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "solver_value_in_requested_role": true,
+              "support_answer_anchored": true,
+              "support_answered": true,
+              "support_value_in_requested_role": true
+            },
+            "citation": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "line": 5,
+              "path": "<workspace>/work/structured-policy/34d25e4f-21fb-4bba-8445-0614b88a835c/policy.md",
+              "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+              "source_id": "52f33654-78f3-4378-9811-55201e2bf30f"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Under what condition is the status inspection_required?",
+            "quote": "If calibration is overdue, the resulting status is inspection_required.",
+            "requested_slot": "condition",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "supported_answer",
+            "task_id": "6f8f2c26-7f6d-4ad3-b7d1-d6b67b86ea12",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "passed": true
+    },
+    {
+      "seed": 47,
+      "result": {
+        "task_id": "88ad40bf-fdeb-404e-bd06-7eb1086f897e",
+        "question": "Under what condition is the status inspection_required?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "requested_slot": "condition",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_value_in_requested_role": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "calibration is overdue",
+        "quote": "If calibration is overdue, the resulting status is inspection_required.",
+        "citation": {
+          "source_id": "52f33654-78f3-4378-9811-55201e2bf30f",
+          "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+          "path": "<workspace>/work/structured-policy/34d25e4f-21fb-4bba-8445-0614b88a835c/policy.md",
+          "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "cookie": "cookie-solver",
+          "kind": "model_call",
+          "payload": {
+            "answer": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "984dd9da192647a758bb84297567bde250bf8c9a0edb46909bed624449323a8f",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 94,
+            "prompt_tokens": 276,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 3979415875
+          }
+        },
+        {
+          "cookie": "cookie-solver",
+          "kind": "policy_extraction",
+          "payload": {
+            "raw": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "requested_slot": "condition"
+          }
+        },
+        {
+          "cookie": "cookie-solver",
+          "kind": "source_proposal",
+          "payload": {
+            "answer": "calibration is overdue",
+            "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+            "outcome": "answered",
+            "quote": "If calibration is overdue, the resulting status is inspection_required."
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "model_call",
+          "payload": {
+            "answer": {
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required"
+            },
+            "context": {
+              "question": "Under what condition is the status inspection_required?",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "7ec70743ced155f03644a624aab2b3c9d336524d8a2e2495c2f8456f77df808b",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 23,
+            "prompt_tokens": 166,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1298305166
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "policy_extraction",
+          "payload": {
+            "raw": {
+              "condition": "calibration is overdue",
+              "decision": "answered",
+              "outcome": "inspection_required"
+            },
+            "requested_slot": "condition"
+          }
+        },
+        {
+          "cookie": "cookie-support",
+          "kind": "support_check",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "solver_value_in_requested_role": true,
+            "support_answer_anchored": true,
+            "support_answered": true,
+            "support_value_in_requested_role": true
+          }
+        },
+        {
+          "cookie": "cookie-reader",
+          "kind": "knowledge_query",
+          "payload": {
+            "answer": "calibration is overdue",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "solver_value_in_requested_role": true,
+              "support_answer_anchored": true,
+              "support_answered": true,
+              "support_value_in_requested_role": true
+            },
+            "citation": {
+              "chunk_id": "52f33654-78f3-4378-9811-55201e2bf30f:115",
+              "line": 5,
+              "path": "<workspace>/work/structured-policy/34d25e4f-21fb-4bba-8445-0614b88a835c/policy.md",
+              "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+              "source_id": "52f33654-78f3-4378-9811-55201e2bf30f"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "Under what condition is the status inspection_required?",
+            "quote": "If calibration is overdue, the resulting status is inspection_required.",
+            "requested_slot": "condition",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "supported_answer",
+            "task_id": "88ad40bf-fdeb-404e-bd06-7eb1086f897e",
+            "temperature": 0.2
+          }
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": 3
+}

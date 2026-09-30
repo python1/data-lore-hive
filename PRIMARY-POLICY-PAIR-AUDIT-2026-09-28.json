@@ -1,0 +1,50 @@
+{
+  "database": "<repo>/knowledge.sqlite3",
+  "sha256_before": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+  "sha256_after": "13911c3542a3f68ace538c9c21c42d0b5c45f0bb04b970742ec06bc962f8a025",
+  "database_unchanged": true,
+  "event_count": 26,
+  "accepted_positive_answers": 2,
+  "accepted_policy_answers": 1,
+  "passed": 1,
+  "failed": 0,
+  "findings": [
+    {
+      "event_id": "4f4e7dfa-0a96-40c8-a05a-99832100df59",
+      "sequence": 15,
+      "run_id": "553b3a89-aa3a-4cf2-8834-ac0cd230057a",
+      "question": "What happens when the model calculation disagrees?",
+      "answer": "needs_review",
+      "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+      "quote_matches_verified_snapshot": true,
+      "cookies": {
+        "cookie-solver": {
+          "extraction_id": "8312ed48-8020-4eac-a41f-ea3c36650ce6",
+          "pair": {
+            "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+            "condition": "Source checks pass, but the model calculates a different total",
+            "decision": "answered",
+            "outcome": "needs_review",
+            "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+          },
+          "pair_consistent": true,
+          "requested_value_matches_finding": true
+        },
+        "cookie-support": {
+          "extraction_id": "135c8b23-7bae-4db0-8451-6d89bbf14531",
+          "pair": {
+            "condition": "Source checks pass, but the model calculates a different total",
+            "decision": "answered",
+            "outcome": "needs_review"
+          },
+          "pair_consistent": true,
+          "requested_value_matches_finding": true
+        }
+      },
+      "pass": true
+    }
+  ],
+  "not_found_queries": 1,
+  "historical_source_excerpts": 2,
+  "scope": "All supported_answer query records; policy identified by route, question slot or extraction events. Not-found findings have no accepted pair; historical source_excerpt records were not accepted answers. Stored snapshots used, no original files or model calls."
+}

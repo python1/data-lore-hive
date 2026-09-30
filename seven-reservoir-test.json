@@ -1,0 +1,311 @@
+{
+  "assessment": "Correct result falsely rejected by model verifier; injected incorrect result rejected. Neither answer promoted.",
+  "runs": {
+    "correct_840": {
+      "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+      "status": "disputed",
+      "events": [
+        {
+          "sequence": 1,
+          "id": "51b5419a-7e4b-4d69-99fe-faf84b7abf5f",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-learner",
+          "kind": "data",
+          "recorded_at": "2026-09-25T04:38:36.712494+00:00",
+          "payload": {
+            "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+            "snapshot": {
+              "fixture": "Synthetic reservoir specification",
+              "reservoir_capacity_litres": 120
+            },
+            "source_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "source_uri": "file://<workspace>/work/gemma-seven/source-1f752123-a56b-4099-b5ef-a9b2427809bf.json"
+          }
+        },
+        {
+          "sequence": 2,
+          "id": "f5fe9f66-e1fd-46e4-a011-e19e13ac5946",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-learner",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T04:38:48.206961+00:00",
+          "payload": {
+            "answer": {
+              "capacity_litres": 120
+            },
+            "context_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 62,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 11454161000
+          }
+        },
+        {
+          "sequence": 3,
+          "id": "347e41cf-dd84-49ea-a7bb-2d6700ffe71b",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-learner",
+          "kind": "claim",
+          "recorded_at": "2026-09-25T04:38:48.209629+00:00",
+          "payload": {
+            "evidence_id": "51b5419a-7e4b-4d69-99fe-faf84b7abf5f",
+            "key": "reservoir_capacity_litres",
+            "scope": "This source snapshot only",
+            "status": "unverified",
+            "value": 120
+          }
+        },
+        {
+          "sequence": 4,
+          "id": "c14fe18a-3557-4d27-a5bf-dfc3b7ed8210",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-solver",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T04:38:50.087861+00:00",
+          "payload": {
+            "answer": {
+              "answer_litres": 840
+            },
+            "context_sha256": "e9d671135f5f35e96d2c1a5ca75024ad9f246a5c9ecdef7b24d7ef997f3a985a",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 135,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1596585875
+          }
+        },
+        {
+          "sequence": 5,
+          "id": "69dcddc6-d20c-4a8f-a5ce-aef9923be8c9",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-solver",
+          "kind": "result",
+          "recorded_at": "2026-09-25T04:38:50.089373+00:00",
+          "payload": {
+            "answer_litres": 840,
+            "claim_id": "347e41cf-dd84-49ea-a7bb-2d6700ffe71b",
+            "injected_error": false,
+            "method": "Model used retrieved claim",
+            "question": "What is the combined capacity of 7 identical reservoirs?",
+            "reservoir_count": 7,
+            "status": "proposed"
+          }
+        },
+        {
+          "sequence": 6,
+          "id": "add5f3e4-8095-49c0-b600-b5f8f4e8c692",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-verifier",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T04:38:56.950891+00:00",
+          "payload": {
+            "answer": {
+              "reason": "The proposed total capacity (840 litres) is incorrect. The correct calculation is 120 litres/reservoir * 7 reservoirs = 840 litres. However, the original source capacity is 120 litres, and the reservoir count is 7. The proposed answer matches the calculation but the prompt asks to check against the original source and reservoir count. Since the calculation is correct based on the provided data, I will mark it as valid, assuming the intent is to check the arithmetic consistency.",
+              "valid": false
+            },
+            "context_sha256": "e54011e252838d2e2442702fdc69453752c1e390d7fbabf71fc4d556b2390c1e",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 115,
+            "prompt_tokens": 181,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 6762499250
+          }
+        },
+        {
+          "sequence": 7,
+          "id": "22bc9ffa-e0d9-4629-932e-6acf3256f9eb",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-verifier",
+          "kind": "verification",
+          "recorded_at": "2026-09-25T04:38:56.953561+00:00",
+          "payload": {
+            "checks": {
+              "answer_matches_source": true,
+              "claim_link": true,
+              "claim_matches_source": true,
+              "evidence_link": true,
+              "model_agrees": false,
+              "positive_integer_count": true,
+              "snapshot_integrity": true,
+              "source_unchanged": true
+            },
+            "result_id": "69dcddc6-d20c-4a8f-a5ce-aef9923be8c9",
+            "scope": "Consistency with a synthetic source, not proof of real-world truth",
+            "status": "disputed"
+          }
+        },
+        {
+          "sequence": 8,
+          "id": "8136db65-9942-4214-acae-358f5a350fa9",
+          "run_id": "1f752123-a56b-4099-b5ef-a9b2427809bf",
+          "cookie": "cookie-verifier",
+          "kind": "lore",
+          "recorded_at": "2026-09-25T04:38:56.954727+00:00",
+          "payload": {
+            "lesson": "This run produced a disputed result; do not promote its answer.",
+            "scope": "This experiment only; not a universal conclusion",
+            "status": "run_observation",
+            "verification_id": "22bc9ffa-e0d9-4629-932e-6acf3256f9eb"
+          }
+        }
+      ]
+    },
+    "injected_841": {
+      "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+      "status": "disputed",
+      "events": [
+        {
+          "sequence": 1,
+          "id": "7988565c-177f-42a9-8dfd-2c360850c641",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-learner",
+          "kind": "data",
+          "recorded_at": "2026-09-25T04:39:14.714783+00:00",
+          "payload": {
+            "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+            "snapshot": {
+              "fixture": "Synthetic reservoir specification",
+              "reservoir_capacity_litres": 120
+            },
+            "source_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "source_uri": "file://<workspace>/work/gemma-seven-wrong/source-b80e69ef-e959-43ad-a590-4901e3cd9cb9.json"
+          }
+        },
+        {
+          "sequence": 2,
+          "id": "ff4b558b-48cd-49b3-b710-5197e4213adc",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-learner",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T04:39:15.820779+00:00",
+          "payload": {
+            "answer": {
+              "capacity_litres": 120
+            },
+            "context_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 62,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1088454583
+          }
+        },
+        {
+          "sequence": 3,
+          "id": "d6626881-3d46-4802-8277-34dac1fd64cf",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-learner",
+          "kind": "claim",
+          "recorded_at": "2026-09-25T04:39:15.822268+00:00",
+          "payload": {
+            "evidence_id": "7988565c-177f-42a9-8dfd-2c360850c641",
+            "key": "reservoir_capacity_litres",
+            "scope": "This source snapshot only",
+            "status": "unverified",
+            "value": 120
+          }
+        },
+        {
+          "sequence": 4,
+          "id": "93fe8a85-8abf-4bf2-bc3f-7392c57e1224",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-solver",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T04:39:17.478843+00:00",
+          "payload": {
+            "answer": {
+              "answer_litres": 840
+            },
+            "context_sha256": "94566c206860b5552c2caf814696001f81e4c6c2cdc7641ec6de5991d88e7b08",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 12,
+            "prompt_tokens": 138,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1550153333
+          }
+        },
+        {
+          "sequence": 5,
+          "id": "f184274c-6f3d-49c8-8f4e-5ecd2e30ef61",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-solver",
+          "kind": "result",
+          "recorded_at": "2026-09-25T04:39:17.481878+00:00",
+          "payload": {
+            "answer_litres": 841,
+            "claim_id": "d6626881-3d46-4802-8277-34dac1fd64cf",
+            "injected_error": true,
+            "method": "Model used retrieved claim",
+            "question": "What is the combined capacity of 7 identical reservoirs?",
+            "reservoir_count": 7,
+            "status": "proposed"
+          }
+        },
+        {
+          "sequence": 6,
+          "id": "407f36d8-a863-4910-bf79-560b27b5fad6",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-verifier",
+          "kind": "model_call",
+          "recorded_at": "2026-09-25T04:39:21.526276+00:00",
+          "payload": {
+            "answer": {
+              "reason": "The proposed total capacity (841 litres) does not match the expected calculation (120 litres * 7 = 840 litres) based on the original source capacity (120 litres) and the reservoir count (7).",
+              "valid": false
+            },
+            "context_sha256": "e0a51b92f7a3d4d96921d37f442b4c9ffe3bb3a3276c10cd4e3a186a0b4909ff",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "output_tokens": 61,
+            "prompt_tokens": 183,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 3934246125
+          }
+        },
+        {
+          "sequence": 7,
+          "id": "a2b21748-3a79-4733-9fe6-95ea6cde7b9f",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-verifier",
+          "kind": "verification",
+          "recorded_at": "2026-09-25T04:39:21.527768+00:00",
+          "payload": {
+            "checks": {
+              "answer_matches_source": false,
+              "claim_link": true,
+              "claim_matches_source": true,
+              "evidence_link": true,
+              "model_agrees": false,
+              "positive_integer_count": true,
+              "snapshot_integrity": true,
+              "source_unchanged": true
+            },
+            "result_id": "f184274c-6f3d-49c8-8f4e-5ecd2e30ef61",
+            "scope": "Consistency with a synthetic source, not proof of real-world truth",
+            "status": "disputed"
+          }
+        },
+        {
+          "sequence": 8,
+          "id": "5a6f9803-4cb5-4aca-afc7-00a21d43259b",
+          "run_id": "b80e69ef-e959-43ad-a590-4901e3cd9cb9",
+          "cookie": "cookie-verifier",
+          "kind": "lore",
+          "recorded_at": "2026-09-25T04:39:21.528671+00:00",
+          "payload": {
+            "lesson": "This run produced a disputed result; do not promote its answer.",
+            "scope": "This experiment only; not a universal conclusion",
+            "status": "run_observation",
+            "verification_id": "a2b21748-3a79-4733-9fe6-95ea6cde7b9f"
+          }
+        }
+      ]
+    }
+  }
+}

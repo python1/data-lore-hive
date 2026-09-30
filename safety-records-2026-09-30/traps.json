@@ -1,0 +1,1582 @@
+{
+  "synthetic": [
+    {
+      "name": "calibration_seal",
+      "path": "deterministic",
+      "answerable": true,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "afcd985f-d631-4a3e-ad56-1036087da4f5",
+        "question": "What happens when calibration is overdue?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "deterministic",
+        "binding_event_id": "c3cae242-2fc2-43d0-95ad-89aedfab6ec3",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "right_row",
+      "path": "deterministic",
+      "answerable": true,
+      "accepted": true,
+      "correct": true,
+      "expected_delivery": true,
+      "result": {
+        "task_id": "a67b1c2e-7be1-402a-a936-092924178ae8",
+        "question": "What happens when calibration is overdue?",
+        "model": "synthetic",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "deterministic",
+        "binding_event_id": "c08c807b-fc70-44bc-a535-05ac80124a33",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "qualification": "calibration is overdue",
+        "qualified_answer": "Under the condition: calibration is overdue; outcome: inspection_required",
+        "answer": "inspection_required",
+        "quote": "| Status | Meaning |\n|---|---|\n| inspection_required | calibration is overdue |\n| locked | the seal is open |",
+        "citation": {
+          "source_id": "a3d31c54-4904-4d44-aa16-92f6a7160880",
+          "chunk_id": "a3d31c54-4904-4d44-aa16-92f6a7160880:0",
+          "path": "<workspace>/work/safety-split-2026-09-30/traps/right_row/source.md",
+          "sha256": "68a554e50a46648f53a9bc733569f376658900992ce51eb1980e904922987451",
+          "line": 1
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "prose_wrong_row",
+      "path": "deterministic",
+      "answerable": true,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "03d9d33c-bfac-420a-97af-a1aabff1a9aa",
+        "question": "What happens when calibration is overdue?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "deterministic",
+        "binding_event_id": "c99170a0-44e5-4fa1-b6c2-2060d70dfeef",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "negation",
+      "path": "deterministic",
+      "answerable": false,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "ee98b843-bbd3-4f1c-a794-394b6ffaf42a",
+        "question": "What happens when calibration is not overdue?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "deterministic",
+        "binding_event_id": "ebc8d8c1-dd66-4551-9536-004dcc469f79",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "conflict",
+      "path": "deterministic",
+      "answerable": false,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "00018c5e-ce2a-43bc-9859-dcbfe03c9754",
+        "question": "What happens when calibration is overdue?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "deterministic",
+        "binding_event_id": "8cd27ee5-1b3c-4370-8bdc-b3e30b1870f3",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "exception",
+      "path": "deterministic",
+      "answerable": false,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "082ce7c9-6da9-45d7-8e57-cfe8abd9a97b",
+        "question": "What happens when calibration is overdue?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "deterministic",
+        "binding_event_id": "e30f7884-f5be-499c-bf50-1015d3935d40",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "fallback_correct",
+      "path": "fallback",
+      "answerable": true,
+      "accepted": true,
+      "correct": true,
+      "expected_delivery": true,
+      "result": {
+        "task_id": "d9773021-96e9-40bf-b838-219ac8c8cd1a",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "fallback",
+        "binding_event_id": "bd0858b0-dedc-422f-8067-a2a84bd000b5",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "mapping_id": "1c886e22345e95f40b40172b90e80b8d1f39e5e8720847ea9d6dd5925765fdbd",
+        "qualification": "calibration is overdue",
+        "qualified_answer": "Under the condition: calibration is overdue; outcome: inspection_required",
+        "answer": "inspection_required",
+        "quote": "| Status | Meaning |\n|---|---|\n| inspection_required | calibration is overdue |\n| locked | the seal is open |",
+        "citation": {
+          "source_id": "78f53d3c-3d08-4092-9596-a5b064b9aeb6",
+          "chunk_id": "78f53d3c-3d08-4092-9596-a5b064b9aeb6:0",
+          "path": "<workspace>/work/safety-split-2026-09-30/traps/fallback_correct/source.md",
+          "sha256": "68a554e50a46648f53a9bc733569f376658900992ce51eb1980e904922987451",
+          "line": 1
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "fallback_wrong_solver",
+      "path": "fallback",
+      "answerable": true,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "6ddf2609-4016-4cc3-b25d-ff01e7979eee",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "fallback",
+        "binding_event_id": "3143bab8-8044-48da-9b1d-210ab69c1a63",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "fallback_wrong_relevance",
+      "path": "fallback",
+      "answerable": true,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "62dff95d-208e-4e67-8d17-e5ab3cd33876",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "fallback",
+        "binding_event_id": "4c4c866e-75de-41de-b656-f503658affaa",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "fallback_abstains",
+      "path": "fallback",
+      "answerable": true,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "1d597154-ee15-46c8-bf6d-a5528b3f718c",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "fallback",
+        "binding_event_id": "0b6cacb5-14c4-4fa7-903a-9e9b86397ee9",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "fallback_malformed",
+      "path": "fallback",
+      "answerable": true,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "029e37fb-a4b2-4862-92b6-3a0d39442092",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "fallback",
+        "binding_event_id": "42bbd8fa-bc58-4459-9c56-14128a75eea3",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": true,
+      "trap_passed": true
+    },
+    {
+      "name": "promoted_correct",
+      "path": "promoted",
+      "answerable": true,
+      "accepted": true,
+      "correct": true,
+      "expected_delivery": true,
+      "result": {
+        "task_id": "f2162f16-ec9c-48f7-bdb2-a58813b79c58",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "promoted",
+        "binding_event_id": "f7bf3003-15ce-442b-971d-c58c4dc9d15f",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "mapping_id": "7a1197dd6a5ccc9f9f525136b5a91238d9f2f324e266579debe371a74eaabd62",
+        "qualification": "calibration is overdue",
+        "qualified_answer": "Under the condition: calibration is overdue; outcome: inspection_required",
+        "answer": "inspection_required",
+        "quote": "| Status | Meaning |\n|---|---|\n| inspection_required | calibration is overdue |\n| locked | the seal is open |",
+        "citation": {
+          "source_id": "78186013-1009-40d4-8ce1-18f4450de265",
+          "chunk_id": "78186013-1009-40d4-8ce1-18f4450de265:0",
+          "path": "<workspace>/work/safety-split-2026-09-30/traps/promoted_correct/source.md",
+          "sha256": "68a554e50a46648f53a9bc733569f376658900992ce51eb1980e904922987451",
+          "line": 1
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "promoted_wrong_solver",
+      "path": "promoted",
+      "answerable": true,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "3743de5b-b883-4ea4-8647-dd46893b1aca",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "promoted",
+        "binding_event_id": "b887196c-b7e2-473c-8bbf-9e4d27435f34",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    },
+    {
+      "name": "promoted_revoked",
+      "path": "promoted",
+      "answerable": false,
+      "accepted": false,
+      "correct": false,
+      "expected_delivery": false,
+      "result": {
+        "task_id": "f99779fa-878c-4d81-ac70-09ec45e2475d",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "needs_review",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "deterministic",
+        "binding_event_id": "8c58a13d-ba99-4a6a-a9e4-180bea70985f",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": false,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        }
+      },
+      "error": false,
+      "trap_passed": true
+    }
+  ],
+  "correlated_error_injection": [
+    {
+      "path": "fallback",
+      "accepted": true,
+      "correct": false,
+      "answerable": true,
+      "result": {
+        "task_id": "e72cd910-bdf0-4069-af8a-602d006e354a",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "fallback",
+        "binding_event_id": "001ef461-35e2-4187-881c-76d46877a786",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "mapping_id": "46efae4f7a7dd501246eee45b8ef6f7aef42d600a44b82538274e56683d0dea1",
+        "qualification": "the seal is open",
+        "qualified_answer": "Under the condition: the seal is open; outcome: locked",
+        "answer": "locked",
+        "quote": "| Status | Meaning |\n|---|---|\n| inspection_required | calibration is overdue |\n| locked | the seal is open |",
+        "citation": {
+          "source_id": "d29ec7d6-feed-4809-9261-c49158fdea67",
+          "chunk_id": "d29ec7d6-feed-4809-9261-c49158fdea67:0",
+          "path": "<workspace>/work/safety-split-2026-09-30/traps/correlated-fallback/source.md",
+          "sha256": "68a554e50a46648f53a9bc733569f376658900992ce51eb1980e904922987451",
+          "line": 1
+        }
+      },
+      "scope": "Injected correlated interpretation; promoted fixture includes synthetic passing trap evidence"
+    },
+    {
+      "path": "promoted",
+      "accepted": true,
+      "correct": false,
+      "answerable": true,
+      "result": {
+        "task_id": "92497841-1b34-4b1f-87ea-a1f2d0794012",
+        "question": "What happens when calibration has expired?",
+        "model": "synthetic",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "binding_path": "promoted",
+        "binding_event_id": "0378ad4e-84b0-4d48-a3db-9acb92ab0d1d",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "solver_pair_in_same_rule": true,
+          "support_pair_in_same_rule": true,
+          "support_value_in_requested_role": true,
+          "policy_relevance": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "mapping_id": "44f38f8b17adea7a4172c26c844254fc06bc645598b65fc099e4cd58100b5bec",
+        "qualification": "the seal is open",
+        "qualified_answer": "Under the condition: the seal is open; outcome: locked",
+        "answer": "locked",
+        "quote": "| Status | Meaning |\n|---|---|\n| inspection_required | calibration is overdue |\n| locked | the seal is open |",
+        "citation": {
+          "source_id": "d328d5d6-a4e8-426e-8e4f-b7b8322c46fc",
+          "chunk_id": "d328d5d6-a4e8-426e-8e4f-b7b8322c46fc:0",
+          "path": "<workspace>/work/safety-split-2026-09-30/traps/correlated-promoted/source.md",
+          "sha256": "68a554e50a46648f53a9bc733569f376658900992ce51eb1980e904922987451",
+          "line": 1
+        }
+      },
+      "scope": "Injected correlated interpretation; promoted fixture includes synthetic passing trap evidence"
+    }
+  ],
+  "live": [
+    {
+      "name": "calibration_literal",
+      "seed": 11,
+      "answerable": true,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "bound",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "literal_selector",
+        "selector_slot": "condition",
+        "selector": "calibration is overdue",
+        "rule": {
+          "condition": "calibration is overdue",
+          "outcome": "inspection_required",
+          "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+          "spans": {
+            "condition": [
+              55,
+              77
+            ],
+            "outcome": [
+              33,
+              52
+            ]
+          }
+        }
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "seal_literal",
+      "seed": 11,
+      "answerable": true,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "bound",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "literal_selector",
+        "selector_slot": "condition",
+        "selector": "the seal is open",
+        "rule": {
+          "condition": "the seal is open",
+          "outcome": "locked",
+          "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+          "spans": {
+            "condition": [
+              91,
+              107
+            ],
+            "outcome": [
+              82,
+              88
+            ]
+          }
+        }
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "calibration_paraphrase",
+      "seed": 11,
+      "answerable": true,
+      "path": "fallback",
+      "review": {
+        "accepted": true,
+        "rule": {
+          "condition": "calibration is overdue",
+          "outcome": "inspection_required",
+          "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+          "spans": {
+            "condition": [
+              55,
+              77
+            ],
+            "outcome": [
+              33,
+              52
+            ]
+          }
+        },
+        "raw": {
+          "decision": {
+            "decision": "bound"
+          },
+          "selection": {
+            "rule_id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3"
+          }
+        },
+        "qualification": "calibration is overdue",
+        "event_id": "f1a7a8b2-0a9c-4a65-b9d7-1c121d0473fd",
+        "decision_event_id": "3e49904f-ae21-4489-9c35-6303dd0a7e5d",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 11,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "negated",
+      "seed": 11,
+      "answerable": false,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "mismatch",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "negation_operator_number_or_conjunction_mismatch",
+        "selector_slot": "condition",
+        "selector": "calibration is not overdue"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "unspecified",
+      "seed": 11,
+      "answerable": false,
+      "path": "fallback",
+      "review": {
+        "accepted": false,
+        "rule": null,
+        "raw": {
+          "decision": {
+            "decision": "ambiguous"
+          },
+          "selection": null
+        },
+        "qualification": null,
+        "event_id": "c7327e0f-138a-4ec2-8e56-a3a304219015",
+        "decision_event_id": "c7327e0f-138a-4ec2-8e56-a3a304219015",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 11,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "injection",
+      "seed": 11,
+      "answerable": true,
+      "path": "fallback",
+      "review": {
+        "accepted": false,
+        "rule": null,
+        "raw": {
+          "decision": {
+            "decision": "ambiguous"
+          },
+          "selection": null
+        },
+        "qualification": null,
+        "event_id": "428ae318-b382-43bf-bdc8-8469ab864a70",
+        "decision_event_id": "428ae318-b382-43bf-bdc8-8469ab864a70",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 11,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "calibration_literal",
+      "seed": 29,
+      "answerable": true,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "bound",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "literal_selector",
+        "selector_slot": "condition",
+        "selector": "calibration is overdue",
+        "rule": {
+          "condition": "calibration is overdue",
+          "outcome": "inspection_required",
+          "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+          "spans": {
+            "condition": [
+              55,
+              77
+            ],
+            "outcome": [
+              33,
+              52
+            ]
+          }
+        }
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "seal_literal",
+      "seed": 29,
+      "answerable": true,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "bound",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "literal_selector",
+        "selector_slot": "condition",
+        "selector": "the seal is open",
+        "rule": {
+          "condition": "the seal is open",
+          "outcome": "locked",
+          "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+          "spans": {
+            "condition": [
+              91,
+              107
+            ],
+            "outcome": [
+              82,
+              88
+            ]
+          }
+        }
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "calibration_paraphrase",
+      "seed": 29,
+      "answerable": true,
+      "path": "fallback",
+      "review": {
+        "accepted": true,
+        "rule": {
+          "condition": "calibration is overdue",
+          "outcome": "inspection_required",
+          "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+          "spans": {
+            "condition": [
+              55,
+              77
+            ],
+            "outcome": [
+              33,
+              52
+            ]
+          }
+        },
+        "raw": {
+          "decision": {
+            "decision": "bound"
+          },
+          "selection": {
+            "rule_id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3"
+          }
+        },
+        "qualification": "calibration is overdue",
+        "event_id": "1b4ce37b-d82c-4c85-b5e6-95cb0dd9f6b3",
+        "decision_event_id": "625af57b-aa4b-458e-9a77-e7763835305b",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 29,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "negated",
+      "seed": 29,
+      "answerable": false,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "mismatch",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "negation_operator_number_or_conjunction_mismatch",
+        "selector_slot": "condition",
+        "selector": "calibration is not overdue"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "unspecified",
+      "seed": 29,
+      "answerable": false,
+      "path": "fallback",
+      "review": {
+        "accepted": false,
+        "rule": null,
+        "raw": {
+          "decision": {
+            "decision": "ambiguous"
+          },
+          "selection": null
+        },
+        "qualification": null,
+        "event_id": "4d9f21cc-ea40-4cfe-abb4-b8ccc8857b7e",
+        "decision_event_id": "4d9f21cc-ea40-4cfe-abb4-b8ccc8857b7e",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 29,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "injection",
+      "seed": 29,
+      "answerable": true,
+      "path": "fallback",
+      "review": {
+        "accepted": false,
+        "rule": null,
+        "raw": {
+          "decision": {
+            "decision": "ambiguous"
+          },
+          "selection": null
+        },
+        "qualification": null,
+        "event_id": "4bcd357d-6f94-4ba5-8b91-f6a15a120fcd",
+        "decision_event_id": "4bcd357d-6f94-4ba5-8b91-f6a15a120fcd",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 29,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "calibration_literal",
+      "seed": 47,
+      "answerable": true,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "bound",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "literal_selector",
+        "selector_slot": "condition",
+        "selector": "calibration is overdue",
+        "rule": {
+          "condition": "calibration is overdue",
+          "outcome": "inspection_required",
+          "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+          "spans": {
+            "condition": [
+              55,
+              77
+            ],
+            "outcome": [
+              33,
+              52
+            ]
+          }
+        }
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "seal_literal",
+      "seed": 47,
+      "answerable": true,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "bound",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "literal_selector",
+        "selector_slot": "condition",
+        "selector": "the seal is open",
+        "rule": {
+          "condition": "the seal is open",
+          "outcome": "locked",
+          "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+          "spans": {
+            "condition": [
+              91,
+              107
+            ],
+            "outcome": [
+              82,
+              88
+            ]
+          }
+        }
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "calibration_paraphrase",
+      "seed": 47,
+      "answerable": true,
+      "path": "fallback",
+      "review": {
+        "accepted": true,
+        "rule": {
+          "condition": "calibration is overdue",
+          "outcome": "inspection_required",
+          "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+          "spans": {
+            "condition": [
+              55,
+              77
+            ],
+            "outcome": [
+              33,
+              52
+            ]
+          }
+        },
+        "raw": {
+          "decision": {
+            "decision": "bound"
+          },
+          "selection": {
+            "rule_id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3"
+          }
+        },
+        "qualification": "calibration is overdue",
+        "event_id": "23b1b048-9780-4bce-ab76-4e3a7d1c4dd6",
+        "decision_event_id": "97ea710b-517d-43c6-8cf7-b656863ae954",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 47,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "name": "negated",
+      "seed": 47,
+      "answerable": false,
+      "path": "deterministic",
+      "decision": {
+        "version": "policy-binding-v1",
+        "state": "mismatch",
+        "rules": [
+          {
+            "condition": "calibration is overdue",
+            "outcome": "inspection_required",
+            "id": "8fca018b230289d0258219e772780323aec2e5b7715a18558c9e541547b241b3",
+            "spans": {
+              "condition": [
+                55,
+                77
+              ],
+              "outcome": [
+                33,
+                52
+              ]
+            }
+          },
+          {
+            "condition": "the seal is open",
+            "outcome": "locked",
+            "id": "a5882aceb4f625ccc022b79cca35ed68adfabc4bd5cb7ff15531158a4908ff7b",
+            "spans": {
+              "condition": [
+                91,
+                107
+              ],
+              "outcome": [
+                82,
+                88
+              ]
+            }
+          }
+        ],
+        "reason": "negation_operator_number_or_conjunction_mismatch",
+        "selector_slot": "condition",
+        "selector": "calibration is not overdue"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "unspecified",
+      "seed": 47,
+      "answerable": false,
+      "path": "fallback",
+      "review": {
+        "accepted": false,
+        "rule": null,
+        "raw": {
+          "decision": {
+            "decision": "ambiguous"
+          },
+          "selection": null
+        },
+        "qualification": null,
+        "event_id": "5b450e88-de82-405b-a1e8-4a7e4146fac2",
+        "decision_event_id": "5b450e88-de82-405b-a1e8-4a7e4146fac2",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 47,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "name": "injection",
+      "seed": 47,
+      "answerable": true,
+      "path": "fallback",
+      "review": {
+        "accepted": false,
+        "rule": null,
+        "raw": {
+          "decision": {
+            "decision": "ambiguous"
+          },
+          "selection": null
+        },
+        "qualification": null,
+        "event_id": "d2127835-da6b-40b3-b650-37aeecb55bef",
+        "decision_event_id": "d2127835-da6b-40b3-b650-37aeecb55bef",
+        "identity": {
+          "tag": "gemma4:e4b",
+          "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+          "family": "gemma4",
+          "runtime": "0.32.14"
+        },
+        "seed": 47,
+        "purpose": "binding",
+        "prompt_version": "relevance-v2"
+      },
+      "accepted": false,
+      "correct": false
+    }
+  ],
+  "metrics": {
+    "synthetic": {
+      "deterministic": {
+        "trials": 6,
+        "delivered": 1,
+        "answerable": 3,
+        "correct_answers": 1,
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "false_accepts_per_delivered": 0.0,
+        "abstentions": 5,
+        "errors": 0
+      },
+      "fallback": {
+        "trials": 5,
+        "delivered": 1,
+        "answerable": 5,
+        "correct_answers": 1,
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "false_accepts_per_delivered": 0.0,
+        "abstentions": 4,
+        "errors": 1
+      },
+      "promoted": {
+        "trials": 3,
+        "delivered": 1,
+        "answerable": 2,
+        "correct_answers": 1,
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "false_accepts_per_delivered": 0.0,
+        "abstentions": 2,
+        "errors": 0
+      }
+    },
+    "correlated_error_injection": {
+      "deterministic": {
+        "trials": 0,
+        "delivered": 0,
+        "answerable": 0,
+        "correct_answers": 0,
+        "false_accepts": 0,
+        "false_accept_rate": null,
+        "false_accepts_per_delivered": null,
+        "abstentions": 0,
+        "errors": 0
+      },
+      "fallback": {
+        "trials": 1,
+        "delivered": 1,
+        "answerable": 1,
+        "correct_answers": 0,
+        "false_accepts": 1,
+        "false_accept_rate": 1.0,
+        "false_accepts_per_delivered": 1.0,
+        "abstentions": 0,
+        "errors": 0
+      },
+      "promoted": {
+        "trials": 1,
+        "delivered": 1,
+        "answerable": 1,
+        "correct_answers": 0,
+        "false_accepts": 1,
+        "false_accept_rate": 1.0,
+        "false_accepts_per_delivered": 1.0,
+        "abstentions": 0,
+        "errors": 0
+      }
+    },
+    "live": {
+      "deterministic": {
+        "trials": 9,
+        "delivered": 6,
+        "answerable": 6,
+        "correct_answers": 6,
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "false_accepts_per_delivered": 0.0,
+        "abstentions": 3,
+        "errors": 0
+      },
+      "fallback": {
+        "trials": 9,
+        "delivered": 3,
+        "answerable": 6,
+        "correct_answers": 3,
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "false_accepts_per_delivered": 0.0,
+        "abstentions": 6,
+        "errors": 0
+      },
+      "promoted": {
+        "trials": 0,
+        "delivered": 0,
+        "answerable": 0,
+        "correct_answers": 0,
+        "false_accepts": 0,
+        "false_accept_rate": null,
+        "false_accepts_per_delivered": null,
+        "abstentions": 0,
+        "errors": 0
+      }
+    }
+  },
+  "model_identity": {
+    "tag": "gemma4:e4b",
+    "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+    "family": "gemma4",
+    "runtime": "0.32.14"
+  },
+  "finished": true
+}

@@ -1,0 +1,1102 @@
+{
+  "started_utc": "2026-09-28T00:42:59.600503+00:00",
+  "model": "gemma4:e4b",
+  "seeds": [
+    29,
+    47
+  ],
+  "temperature": 0.2,
+  "database": "<workspace>/work/source-recovery/clean-machine/knowledge.sqlite3",
+  "recovery_root": "<workspace>/work/source-recovery/clean-machine/recovered",
+  "original_source_reads": "blocked by an assertion throughout all live queries",
+  "cases": [
+    {
+      "seed": 29,
+      "matches_seed_11": true,
+      "result": {
+        "task_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+        "question": "What happens when the model calculation disagrees?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_value_in_requested_role": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "needs_review",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "citation": {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "line": 38,
+          "original_path": "<repo>/README.md"
+        }
+      }
+    },
+    {
+      "seed": 29,
+      "matches_seed_11": true,
+      "result": {
+        "task_id": "bb4b7c39-2dd4-4c0a-b12f-13b5af4f397b",
+        "question": "What is the minimum Python version required?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "general",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "Python 3.10 or newer",
+        "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+        "citation": {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "line": 7,
+          "original_path": "<repo>/README.md"
+        }
+      }
+    },
+    {
+      "seed": 29,
+      "matches_seed_11": true,
+      "result": {
+        "task_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+        "question": "Who manufactured the reservoir?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "general",
+        "absence_checks": {
+          "evidence_available": true,
+          "support_confirms_not_found": true,
+          "evidence_still_current": true
+        },
+        "finding_id": "c4c99bc6-9f15-47c5-b39d-3e2c4cd11ef4"
+      }
+    },
+    {
+      "seed": 47,
+      "matches_seed_11": true,
+      "result": {
+        "task_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+        "question": "What happens when the model calculation disagrees?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "policy",
+        "requested_slot": "outcome",
+        "checks": {
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_value_in_requested_role": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "needs_review",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "citation": {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "line": 38,
+          "original_path": "<repo>/README.md"
+        }
+      }
+    },
+    {
+      "seed": 47,
+      "matches_seed_11": true,
+      "result": {
+        "task_id": "85c6c3d9-04b8-410d-afc2-299bf0d0d7e7",
+        "question": "What is the minimum Python version required?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "general",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "Python 3.10 or newer",
+        "quote": "Requires Python 3.10 or newer.",
+        "citation": {
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "line": 7,
+          "original_path": "<repo>/README.md"
+        }
+      }
+    },
+    {
+      "seed": 47,
+      "matches_seed_11": true,
+      "result": {
+        "task_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+        "question": "Who manufactured the reservoir?",
+        "model": "gemma4:e4b",
+        "status": "not_found_in_source",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "question_route": "general",
+        "absence_checks": {
+          "evidence_available": true,
+          "support_confirms_not_found": true,
+          "evidence_still_current": true
+        },
+        "finding_id": "f6c0f460-8f91-4829-9a31-47747b73f380"
+      }
+    }
+  ],
+  "prior_record_hashes": {
+    "question-routing-audit.json": "632abd908d0c977d5847a0c7f1b9fa23b67aa4ec37352899f73425861ad642fd",
+    "policy-parser-limitations-observed.json": "f56e5c4a107d3b4aa7af07ff965c0a88c2e27db0d1e8b92d80e0cbe17f322154",
+    "abstention-format-validation-b3acd7b3.json": "36378aaa8e7ef1cbc023ca38fd9314bacb90c349a56bba7143e7073cd4224c79",
+    "preserved-prose-replay-fa52a8fe.json": "e9a84b924caf9ff8282dcc4fa4f12f22f674bdfce13f80cfd9077c6b9b1fe6f6",
+    "prose-policy-validation-2147ce73.json": "4aef6bf1537a9a3030d5ab8078ddde0c2b504b492eac3ee7ce9c50b805fc6124",
+    "question-routing-attempt-4.json": "38ff46af6fd7d0d02468b8d5c5109ea8b863ca3e98090e2adfdeb0508191e234",
+    "table-context-validation-40eddada.json": "2af8a177ca84e58815c6752348c468bc8839df3b508ec975436837d24a6a39b6",
+    "absence-confirmation-live-query.json": "6d9c702df2cf0cc3317ad58e7aec4d88c7e0719db05aa000c94b389256ae9d8a",
+    "structured-policy-complete-record.json": "02a777a954f0df2fe7804667d48bdc5722a41546f96ff30674142aaff0030540",
+    "support-seeded-0564edb2-raw.json": "f7daa22baae7c8d0ffa7608866b8da6026873bc0c99a3742a15e6e726f65e3a8",
+    "question-routing-attempt-3.json": "3cecefb329b8a30e11af7ef07152f485a40e19d1a091e3411db8cf6317b024cc",
+    "support-meaning-rerun-4c9252b8.json": "467212e9e5340a7e72b16404f7dc9e84b07af76af9df1025d316a7e5738060eb",
+    "question-routing-attempt-2.json": "7c2dceece9c2a29d614366b280f8f8e2b485e88176781fe2b8109371d7edf1b8",
+    "verifier-v2-validation.json": "e7bde6eb00b9fbced6cafb559c09b703cfcb96cd9a34b6937fe5415eafe98993",
+    "survivability-step-1-2026-09-27.json": "e6618d9149a16ad892d5c8af9f7cca0f467c28f18f3fd8c66ddcf5debef22594",
+    "survivability-coverage-2026-09-27.json": "d5c5b8c88cbec40fe0f56061580b7cb64251180907f2c394479db99542255560",
+    "rerun-2026-09-26-prose-unplanned-246ffdb1.json": "0bc63daa5117bedfc2698a89428af529e762bbb6eadf86dc87b3eac70aedca6d",
+    "source-memory-query-2.json": "d788acc6f0796f6509c377b2e598d43899a7cb623366dc891c2de293ab8d31d8",
+    "source-memory-query-1.json": "f3207bd7991b509b50b8b0f5c7a007eb83feb4db31175e89cbd85e55d55823d3",
+    "question-routing-attempt-1.json": "ddd0607da9e876abbf3eb68a6f3d0863a4ac9f28d6915480d539b54891f0725c",
+    "prose-nonanswer-unfixed-e7a6c871.json": "0f376aaf9ed4f01ff4d46a880829f3257351d5ca8dc015ca7067710502514dc5",
+    "outcome-selection-attempt-1.json": "de9e7910eaa45f9c02d60dc8382ba5ecb4d320cbaef469f897cd0df60a039311",
+    "source-recovery-validation-2026-09-27.json": "650ed1ac774ec1e3d0594adf389a7501bfaf80d1d1b7149cb89ef382799bda6e",
+    "batch-validation-1d3dc0b9.json": "f092ab8414ce53594359d86b3f10f4a0f0d347c71714cf4879295d315c3a9efc",
+    "support-seeded-0564edb2-adjudicated.json": "abf3ef70d7f0d6e4da74630a1b68b196c3f1995372a74cd461479636182fcbe4",
+    "structured-prose-diagnostic.json": "3314082fb75669b876d08777214f29a16bc9d10a1e67f5beadbc29a49b902811",
+    "rerun-2026-09-26-prose-c05d54e7.json": "ef04c650c23c1a43679bf6e0f148c75e19e6334e889433457772135f87a96d59",
+    "prose-current-validation-ab0af95d.json": "d78c6236ab2d0aba6f9f52d2de5077bc446cacb84ca12d17b4325b816844ded5",
+    "question-routing-final.json": "8b826dab508cd377b0af1565f8783c65632280fb2133961dab3364d0a1da4e25",
+    "gemma-validation.json": "37aad764dbca42ff8db053f62cac96ea5a3d8d4a5b233cc46f53054fcefe8950",
+    "structured-policy-notfound-8f814944.json": "ec30f83d6de5e16488f432c99ca22e6bb85f96e0220a2a6f372eaa659fbb85e4",
+    "policy-holdout-validation-7e145b8d.json": "61ffc80509e28ee8f86d3a240e28d020e914d49331df58a766e66f4508a350bc",
+    "historical-quote-support-replay.json": "e325fe7653c519d9fb692ec0a3f5e45373c97af52a57f4a911fcc09eca228c0c",
+    "seven-reservoir-test.json": "fb328509ca255f63b4405499631c91ef01528f0db564716f93fe038dbfb150df",
+    "rerun-2026-09-26-measurements.json": "5c31be70562ab1d6c92a4578608d54d9fad696e1dbdc00b2f4a0ce4114d01382",
+    "source-memory-validation.json": "200a6c5b020adb7ffc731aab2616fcbf62231adcc0a7036d6d5ef9cf06b4a013",
+    "structured-prose-validation-baaeb1ee.json": "a0c7fb456cceb53392f009c31a680be6c8065a8fa66639bd51383a38ab70ef9d",
+    "condition-slot-validation.json": "f4fc40f1d8850a558f6be8d65b7aeca14086dbde2163916f61f102e63a25ab7b",
+    "rerun-2026-09-26-table-source-2adf1acc.json": "b782c40c9df1f453d0965abadedf7f7af8a8aeee96fd4ad8a0b07fef6686a9ea",
+    "absence-confirmation-validation.json": "42e301515bdc2f65d040cbc1fab023c35d69dc6d3c46cd74bd83de393a17aee5",
+    "structured-table-validation-4a0208d6.json": "98314d79b4212b54bd92074409655c451877761b6162bdc1aabad8bb46a36a46"
+  },
+  "all_match": true,
+  "events": [
+    {
+      "sequence": 48,
+      "id": "8d625229-b8ce-49dd-b77e-7f34a86929ad",
+      "run_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:17.253566+00:00",
+      "payload": {
+        "answer": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "7496cb1dda0521075031d1813d852b18afff9a672caaa19a00538f876c1c8802",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 29,
+          "temperature": 0.2
+        },
+        "output_tokens": 168,
+        "prompt_tokens": 606,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 17612931917
+      }
+    },
+    {
+      "sequence": 49,
+      "id": "69c3810e-fe6f-4503-b7f1-9178082bd539",
+      "run_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+      "cookie": "cookie-solver",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-28T00:43:17.256014+00:00",
+      "payload": {
+        "raw": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 50,
+      "id": "ea7ac653-d628-41e6-a97c-3c9a87c83bac",
+      "run_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:43:17.258120+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+        "outcome": "answered",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+      }
+    },
+    {
+      "sequence": 51,
+      "id": "7e4a8cfc-5e64-4b9e-91e9-02cd300b3269",
+      "run_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:19.822981+00:00",
+      "payload": {
+        "answer": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "context": {
+          "question": "What happens when the model calculation disagrees?",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "25c59ab0744e95e4e3feadb6c20be2edd4af8de9299431014f936b26a123d4e1",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 29,
+          "temperature": 0.2
+        },
+        "output_tokens": 31,
+        "prompt_tokens": 235,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 2432563416
+      }
+    },
+    {
+      "sequence": 52,
+      "id": "48fe2cae-c672-4d14-a45a-44b627241069",
+      "run_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+      "cookie": "cookie-support",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-28T00:43:19.824770+00:00",
+      "payload": {
+        "raw": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 53,
+      "id": "e861f20f-42fe-4020-8958-e018e74f72dd",
+      "run_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-28T00:43:19.826449+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "solver_value_in_requested_role": true,
+        "support_answer_anchored": true,
+        "support_answered": true,
+        "support_value_in_requested_role": true
+      }
+    },
+    {
+      "sequence": 54,
+      "id": "1593acb7-246d-47ea-bed5-c9bb5030d432",
+      "run_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:43:19.828619+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_answer_anchored": true,
+          "support_answered": true,
+          "support_value_in_requested_role": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "line": 38,
+          "original_path": "<repo>/README.md",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What happens when the model calculation disagrees?",
+        "question_route": "policy",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "requested_slot": "outcome",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 29,
+        "status": "supported_answer",
+        "task_id": "243f4aa5-4a6a-4e2c-b0d1-73deb6d328a0",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 55,
+      "id": "12daee09-6b7b-43ea-80cb-d3aa0a8eb773",
+      "run_id": "bb4b7c39-2dd4-4c0a-b12f-13b5af4f397b",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:26.074117+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "outcome": "answered",
+          "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+        },
+        "context_sha256": "16f05e5b6fe46406673c3df326f12d1e7e51662cd8e6221a11533b9ca5845d37",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 29,
+          "temperature": 0.2
+        },
+        "output_tokens": 95,
+        "prompt_tokens": 556,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 6224669375
+      }
+    },
+    {
+      "sequence": 56,
+      "id": "2ffff3d8-fcc4-4def-9c01-f74bfac3b34f",
+      "run_id": "bb4b7c39-2dd4-4c0a-b12f-13b5af4f397b",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:43:26.078135+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+        "outcome": "answered",
+        "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+      }
+    },
+    {
+      "sequence": 57,
+      "id": "5bb9dd43-6f18-4c30-9a2d-83433d4f87f1",
+      "run_id": "bb4b7c39-2dd4-4c0a-b12f-13b5af4f397b",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:28.087276+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "outcome": "answered"
+        },
+        "context": {
+          "question": "What is the minimum Python version required?",
+          "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections."
+        },
+        "context_sha256": "35f15a85cb60f9c04cbaad05ae5314caf985544b85f025e8e9b1eb6becf535b5",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 29,
+          "temperature": 0.2
+        },
+        "output_tokens": 20,
+        "prompt_tokens": 215,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1897652500
+      }
+    },
+    {
+      "sequence": 58,
+      "id": "515800e6-7570-4eaa-a630-648003b913bd",
+      "run_id": "bb4b7c39-2dd4-4c0a-b12f-13b5af4f397b",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-28T00:43:28.088934+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "support_answer_anchored": true,
+        "support_answered": true
+      }
+    },
+    {
+      "sequence": 59,
+      "id": "a9d30422-a8ad-40fb-8e7d-d0958d43ec44",
+      "run_id": "bb4b7c39-2dd4-4c0a-b12f-13b5af4f397b",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:43:28.090852+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "support_answer_anchored": true,
+          "support_answered": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "line": 7,
+          "original_path": "<repo>/README.md",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What is the minimum Python version required?",
+        "question_route": "general",
+        "quote": "Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 29,
+        "status": "supported_answer",
+        "task_id": "bb4b7c39-2dd4-4c0a-b12f-13b5af4f397b",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 60,
+      "id": "a426a766-7ca9-440a-baca-d09387ce6783",
+      "run_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:31.737751+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "chunk_id": "",
+          "outcome": "not_found_in_source",
+          "quote": ""
+        },
+        "context_sha256": "9b869fc89ee5085a339e2d39634b59f74ef7b076126a0e2767dd45213db9085f",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 29,
+          "temperature": 0.2
+        },
+        "output_tokens": 27,
+        "prompt_tokens": 711,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 3633564208
+      }
+    },
+    {
+      "sequence": 61,
+      "id": "ed4e265f-37eb-43da-9651-f62105f62507",
+      "run_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:43:31.739677+00:00",
+      "payload": {
+        "answer": "",
+        "chunk_id": "",
+        "outcome": "not_found_in_source",
+        "quote": ""
+      }
+    },
+    {
+      "sequence": 62,
+      "id": "136af3db-ae29-434e-a225-12a06f71859d",
+      "run_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:34.464517+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "outcome": "not_found_in_source"
+        },
+        "context": {
+          "question": "Who manufactured the reservoir?",
+          "quote": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge."
+        },
+        "context_sha256": "4d0dae696c523903705352c888ec200556a7c17b0575ee7544860743145b679b",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 29,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 539,
+        "purpose": "independent_answer_search",
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 2614661750
+      }
+    },
+    {
+      "sequence": 63,
+      "id": "a5999068-8ceb-45a4-89af-c4cbe1a11816",
+      "run_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+      "cookie": "cookie-support",
+      "kind": "absence_check",
+      "recorded_at": "2026-09-28T00:43:34.467624+00:00",
+      "payload": {
+        "checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "confirmation_id": "136af3db-ae29-434e-a225-12a06f71859d"
+      }
+    },
+    {
+      "sequence": 64,
+      "id": "c4c99bc6-9f15-47c5-b39d-3e2c4cd11ef4",
+      "run_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+      "cookie": "cookie-solver",
+      "kind": "source_finding",
+      "recorded_at": "2026-09-28T00:43:34.469308+00:00",
+      "payload": {
+        "absence_check_id": "a5999068-8ceb-45a4-89af-c4cbe1a11816",
+        "confirmation_id": "136af3db-ae29-434e-a225-12a06f71859d",
+        "excluded_sources": [],
+        "finding": "not_found_in_source",
+        "question": "Who manufactured the reservoir?",
+        "reason": "solver_not_found_in_source",
+        "scope": "Both cookies found no answer in retrieved excerpts; not an exhaustive source or universal absence claim",
+        "searched_chunk_ids": [
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:2793",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:3042",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:5009"
+        ]
+      }
+    },
+    {
+      "sequence": 65,
+      "id": "72b375a7-c5d9-4837-b2d9-cf44f0f45252",
+      "run_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:43:34.471189+00:00",
+      "payload": {
+        "absence_checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "excluded_sources": [],
+        "finding_id": "c4c99bc6-9f15-47c5-b39d-3e2c4cd11ef4",
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "Who manufactured the reservoir?",
+        "question_route": "general",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 29,
+        "status": "not_found_in_source",
+        "task_id": "65c20b35-4400-44de-9dd9-92578ae31f75",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 66,
+      "id": "1f891477-a39d-4865-9e63-ae247c2133e8",
+      "run_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:42.241970+00:00",
+      "payload": {
+        "answer": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "7496cb1dda0521075031d1813d852b18afff9a672caaa19a00538f876c1c8802",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 47,
+          "temperature": 0.2
+        },
+        "output_tokens": 168,
+        "prompt_tokens": 606,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 7753646750
+      }
+    },
+    {
+      "sequence": 67,
+      "id": "96d96833-96d8-495e-8f03-1f97e1371584",
+      "run_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+      "cookie": "cookie-solver",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-28T00:43:42.244923+00:00",
+      "payload": {
+        "raw": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 68,
+      "id": "bcdef8b7-c679-4822-adc9-834147bb6310",
+      "run_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:43:42.247451+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+        "outcome": "answered",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+      }
+    },
+    {
+      "sequence": 69,
+      "id": "eb8fbada-80f9-4e75-9a7a-472cee81e306",
+      "run_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:44.166707+00:00",
+      "payload": {
+        "answer": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "context": {
+          "question": "What happens when the model calculation disagrees?",
+          "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+        },
+        "context_sha256": "25c59ab0744e95e4e3feadb6c20be2edd4af8de9299431014f936b26a123d4e1",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 47,
+          "temperature": 0.2
+        },
+        "output_tokens": 31,
+        "prompt_tokens": 235,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1813002333
+      }
+    },
+    {
+      "sequence": 70,
+      "id": "990cc30d-11fc-4866-91ee-93c85b9a5137",
+      "run_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+      "cookie": "cookie-support",
+      "kind": "policy_extraction",
+      "recorded_at": "2026-09-28T00:43:44.169055+00:00",
+      "payload": {
+        "raw": {
+          "condition": "Source checks pass, but the model calculates a different total",
+          "decision": "answered",
+          "outcome": "needs_review"
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "sequence": 71,
+      "id": "5d411ba7-3ab9-456e-bb66-7d3e94637fbc",
+      "run_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-28T00:43:44.170680+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "solver_value_in_requested_role": true,
+        "support_answer_anchored": true,
+        "support_answered": true,
+        "support_value_in_requested_role": true
+      }
+    },
+    {
+      "sequence": 72,
+      "id": "6fab444f-c92c-45de-9569-83db5f6ed255",
+      "run_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:43:44.172116+00:00",
+      "payload": {
+        "answer": "needs_review",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "solver_value_in_requested_role": true,
+          "support_answer_anchored": true,
+          "support_answered": true,
+          "support_value_in_requested_role": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:3495",
+          "line": 38,
+          "original_path": "<repo>/README.md",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What happens when the model calculation disagrees?",
+        "question_route": "policy",
+        "quote": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+        "requested_slot": "outcome",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 47,
+        "status": "supported_answer",
+        "task_id": "a0fb301f-d0ae-46a5-b5f9-12f6bb56f6ef",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 73,
+      "id": "b1ab471d-92d8-4be2-a894-81dccacd8f1d",
+      "run_id": "85c6c3d9-04b8-410d-afc2-299bf0d0d7e7",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:48.035363+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "outcome": "answered",
+          "quote": "Requires Python 3.10 or newer."
+        },
+        "context_sha256": "16f05e5b6fe46406673c3df326f12d1e7e51662cd8e6221a11533b9ca5845d37",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 47,
+          "temperature": 0.2
+        },
+        "output_tokens": 80,
+        "prompt_tokens": 556,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 3847719750
+      }
+    },
+    {
+      "sequence": 74,
+      "id": "b3f5e4d6-ca04-4914-905b-c2b058e72b5f",
+      "run_id": "85c6c3d9-04b8-410d-afc2-299bf0d0d7e7",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:43:48.037208+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+        "outcome": "answered",
+        "quote": "Requires Python 3.10 or newer."
+      }
+    },
+    {
+      "sequence": 75,
+      "id": "ddb8adfd-25c9-4b72-a488-a7664c3d0a14",
+      "run_id": "85c6c3d9-04b8-410d-afc2-299bf0d0d7e7",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:49.842571+00:00",
+      "payload": {
+        "answer": {
+          "answer": "Python 3.10 or newer",
+          "outcome": "answered"
+        },
+        "context": {
+          "question": "What is the minimum Python version required?",
+          "quote": "Requires Python 3.10 or newer."
+        },
+        "context_sha256": "e5a939df6e41ceea3ce97a3f91ddb3feb72afaad1e5cd0ce47d9fd2e20ec1ee5",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 47,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 200,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1695758834
+      }
+    },
+    {
+      "sequence": 76,
+      "id": "1c7ade30-29f4-4abf-91ab-b63406c7e14d",
+      "run_id": "85c6c3d9-04b8-410d-afc2-299bf0d0d7e7",
+      "cookie": "cookie-support",
+      "kind": "support_check",
+      "recorded_at": "2026-09-28T00:43:49.844385+00:00",
+      "payload": {
+        "answers_agree": true,
+        "solver_answer_anchored": true,
+        "support_answer_anchored": true,
+        "support_answered": true
+      }
+    },
+    {
+      "sequence": 77,
+      "id": "4c6dd180-f2d7-4e0f-b16c-42bbbe4c3e4b",
+      "run_id": "85c6c3d9-04b8-410d-afc2-299bf0d0d7e7",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:43:49.845981+00:00",
+      "payload": {
+        "answer": "Python 3.10 or newer",
+        "checks": {
+          "answers_agree": true,
+          "solver_answer_anchored": true,
+          "support_answer_anchored": true,
+          "support_answered": true
+        },
+        "citation": {
+          "chunk_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034:601",
+          "line": 7,
+          "original_path": "<repo>/README.md",
+          "path": "<workspace>/work/source-recovery/clean-machine/recovered/sources/34b686a2-8e9a-4aeb-a22b-cf1056115034/source.md",
+          "sha256": "9aeb5f6b2a22ac956025509b24a2836a72c22a87c0c120cbf5accadef345e564",
+          "source_id": "34b686a2-8e9a-4aeb-a22b-cf1056115034"
+        },
+        "excluded_sources": [],
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What is the minimum Python version required?",
+        "question_route": "general",
+        "quote": "Requires Python 3.10 or newer.",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 47,
+        "status": "supported_answer",
+        "task_id": "85c6c3d9-04b8-410d-afc2-299bf0d0d7e7",
+        "temperature": 0.2
+      }
+    },
+    {
+      "sequence": 78,
+      "id": "bebf0a6b-a071-4336-b544-3f2b90125848",
+      "run_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+      "cookie": "cookie-solver",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:51.448207+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "chunk_id": "",
+          "outcome": "not_found_in_source",
+          "quote": ""
+        },
+        "context_sha256": "9b869fc89ee5085a339e2d39634b59f74ef7b076126a0e2767dd45213db9085f",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 47,
+          "temperature": 0.2
+        },
+        "output_tokens": 27,
+        "prompt_tokens": 711,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1585000542
+      }
+    },
+    {
+      "sequence": 79,
+      "id": "5bb9ccec-00cb-4bb3-b76c-70a5b7f1e660",
+      "run_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+      "cookie": "cookie-solver",
+      "kind": "source_proposal",
+      "recorded_at": "2026-09-28T00:43:51.453204+00:00",
+      "payload": {
+        "answer": "",
+        "chunk_id": "",
+        "outcome": "not_found_in_source",
+        "quote": ""
+      }
+    },
+    {
+      "sequence": 80,
+      "id": "8ec325af-5b45-4166-b6ef-12f38cfc4930",
+      "run_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+      "cookie": "cookie-support",
+      "kind": "model_call",
+      "recorded_at": "2026-09-28T00:43:52.757644+00:00",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "outcome": "not_found_in_source"
+        },
+        "context": {
+          "question": "Who manufactured the reservoir?",
+          "quote": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge."
+        },
+        "context_sha256": "4d0dae696c523903705352c888ec200556a7c17b0575ee7544860743145b679b",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 47,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 539,
+        "purpose": "independent_answer_search",
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1210760625
+      }
+    },
+    {
+      "sequence": 81,
+      "id": "c44e6173-9c0a-43f6-a846-507f3a6cecb8",
+      "run_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+      "cookie": "cookie-support",
+      "kind": "absence_check",
+      "recorded_at": "2026-09-28T00:43:52.761757+00:00",
+      "payload": {
+        "checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "confirmation_id": "8ec325af-5b45-4166-b6ef-12f38cfc4930"
+      }
+    },
+    {
+      "sequence": 82,
+      "id": "f6c0f460-8f91-4829-9a31-47747b73f380",
+      "run_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+      "cookie": "cookie-solver",
+      "kind": "source_finding",
+      "recorded_at": "2026-09-28T00:43:52.763340+00:00",
+      "payload": {
+        "absence_check_id": "c44e6173-9c0a-43f6-a846-507f3a6cecb8",
+        "confirmation_id": "8ec325af-5b45-4166-b6ef-12f38cfc4930",
+        "excluded_sources": [],
+        "finding": "not_found_in_source",
+        "question": "Who manufactured the reservoir?",
+        "reason": "solver_not_found_in_source",
+        "scope": "Both cookies found no answer in retrieved excerpts; not an exhaustive source or universal absence claim",
+        "searched_chunk_ids": [
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:2793",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:3042",
+          "34b686a2-8e9a-4aeb-a22b-cf1056115034:5009"
+        ]
+      }
+    },
+    {
+      "sequence": 83,
+      "id": "dd5c002b-4ead-4e19-909c-772db8723faa",
+      "run_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+      "cookie": "cookie-reader",
+      "kind": "knowledge_query",
+      "recorded_at": "2026-09-28T00:43:52.764733+00:00",
+      "payload": {
+        "absence_checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "excluded_sources": [],
+        "finding_id": "f6c0f460-8f91-4829-9a31-47747b73f380",
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "Who manufactured the reservoir?",
+        "question_route": "general",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 47,
+        "status": "not_found_in_source",
+        "task_id": "b3df67d7-c61e-4917-beaf-f6e319d52914",
+        "temperature": 0.2
+      }
+    }
+  ],
+  "recovery_unit_tests": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "test_absence_freshness_uses_recovered_path (test_source_recovery.SourceRecoveryTests.test_absence_freshness_uses_recovered_path) ... ok\ntest_concurrent_file_creation_is_not_overwritten (test_source_recovery.SourceRecoveryTests.test_concurrent_file_creation_is_not_overwritten) ... ok\ntest_directory_at_file_path_refused (test_source_recovery.SourceRecoveryTests.test_directory_at_file_path_refused) ... ok\ntest_existing_identical_file_reused_and_conflict_untouched (test_source_recovery.SourceRecoveryTests.test_existing_identical_file_reused_and_conflict_untouched) ... ok\ntest_file_symlink_and_parent_symlink_refused (test_source_recovery.SourceRecoveryTests.test_file_symlink_and_parent_symlink_refused) ... ok\ntest_interruption_leaves_no_manifest_and_retry_succeeds (test_source_recovery.SourceRecoveryTests.test_interruption_leaves_no_manifest_and_retry_succeeds) ... ok\ntest_latest_only_and_corrupt_latest_does_not_fall_back (test_source_recovery.SourceRecoveryTests.test_latest_only_and_corrupt_latest_does_not_fall_back) ... ok\ntest_manifest_path_escape_refused (test_source_recovery.SourceRecoveryTests.test_manifest_path_escape_refused) ... ok\ntest_missing_map_never_falls_back_to_existing_original (test_source_recovery.SourceRecoveryTests.test_missing_map_never_falls_back_to_existing_original) ... ok\ntest_missing_modified_and_symlink_recovered_file_excluded (test_source_recovery.SourceRecoveryTests.test_missing_modified_and_symlink_recovered_file_excluded) ... ok\ntest_post_inference_freshness_uses_recovered_path (test_source_recovery.SourceRecoveryTests.test_post_inference_freshness_uses_recovered_path) ... ok\ntest_recreates_exact_bytes_without_rewriting_history (test_source_recovery.SourceRecoveryTests.test_recreates_exact_bytes_without_rewriting_history) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.100s\n\nOK\n"
+  },
+  "finished_utc": "2026-09-28T00:43:53.022994+00:00",
+  "status": "passed",
+  "procedure": "from pathlib import Path\nfrom unittest.mock import patch\nfrom datetime import datetime,timezone\nimport sys,json,hashlib,subprocess\nroot=Path.cwd();out=root/'outputs/hive-prototype';work=root/'work/source-recovery'\nsys.path.insert(0,str(out));import knowledge;import replication as r\nold=json.loads((out/'source-recovery-validation-2026-09-27.json').read_text())\narea=work/'clean-machine';db=area/'knowledge.sqlite3';sources=area/'recovered'\nprior={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.json')}\nrecord={'started_utc':datetime.now(timezone.utc).isoformat(),'model':'gemma4:e4b','seeds':[29,47],'temperature':0.2,'database':str(db),'recovery_root':str(sources),'original_source_reads':'blocked by an assertion throughout all live queries','cases':[],'prior_record_hashes':prior}\ndef save():(work/'additional-seeds.json').write_text(json.dumps(record,indent=2)+'\\n')\nwith patch('knowledge.read_source',side_effect=AssertionError('Original source paths must not be accessed')):\n for seed in [29,47]:\n  for baseline in old['after']:\n   result=knowledge.answer_question(db,baseline['question'],'gemma4:e4b',seed,0.2,recovery_root=sources)\n   match=result['status']==baseline['status'] and result.get('answer')==baseline.get('answer')\n   record['cases'].append({'seed':seed,'matches_seed_11':match,'result':result});save()\n   print(seed,baseline['question'],result['status'],result.get('answer'),flush=True)\nrecord['all_match']=all(c['matches_seed_11'] for c in record['cases'])\nwith r.database(db,immutable=False) as connection:\n tasks={c['result']['task_id'] for c in record['cases']}\n record['events']=[{**dict(zip(r.COLS,row)),'payload':json.loads(row[-1])} for row in connection.execute('SELECT * FROM events ORDER BY sequence') if row[2] in tasks]\ntests=subprocess.run([sys.executable,'-m','unittest','-v','test_source_recovery'],cwd=out,capture_output=True,text=True)\nrecord['recovery_unit_tests']={'exit':tests.returncode,'stdout':tests.stdout,'stderr':tests.stderr}\nassert all(hashlib.sha256((out/name).read_bytes()).hexdigest()==digest for name,digest in prior.items())\nrecord['finished_utc']=datetime.now(timezone.utc).isoformat();record['status']='passed' if record['all_match'] and tests.returncode==0 else 'failed';save()\nprint(record['status'],flush=True)\n"
+}

@@ -1,0 +1,1665 @@
+{
+  "model": "gemma4:e4b",
+  "batch_id": "1d3dc0b9-c4f4-4faa-a787-7905f252bd11",
+  "status": "failed",
+  "suites": {
+    "arithmetic": {
+      "model": "gemma4:e4b",
+      "policy": "independent-calculation-v2",
+      "passed": 6,
+      "completed": 6,
+      "planned": 6,
+      "cases": [
+        {
+          "capacity": 120,
+          "count": 7,
+          "inject_error": false,
+          "expected_status": "verified",
+          "exit_code": 0,
+          "stderr": "",
+          "report": {
+            "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+            "status": "verified",
+            "events": [
+              {
+                "sequence": 1,
+                "id": "891cf6bc-92c2-42cf-ac53-7e2466af738e",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-learner",
+                "kind": "data",
+                "recorded_at": "2026-09-25T05:42:22.267462+00:00",
+                "payload": {
+                  "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+                  "snapshot": {
+                    "fixture": "Synthetic reservoir specification",
+                    "reservoir_capacity_litres": 120
+                  },
+                  "source_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+                  "source_uri": "file://<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/arithmetic/10b37231-4ec0-4a08-97ff-791fe5079f63/120x7-correct/source-38f70d17-baa2-4163-bb12-8a22c7ee7c75.json"
+                }
+              },
+              {
+                "sequence": 2,
+                "id": "050f559d-2ae5-4715-8ec5-5f4ee84b551d",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-learner",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:32.246078+00:00",
+                "payload": {
+                  "answer": {
+                    "capacity_litres": 120
+                  },
+                  "context_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 62,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 9925716167
+                }
+              },
+              {
+                "sequence": 3,
+                "id": "0f0a2c48-4915-4136-80d8-68fdf4a136d0",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-learner",
+                "kind": "claim",
+                "recorded_at": "2026-09-25T05:42:32.247917+00:00",
+                "payload": {
+                  "evidence_id": "891cf6bc-92c2-42cf-ac53-7e2466af738e",
+                  "key": "reservoir_capacity_litres",
+                  "scope": "This source snapshot only",
+                  "status": "unverified",
+                  "value": 120
+                }
+              },
+              {
+                "sequence": 4,
+                "id": "1f485a53-0178-42ad-af31-e76b640d1db6",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-solver",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:34.104227+00:00",
+                "payload": {
+                  "answer": {
+                    "answer_litres": 840
+                  },
+                  "context_sha256": "f0775a403c68374c7581a05cd93a2667f8e0594dec9cca7be0f178501cae5e84",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 134,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1625554416
+                }
+              },
+              {
+                "sequence": 5,
+                "id": "8239a455-ea87-44c3-8827-ce7eede1957a",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-solver",
+                "kind": "result",
+                "recorded_at": "2026-09-25T05:42:34.106270+00:00",
+                "payload": {
+                  "answer_litres": 840,
+                  "claim_id": "0f0a2c48-4915-4136-80d8-68fdf4a136d0",
+                  "injected_error": false,
+                  "method": "Model used retrieved claim",
+                  "question": "What is the combined capacity of 7 identical reservoirs?",
+                  "reservoir_count": 7,
+                  "status": "proposed"
+                }
+              },
+              {
+                "sequence": 6,
+                "id": "0e3eb47b-c7ad-4ca1-883f-3f2cafac42fd",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-verifier",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:35.615226+00:00",
+                "payload": {
+                  "answer": {
+                    "expected_total_litres": 840
+                  },
+                  "context_sha256": "a3bec0ed9f99d76d8c297af28260428d8c49c58825eb7da9d8fabff0e636e8d0",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 14,
+                  "prompt_tokens": 97,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1396823625
+                }
+              },
+              {
+                "sequence": 7,
+                "id": "288ec3c7-9fc0-47b8-8bef-61d4bc6604a3",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-verifier",
+                "kind": "verification",
+                "recorded_at": "2026-09-25T05:42:35.617890+00:00",
+                "payload": {
+                  "checks": {
+                    "answer_matches_source": true,
+                    "claim_link": true,
+                    "claim_matches_source": true,
+                    "evidence_link": true,
+                    "positive_integer_count": true,
+                    "snapshot_integrity": true,
+                    "source_unchanged": true
+                  },
+                  "expected_total_litres": 840,
+                  "model_review": {
+                    "expected_total_litres": 840,
+                    "matches_proposed_answer": true,
+                    "matches_source_calculation": true,
+                    "proposed_answer_visible_to_model": false
+                  },
+                  "policy": "independent-calculation-v2",
+                  "result_id": "8239a455-ea87-44c3-8827-ce7eede1957a",
+                  "scope": "Consistency with a synthetic source, not proof of real-world truth",
+                  "status": "verified"
+                }
+              },
+              {
+                "sequence": 8,
+                "id": "8c53a1e2-6948-4967-8090-7269d12a6761",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-verifier",
+                "kind": "lore",
+                "recorded_at": "2026-09-25T05:42:35.619669+00:00",
+                "payload": {
+                  "lesson": "This run successfully reused another cookie's stored fact.",
+                  "scope": "This experiment only; not a universal conclusion",
+                  "status": "run_observation",
+                  "verification_id": "288ec3c7-9fc0-47b8-8bef-61d4bc6604a3"
+                }
+              },
+              {
+                "sequence": 9,
+                "id": "d045492c-64d5-4afc-9d98-9deed5bd71bf",
+                "run_id": "38f70d17-baa2-4163-bb12-8a22c7ee7c75",
+                "cookie": "cookie-verifier",
+                "kind": "working_knowledge",
+                "recorded_at": "2026-09-25T05:42:35.621072+00:00",
+                "payload": {
+                  "answer_litres": 840,
+                  "result_id": "8239a455-ea87-44c3-8827-ce7eede1957a",
+                  "scope": "What is the combined capacity of 7 identical reservoirs?",
+                  "status": "supported_by_fixture",
+                  "verification_id": "288ec3c7-9fc0-47b8-8bef-61d4bc6604a3"
+                }
+              }
+            ]
+          },
+          "status": "verified",
+          "passed": true
+        },
+        {
+          "capacity": 120,
+          "count": 7,
+          "inject_error": true,
+          "expected_status": "disputed",
+          "exit_code": 2,
+          "stderr": "",
+          "report": {
+            "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+            "status": "disputed",
+            "events": [
+              {
+                "sequence": 1,
+                "id": "db466208-cd36-43b4-85e1-08b8da2bc919",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-learner",
+                "kind": "data",
+                "recorded_at": "2026-09-25T05:42:35.816289+00:00",
+                "payload": {
+                  "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+                  "snapshot": {
+                    "fixture": "Synthetic reservoir specification",
+                    "reservoir_capacity_litres": 120
+                  },
+                  "source_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+                  "source_uri": "file://<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/arithmetic/10b37231-4ec0-4a08-97ff-791fe5079f63/120x7-wrong/source-c807bc07-b7c8-4900-83cd-d18b81fce257.json"
+                }
+              },
+              {
+                "sequence": 2,
+                "id": "d9d8740e-2806-4bb3-843a-c33d78973094",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-learner",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:36.888746+00:00",
+                "payload": {
+                  "answer": {
+                    "capacity_litres": 120
+                  },
+                  "context_sha256": "319f3608ec7c60357ca1fd047fdd0932869a5d5e45e07d36612fa78a2766d59a",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 62,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1058349959
+                }
+              },
+              {
+                "sequence": 3,
+                "id": "02adbe31-9a0c-4d24-9a2f-34ab1f28940c",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-learner",
+                "kind": "claim",
+                "recorded_at": "2026-09-25T05:42:36.891091+00:00",
+                "payload": {
+                  "evidence_id": "db466208-cd36-43b4-85e1-08b8da2bc919",
+                  "key": "reservoir_capacity_litres",
+                  "scope": "This source snapshot only",
+                  "status": "unverified",
+                  "value": 120
+                }
+              },
+              {
+                "sequence": 4,
+                "id": "746deb76-71ff-4cf7-9e7a-3c4372e1c6f4",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-solver",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:38.533572+00:00",
+                "payload": {
+                  "answer": {
+                    "answer_litres": 840
+                  },
+                  "context_sha256": "6cdcf13f3d09ed33b0a5aa7573e936d0dd443e770717460ef6759935faf2fac2",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 135,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1532491417
+                }
+              },
+              {
+                "sequence": 5,
+                "id": "894c52ed-631e-425d-ac7e-42e10df1c906",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-solver",
+                "kind": "result",
+                "recorded_at": "2026-09-25T05:42:38.536274+00:00",
+                "payload": {
+                  "answer_litres": 841,
+                  "claim_id": "02adbe31-9a0c-4d24-9a2f-34ab1f28940c",
+                  "injected_error": true,
+                  "method": "Model used retrieved claim",
+                  "question": "What is the combined capacity of 7 identical reservoirs?",
+                  "reservoir_count": 7,
+                  "status": "proposed"
+                }
+              },
+              {
+                "sequence": 6,
+                "id": "2e2722cd-ef59-4329-94ef-27ccd7896a08",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-verifier",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:39.763357+00:00",
+                "payload": {
+                  "answer": {
+                    "expected_total_litres": 840
+                  },
+                  "context_sha256": "a3bec0ed9f99d76d8c297af28260428d8c49c58825eb7da9d8fabff0e636e8d0",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 14,
+                  "prompt_tokens": 97,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1107598583
+                }
+              },
+              {
+                "sequence": 7,
+                "id": "bb739b86-e706-4b31-96ef-32b404aa349e",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-verifier",
+                "kind": "verification",
+                "recorded_at": "2026-09-25T05:42:39.766871+00:00",
+                "payload": {
+                  "checks": {
+                    "answer_matches_source": false,
+                    "claim_link": true,
+                    "claim_matches_source": true,
+                    "evidence_link": true,
+                    "positive_integer_count": true,
+                    "snapshot_integrity": true,
+                    "source_unchanged": true
+                  },
+                  "expected_total_litres": 840,
+                  "model_review": {
+                    "expected_total_litres": 840,
+                    "matches_proposed_answer": false,
+                    "matches_source_calculation": true,
+                    "proposed_answer_visible_to_model": false
+                  },
+                  "policy": "independent-calculation-v2",
+                  "result_id": "894c52ed-631e-425d-ac7e-42e10df1c906",
+                  "scope": "Consistency with a synthetic source, not proof of real-world truth",
+                  "status": "disputed"
+                }
+              },
+              {
+                "sequence": 8,
+                "id": "7492d72c-5448-4b6e-8bce-ffd9e9a293e3",
+                "run_id": "c807bc07-b7c8-4900-83cd-d18b81fce257",
+                "cookie": "cookie-verifier",
+                "kind": "lore",
+                "recorded_at": "2026-09-25T05:42:39.769059+00:00",
+                "payload": {
+                  "lesson": "Source or arithmetic checks failed; do not promote this answer.",
+                  "scope": "This experiment only; not a universal conclusion",
+                  "status": "run_observation",
+                  "verification_id": "bb739b86-e706-4b31-96ef-32b404aa349e"
+                }
+              }
+            ]
+          },
+          "status": "disputed",
+          "passed": true
+        },
+        {
+          "capacity": 37,
+          "count": 7,
+          "inject_error": false,
+          "expected_status": "verified",
+          "exit_code": 0,
+          "stderr": "",
+          "report": {
+            "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+            "status": "verified",
+            "events": [
+              {
+                "sequence": 1,
+                "id": "af3c5f8f-5e24-4d9f-bb3b-b0811f8419d1",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-learner",
+                "kind": "data",
+                "recorded_at": "2026-09-25T05:42:39.949119+00:00",
+                "payload": {
+                  "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+                  "snapshot": {
+                    "fixture": "Synthetic reservoir specification",
+                    "reservoir_capacity_litres": 37
+                  },
+                  "source_sha256": "8add81331adfce7b3af007df078c9dcead25ebdcef25f698601a3bc6661cb6dc",
+                  "source_uri": "file://<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/arithmetic/10b37231-4ec0-4a08-97ff-791fe5079f63/37x7-correct/source-e64a5bd4-59ed-4cfa-86d7-424885bd1e0e.json"
+                }
+              },
+              {
+                "sequence": 2,
+                "id": "e879dd3c-1a0c-4f08-b65c-b02f2848fd6d",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-learner",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:41.121317+00:00",
+                "payload": {
+                  "answer": {
+                    "capacity_litres": 37
+                  },
+                  "context_sha256": "8add81331adfce7b3af007df078c9dcead25ebdcef25f698601a3bc6661cb6dc",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 11,
+                  "prompt_tokens": 61,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1160516125
+                }
+              },
+              {
+                "sequence": 3,
+                "id": "7021f277-3729-4b3f-985f-59b919cc8a97",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-learner",
+                "kind": "claim",
+                "recorded_at": "2026-09-25T05:42:41.123187+00:00",
+                "payload": {
+                  "evidence_id": "af3c5f8f-5e24-4d9f-bb3b-b0811f8419d1",
+                  "key": "reservoir_capacity_litres",
+                  "scope": "This source snapshot only",
+                  "status": "unverified",
+                  "value": 37
+                }
+              },
+              {
+                "sequence": 4,
+                "id": "7ebc4f2f-4431-492c-a7dc-ca6b65782079",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-solver",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:42.798097+00:00",
+                "payload": {
+                  "answer": {
+                    "answer_litres": 259
+                  },
+                  "context_sha256": "9442feca1f1af4d8ec7050827ea2e45a065b6a37e58066859285a398d402790a",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 136,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1565804666
+                }
+              },
+              {
+                "sequence": 5,
+                "id": "9f41aa66-2b1c-49b2-982d-cc9134ea547a",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-solver",
+                "kind": "result",
+                "recorded_at": "2026-09-25T05:42:42.800161+00:00",
+                "payload": {
+                  "answer_litres": 259,
+                  "claim_id": "7021f277-3729-4b3f-985f-59b919cc8a97",
+                  "injected_error": false,
+                  "method": "Model used retrieved claim",
+                  "question": "What is the combined capacity of 7 identical reservoirs?",
+                  "reservoir_count": 7,
+                  "status": "proposed"
+                }
+              },
+              {
+                "sequence": 6,
+                "id": "7fdb6e1a-4831-45f4-b9ae-1db2886b5662",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-verifier",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:44.285852+00:00",
+                "payload": {
+                  "answer": {
+                    "expected_total_litres": 259
+                  },
+                  "context_sha256": "460a00d8d2e32bf93796d4f5c24ed7e805fedcfe360473359b36df674add1c2a",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 14,
+                  "prompt_tokens": 96,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1380428584
+                }
+              },
+              {
+                "sequence": 7,
+                "id": "6d86ab21-b11c-4f3e-a3d7-51d63b550170",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-verifier",
+                "kind": "verification",
+                "recorded_at": "2026-09-25T05:42:44.287938+00:00",
+                "payload": {
+                  "checks": {
+                    "answer_matches_source": true,
+                    "claim_link": true,
+                    "claim_matches_source": true,
+                    "evidence_link": true,
+                    "positive_integer_count": true,
+                    "snapshot_integrity": true,
+                    "source_unchanged": true
+                  },
+                  "expected_total_litres": 259,
+                  "model_review": {
+                    "expected_total_litres": 259,
+                    "matches_proposed_answer": true,
+                    "matches_source_calculation": true,
+                    "proposed_answer_visible_to_model": false
+                  },
+                  "policy": "independent-calculation-v2",
+                  "result_id": "9f41aa66-2b1c-49b2-982d-cc9134ea547a",
+                  "scope": "Consistency with a synthetic source, not proof of real-world truth",
+                  "status": "verified"
+                }
+              },
+              {
+                "sequence": 8,
+                "id": "285f26e1-f099-4f4f-bf00-0d418b49c8b6",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-verifier",
+                "kind": "lore",
+                "recorded_at": "2026-09-25T05:42:44.289177+00:00",
+                "payload": {
+                  "lesson": "This run successfully reused another cookie's stored fact.",
+                  "scope": "This experiment only; not a universal conclusion",
+                  "status": "run_observation",
+                  "verification_id": "6d86ab21-b11c-4f3e-a3d7-51d63b550170"
+                }
+              },
+              {
+                "sequence": 9,
+                "id": "612cd3cb-4a8b-4864-8247-fc7868e5daa4",
+                "run_id": "e64a5bd4-59ed-4cfa-86d7-424885bd1e0e",
+                "cookie": "cookie-verifier",
+                "kind": "working_knowledge",
+                "recorded_at": "2026-09-25T05:42:44.290266+00:00",
+                "payload": {
+                  "answer_litres": 259,
+                  "result_id": "9f41aa66-2b1c-49b2-982d-cc9134ea547a",
+                  "scope": "What is the combined capacity of 7 identical reservoirs?",
+                  "status": "supported_by_fixture",
+                  "verification_id": "6d86ab21-b11c-4f3e-a3d7-51d63b550170"
+                }
+              }
+            ]
+          },
+          "status": "verified",
+          "passed": true
+        },
+        {
+          "capacity": 37,
+          "count": 7,
+          "inject_error": true,
+          "expected_status": "disputed",
+          "exit_code": 2,
+          "stderr": "",
+          "report": {
+            "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+            "status": "disputed",
+            "events": [
+              {
+                "sequence": 1,
+                "id": "457aadf6-922a-4307-826d-6ddfc9d41ea9",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-learner",
+                "kind": "data",
+                "recorded_at": "2026-09-25T05:42:44.473541+00:00",
+                "payload": {
+                  "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+                  "snapshot": {
+                    "fixture": "Synthetic reservoir specification",
+                    "reservoir_capacity_litres": 37
+                  },
+                  "source_sha256": "8add81331adfce7b3af007df078c9dcead25ebdcef25f698601a3bc6661cb6dc",
+                  "source_uri": "file://<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/arithmetic/10b37231-4ec0-4a08-97ff-791fe5079f63/37x7-wrong/source-5b360c0f-2546-4fe0-91dd-28103db28fc4.json"
+                }
+              },
+              {
+                "sequence": 2,
+                "id": "b8fab0b0-d28d-4d36-a4a4-8bc23981b5e3",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-learner",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:45.470785+00:00",
+                "payload": {
+                  "answer": {
+                    "capacity_litres": 37
+                  },
+                  "context_sha256": "8add81331adfce7b3af007df078c9dcead25ebdcef25f698601a3bc6661cb6dc",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 11,
+                  "prompt_tokens": 61,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 984250875
+                }
+              },
+              {
+                "sequence": 3,
+                "id": "5690bd2a-b547-41ac-96a7-cc978434f01c",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-learner",
+                "kind": "claim",
+                "recorded_at": "2026-09-25T05:42:45.475127+00:00",
+                "payload": {
+                  "evidence_id": "457aadf6-922a-4307-826d-6ddfc9d41ea9",
+                  "key": "reservoir_capacity_litres",
+                  "scope": "This source snapshot only",
+                  "status": "unverified",
+                  "value": 37
+                }
+              },
+              {
+                "sequence": 4,
+                "id": "744b25b7-9118-44a5-b289-34a40f415092",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-solver",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:47.141581+00:00",
+                "payload": {
+                  "answer": {
+                    "answer_litres": 259
+                  },
+                  "context_sha256": "0c7b6b05f97e0136fc505bf21077158ad626edb70c481455b8bdc6498f1a96f9",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 133,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1555247833
+                }
+              },
+              {
+                "sequence": 5,
+                "id": "97968ecd-965b-465a-8a0e-fb82547a1dcc",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-solver",
+                "kind": "result",
+                "recorded_at": "2026-09-25T05:42:47.142995+00:00",
+                "payload": {
+                  "answer_litres": 260,
+                  "claim_id": "5690bd2a-b547-41ac-96a7-cc978434f01c",
+                  "injected_error": true,
+                  "method": "Model used retrieved claim",
+                  "question": "What is the combined capacity of 7 identical reservoirs?",
+                  "reservoir_count": 7,
+                  "status": "proposed"
+                }
+              },
+              {
+                "sequence": 6,
+                "id": "60aa69c2-d289-48e7-b86a-c0f68556d345",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-verifier",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:48.357882+00:00",
+                "payload": {
+                  "answer": {
+                    "expected_total_litres": 259
+                  },
+                  "context_sha256": "460a00d8d2e32bf93796d4f5c24ed7e805fedcfe360473359b36df674add1c2a",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 14,
+                  "prompt_tokens": 96,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1104775542
+                }
+              },
+              {
+                "sequence": 7,
+                "id": "05579539-0503-4b9e-abd7-f12257dbad85",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-verifier",
+                "kind": "verification",
+                "recorded_at": "2026-09-25T05:42:48.359633+00:00",
+                "payload": {
+                  "checks": {
+                    "answer_matches_source": false,
+                    "claim_link": true,
+                    "claim_matches_source": true,
+                    "evidence_link": true,
+                    "positive_integer_count": true,
+                    "snapshot_integrity": true,
+                    "source_unchanged": true
+                  },
+                  "expected_total_litres": 259,
+                  "model_review": {
+                    "expected_total_litres": 259,
+                    "matches_proposed_answer": false,
+                    "matches_source_calculation": true,
+                    "proposed_answer_visible_to_model": false
+                  },
+                  "policy": "independent-calculation-v2",
+                  "result_id": "97968ecd-965b-465a-8a0e-fb82547a1dcc",
+                  "scope": "Consistency with a synthetic source, not proof of real-world truth",
+                  "status": "disputed"
+                }
+              },
+              {
+                "sequence": 8,
+                "id": "61c91af3-e52c-4d89-bfb5-25410f752b0e",
+                "run_id": "5b360c0f-2546-4fe0-91dd-28103db28fc4",
+                "cookie": "cookie-verifier",
+                "kind": "lore",
+                "recorded_at": "2026-09-25T05:42:48.360820+00:00",
+                "payload": {
+                  "lesson": "Source or arithmetic checks failed; do not promote this answer.",
+                  "scope": "This experiment only; not a universal conclusion",
+                  "status": "run_observation",
+                  "verification_id": "05579539-0503-4b9e-abd7-f12257dbad85"
+                }
+              }
+            ]
+          },
+          "status": "disputed",
+          "passed": true
+        },
+        {
+          "capacity": 123,
+          "count": 13,
+          "inject_error": false,
+          "expected_status": "verified",
+          "exit_code": 0,
+          "stderr": "",
+          "report": {
+            "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+            "status": "verified",
+            "events": [
+              {
+                "sequence": 1,
+                "id": "2a4bbb5e-f1b6-4c9b-87ab-7767fe7d7e68",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-learner",
+                "kind": "data",
+                "recorded_at": "2026-09-25T05:42:48.542178+00:00",
+                "payload": {
+                  "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+                  "snapshot": {
+                    "fixture": "Synthetic reservoir specification",
+                    "reservoir_capacity_litres": 123
+                  },
+                  "source_sha256": "fdc0955912aeb22a67cc4f1c3af2a42ec93371f50a538bf26ecb90d605d95aa8",
+                  "source_uri": "file://<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/arithmetic/10b37231-4ec0-4a08-97ff-791fe5079f63/123x13-correct/source-4881b868-5fef-459e-be15-efa9fe0250fa.json"
+                }
+              },
+              {
+                "sequence": 2,
+                "id": "3447f1f0-ad2c-4cac-b1ac-45b7b09cda02",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-learner",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:49.750321+00:00",
+                "payload": {
+                  "answer": {
+                    "capacity_litres": 123
+                  },
+                  "context_sha256": "fdc0955912aeb22a67cc4f1c3af2a42ec93371f50a538bf26ecb90d605d95aa8",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 62,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1195550333
+                }
+              },
+              {
+                "sequence": 3,
+                "id": "ada27ce3-0a1b-4852-b744-66a92aab53be",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-learner",
+                "kind": "claim",
+                "recorded_at": "2026-09-25T05:42:49.753247+00:00",
+                "payload": {
+                  "evidence_id": "2a4bbb5e-f1b6-4c9b-87ab-7767fe7d7e68",
+                  "key": "reservoir_capacity_litres",
+                  "scope": "This source snapshot only",
+                  "status": "unverified",
+                  "value": 123
+                }
+              },
+              {
+                "sequence": 4,
+                "id": "8f0dca05-09fc-4221-8f86-5b38e0b4ca80",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-solver",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:51.445557+00:00",
+                "payload": {
+                  "answer": {
+                    "answer_litres": 1599
+                  },
+                  "context_sha256": "a12b932441fa33ee96d85f89f9a536ce130bfc7826541f9b398b2f04d43ee432",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 13,
+                  "prompt_tokens": 136,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1581124083
+                }
+              },
+              {
+                "sequence": 5,
+                "id": "9b2923ed-da4a-4a28-bc14-137f9d8558eb",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-solver",
+                "kind": "result",
+                "recorded_at": "2026-09-25T05:42:51.450457+00:00",
+                "payload": {
+                  "answer_litres": 1599,
+                  "claim_id": "ada27ce3-0a1b-4852-b744-66a92aab53be",
+                  "injected_error": false,
+                  "method": "Model used retrieved claim",
+                  "question": "What is the combined capacity of 13 identical reservoirs?",
+                  "reservoir_count": 13,
+                  "status": "proposed"
+                }
+              },
+              {
+                "sequence": 6,
+                "id": "7d4e2b13-599b-4fe3-b13a-767339f8fe7d",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-verifier",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:52.993477+00:00",
+                "payload": {
+                  "answer": {
+                    "expected_total_litres": 1599
+                  },
+                  "context_sha256": "3d6cc9b52f50f1cd9ef9fe9bfcbc1b2a998d71598b9949b8eb25942f26eaa527",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 15,
+                  "prompt_tokens": 98,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1427763125
+                }
+              },
+              {
+                "sequence": 7,
+                "id": "db7479a1-1b4a-4821-b2a3-1d3d105aa998",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-verifier",
+                "kind": "verification",
+                "recorded_at": "2026-09-25T05:42:52.995502+00:00",
+                "payload": {
+                  "checks": {
+                    "answer_matches_source": true,
+                    "claim_link": true,
+                    "claim_matches_source": true,
+                    "evidence_link": true,
+                    "positive_integer_count": true,
+                    "snapshot_integrity": true,
+                    "source_unchanged": true
+                  },
+                  "expected_total_litres": 1599,
+                  "model_review": {
+                    "expected_total_litres": 1599,
+                    "matches_proposed_answer": true,
+                    "matches_source_calculation": true,
+                    "proposed_answer_visible_to_model": false
+                  },
+                  "policy": "independent-calculation-v2",
+                  "result_id": "9b2923ed-da4a-4a28-bc14-137f9d8558eb",
+                  "scope": "Consistency with a synthetic source, not proof of real-world truth",
+                  "status": "verified"
+                }
+              },
+              {
+                "sequence": 8,
+                "id": "b83558a8-0d00-455d-b478-5501e7b67ed9",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-verifier",
+                "kind": "lore",
+                "recorded_at": "2026-09-25T05:42:52.997464+00:00",
+                "payload": {
+                  "lesson": "This run successfully reused another cookie's stored fact.",
+                  "scope": "This experiment only; not a universal conclusion",
+                  "status": "run_observation",
+                  "verification_id": "db7479a1-1b4a-4821-b2a3-1d3d105aa998"
+                }
+              },
+              {
+                "sequence": 9,
+                "id": "1b88ae31-1bfd-47dc-9629-896255a42856",
+                "run_id": "4881b868-5fef-459e-be15-efa9fe0250fa",
+                "cookie": "cookie-verifier",
+                "kind": "working_knowledge",
+                "recorded_at": "2026-09-25T05:42:52.998934+00:00",
+                "payload": {
+                  "answer_litres": 1599,
+                  "result_id": "9b2923ed-da4a-4a28-bc14-137f9d8558eb",
+                  "scope": "What is the combined capacity of 13 identical reservoirs?",
+                  "status": "supported_by_fixture",
+                  "verification_id": "db7479a1-1b4a-4821-b2a3-1d3d105aa998"
+                }
+              }
+            ]
+          },
+          "status": "verified",
+          "passed": true
+        },
+        {
+          "capacity": 123,
+          "count": 13,
+          "inject_error": true,
+          "expected_status": "disputed",
+          "exit_code": 2,
+          "stderr": "",
+          "report": {
+            "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+            "status": "disputed",
+            "events": [
+              {
+                "sequence": 1,
+                "id": "d1a86e8b-6e59-4416-8bb2-e983047d57a8",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-learner",
+                "kind": "data",
+                "recorded_at": "2026-09-25T05:42:53.180655+00:00",
+                "payload": {
+                  "provenance": "Synthetic fixture supplied for this experiment; not a real observation",
+                  "snapshot": {
+                    "fixture": "Synthetic reservoir specification",
+                    "reservoir_capacity_litres": 123
+                  },
+                  "source_sha256": "fdc0955912aeb22a67cc4f1c3af2a42ec93371f50a538bf26ecb90d605d95aa8",
+                  "source_uri": "file://<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/arithmetic/10b37231-4ec0-4a08-97ff-791fe5079f63/123x13-wrong/source-f99dbc88-03d7-4c02-bb8f-3c62d7016991.json"
+                }
+              },
+              {
+                "sequence": 2,
+                "id": "65775b91-7805-4a80-a669-db332ef36f53",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-learner",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:54.287346+00:00",
+                "payload": {
+                  "answer": {
+                    "capacity_litres": 123
+                  },
+                  "context_sha256": "fdc0955912aeb22a67cc4f1c3af2a42ec93371f50a538bf26ecb90d605d95aa8",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 12,
+                  "prompt_tokens": 62,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1090295250
+                }
+              },
+              {
+                "sequence": 3,
+                "id": "cd3d73b9-b536-4c1b-acd2-fcf2ab84dc30",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-learner",
+                "kind": "claim",
+                "recorded_at": "2026-09-25T05:42:54.288869+00:00",
+                "payload": {
+                  "evidence_id": "d1a86e8b-6e59-4416-8bb2-e983047d57a8",
+                  "key": "reservoir_capacity_litres",
+                  "scope": "This source snapshot only",
+                  "status": "unverified",
+                  "value": 123
+                }
+              },
+              {
+                "sequence": 4,
+                "id": "ff21596c-5dcb-4a8f-a09e-8689e1b0473b",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-solver",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:55.949895+00:00",
+                "payload": {
+                  "answer": {
+                    "answer_litres": 1599
+                  },
+                  "context_sha256": "e2b63828d7251bf4f0f71fb4368626aa9b310f42abd6e9487a0cda1a3fe17e61",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 13,
+                  "prompt_tokens": 139,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1558028667
+                }
+              },
+              {
+                "sequence": 5,
+                "id": "8bea408e-8ba5-4f73-b3cd-37b561bba351",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-solver",
+                "kind": "result",
+                "recorded_at": "2026-09-25T05:42:55.951581+00:00",
+                "payload": {
+                  "answer_litres": 1600,
+                  "claim_id": "cd3d73b9-b536-4c1b-acd2-fcf2ab84dc30",
+                  "injected_error": true,
+                  "method": "Model used retrieved claim",
+                  "question": "What is the combined capacity of 13 identical reservoirs?",
+                  "reservoir_count": 13,
+                  "status": "proposed"
+                }
+              },
+              {
+                "sequence": 6,
+                "id": "20eb10ac-ab9c-4115-86e5-502b6ba4cf65",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-verifier",
+                "kind": "model_call",
+                "recorded_at": "2026-09-25T05:42:57.225926+00:00",
+                "payload": {
+                  "answer": {
+                    "expected_total_litres": 1599
+                  },
+                  "context_sha256": "3d6cc9b52f50f1cd9ef9fe9bfcbc1b2a998d71598b9949b8eb25942f26eaa527",
+                  "endpoint": "http://127.0.0.1:11434/api/chat",
+                  "output_tokens": 15,
+                  "prompt_tokens": 98,
+                  "requested_model": "gemma4:e4b",
+                  "returned_model": "gemma4:e4b",
+                  "total_duration_ns": 1162534416
+                }
+              },
+              {
+                "sequence": 7,
+                "id": "daa68f04-9385-4ccb-b798-a7fa6414b2d3",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-verifier",
+                "kind": "verification",
+                "recorded_at": "2026-09-25T05:42:57.227644+00:00",
+                "payload": {
+                  "checks": {
+                    "answer_matches_source": false,
+                    "claim_link": true,
+                    "claim_matches_source": true,
+                    "evidence_link": true,
+                    "positive_integer_count": true,
+                    "snapshot_integrity": true,
+                    "source_unchanged": true
+                  },
+                  "expected_total_litres": 1599,
+                  "model_review": {
+                    "expected_total_litres": 1599,
+                    "matches_proposed_answer": false,
+                    "matches_source_calculation": true,
+                    "proposed_answer_visible_to_model": false
+                  },
+                  "policy": "independent-calculation-v2",
+                  "result_id": "8bea408e-8ba5-4f73-b3cd-37b561bba351",
+                  "scope": "Consistency with a synthetic source, not proof of real-world truth",
+                  "status": "disputed"
+                }
+              },
+              {
+                "sequence": 8,
+                "id": "2210e6a5-c0c8-47df-9e41-6017b5b822a7",
+                "run_id": "f99dbc88-03d7-4c02-bb8f-3c62d7016991",
+                "cookie": "cookie-verifier",
+                "kind": "lore",
+                "recorded_at": "2026-09-25T05:42:57.228983+00:00",
+                "payload": {
+                  "lesson": "Source or arithmetic checks failed; do not promote this answer.",
+                  "scope": "This experiment only; not a universal conclusion",
+                  "status": "run_observation",
+                  "verification_id": "daa68f04-9385-4ccb-b798-a7fa6414b2d3"
+                }
+              }
+            ]
+          },
+          "status": "disputed",
+          "passed": true
+        }
+      ],
+      "process": {
+        "exit_code": 0,
+        "stdout": "120x7-correct: verified \u2014 PASS\n120x7-wrong: disputed \u2014 PASS\n37x7-correct: verified \u2014 PASS\n37x7-wrong: disputed \u2014 PASS\n123x13-correct: verified \u2014 PASS\n123x13-wrong: disputed \u2014 PASS\nSummary: <workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/arithmetic/10b37231-4ec0-4a08-97ff-791fe5079f63/summary.json\n",
+        "stderr": ""
+      }
+    },
+    "source_memory": {
+      "source_sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+      "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+      "planned": 6,
+      "cases": [
+        {
+          "name": "review_policy",
+          "question": "What happens when the model calculation disagrees?",
+          "expected_status": "source_excerpt",
+          "expected_answer_phrase": "needs_review",
+          "expected_candidates": true,
+          "passed": true,
+          "retrieval": {
+            "question": "What happens when the model calculation disagrees?",
+            "candidates": [
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:7096",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 7096,
+                "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+                "score": 4
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:2757",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 2757,
+                "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+                "score": 2
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:3210",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 3210,
+                "text": "| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+                "score": 2
+              }
+            ],
+            "excluded_sources": [],
+            "retrieval": "keyword overlap; not semantic search"
+          },
+          "process": {
+            "exit_code": 0,
+            "stdout": "{\n  \"task_id\": \"6469799f-4377-470b-8f75-5a1b22e98bae\",\n  \"question\": \"What happens when the model calculation disagrees?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"source_excerpt\",\n  \"excluded_sources\": [],\n  \"scope\": \"Exact source attribution only; relevance and real-world truth are not independently verified\",\n  \"quote\": \"| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\",\n  \"citation\": {\n    \"source_id\": \"c6512a96-5e57-4b09-a7fc-42b992fb34fd\",\n    \"chunk_id\": \"c6512a96-5e57-4b09-a7fc-42b992fb34fd:3210\",\n    \"path\": \"<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 40\n  }\n}\n",
+            "stderr": ""
+          },
+          "result": {
+            "task_id": "6469799f-4377-470b-8f75-5a1b22e98bae",
+            "question": "What happens when the model calculation disagrees?",
+            "model": "gemma4:e4b",
+            "status": "source_excerpt",
+            "excluded_sources": [],
+            "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+            "quote": "| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+            "citation": {
+              "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+              "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:3210",
+              "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "line": 40
+            }
+          },
+          "events": [
+            {
+              "kind": "model_call",
+              "payload": {
+                "answer": {
+                  "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:3210",
+                  "quote": "| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |"
+                },
+                "context_sha256": "414d68be011e7efae7d722b13719b60df4dd11dc5521381386f62eb49da14964",
+                "endpoint": "http://127.0.0.1:11434/api/chat",
+                "output_tokens": 79,
+                "prompt_tokens": 505,
+                "requested_model": "gemma4:e4b",
+                "returned_model": "gemma4:e4b",
+                "total_duration_ns": 6352847917
+              }
+            },
+            {
+              "kind": "knowledge_query",
+              "payload": {
+                "citation": {
+                  "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:3210",
+                  "line": 40,
+                  "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                  "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                  "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd"
+                },
+                "excluded_sources": [],
+                "model": "gemma4:e4b",
+                "question": "What happens when the model calculation disagrees?",
+                "quote": "| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |",
+                "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+                "status": "source_excerpt",
+                "task_id": "6469799f-4377-470b-8f75-5a1b22e98bae"
+              }
+            }
+          ],
+          "checks": {
+            "expected_status": true,
+            "expected_exit": true,
+            "retrieval_exercised": true,
+            "answer_content": true,
+            "exact_quote": true,
+            "source_link": true,
+            "source_hash": true,
+            "source_path": true,
+            "source_line": true,
+            "model_called_as_expected": true
+          }
+        },
+        {
+          "name": "replication_support",
+          "question": "Does this project support peer replication?",
+          "expected_status": "source_excerpt",
+          "expected_answer_phrase": "does not provide peer replication",
+          "expected_candidates": true,
+          "passed": true,
+          "retrieval": {
+            "question": "Does this project support peer replication?",
+            "candidates": [
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:7096",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 7096,
+                "text": "```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```",
+                "score": 4
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:5993",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 5993,
+                "text": "The arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.",
+                "score": 2
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:9811",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 9811,
+                "text": "Next, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+                "score": 1
+              }
+            ],
+            "excluded_sources": [],
+            "retrieval": "keyword overlap; not semantic search"
+          },
+          "process": {
+            "exit_code": 0,
+            "stdout": "{\n  \"task_id\": \"278d1114-6b65-4288-a277-e5be20bb5c7b\",\n  \"question\": \"Does this project support peer replication?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"source_excerpt\",\n  \"excluded_sources\": [],\n  \"scope\": \"Exact source attribution only; relevance and real-world truth are not independently verified\",\n  \"quote\": \"It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.\",\n  \"citation\": {\n    \"source_id\": \"c6512a96-5e57-4b09-a7fc-42b992fb34fd\",\n    \"chunk_id\": \"c6512a96-5e57-4b09-a7fc-42b992fb34fd:5993\",\n    \"path\": \"<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 67\n  }\n}\n",
+            "stderr": ""
+          },
+          "result": {
+            "task_id": "278d1114-6b65-4288-a277-e5be20bb5c7b",
+            "question": "Does this project support peer replication?",
+            "model": "gemma4:e4b",
+            "status": "source_excerpt",
+            "excluded_sources": [],
+            "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+            "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+            "citation": {
+              "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+              "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:5993",
+              "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "line": 67
+            }
+          },
+          "events": [
+            {
+              "kind": "model_call",
+              "payload": {
+                "answer": {
+                  "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:5993",
+                  "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution."
+                },
+                "context_sha256": "dadee927135090ce6730e80667e9d00f9502fd91ca66b0c73074fe6c90699b62",
+                "endpoint": "http://127.0.0.1:11434/api/chat",
+                "output_tokens": 89,
+                "prompt_tokens": 522,
+                "requested_model": "gemma4:e4b",
+                "returned_model": "gemma4:e4b",
+                "total_duration_ns": 6809622458
+              }
+            },
+            {
+              "kind": "knowledge_query",
+              "payload": {
+                "citation": {
+                  "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:5993",
+                  "line": 67,
+                  "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                  "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                  "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd"
+                },
+                "excluded_sources": [],
+                "model": "gemma4:e4b",
+                "question": "Does this project support peer replication?",
+                "quote": "It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution.",
+                "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+                "status": "source_excerpt",
+                "task_id": "278d1114-6b65-4288-a277-e5be20bb5c7b"
+              }
+            }
+          ],
+          "checks": {
+            "expected_status": true,
+            "expected_exit": true,
+            "retrieval_exercised": true,
+            "answer_content": true,
+            "exact_quote": true,
+            "source_link": true,
+            "source_hash": true,
+            "source_path": true,
+            "source_line": true,
+            "model_called_as_expected": true
+          }
+        },
+        {
+          "name": "absent_temperature",
+          "question": "What is the reservoir water temperature in Celsius?",
+          "expected_status": "insufficient_evidence",
+          "expected_answer_phrase": null,
+          "expected_candidates": true,
+          "passed": true,
+          "retrieval": {
+            "question": "What is the reservoir water temperature in Celsius?",
+            "candidates": [
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:2508",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 2508,
+                "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+                "score": 1
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:2757",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 2757,
+                "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+                "score": 1
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:4724",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 4724,
+                "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+                "score": 1
+              }
+            ],
+            "excluded_sources": [],
+            "retrieval": "keyword overlap; not semantic search"
+          },
+          "process": {
+            "exit_code": 2,
+            "stdout": "{\n  \"task_id\": \"d5d28102-6799-4351-a154-6c3fb120f6a8\",\n  \"question\": \"What is the reservoir water temperature in Celsius?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"insufficient_evidence\",\n  \"excluded_sources\": [],\n  \"scope\": \"Exact source attribution only; relevance and real-world truth are not independently verified\"\n}\n",
+            "stderr": ""
+          },
+          "result": {
+            "task_id": "d5d28102-6799-4351-a154-6c3fb120f6a8",
+            "question": "What is the reservoir water temperature in Celsius?",
+            "model": "gemma4:e4b",
+            "status": "insufficient_evidence",
+            "excluded_sources": [],
+            "scope": "Exact source attribution only; relevance and real-world truth are not independently verified"
+          },
+          "events": [
+            {
+              "kind": "model_call",
+              "payload": {
+                "answer": {
+                  "chunk_id": "",
+                  "quote": ""
+                },
+                "context_sha256": "da6919b9994a7efbd186e15cb6d577f4985191d872441f3251d6b655a235eef1",
+                "endpoint": "http://127.0.0.1:11434/api/chat",
+                "output_tokens": 11,
+                "prompt_tokens": 512,
+                "requested_model": "gemma4:e4b",
+                "returned_model": "gemma4:e4b",
+                "total_duration_ns": 2665468833
+              }
+            },
+            {
+              "kind": "knowledge_query",
+              "payload": {
+                "excluded_sources": [],
+                "model": "gemma4:e4b",
+                "question": "What is the reservoir water temperature in Celsius?",
+                "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+                "status": "insufficient_evidence",
+                "task_id": "d5d28102-6799-4351-a154-6c3fb120f6a8"
+              }
+            }
+          ],
+          "checks": {
+            "expected_status": true,
+            "expected_exit": true,
+            "retrieval_exercised": true,
+            "no_answer_or_citation": true,
+            "model_called_as_expected": true
+          }
+        },
+        {
+          "name": "absent_ip",
+          "question": "What is the hive server IP address?",
+          "expected_status": "insufficient_evidence",
+          "expected_answer_phrase": null,
+          "expected_candidates": true,
+          "passed": true,
+          "retrieval": {
+            "question": "What is the hive server IP address?",
+            "candidates": [
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:0",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 0,
+                "text": "# Data & Lore: first hive experiment",
+                "score": 1
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:587",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 587,
+                "text": "```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```",
+                "score": 1
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:731",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 731,
+                "text": "```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```",
+                "score": 1
+              }
+            ],
+            "excluded_sources": [],
+            "retrieval": "keyword overlap; not semantic search"
+          },
+          "process": {
+            "exit_code": 2,
+            "stdout": "{\n  \"task_id\": \"b913b509-29b1-4776-b056-57dac5748497\",\n  \"question\": \"What is the hive server IP address?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"insufficient_evidence\",\n  \"excluded_sources\": [],\n  \"scope\": \"Exact source attribution only; relevance and real-world truth are not independently verified\"\n}\n",
+            "stderr": ""
+          },
+          "result": {
+            "task_id": "b913b509-29b1-4776-b056-57dac5748497",
+            "question": "What is the hive server IP address?",
+            "model": "gemma4:e4b",
+            "status": "insufficient_evidence",
+            "excluded_sources": [],
+            "scope": "Exact source attribution only; relevance and real-world truth are not independently verified"
+          },
+          "events": [
+            {
+              "kind": "model_call",
+              "payload": {
+                "answer": {
+                  "chunk_id": "",
+                  "quote": ""
+                },
+                "context_sha256": "2f5fff51c61cd5412b3d5e3e94ac7fe74efe70df3b6d1c9a5a0043d57db2ad7a",
+                "endpoint": "http://127.0.0.1:11434/api/chat",
+                "output_tokens": 11,
+                "prompt_tokens": 329,
+                "requested_model": "gemma4:e4b",
+                "returned_model": "gemma4:e4b",
+                "total_duration_ns": 2075055708
+              }
+            },
+            {
+              "kind": "knowledge_query",
+              "payload": {
+                "excluded_sources": [],
+                "model": "gemma4:e4b",
+                "question": "What is the hive server IP address?",
+                "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+                "status": "insufficient_evidence",
+                "task_id": "b913b509-29b1-4776-b056-57dac5748497"
+              }
+            }
+          ],
+          "checks": {
+            "expected_status": true,
+            "expected_exit": true,
+            "retrieval_exercised": true,
+            "no_answer_or_citation": true,
+            "model_called_as_expected": true
+          }
+        },
+        {
+          "name": "absent_manufacturer",
+          "question": "Who manufactured the reservoir?",
+          "expected_status": "insufficient_evidence",
+          "expected_answer_phrase": null,
+          "expected_candidates": true,
+          "passed": false,
+          "retrieval": {
+            "question": "Who manufactured the reservoir?",
+            "candidates": [
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:2508",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 2508,
+                "text": "A live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.",
+                "score": 1
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:2757",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 2757,
+                "text": "The revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.",
+                "score": 1
+              },
+              {
+                "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:4724",
+                "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+                "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                "offset": 4724,
+                "text": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.",
+                "score": 1
+              }
+            ],
+            "excluded_sources": [],
+            "retrieval": "keyword overlap; not semantic search"
+          },
+          "process": {
+            "exit_code": 0,
+            "stdout": "{\n  \"task_id\": \"e005304b-a498-4012-b649-dd654b447ef6\",\n  \"question\": \"Who manufactured the reservoir?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"source_excerpt\",\n  \"excluded_sources\": [],\n  \"scope\": \"Exact source attribution only; relevance and real-world truth are not independently verified\",\n  \"quote\": \"1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\",\n  \"citation\": {\n    \"source_id\": \"c6512a96-5e57-4b09-a7fc-42b992fb34fd\",\n    \"chunk_id\": \"c6512a96-5e57-4b09-a7fc-42b992fb34fd:4724\",\n    \"path\": \"<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md\",\n    \"sha256\": \"f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c\",\n    \"line\": 57\n  }\n}\n",
+            "stderr": ""
+          },
+          "result": {
+            "task_id": "e005304b-a498-4012-b649-dd654b447ef6",
+            "question": "Who manufactured the reservoir?",
+            "model": "gemma4:e4b",
+            "status": "source_excerpt",
+            "excluded_sources": [],
+            "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+            "quote": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.",
+            "citation": {
+              "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd",
+              "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:4724",
+              "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+              "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+              "line": 57
+            }
+          },
+          "events": [
+            {
+              "kind": "model_call",
+              "payload": {
+                "answer": {
+                  "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:4724",
+                  "quote": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim."
+                },
+                "context_sha256": "05cf123477a6cd5a44e966cd8de186b6393b61f185f7d275b1d8d55741d6829f",
+                "endpoint": "http://127.0.0.1:11434/api/chat",
+                "output_tokens": 82,
+                "prompt_tokens": 508,
+                "requested_model": "gemma4:e4b",
+                "returned_model": "gemma4:e4b",
+                "total_duration_ns": 6097758166
+              }
+            },
+            {
+              "kind": "knowledge_query",
+              "payload": {
+                "citation": {
+                  "chunk_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd:4724",
+                  "line": 57,
+                  "path": "<workspace>/work/combined-evaluation/1d3dc0b9-c4f4-4faa-a787-7905f252bd11/README-snapshot.md",
+                  "sha256": "f9f2bf069bb254d08b7b2f42231b0c48798ee7da9616f060801c3eef0ae5242c",
+                  "source_id": "c6512a96-5e57-4b09-a7fc-42b992fb34fd"
+                },
+                "excluded_sources": [],
+                "model": "gemma4:e4b",
+                "question": "Who manufactured the reservoir?",
+                "quote": "1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.",
+                "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+                "status": "source_excerpt",
+                "task_id": "e005304b-a498-4012-b649-dd654b447ef6"
+              }
+            }
+          ],
+          "checks": {
+            "expected_status": false,
+            "expected_exit": false,
+            "retrieval_exercised": true,
+            "no_answer_or_citation": false,
+            "model_called_as_expected": true
+          }
+        },
+        {
+          "name": "no_keyword_match",
+          "question": "Platypus habitat?",
+          "expected_status": "insufficient_evidence",
+          "expected_answer_phrase": null,
+          "expected_candidates": false,
+          "passed": true,
+          "retrieval": {
+            "question": "Platypus habitat?",
+            "candidates": [],
+            "excluded_sources": [],
+            "retrieval": "keyword overlap; not semantic search"
+          },
+          "process": {
+            "exit_code": 2,
+            "stdout": "{\n  \"task_id\": \"4059649c-d1fc-4043-8acd-87bd64a4cf7b\",\n  \"question\": \"Platypus habitat?\",\n  \"model\": \"gemma4:e4b\",\n  \"status\": \"insufficient_evidence\",\n  \"excluded_sources\": [],\n  \"scope\": \"Exact source attribution only; relevance and real-world truth are not independently verified\"\n}\n",
+            "stderr": ""
+          },
+          "result": {
+            "task_id": "4059649c-d1fc-4043-8acd-87bd64a4cf7b",
+            "question": "Platypus habitat?",
+            "model": "gemma4:e4b",
+            "status": "insufficient_evidence",
+            "excluded_sources": [],
+            "scope": "Exact source attribution only; relevance and real-world truth are not independently verified"
+          },
+          "events": [
+            {
+              "kind": "knowledge_query",
+              "payload": {
+                "excluded_sources": [],
+                "model": "gemma4:e4b",
+                "question": "Platypus habitat?",
+                "scope": "Exact source attribution only; relevance and real-world truth are not independently verified",
+                "status": "insufficient_evidence",
+                "task_id": "4059649c-d1fc-4043-8acd-87bd64a4cf7b"
+              }
+            }
+          ],
+          "checks": {
+            "expected_status": true,
+            "expected_exit": true,
+            "retrieval_exercised": true,
+            "no_answer_or_citation": true,
+            "model_called_as_expected": true
+          }
+        }
+      ],
+      "completed": 6,
+      "passed": 5
+    }
+  },
+  "unit_tests": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_changed_source_cannot_be_overruled_by_model (test_hive.MemoryTests.test_changed_source_cannot_be_overruled_by_model) ... ok\ntest_changed_source_disputes_result (test_hive.MemoryTests.test_changed_source_disputes_result) ... ok\ntest_history_rejects_edits (test_hive.MemoryTests.test_history_rejects_edits) ... ok\ntest_model_approval_cannot_override_wrong_answer (test_hive.MemoryTests.test_model_approval_cannot_override_wrong_answer) ... ok\ntest_model_failure_does_not_create_scripted_fallback (test_hive.MemoryTests.test_model_failure_does_not_create_scripted_fallback) ... ok\ntest_model_miscalculation_requires_review (test_hive.MemoryTests.test_model_miscalculation_requires_review) ... ok\ntest_reuse_promotes_supported_result (test_hive.MemoryTests.test_reuse_promotes_supported_result) ... ok\ntest_run_isolation (test_hive.MemoryTests.test_run_isolation) ... ok\ntest_seven_reservoir_regression_and_blind_review (test_hive.MemoryTests.test_seven_reservoir_regression_and_blind_review) ... ok\ntest_solver_retrieves_claim_for_model (test_hive.MemoryTests.test_solver_retrieves_claim_for_model) ... ok\ntest_verifier_failure_prevents_promotion (test_hive.MemoryTests.test_verifier_failure_prevents_promotion) ... ok\ntest_wrong_answer_retained_but_not_promoted (test_hive.MemoryTests.test_wrong_answer_retained_but_not_promoted) ... ok\ntest_duplicate_ingestion_does_not_duplicate_memory (test_knowledge.KnowledgeTests.test_duplicate_ingestion_does_not_duplicate_memory) ... ok\ntest_exact_quote_has_correct_citation_and_separate_task (test_knowledge.KnowledgeTests.test_exact_quote_has_correct_citation_and_separate_task) ... ok\ntest_fabricated_quote_is_withheld (test_knowledge.KnowledgeTests.test_fabricated_quote_is_withheld) ... ok\ntest_independent_process_can_retrieve_previous_ingestion (test_knowledge.KnowledgeTests.test_independent_process_can_retrieve_previous_ingestion) ... ok\ntest_missing_source_is_excluded (test_knowledge.KnowledgeTests.test_missing_source_is_excluded) ... ok\ntest_model_can_abstain_on_irrelevant_keyword_match (test_knowledge.KnowledgeTests.test_model_can_abstain_on_irrelevant_keyword_match) ... ok\ntest_no_keyword_match_does_not_call_model (test_knowledge.KnowledgeTests.test_no_keyword_match_does_not_call_model) ... ok\ntest_source_changed_during_model_call_withholds_quote (test_knowledge.KnowledgeTests.test_source_changed_during_model_call_withholds_quote) ... ok\ntest_stale_source_excluded_until_reingested (test_knowledge.KnowledgeTests.test_stale_source_excluded_until_reingested) ... ok\ntest_wrong_chunk_id_is_withheld (test_knowledge.KnowledgeTests.test_wrong_chunk_id_is_withheld) ... ok\ntest_boolean_is_not_integer_evidence (test_ollama_local.ResponseValidationTests.test_boolean_is_not_integer_evidence) ... ok\ntest_incomplete_responses_rejected (test_ollama_local.ResponseValidationTests.test_incomplete_responses_rejected) ... ok\ntest_integer_result_accepted (test_ollama_local.ResponseValidationTests.test_integer_result_accepted) ... ok\ntest_missing_extra_and_string_fields_rejected (test_ollama_local.ResponseValidationTests.test_missing_extra_and_string_fields_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 26 tests in 0.266s\n\nOK\n"
+  },
+  "evaluation_source_text": "# Data & Lore: first hive experiment\n\nThis runnable prototype tests one narrow idea: a cookie records a fact, a second cookie uses it, and a third checks the answer against its source. Each cookie runs in a separate Python process. Shared SQLite memory preserves the evidence and outcome between process lifetimes.\n\nThis is a local coordination experiment with a scripted mode and an optional Ollama model mode. It is not a distributed deployment. Requires Python 3.10 or newer. The scripted mode needs no services, packages, weights, or network connections.\n\n## Run\n\nFrom this folder:\n\n```bash\npython3 hive.py demo\npython3 hive.py demo --inject-error\npython3 -m unittest -v\n```\n\nTo use the Gemma model installed on this MacBook:\n\n```bash\npython3 hive.py demo --model gemma4:e4b\npython3 hive.py demo --model gemma4:e4b --inject-error\n```\n\nOllama must be running at `127.0.0.1:11434`. Each worker makes its own model request: extraction, problem solving, and source review. Workers run sequentially and share one model runtime; these are separate roles, not three model copies or independent intelligences. The adapter uses Ollama's [chat API](https://docs.ollama.com/api/chat) with structured JSON output. The deterministic source and arithmetic checks still gate promotion even if the model incorrectly approves a result.\n\nNo model is downloaded. Requests bypass proxy settings and target only the loopback endpoint. The arithmetic demo sends synthetic fixture/task data; the source-memory commands below send excerpts from files you explicitly ingest. Each request caps context at 4,096 tokens and output at 256 tokens with a 180-second HTTP timeout, and requests a one-minute keep-alive. These settings bound individual calls, not system-wide CPU/GPU or power consumption. Model call records include the returned JSON, model name, context hash and reported timing/token counts. Invalid responses and network failures stop the run; they do not silently fall back to scripted answers. Failed runs may leave partial events and no final report.\n\nThe scripted demo produces **360 litres \u2014 verified**. Its fault-injection demo produces **361 litres \u2014 disputed** and exits with code 2 intentionally. Model runs can also require review. Each run writes a unique source fixture and JSON report plus a persistent `memory.sqlite3` into `state/`. Use `--state-dir /path/to/folder` to choose another location. Use `--capacity 37 --count 7` to change both the synthetic source and question.\n\n## Verification policy v2\n\nA live test of the original verifier returned `valid: false` while explaining that the correct 840-litre answer was valid. That failure is preserved in `seven-reservoir-test.json`; the earlier `gemma-validation.json` also describes the old policy.\n\nThe revised verifier receives only the original source and reservoir count. It does **not** see the solver's answer, rationale or fault-injection flag. It returns one integer, `expected_total_litres`, instead of a Boolean and prose explanation. Code compares that independent model calculation with the proposed answer and deterministic source calculation. This removes the contradictory Boolean/prose interface; it does not make the model infallible.\n\n| Status | Meaning | Promotion | CLI exit |\n|---|---|---|---|\n| `verified` | All source checks pass; the model calculation agrees when enabled | Yes | 0 |\n| `disputed` | A deterministic evidence or arithmetic check failed | No | 2 |\n| `needs_review` | Source checks pass, but the model calculates a different total | No | 3 |\n\n`needs_review` is a recorded state, not an automatic human-review queue. Model/network failures still abort without promotion. This policy is specific to exact arithmetic from a structured fixture; it does not settle open-ended factual disagreements or interpret contradictory natural-language reasoning. All workers still use the same model and share its potential weaknesses.\n\nRun the repeatable six-case evaluation:\n\n```bash\npython3 evaluate.py\npython3 evaluate.py --model gemma4:e4b\n```\n\nIt tests 120 \u00d7 7, 37 \u00d7 7, and 123 \u00d7 13, each with a normal and deliberately altered answer. Each invocation creates a fresh directory containing every run and a progressively saved `summary.json`, including failures. A case passes only if the answer, promotion behavior, status, and process exit code match expectations. The evaluation exits 1 if any case fails. Six cases are a regression sample, not a reliability benchmark.\n\nThe saved `verifier-v2-validation.json` records a successful live run using `gemma4:e4b`: all six cases passed, including the previous 840-litre regression. All 16 automated tests also passed. The earlier failure reports remain unchanged.\n\n## What the cookies share\n\n1. **Learner:** reads a synthetic reservoir specification, stores its source URI, content hash and snapshot, then records an explicitly unverified capacity claim.\n2. **Solver:** retrieves that claim from memory and uses it to answer a new question. It does not read the source file.\n3. **Verifier:** reads the original source and checks evidence links, source consistency, the claim and arithmetic. In model mode it also obtains an independent calculation. It records verification, dispute, or a need for review, then a scoped observation in lore. Only a passing answer becomes working knowledge.\n\nThe source contains a fictional 120-litre reservoir. Verification demonstrates agreement with that fixture, not real-world truth. Lore here is a record of what happened during the experiment, not a universal rule.\n\n## Memory semantics and limits\n\nEvents are append-only through SQLite triggers: verification adds an event rather than rewriting an earlier claim. Run IDs isolate experiments. Original disputed results remain inspectable. The database owner can bypass the triggers; these are an application guardrail, not cryptographic identity or protection against hostile hosts. Hashes detect changes relative to a stored snapshot; they do not establish source trust.\n\nThe arithmetic demo uses one local database, exact retrieval by event type, a fixed task sequence, and trusted processes. The source-memory workflow adds keyword retrieval and document versioning across tasks. It does not provide peer replication, semantic search, model training, authentication, independent real-world corroboration, automatic retries, resource quotas, or general conflict resolution. Separate verifier code checks the source independently of the solver's arithmetic, but all workers share this implementation and trust domain. Source-memory ingestion can supersede document snapshots, but it does not automatically revise earlier arithmetic conclusions or resolve conflicting sources.\n\nWorkers exit after their task. No idle daemon remains. Power use has not been measured.\n\n## Source memory across tasks\n\n`knowledge.py` adds persistent ingestion of local `.txt` and `.md` files. It stores their UTF-8 text, paths and SHA-256 hashes in append-only events. Separate process invocations can query the same database without repeating ingestion or relying on model conversation history.\n\n```bash\npython3 knowledge.py ingest README.md\npython3 knowledge.py search \"What happens when the model calculation disagrees?\"\npython3 knowledge.py ask \"What happens when the model calculation disagrees?\" --model gemma4:e4b\npython3 knowledge.py ask \"Does this project support peer replication?\" --model gemma4:e4b\n```\n\nThe default database is `knowledge.sqlite3`. To choose a shared database path, put `--db /path/to/memory.sqlite3` before the subcommand. `ask` also accepts `--report result.json` to save its output. The database's parent directory must already exist.\n\nRetrieval ranks paragraphs by keyword overlap and sends the top three excerpts to the local model. Gemma selects an exact quote, limited to 400 characters. Code verifies the quote against the selected excerpt and rechecks the source hash after inference. Successful output includes the source version, path, hash and line number. The returned excerpt may need interpretation: relevance is model-selected, and neither source truth nor completeness is established by finding an exact quote. This deliberately extractive first version does not generate synthesized factual answers or promote excerpts into verified working knowledge.\n\n| Query status | Meaning |\n|---|---|\n| `source_excerpt` | A model-selected quote matches a current ingested source exactly |\n| `insufficient_evidence` | No keyword candidate, or the model declined to select an answer |\n| `unsupported_output` | The model invented a quote, selected an invalid excerpt, or violated quote limits |\n| `stale_source` | The selected source changed or became unreadable during inference |\n\nChanged/missing sources detected before inference are excluded and listed under `excluded_sources`. Re-run `ingest` after editing a source to make a new version available; previous snapshots remain in history. Unchanged repeat ingestion is deduplicated. Only the latest ingested version of each file participates in new queries, and the original file must remain accessible for freshness checks. These checks capture file state at the check time, not a guarantee against subsequent edits.\n\nIngestion is explicit and limited to 256,000 bytes per file; there is no folder crawling, PDF parsing, web fetching, semantic search, or external communication. Keyword retrieval can miss relevant evidence. Conflicting documents are not reconciled, and identical quotes can be misleading out of context. Source text is treated as data and never executed. This is a trusted local prototype, not an authenticated multi-user memory service. Each completed query gets its own task ID and stored result event; model/network errors stop the query and may leave partial history.\n\n## Next implementation boundary\n\nNext, expand retrieval and review for real source material, then choose a second participating machine. Move task delivery to an authenticated queue and memory access to a service rather than sharing SQLite over a network filesystem. Opt-in hosts should enforce resource limits locally. Cross-host replication and Eureka Protocol integration require current repository and deployment details before implementation.\n",
+  "assessment": {
+    "live_cases_passed": 11,
+    "live_cases_total": 12,
+    "answer_not_in_source_passed": 3,
+    "answer_not_in_source_total": 4,
+    "failure": "absent_manufacturer returned an exact but irrelevant quote rather than abstaining",
+    "limitation": "Source authenticity checks do not validate whether an excerpt answers the question",
+    "retries": 0,
+    "production_logic_changed": false
+  }
+}

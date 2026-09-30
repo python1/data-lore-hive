@@ -1,0 +1,11 @@
+test_production_default_is_disabled (test_production_lore.ProductionDefaultTests.test_production_default_is_disabled) ... ok
+test_calibration_seal_wrong_row_is_blocked_in_production (test_production_lore.ProductionLoreTests.test_calibration_seal_wrong_row_is_blocked_in_production) ... ok
+test_enough_votes_and_traps_stay_provisional (test_production_lore.ProductionLoreTests.test_enough_votes_and_traps_stay_provisional) ... ok
+test_existing_promotion_cannot_mask_fallback_failure (test_production_lore.ProductionLoreTests.test_existing_promotion_cannot_mask_fallback_failure) ... ok
+test_imported_promotion_requires_fresh_fallback (test_production_lore.ProductionLoreTests.test_imported_promotion_requires_fresh_fallback) ... ok
+test_provisional_delivery_revoke_and_future_block (test_production_lore.ProductionLoreTests.test_provisional_delivery_revoke_and_future_block) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.071s
+
+OK

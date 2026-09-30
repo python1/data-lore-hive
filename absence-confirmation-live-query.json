@@ -1,0 +1,17 @@
+{
+  "task_id": "a17904ce-786c-4eb6-8304-b04256449eb0",
+  "question": "What is the calibration temperature in Celsius?",
+  "model": "gemma4:e4b",
+  "status": "not_found_in_source",
+  "excluded_sources": [],
+  "policy": "quote-support-v2",
+  "seed": 11,
+  "temperature": 0.2,
+  "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+  "absence_checks": {
+    "evidence_available": true,
+    "support_confirms_not_found": true,
+    "evidence_still_current": true
+  },
+  "finding_id": "5a1402da-cd57-4e13-98c1-01490d668200"
+}

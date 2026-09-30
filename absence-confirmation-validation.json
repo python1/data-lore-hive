@@ -1,0 +1,159 @@
+{
+  "result": {
+    "task_id": "a17904ce-786c-4eb6-8304-b04256449eb0",
+    "question": "What is the calibration temperature in Celsius?",
+    "model": "gemma4:e4b",
+    "status": "not_found_in_source",
+    "excluded_sources": [],
+    "policy": "quote-support-v2",
+    "seed": 11,
+    "temperature": 0.2,
+    "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+    "absence_checks": {
+      "evidence_available": true,
+      "support_confirms_not_found": true,
+      "evidence_still_current": true
+    },
+    "finding_id": "5a1402da-cd57-4e13-98c1-01490d668200"
+  },
+  "events": [
+    {
+      "id": "f9af75f8-5444-4e54-8c25-f403733cc838",
+      "kind": "model_call",
+      "cookie": "cookie-solver",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "chunk_id": "",
+          "outcome": "not_found_in_source",
+          "quote": ""
+        },
+        "context_sha256": "15d7056e326c1a0eac6622b888a91a3bc55f9c438f9a89488f506fa743a9c21a",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 27,
+        "prompt_tokens": 242,
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 2659169250
+      }
+    },
+    {
+      "id": "b7fd4dba-e35c-414c-bf46-98940a97152a",
+      "kind": "source_proposal",
+      "cookie": "cookie-solver",
+      "payload": {
+        "answer": "",
+        "chunk_id": "",
+        "outcome": "not_found_in_source",
+        "quote": ""
+      }
+    },
+    {
+      "id": "7c96189b-e22f-4391-8d64-ee6f700dc312",
+      "kind": "model_call",
+      "cookie": "cookie-support",
+      "payload": {
+        "answer": {
+          "answer": "",
+          "outcome": "not_found_in_source"
+        },
+        "context": {
+          "question": "What is the calibration temperature in Celsius?",
+          "quote": "If calibration is overdue, the resulting status is inspection_required.\nIf the seal is open, the resulting status is locked."
+        },
+        "context_sha256": "b1dfe7cea2474e655fb1db41d1648c0d185f05ae9a0a11d372a986393962c087",
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "generation_options": {
+          "num_ctx": 4096,
+          "num_predict": 384,
+          "seed": 11,
+          "temperature": 0.2
+        },
+        "output_tokens": 17,
+        "prompt_tokens": 175,
+        "purpose": "independent_answer_search",
+        "requested_model": "gemma4:e4b",
+        "returned_model": "gemma4:e4b",
+        "total_duration_ns": 1835453709
+      }
+    },
+    {
+      "id": "fda15e7c-bfb1-40c3-83b9-18db295e9b18",
+      "kind": "absence_check",
+      "cookie": "cookie-support",
+      "payload": {
+        "checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "confirmation_id": "7c96189b-e22f-4391-8d64-ee6f700dc312"
+      }
+    },
+    {
+      "id": "5a1402da-cd57-4e13-98c1-01490d668200",
+      "kind": "source_finding",
+      "cookie": "cookie-solver",
+      "payload": {
+        "absence_check_id": "fda15e7c-bfb1-40c3-83b9-18db295e9b18",
+        "confirmation_id": "7c96189b-e22f-4391-8d64-ee6f700dc312",
+        "excluded_sources": [],
+        "finding": "not_found_in_source",
+        "question": "What is the calibration temperature in Celsius?",
+        "reason": "solver_not_found_in_source",
+        "scope": "Both cookies found no answer in retrieved excerpts; not an exhaustive source or universal absence claim",
+        "searched_chunk_ids": [
+          "ca51c33a-4581-4dd3-b0eb-c8e56c140bee:115"
+        ]
+      }
+    },
+    {
+      "id": "75093eca-0ad5-48fc-b977-3ea8a29bcdf4",
+      "kind": "knowledge_query",
+      "cookie": "cookie-reader",
+      "payload": {
+        "absence_checks": {
+          "evidence_available": true,
+          "evidence_still_current": true,
+          "support_confirms_not_found": true
+        },
+        "excluded_sources": [],
+        "finding_id": "5a1402da-cd57-4e13-98c1-01490d668200",
+        "model": "gemma4:e4b",
+        "policy": "quote-support-v2",
+        "question": "What is the calibration temperature in Celsius?",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": 11,
+        "status": "not_found_in_source",
+        "task_id": "a17904ce-786c-4eb6-8304-b04256449eb0",
+        "temperature": 0.2
+      }
+    }
+  ],
+  "unit_tests_passed": 53,
+  "prior_json_records_verified_unchanged": 16,
+  "prior_record_hashes": {
+    "outputs/hive-prototype/abstention-format-validation-b3acd7b3.json": "36378aaa8e7ef1cbc023ca38fd9314bacb90c349a56bba7143e7073cd4224c79",
+    "outputs/hive-prototype/prose-policy-validation-2147ce73.json": "4aef6bf1537a9a3030d5ab8078ddde0c2b504b492eac3ee7ce9c50b805fc6124",
+    "outputs/hive-prototype/table-context-validation-40eddada.json": "2af8a177ca84e58815c6752348c468bc8839df3b508ec975436837d24a6a39b6",
+    "outputs/hive-prototype/support-seeded-0564edb2-raw.json": "f7daa22baae7c8d0ffa7608866b8da6026873bc0c99a3742a15e6e726f65e3a8",
+    "outputs/hive-prototype/support-meaning-rerun-4c9252b8.json": "467212e9e5340a7e72b16404f7dc9e84b07af76af9df1025d316a7e5738060eb",
+    "outputs/hive-prototype/verifier-v2-validation.json": "e7bde6eb00b9fbced6cafb559c09b703cfcb96cd9a34b6937fe5415eafe98993",
+    "outputs/hive-prototype/source-memory-query-2.json": "d788acc6f0796f6509c377b2e598d43899a7cb623366dc891c2de293ab8d31d8",
+    "outputs/hive-prototype/source-memory-query-1.json": "f3207bd7991b509b50b8b0f5c7a007eb83feb4db31175e89cbd85e55d55823d3",
+    "outputs/hive-prototype/outcome-selection-attempt-1.json": "de9e7910eaa45f9c02d60dc8382ba5ecb4d320cbaef469f897cd0df60a039311",
+    "outputs/hive-prototype/batch-validation-1d3dc0b9.json": "f092ab8414ce53594359d86b3f10f4a0f0d347c71714cf4879295d315c3a9efc",
+    "outputs/hive-prototype/support-seeded-0564edb2-adjudicated.json": "abf3ef70d7f0d6e4da74630a1b68b196c3f1995372a74cd461479636182fcbe4",
+    "outputs/hive-prototype/gemma-validation.json": "37aad764dbca42ff8db053f62cac96ea5a3d8d4a5b233cc46f53054fcefe8950",
+    "outputs/hive-prototype/policy-holdout-validation-7e145b8d.json": "61ffc80509e28ee8f86d3a240e28d020e914d49331df58a766e66f4508a350bc",
+    "outputs/hive-prototype/historical-quote-support-replay.json": "e325fe7653c519d9fb692ec0a3f5e45373c97af52a57f4a911fcc09eca228c0c",
+    "outputs/hive-prototype/seven-reservoir-test.json": "fb328509ca255f63b4405499631c91ef01528f0db564716f93fe038dbfb150df",
+    "outputs/hive-prototype/source-memory-validation.json": "200a6c5b020adb7ffc731aab2616fcbf62231adcc0a7036d6d5ef9cf06b4a013"
+  }
+}

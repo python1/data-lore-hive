@@ -1,0 +1,76 @@
+{
+  "questions": {
+    "What should happen when calibration expires?": null,
+    "What must I do?": null,
+    "Why is inspection required?": null,
+    "Who manufactured the seal?": null,
+    "How should overdue calibration be handled?": null
+  },
+  "source_patterns": [
+    {
+      "name": "condition_after_action",
+      "text": "Inspection is required if calibration is overdue.",
+      "parsed": []
+    },
+    {
+      "name": "no_comma",
+      "text": "If calibration is overdue then inspection is required.",
+      "parsed": []
+    },
+    {
+      "name": "unless",
+      "text": "Unless calibration is current, inspection is required.",
+      "parsed": []
+    },
+    {
+      "name": "provided_that",
+      "text": "Provided that calibration is overdue, inspection is required.",
+      "parsed": []
+    },
+    {
+      "name": "multiline",
+      "text": "If calibration is overdue,\ninspection is required.",
+      "parsed": [
+        {
+          "condition": "calibration is overdue",
+          "outcome": "inspection is required"
+        }
+      ]
+    },
+    {
+      "name": "comma_in_condition",
+      "text": "If calibration is overdue, or the seal is open, inspection is required.",
+      "parsed": [
+        {
+          "condition": "calibration is overdue",
+          "outcome": "or the seal is open, inspection is required"
+        }
+      ]
+    },
+    {
+      "name": "multiple_sentences",
+      "text": "If calibration is overdue, record the result. Then request inspection.",
+      "parsed": [
+        {
+          "condition": "calibration is overdue",
+          "outcome": "record the result"
+        }
+      ]
+    },
+    {
+      "name": "decimal",
+      "text": "If pressure rises, set the threshold to 37.5.",
+      "parsed": [
+        {
+          "condition": "pressure rises",
+          "outcome": "set the threshold to 37"
+        }
+      ]
+    },
+    {
+      "name": "unrecognized_headers",
+      "text": "| Prerequisite | Effect |\n|---|---|\n| Calibration overdue | Inspection required |",
+      "parsed": []
+    }
+  ]
+}

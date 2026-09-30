@@ -1,0 +1,37 @@
+{
+  "scope": "Synthetic mocked coherent-but-irrelevant policy row; not a live model trial or version-comparison case",
+  "expected": "inspection_required",
+  "result": {
+    "task_id": "f69922b1-65b0-483b-847e-e0a862923468",
+    "question": "What happens when calibration is overdue?",
+    "model": "synthetic-mock",
+    "status": "supported_answer",
+    "excluded_sources": [],
+    "policy": "quote-support-v2",
+    "seed": 11,
+    "temperature": 0.2,
+    "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+    "question_route": "policy",
+    "requested_slot": "outcome",
+    "checks": {
+      "solver_answer_anchored": true,
+      "solver_value_in_requested_role": true,
+      "solver_pair_in_same_rule": true,
+      "support_pair_in_same_rule": true,
+      "support_value_in_requested_role": true,
+      "support_answered": true,
+      "support_answer_anchored": true,
+      "answers_agree": true
+    },
+    "answer": "locked",
+    "quote": "| Status | Meaning |\n|---|---|\n| inspection_required | calibration is overdue |\n| locked | the seal is open |",
+    "citation": {
+      "source_id": "aaec9dae-a775-4d48-804f-01de83726de5",
+      "chunk_id": "aaec9dae-a775-4d48-804f-01de83726de5:0",
+      "path": "<tmpdir>/T/tmpj7v30_6i/policy.md",
+      "sha256": "68a554e50a46648f53a9bc733569f376658900992ce51eb1980e904922987451",
+      "line": 1
+    }
+  },
+  "false_accept": true
+}

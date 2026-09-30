@@ -1,0 +1,35 @@
+{
+  "test_type": "controlled injection using preserved source and question",
+  "prior_record": "prose-nonanswer-unfixed-e7a6c871.json",
+  "solver_fields": {
+    "decision": "answered",
+    "condition": "calibration is overdue",
+    "outcome": "calibration is overdue"
+  },
+  "support_fields": {
+    "decision": "answered",
+    "condition": "calibration is overdue",
+    "outcome": "calibration is overdue"
+  },
+  "result": {
+    "task_id": "f9e599a9-ac59-45c6-80e3-5981dd74575b",
+    "question": "What happens when calibration is overdue?",
+    "model": "controlled-test",
+    "status": "needs_review",
+    "excluded_sources": [],
+    "policy": "quote-support-v2",
+    "seed": null,
+    "temperature": 0,
+    "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+    "requested_slot": "outcome",
+    "checks": {
+      "solver_answer_anchored": true,
+      "solver_value_in_requested_role": false,
+      "support_value_in_requested_role": false,
+      "support_answered": true,
+      "support_answer_anchored": true,
+      "answers_agree": true
+    }
+  },
+  "caught": true
+}

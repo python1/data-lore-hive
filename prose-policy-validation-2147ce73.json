@@ -1,0 +1,422 @@
+{
+  "source_text": "# Fictional laboratory policy fixture\n\nThis document is a synthetic evaluation source, not an operational policy.\n\nIf calibration is overdue, the resulting status is inspection_required.\nIf the seal is open, the resulting status is locked.\n\nVibration can exceed the warning threshold.\n",
+  "model": "gemma4:e4b",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "temperature": 0.2,
+  "table_parser_active": false,
+  "cases": [
+    {
+      "seed": 11,
+      "question": "What happens when calibration is overdue?",
+      "expected": "inspection_required",
+      "passed": true,
+      "result": {
+        "task_id": "b297a263-2b3c-4a72-8223-c9880755ad30",
+        "question": "What happens when calibration is overdue?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 11,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "inspection_required",
+        "quote": "If calibration is overdue, the resulting status is inspection_required.",
+        "citation": {
+          "source_id": "b1351534-4c8d-4294-8293-5c2a36618697",
+          "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+          "path": "<workspace>/work/prose-before-abstention/2147ce73-9207-4919-b007-d89655445275/prose-policy.md",
+          "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+              "outcome": "answered",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "9394902db35401cbedf153500634ed7173238e85a02d55f48872ba79f3ada9bb",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 80,
+            "prompt_tokens": 301,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 13299919625
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "inspection_required",
+            "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+            "outcome": "answered",
+            "quote": "If calibration is overdue, the resulting status is inspection_required."
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when calibration is overdue?",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "184b3516a71420b78f45e7efbbfb23e25267da1908f8f8052abc8ce8d6bdb5a5",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 11,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 216,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1867344792
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "inspection_required",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+              "line": 5,
+              "path": "<workspace>/work/prose-before-abstention/2147ce73-9207-4919-b007-d89655445275/prose-policy.md",
+              "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+              "source_id": "b1351534-4c8d-4294-8293-5c2a36618697"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when calibration is overdue?",
+            "quote": "If calibration is overdue, the resulting status is inspection_required.",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 11,
+            "status": "supported_answer",
+            "task_id": "b297a263-2b3c-4a72-8223-c9880755ad30",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 29,
+      "question": "What happens when calibration is overdue?",
+      "expected": "inspection_required",
+      "passed": true,
+      "result": {
+        "task_id": "0274a3b1-5012-4ac5-8075-a0eb12d72959",
+        "question": "What happens when calibration is overdue?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 29,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "inspection_required",
+        "quote": "If calibration is overdue, the resulting status is inspection_required.",
+        "citation": {
+          "source_id": "b1351534-4c8d-4294-8293-5c2a36618697",
+          "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+          "path": "<workspace>/work/prose-before-abstention/2147ce73-9207-4919-b007-d89655445275/prose-policy.md",
+          "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+              "outcome": "answered",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "9394902db35401cbedf153500634ed7173238e85a02d55f48872ba79f3ada9bb",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 80,
+            "prompt_tokens": 301,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4474498541
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "inspection_required",
+            "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+            "outcome": "answered",
+            "quote": "If calibration is overdue, the resulting status is inspection_required."
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when calibration is overdue?",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "184b3516a71420b78f45e7efbbfb23e25267da1908f8f8052abc8ce8d6bdb5a5",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 29,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 216,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1194456709
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "inspection_required",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+              "line": 5,
+              "path": "<workspace>/work/prose-before-abstention/2147ce73-9207-4919-b007-d89655445275/prose-policy.md",
+              "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+              "source_id": "b1351534-4c8d-4294-8293-5c2a36618697"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when calibration is overdue?",
+            "quote": "If calibration is overdue, the resulting status is inspection_required.",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 29,
+            "status": "supported_answer",
+            "task_id": "0274a3b1-5012-4ac5-8075-a0eb12d72959",
+            "temperature": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 47,
+      "question": "What happens when calibration is overdue?",
+      "expected": "inspection_required",
+      "passed": true,
+      "result": {
+        "task_id": "d5f23645-a082-4f63-949c-664aa791d13a",
+        "question": "What happens when calibration is overdue?",
+        "model": "gemma4:e4b",
+        "status": "supported_answer",
+        "excluded_sources": [],
+        "policy": "quote-support-v2",
+        "seed": 47,
+        "temperature": 0.2,
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "checks": {
+          "solver_answer_anchored": true,
+          "support_answered": true,
+          "support_answer_anchored": true,
+          "answers_agree": true
+        },
+        "answer": "inspection_required",
+        "quote": "If calibration is overdue, the resulting status is inspection_required.",
+        "citation": {
+          "source_id": "b1351534-4c8d-4294-8293-5c2a36618697",
+          "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+          "path": "<workspace>/work/prose-before-abstention/2147ce73-9207-4919-b007-d89655445275/prose-policy.md",
+          "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+          "line": 5
+        }
+      },
+      "events": [
+        {
+          "kind": "model_call",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+              "outcome": "answered",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "9394902db35401cbedf153500634ed7173238e85a02d55f48872ba79f3ada9bb",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 80,
+            "prompt_tokens": 301,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 4342390292
+          }
+        },
+        {
+          "kind": "source_proposal",
+          "cookie": "cookie-solver",
+          "payload": {
+            "answer": "inspection_required",
+            "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+            "outcome": "answered",
+            "quote": "If calibration is overdue, the resulting status is inspection_required."
+          }
+        },
+        {
+          "kind": "model_call",
+          "cookie": "cookie-support",
+          "payload": {
+            "answer": {
+              "answer": "inspection_required",
+              "outcome": "answered"
+            },
+            "context": {
+              "question": "What happens when calibration is overdue?",
+              "quote": "If calibration is overdue, the resulting status is inspection_required."
+            },
+            "context_sha256": "184b3516a71420b78f45e7efbbfb23e25267da1908f8f8052abc8ce8d6bdb5a5",
+            "endpoint": "http://127.0.0.1:11434/api/chat",
+            "generation_options": {
+              "num_ctx": 4096,
+              "num_predict": 384,
+              "seed": 47,
+              "temperature": 0.2
+            },
+            "output_tokens": 15,
+            "prompt_tokens": 216,
+            "requested_model": "gemma4:e4b",
+            "returned_model": "gemma4:e4b",
+            "total_duration_ns": 1220124709
+          }
+        },
+        {
+          "kind": "support_check",
+          "cookie": "cookie-support",
+          "payload": {
+            "answers_agree": true,
+            "solver_answer_anchored": true,
+            "support_answer_anchored": true,
+            "support_answered": true
+          }
+        },
+        {
+          "kind": "knowledge_query",
+          "cookie": "cookie-reader",
+          "payload": {
+            "answer": "inspection_required",
+            "checks": {
+              "answers_agree": true,
+              "solver_answer_anchored": true,
+              "support_answer_anchored": true,
+              "support_answered": true
+            },
+            "citation": {
+              "chunk_id": "b1351534-4c8d-4294-8293-5c2a36618697:115",
+              "line": 5,
+              "path": "<workspace>/work/prose-before-abstention/2147ce73-9207-4919-b007-d89655445275/prose-policy.md",
+              "sha256": "946723a21b169987ccfc9d89c486df2c5eca582cacfd4c1e4a1c6b279185e4a8",
+              "source_id": "b1351534-4c8d-4294-8293-5c2a36618697"
+            },
+            "excluded_sources": [],
+            "model": "gemma4:e4b",
+            "policy": "quote-support-v2",
+            "question": "What happens when calibration is overdue?",
+            "quote": "If calibration is overdue, the resulting status is inspection_required.",
+            "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+            "seed": 47,
+            "status": "supported_answer",
+            "task_id": "d5f23645-a082-4f63-949c-664aa791d13a",
+            "temperature": 0.2
+          }
+        }
+      ]
+    }
+  ],
+  "passed": 3
+}

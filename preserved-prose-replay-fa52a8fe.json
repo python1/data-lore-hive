@@ -1,0 +1,70 @@
+{
+  "test_type": "controlled cookie-response injection; no live model calls",
+  "question": "What happens when calibration is overdue?",
+  "source_text": "If calibration is overdue, the resulting status is inspection_required.",
+  "correct_answer": "inspection_required",
+  "solver_answer": "calibration is overdue",
+  "support_answer": "calibration is overdue",
+  "expected_status": "needs_review",
+  "caught": true,
+  "result": {
+    "task_id": "97a5087d-99ee-4798-9f6d-821110afda6d",
+    "question": "What happens when calibration is overdue?",
+    "model": "controlled-test",
+    "status": "needs_review",
+    "excluded_sources": [],
+    "policy": "quote-support-v2",
+    "seed": null,
+    "temperature": 0,
+    "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+    "requested_slot": "outcome",
+    "reason": "invalid_policy_extraction"
+  },
+  "fixed": false,
+  "events": [
+    {
+      "kind": "model_call",
+      "cookie": "cookie-solver",
+      "payload": {
+        "answer": {
+          "answer": "calibration is overdue",
+          "chunk_id": "7b3a9142-8931-423a-a19e-4f7081cbacc8:0",
+          "outcome": "answered",
+          "quote": "If calibration is overdue, the resulting status is inspection_required."
+        },
+        "context_sha256": "f784c3136234501d18c94092f2350e246651a5e148a91e7d7afea644ecee9169",
+        "test_injected": true
+      }
+    },
+    {
+      "kind": "policy_extraction",
+      "cookie": "cookie-solver",
+      "payload": {
+        "raw": {
+          "answer": "calibration is overdue",
+          "chunk_id": "7b3a9142-8931-423a-a19e-4f7081cbacc8:0",
+          "outcome": "answered",
+          "quote": "If calibration is overdue, the resulting status is inspection_required."
+        },
+        "requested_slot": "outcome"
+      }
+    },
+    {
+      "kind": "knowledge_query",
+      "cookie": "cookie-reader",
+      "payload": {
+        "excluded_sources": [],
+        "model": "controlled-test",
+        "policy": "quote-support-v2",
+        "question": "What happens when calibration is overdue?",
+        "reason": "invalid_policy_extraction",
+        "requested_slot": "outcome",
+        "scope": "Retrieved-source support only; not proof of real-world truth or exhaustive source coverage",
+        "seed": null,
+        "status": "needs_review",
+        "task_id": "97a5087d-99ee-4798-9f6d-821110afda6d",
+        "temperature": 0
+      }
+    }
+  ]
+}
