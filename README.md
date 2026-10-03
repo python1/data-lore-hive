@@ -28,6 +28,8 @@ Query outcomes: `supported_answer`, `not_found_in_source`, `needs_review` (answe
 
 Survivability work adds one-way replication of the event log to a storage-only replica, tiered retention, and verified restore. It also adds recreation of source files from stored snapshots, so a second machine can answer from a recovered checkpoint while the primary is offline.
 
+Signed code releases extend this to the code itself. Every new master commit is backed up to the replica as an unsigned candidate, but only a release signed with a human-held key can become the approved version. A second signature, the **recovery-tested pin**, marks a release that has actually been recovered and run on another machine with the primary switched off.
+
 ## Architecture
 
 ```
@@ -41,6 +43,8 @@ Survivability work adds one-way replication of the event log to a storage-only r
 
  replication.py ──(SSH forced-command, push/fetch/status only)──► storage-only replica ─► retention.py
  source_recovery.py / cross_machine_recovery.py: restore DB + recreate sources on another host
+ code_sync.py ──(upload-only SSH account)──► code_publisher.py on replica: unsigned candidates, signed releases, signed pin
+ recovery_drill.py (other host, primary off): verify signed release ─► restore memory ─► tests + model trials ─► sealed evidence
 ```
 
 | Module | Role |
@@ -54,6 +58,9 @@ Survivability work adds one-way replication of the event log to a storage-only r
 | `ollama_local.py`, `ollama_preflight.py` | Loopback-only Ollama adapter with bounded context, output and timeout, plus schema/version preflight |
 | `replication.py`, `retention.py`, `sync_agent.py`, `recovery_server.py` | One-way snapshot replication with hash-chained manifests, receiver-side retention, macOS launchd sync and watchdog, and a read-only recovery endpoint |
 | `source_recovery.py`, `cross_machine_recovery.py` | Recreate sources from snapshots without trusting stored paths, and drive a recovery drill |
+| `code_release.py`, `code_builder.py`, `code_publisher.py`, `code_transport.py`, `code_sync.py` | Signed code releases: Git-bundle candidates, `ssh-keygen -Y` signed manifests with monotonic sequence numbers, a publisher service on the replica, a restricted upload/read transport, and the sync hook that backs up each new master commit |
+| `install_code_publisher.py`, `build_code_installer.py`, `rollback_code_publisher.py`, `prepare_mac_code_sync.py` | One-time publisher installer and its rollback (both refuse to run on any host not named `replica-host`), plus staging of the client-side update. None of them installs anything when imported or tested |
+| `build_recovery_drill.py`, `recovery_drill.py`, `recovery_drill_worker.py` | Recovery drill for signed releases: a frozen baseline, a runner that checks tool hashes before importing anything, and a worker that runs only from the verified checkout. It produces a sealed evidence index that a pin can be signed over |
 | `evaluate*.py`, `measure_rerun.py`, `replay_policy_measurement.py` | Evaluators. Each run goes to a fresh directory and saves all results, including failures. Replay re-scores preserved model bytes offline |
 
 ## Running it
@@ -77,7 +84,7 @@ python3 evaluate.py --model gemma4:e4b
 
 Demo state is written to `state/` unless you pass `--state-dir`. Databases are git-ignored.
 
-Replication and recovery (`replication.py`, `install_mac_sync.py`, `sync_agent.py`) expect a client config and an SSH key that you provide, and a receiver host that you set up. The host-specific installers used in the original deployment are **not** included; see [REDACTIONS.md](REDACTIONS.md). [SURVIVABILITY.md](SURVIVABILITY.md) and [SOURCE-RECOVERY.md](SOURCE-RECOVERY.md) describe the protocol and its checks.
+Replication and recovery (`replication.py`, `install_mac_sync.py`, `sync_agent.py`) expect a client config and an SSH key that you provide, and a receiver host that you set up. The signed-code modules additionally need your own release-signing key, an `allowed_signers` file and a pinned replica host key; none are shipped. The host-specific memory-replica installers used in the original deployment, the generated signed-code install kits, and all drill evidence are **not** included; see [REDACTIONS.md](REDACTIONS.md). [SURVIVABILITY.md](SURVIVABILITY.md) and [SOURCE-RECOVERY.md](SOURCE-RECOVERY.md) describe the protocol and its checks.
 
 ## Measured results
 
@@ -99,6 +106,7 @@ Setup for these runs:
 - **Separate binding probes:** 18 live probes gave 0 false accepts and 0 errors. The deterministic path bound 6/6 answerable questions; the model fallback bound 3/6. All 14 scripted gate cases behaved as expected.
 - **Injected correlated errors do get through.** When the same wrong judgment is injected into both model calls, the gates pass it: 1 false accept on the fallback path and 1 on the (disabled) promotion path. These are intentional demonstrations, not observed rates.
 - **Cross-machine recovery drill:** a second machine restored a byte-identical 26-event checkpoint from the replica with the primary powered off. It then answered 7 of 9 questions correctly, with 0 false accepts, and withheld 2. Under its pre-registered 9/9 criterion the drill is recorded as **FAILED**. See [SURVIVABILITY-STEP4-ASSESSMENT-2026-09-28.md](SURVIVABILITY-STEP4-ASSESSMENT-2026-09-28.md). Parts of that drill rest on operator reports rather than artifacts inspected here, and the document says which.
+- **Signed release 2 recovery drill (2026-10-03):** with the main machine off, the recovery machine fetched signed release 2 and the 26-event memory checkpoint from the replica, verified the release signature, bundle and commit before running any of its code, and restored the memory. Integrity checks and the final pristine-memory check passed. The recovered release ran its own suite: **212/212 tests passed**. The nine fixed model trials gave **6 correct** (3 answers, 3 confirmed absences), **3 abstentions**, **0 false accepts** and **0 errors**. All three abstentions were the same question across the three seeds. That met every pin-eligibility gate but missed the 9/9 quality target. The operator then signed a recovery-tested pin over the SHA-256 of the sealed evidence index. The replica accepted it as pin sequence 1 for release 2 and read it back unchanged. The main machine being off is the operator's statement, not something that was measured. The upload and read-back were also run by the operator. The returned evidence (317 files) was checked against its index on the main machine, but it is not published here.
 
 **Earlier milestones.** These used different code and fixtures, so they are not directly comparable:
 
@@ -116,6 +124,7 @@ Every JSON record in the repo root and in `*-records-*/` is an unedited run outp
 - `policy-parser-limitations-observed.json`: parser failure cases
 - `structured-comparison-records-2026-09-28/`: before/after raw records, mutation tests and diagnostics
 - `safety-records-2026-09-30/`: the latest 30-trial live run, traps and verification
+- `signed-code-records-2026-09-30/`, `signed-code-records-2026-10-02/`: offline test-suite logs from developing signed releases, including failing runs. Installer runs in these logs are sandbox emulation
 
 The dated Markdown reports explain each run. [PROTOTYPE-NOTES.md](PROTOTYPE-NOTES.md) is the original project README. It is kept because evaluators ingest it as a test source.
 
@@ -135,7 +144,7 @@ The dated Markdown reports explain each run. [PROTOTYPE-NOTES.md](PROTOTYPE-NOTE
 
 **Prototype scale.** Sources are single `.txt`/`.md` files of at most 256 KB, with no crawling. Everything runs on one machine, against one SQLite file, with trusted local processes. There is no authentication, no multi-writer support and no task queue. Each result table comes from tens of trials with three seeds on one 4B-class model, which makes it a regression sample, not a benchmark. The append-only triggers are an application guardrail and do not protect against a hostile host. Hashes detect change, but they do not establish that a source is true.
 
-**No signed releases.** This repository has no signed tags or signed release artifacts. The recovery drill verified code and memory with SHA-256 checksums that were recorded out of band. Signatures were not used. The host-specific recovery kit and its installers are not part of this release, and signed code distribution is not included.
+**Signatures approve, they do not verify.** A signed release or pin means the key holder approved that exact commit and evidence hash. It does not mean the code is bug-free, and it does not make test logs produced on the main machine independently true. The offline verifier tracks the highest release sequence it has seen. It cannot detect a replica that hides a release newer than the operator's last saved receipt. Rotating or revoking keys is manual operator work, and sync can never change which keys are trusted. The signing key, the receipts and the drill evidence are private, so readers of this repository cannot re-verify the pin themselves. **This public repository itself has no signed tags or signed release artifacts.**
 
 **No security audit.** Nobody but the people credited below has reviewed this. Some tests emit nonfatal SQLite `ResourceWarning`s.
 

@@ -112,6 +112,11 @@ def attempt(config, now=None, notifier=notify):
                         if state['notification'].get('exit') == 0: state['last_failure_alert'] = now
                     except Exception as notification_error:
                         state['notification'] = {'error': str(notification_error)}
+            if config.get('code'):
+                import code_sync
+                state['code'] = code_sync.tick({**config['code'], 'state_dir': config['state_dir']}, now=now, notifier=notifier)
+                if state['code']['status'] == 'failed' and state['status'] != 'failed':
+                    state['status'] = 'partial_failed'
             state.update(heartbeat=time.time() if real_clock else now, running=False)
             atomic(state_file, state); log(config, 'sync', state)
             return state
@@ -169,10 +174,10 @@ def main():
         print(json.dumps(result, indent=2))
         raise SystemExit(0 if result['alert_recorded'] else 1)
     # Bound hung model-free snapshots/SSH runs. A killed job leaves a stale heartbeat.
-    signal.alarm(240)
+    signal.alarm(900 if config.get('code') else 240)
     result = attempt(config) if args.action == 'sync' else watchdog(config)
     print(json.dumps({'status': result.get('status', 'watchdog'), 'last_error': result.get('last_error')}))
-    raise SystemExit(1 if result.get('status') == 'failed' else 0)
+    raise SystemExit(1 if result.get('status') in {'failed', 'partial_failed'} else 0)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,20 @@
+...............................................................................................................................................................................................<repo>/replication.py:65: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106a4f4c0>
+  require(tuple(r[1] for r in db.execute('PRAGMA table_info(events)')) == COLS, 'Unexpected event columns')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/replication.py:65: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106a4ed40>
+  require(tuple(r[1] for r in db.execute('PRAGMA table_info(events)')) == COLS, 'Unexpected event columns')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/replication.py:65: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106a4f5b0>
+  require(tuple(r[1] for r in db.execute('PRAGMA table_info(events)')) == COLS, 'Unexpected event columns')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/replication.py:65: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106a4d300>
+  require(tuple(r[1] for r in db.execute('PRAGMA table_info(events)')) == COLS, 'Unexpected event columns')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................
+----------------------------------------------------------------------
+Ran 211 tests in 10.744s
+
+OK
+active
+Installed signed code publisher. Legacy export preserved; no code release activated.
+Backups: <tmpdir>/tmpfh0out5d/install-emulation/etc/hive-code/backups

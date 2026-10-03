@@ -1,0 +1,35 @@
+test_auto_sync_idempotence_and_failure_status (test_code_recovery.CodeTests.test_auto_sync_idempotence_and_failure_status) ... ok
+test_bad_valid_candidates_and_signed_broken_release_preserve_pin (test_code_recovery.CodeTests.test_bad_valid_candidates_and_signed_broken_release_preserve_pin) ... ok
+test_builder_exact_master_with_isolated_tests_smoke_and_sensitive_history (test_code_recovery.CodeTests.test_builder_exact_master_with_isolated_tests_smoke_and_sensitive_history) ... ok
+test_clean_bootstrap_receipt_and_rollback (test_code_recovery.CodeTests.test_clean_bootstrap_receipt_and_rollback) ... ok
+test_duplicate_and_rollback_conflicting_sequence (test_code_recovery.CodeTests.test_duplicate_and_rollback_conflicting_sequence) ... ok
+test_explicit_pinned_rescue_does_not_lower_high_watermark (test_code_recovery.CodeTests.test_explicit_pinned_rescue_does_not_lower_high_watermark) ... ok
+test_failing_evidence_cannot_be_approved (test_code_recovery.CodeTests.test_failing_evidence_cannot_be_approved) ... ok
+test_fake_upload_cannot_sign_approve_or_change_pin (test_code_recovery.CodeTests.test_fake_upload_cannot_sign_approve_or_change_pin) ... ok
+test_independent_bootstrap_fetches_all_files_before_verification (test_code_recovery.CodeTests.test_independent_bootstrap_fetches_all_files_before_verification) ... ok
+test_installer_build_compiles_and_has_separate_credentials (test_code_recovery.CodeTests.test_installer_build_compiles_and_has_separate_credentials) ... ok
+test_installer_files_and_service_emulated_without_root (test_code_recovery.CodeTests.test_installer_files_and_service_emulated_without_root) ... ok
+test_interrupted_transfer_and_every_publication_boundary_preserve_current (test_code_recovery.CodeTests.test_interrupted_transfer_and_every_publication_boundary_preserve_current) ... ok
+test_orphan_after_crash_cleaned_without_dropping_current (test_code_recovery.CodeTests.test_orphan_after_crash_cleaned_without_dropping_current) ... ok
+test_oversized_and_budget_refusal_preserve_memory (test_code_recovery.CodeTests.test_oversized_and_budget_refusal_preserve_memory) ... ok
+test_readonly_api_rejects_writes_shell_retention_and_path_escape (test_code_recovery.CodeTests.test_readonly_api_rejects_writes_shell_retention_and_path_escape) ... ok
+test_real_memory_retention_and_code_publish_concurrently (test_code_recovery.CodeTests.test_real_memory_retention_and_code_publish_concurrently) ... ok
+test_receive_never_executes_bundle_code (test_code_recovery.CodeTests.test_receive_never_executes_bundle_code) ... ok
+test_reserve_refusal_and_clock_rollback_preserve_approved (test_code_recovery.CodeTests.test_reserve_refusal_and_clock_rollback_preserve_approved) ... ok
+test_shared_lock_serializes_memory_and_code (test_code_recovery.CodeTests.test_shared_lock_serializes_memory_and_code) ... ok
+test_source_branch_and_experimental_refs_excluded (test_code_recovery.CodeTests.test_source_branch_and_experimental_refs_excluded) ... ok
+test_unsigned_wrong_key_modified_and_incomplete_refused (test_code_recovery.CodeTests.test_unsigned_wrong_key_modified_and_incomplete_refused) ... ok
+test_unsupported_compatibility_and_wrong_namespace_fail_closed (test_code_recovery.CodeTests.test_unsupported_compatibility_and_wrong_namespace_fail_closed) ... ok
+test_upload_bridge_refuses_shell_before_opening_socket (test_code_recovery.CodeTests.test_upload_bridge_refuses_shell_before_opening_socket) ... ok
+test_valid_same_number_conflict_and_signed_pin_replay (test_code_recovery.CodeTests.test_valid_same_number_conflict_and_signed_pin_replay) ... ok
+test_code_attempt_runs_even_if_memory_is_unreachable (test_code_sync_integration.CodeSyncIntegrationTests.test_code_attempt_runs_even_if_memory_is_unreachable) ... ok
+test_mac_staging_does_not_modify_installed_files (test_code_sync_integration.CodeSyncIntegrationTests.test_mac_staging_does_not_modify_installed_files) ... ok
+test_memory_success_survives_code_failure_with_visible_partial_status (test_code_sync_integration.CodeSyncIntegrationTests.test_memory_success_survives_code_failure_with_visible_partial_status) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 9.118s
+
+OK
+active
+Installed signed code publisher. Legacy export preserved; no code release activated.
+Backups: <tmpdir>/tmpr6q3cisp/install-emulation/etc/hive-code/backups

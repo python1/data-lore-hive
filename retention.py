@@ -100,6 +100,9 @@ def accept(config, stream, now=None):
             r.require(r.usage(global_root) + size <= r.BUDGET, 'Combined storage budget exceeded')
             r.require(shutil.disk_usage(root).free - size >= config.get('reserve', r.RESERVE), 'Free-space reserve would be breached')
         with tempfile.TemporaryDirectory(prefix='.incoming-', dir=root) as temp:
+            # Root-installed default ACL grants only the code publisher read/traverse.
+            # mkdtemp's 0700 would mask it; widen the mask before receiving data.
+            if config.get('code_budget_reader') is True:os.chmod(temp, 0o750)
             r.receive(stream, temp, preflight, max_snapshot=MAX_SNAPSHOT)
             m = r.validate(temp, identity); preflight(0)
             previous = state['current']

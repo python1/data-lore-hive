@@ -1,5 +1,62 @@
 # Public release redactions
 
+## Update 2: signed code releases (private master `b1fd9d4`, tag `recovery-tested-pin-2026-10-03`)
+
+The files added or changed in the private repository between `31dde0f` and `b1fd9d4bcaf6c6e83bd6db04cf858c2cb44c93d4` were exported with `git archive` and redacted under the same rules as the first release, extended as described below. Git history is still not included. The full offline suite now has 226 tests. On this tree 225 pass and 1 is skipped (see Code changes).
+
+### Removed files (update 2)
+
+**84 of the 114 new files were removed**, as were the private `PROJECT-STATE.md` changes (that file was already excluded):
+
+- `signed-code-install-kit-2026-09-30/`, `-final-`, `-v3-`, `-v4-`: generated install kits (33 files). They contain embedded payloads, checksums and installer scripts for one specific replica host. `build_code_installer.py` regenerates an equivalent kit from the included sources.
+- `recovery-drill-records-2026-10-02/` and `recovery-drill-records-2026-10-03/`: drill evidence (48 files). This covers the local rehearsal and Mac-off drill evidence, the baseline, the signed pin manifest and signature, the upload envelope, the phone receipt, the operator read-back and a live probe of the replica.
+- `SIGNED-CODE-RECOVERY-HANDOFF.md` and `SIGNED-RECOVERY-DRILL-REVIEW.md`: operator runbooks. They contain key-creation and installation steps, kit checksums, key fingerprints, LAN addresses and home-directory paths. The trust model and the drill results they describe are summarised in the README.
+- `signed-code-records-2026-10-02/release-1-operator-report.md`: an operator receipt containing a signing-key fingerprint.
+
+No `allowed_signers`, `known_hosts`, public-key, receipt, `.sqlite3` or HiveSync configuration file is included. Code and tests that need these build throwaway fixtures at run time. The signing and host-key fingerprints hard-coded in `build_recovery_drill.py` were replaced with placeholders (see below).
+
+### Placeholder substitutions (update 2)
+
+These are applied in addition to the table further down:
+
+| Original | Replacement |
+|---|---|
+| real release-signing key fingerprint | `<release-signing-key-fingerprint>` |
+| real replica SSH host-key fingerprint | `<replica-host-key-fingerprint>` |
+| replica LAN address in code and tests | `replica-host` (used as an SSH host name) |
+| LAN gateway address passed to `sshd -T -C addr=` | `192.0.2.1` (RFC 5737 documentation address; `sshd -T` needs a literal IP) |
+| replica hostname checked by the installer and rollback | `replica-host` |
+| replica container ID in docstrings, messages and generated kit filenames | `replica CT`, `install-replica-ct-code.py`, `rollback-replica-ct-code.py` |
+| recovery machine brand name | `recovery host` |
+| repository path and macOS temporary directory in test logs | `<repo>`, `<tmpdir>` |
+
+Kept on purpose: the code-level account names (`hive-recovery`, `hive-code-upload`, `hive-code-publisher`), the signed-manifest project identifier `aster-hive` (the engineering agent is credited by name in the README), and the release commit, manifest, checkpoint and model digests used as fixed drill criteria in `recovery_drill.py`. These identify content, not people or hosts.
+
+### Code changes (update 2)
+
+- `build_recovery_drill.py`: the `SIGNER` and `HOST` fingerprint constants are placeholders, and the expected known-hosts entry is `replica-host`. Generating a real baseline requires setting your own values. The tests patch these constants, as they did before redaction.
+- `recovery_drill.py`: the SSH destination is `hive-recovery@replica-host`, and one message now says "recovery-host user".
+- `install_code_publisher.py`, `rollback_code_publisher.py`: the hostname check is `replica-host`, the `sshd -T` probe address is `192.0.2.1`, and the docstrings and messages say "replica CT".
+- `build_code_installer.py`, `test_code_recovery.py`: the generated installer and rollback filenames no longer contain the container ID.
+- `test_recovery_drill.py`: the fixture known-hosts address is `replica-host`. `test_real_integrity_worker_restores_only_isolated_sources` clones this repository and checks out signed release 2's commit (`c8a784e…`). That commit exists only in the private history, so the test now skips when the commit is absent. Against the private repository it still runs and passes.
+- `retention.py`, `sync_agent.py`: the upstream changes were applied unmodified on top of the first public release.
+
+### Per-file substitution counts (update 2)
+
+```
+build_code_installer.py: ct-id-lc=3
+build_recovery_drill.py: host-fp=1, ip-replica=1, signing-fp=1
+install_code_publisher.py: ct-id=2, hostname=3, ip-gateway=1
+recovery_drill.py: device=1, ip-replica=1
+rollback_code_publisher.py: ct-id=2, hostname=1
+signed-code-records-2026-09-30/*.txt (13 files): mac-tmpdir=17, repo-path=24
+signed-code-records-2026-10-02/*.txt (2 files): mac-tmpdir=2, repo-path=4
+test_code_recovery.py: ct-id-lc=2, hostname=1
+test_recovery_drill.py: ip-replica=3
+```
+
+## First release (private master `31dde0f`)
+
 This tree was exported with `git archive` from master commit `31dde0f580282f0751141421ee45a8fb82e2551c` of the private repository. Git history is not included. After export, operator records for private machines were removed, and private identifiers in the remaining files were replaced with placeholders. Code behaviour is unchanged apart from the three edits listed under Code changes. The full offline test suite (182 tests) passes after redaction.
 
 ## Removed files

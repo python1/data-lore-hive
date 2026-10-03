@@ -1,0 +1,20 @@
+....................................................................................................................................................................................<repo>/knowledge.py:39: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x109d48e50>
+  rows = db.execute("SELECT id,payload FROM events WHERE kind='source_ingested' ORDER BY sequence DESC").fetchall()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/knowledge.py:39: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x109d49120>
+  rows = db.execute("SELECT id,payload FROM events WHERE kind='source_ingested' ORDER BY sequence DESC").fetchall()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/knowledge.py:39: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x109d4b3d0>
+  rows = db.execute("SELECT id,payload FROM events WHERE kind='source_ingested' ORDER BY sequence DESC").fetchall()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/knowledge.py:39: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x109d49210>
+  rows = db.execute("SELECT id,payload FROM events WHERE kind='source_ingested' ORDER BY sequence DESC").fetchall()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+................................
+----------------------------------------------------------------------
+Ran 212 tests in 12.120s
+
+OK
+active
+Installed signed code publisher. Legacy export preserved; no code release activated.
+Backups: <tmpdir>/tmp9los85nh/install-emulation/etc/hive-code/backups
