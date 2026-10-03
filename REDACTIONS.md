@@ -1,5 +1,19 @@
 # Public release redactions
 
+## Update 3: release-2 drill evidence (`evidence/release-2-drill/`)
+
+This update publishes what is needed to verify the release-2 recovery-tested pin. **Signed and hashed files were copied byte-for-byte and never edited.** A file that failed the leak scan was withheld whole. No file was redacted.
+
+- **Sources:** the signed release-2 approval directory on the main machine, and the drill evidence archive returned from the recovery machine. The archive's SHA-256 (`492cc9a1…aca690`) was checked before use. The pin manifest and signature were taken from the pin upload envelope and are byte-identical to the standalone signed files.
+- **Published on purpose:** the release-signing **public** key (`allowed_signers`, identity `aster-hive`, fingerprint `SHA256:ZozTASM/tPWZPMpUaYnP5tYJsVWNbANnRnjjYkx5j4A`). Update 2 replaced this fingerprint with a placeholder. It is now public so that the signatures can be verified. `build_recovery_drill.py` keeps its placeholder constant.
+- **Published unchanged:** the release-2 `manifest.json` and `manifest.sig`, `pin-manifest.json` and `pin-manifest.json.sig`, `run/evidence-index.json`, and the 28 indexed evidence files that passed the scan, each at its indexed path under `run/`.
+- **Withheld by rule (271 files):** the Git bundle (`release/hive.bundle` and its identical download copy), the 261-file `recovered-code/` checkout, every SQLite file and the memory checkpoint stream, `known_hosts`, `baseline.json`, and the release phone receipt.
+- **Withheld by the leak scan (18 files):** 16 command records, worker reports, trial records and event dumps contain the replica's LAN address, the recovery machine's account name, or home-directory paths. `release/evidence.json` and its download copy contain the main machine's macOS per-user temporary directory.
+- **Leak scan patterns:** private IPv4 ranges; the usernames and hostnames listed in this file; `/Users/`, `/home/<name>`, `/root/` and Windows home paths; macOS per-user temporary directories; any SSH fingerprint other than the signing key's; SSH public-key blobs; and the update-1 identifiers (recovery machine brand, replica container ID, replica hostname, operator's first name, workspace name). A generic `/tmp/tmp…` sandbox path was not treated as a leak.
+- **Known exception:** `run/evidence-index.json` is sealed and signed over, so it could not be edited. It lists the filenames of the withheld `recovered-code/` checkout, and some of those names contain the recovery machine's brand and the replica container ID, which update 1 removed from text. `VERIFY.md` and `withheld.json` repeat those paths together with their hashes. The index contains no IP addresses, usernames, home paths or fingerprints.
+
+`withheld.json` lists each withheld path with its index hash and a generic reason. `verify_evidence.py` fails if any indexed file is neither present with a matching hash nor listed there.
+
 ## Update 2: signed code releases (private master `b1fd9d4`, tag `recovery-tested-pin-2026-10-03`)
 
 The files added or changed in the private repository between `31dde0f` and `b1fd9d4bcaf6c6e83bd6db04cf858c2cb44c93d4` were exported with `git archive` and redacted under the same rules as the first release, extended as described below. Git history is still not included. The full offline suite now has 226 tests. On this tree 225 pass and 1 is skipped (see Code changes).
