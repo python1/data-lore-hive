@@ -30,6 +30,8 @@ Survivability work adds one-way replication of the event log to a storage-only r
 
 Signed code releases extend this to the code itself. Every new master commit is backed up to the replica as an unsigned candidate, but only a release signed with a human-held key can become the approved version. A second signature, the **recovery-tested pin**, marks a release that has actually been recovered and run on another machine with the primary switched off.
 
+[`agent-memory/`](agent-memory/README.md) is a separate, self-contained pipeline. It turns your own Telegram JSON chat export into cited memory for your local agent: secrets are masked, a model proposes dated records in two attributed voices, code verifies every quote word for word, a second model audits each record, and you approve what is exported.
+
 ## Architecture
 
 ```
@@ -151,7 +153,7 @@ The dated Markdown reports explain each run. [PROTOTYPE-NOTES.md](PROTOTYPE-NOTE
 
 ## Repository layout
 
-The Python code and tests are at the top level. The design and results documents are the upper-case `.md` files, and records are the `.json` files plus the `*-records-*/` folders. Each record is kept alongside the report that describes it.
+The Python code and tests are at the top level, except for the self-contained [`agent-memory/`](agent-memory/README.md) folder. The design and results documents are the upper-case `.md` files, and records are the `.json` files plus the `*-records-*/` folders. Each record is kept alongside the report that describes it.
 
 ## Credits
 

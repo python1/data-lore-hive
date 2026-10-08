@@ -1,0 +1,6 @@
+# Run directories and exports hold personal data. Never commit them.
+runs/
+exports/
+# A real Telegram Desktop export, if someone copies one in here by mistake.
+result.json
+ChatExport_*/

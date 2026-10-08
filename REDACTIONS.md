@@ -1,5 +1,23 @@
 # Public release redactions
 
+## Update 4: agent memory (`agent-memory/`)
+
+This update adds a new folder of code, tests and an invented sample. It was written for this release by adapting the Python sources of a private pipeline: the phase-0 inventory and secret masking, the lore extraction and audit runners, quote verification, and the bundle export and search. **Only those `.py` files were read.** Nothing else from the private run was opened, listed or copied: no Telegram data, no `local/` run directories, no `result.json`, and no reports, spreadsheets or JSONL records.
+
+- **Not carried over:**
+  - the names of the two people whose chat the private run used. The voices are now configurable (`--user-name`, `--agent-name`; defaults `User` and `Agent`).
+  - their hard-coded Telegram sender IDs
+  - the frozen export's SHA-256 and its file path, including a home-directory path
+  - the private run's approval labels and dates, its record, chunk and refusal counts, and its chunk indices and pilot dates
+  - a sealed commit prefix and a replica container reference
+  - a hard-coded review time zone. Everything is now UTC.
+  - product and assistant names in keyword lists
+  - the description of the relationship between the two people in the prompts
+- **Rewritten, not copied:** the prompts were generalised to a human voice and an agent voice. The private layout (frozen copies under `local/`, canary receipts, and pilot gates tied to specific dates and chunks) was replaced by a run directory, a frozen chunk plan and `--max-chunks` pilots. The SQLite full-text index was replaced by plain-text search over `records.jsonl`. The message-ID collision refusal became a one-chat-per-run rule.
+- **Sample:** `agent-memory/sample/telegram-export.json` is invented. The people, sender IDs (`user1000001`, `user2000002`), chat ID, messages and the masked "password" are fictional.
+- **No results:** the folder reports no measurements, quotes, hashes or counts from the private run. The only hashes in it are computed by the tests or from the sample.
+- **Leak scan of the diff:** private IPv4 ranges; the usernames, hostnames and update-1 identifiers listed in this file; `/Users/`, `/home/<name>`, `/root/` and Windows home paths; macOS per-user temporary directories; 64-hex SHA-256 values and 40-hex commit IDs; Telegram-style sender IDs other than the two fictional ones; the two private voice names; and the private time zone.
+
 ## Update 3: release-2 drill evidence (`evidence/release-2-drill/`)
 
 This update publishes what is needed to verify the release-2 recovery-tested pin. **Signed and hashed files were copied byte-for-byte and never edited.** A file that failed the leak scan was withheld whole. No file was redacted.

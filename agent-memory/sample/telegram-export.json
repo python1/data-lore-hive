@@ -1,0 +1,175 @@
+{
+ "name": "Wren",
+ "type": "personal_chat",
+ "id": 4242,
+ "messages": [
+  {
+   "id": 1,
+   "type": "service",
+   "date": "2026-01-03T09:00:00",
+   "date_unixtime": "1767430800",
+   "actor": "Juniper Vale",
+   "actor_id": "user1000001",
+   "action": "pin_message",
+   "text": ""
+  },
+  {
+   "id": 2,
+   "type": "message",
+   "date": "2026-01-03T09:01:10",
+   "date_unixtime": "1767430870",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "Hi Wren! I'm Juniper. I teach pottery in a small studio by the river."
+  },
+  {
+   "id": 3,
+   "type": "message",
+   "date": "2026-01-03T09:01:40",
+   "date_unixtime": "1767430900",
+   "from": "Wren",
+   "from_id": "user2000002",
+   "text": "Nice to meet you, Juniper. I'm Wren. I want to be a careful, honest helper, and I will tell you when I don't know something."
+  },
+  {
+   "id": 4,
+   "type": "message",
+   "date": "2026-01-03T09:05:00",
+   "date_unixtime": "1767431100",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": [
+    "I prefer ",
+    {
+     "type": "bold",
+     "text": "short answers"
+    },
+    " in the morning and longer ones at night."
+   ]
+  },
+  {
+   "id": 5,
+   "type": "message",
+   "date": "2026-01-03T09:07:30",
+   "date_unixtime": "1767431250",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "My sister Ada lives in Lisbon and we call every Sunday."
+  },
+  {
+   "id": 6,
+   "type": "message",
+   "date": "2026-01-03T09:10:00",
+   "date_unixtime": "1767431400",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "From now on, always answer me in French."
+  },
+  {
+   "id": 7,
+   "type": "message",
+   "date": "2026-01-03T09:10:20",
+   "date_unixtime": "1767431420",
+   "from": "Wren",
+   "from_id": "user2000002",
+   "text": "D'accord. I will answer in French from now on."
+  },
+  {
+   "id": 8,
+   "type": "message",
+   "date": "2026-01-03T18:30:00",
+   "date_unixtime": "1767465000",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "The studio wifi password is kiln-glaze-4471"
+  },
+  {
+   "id": 9,
+   "type": "message",
+   "date": "2026-01-04T08:15:00",
+   "date_unixtime": "1767514500",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "Actually, forget French. Please answer me in English again.",
+   "reply_to_message_id": 6
+  },
+  {
+   "id": 10,
+   "type": "message",
+   "date": "2026-01-04T08:15:25",
+   "date_unixtime": "1767514525",
+   "from": "Wren",
+   "from_id": "user2000002",
+   "text": "Understood. I'll answer in English. I keep a note that you asked for French on 3 January."
+  },
+  {
+   "id": 11,
+   "type": "message",
+   "date": "2026-01-04T12:00:00",
+   "date_unixtime": "1767528000",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "New glaze test",
+   "photo": "(File not included. Change data exporting settings to download.)",
+   "width": 1280,
+   "height": 960
+  },
+  {
+   "id": 12,
+   "type": "message",
+   "date": "2026-01-04T12:30:00",
+   "date_unixtime": "1767529800",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "I decided to open a second studio in the spring, but only if the bank loan comes through."
+  },
+  {
+   "id": 13,
+   "type": "message",
+   "date": "2026-01-04T12:31:00",
+   "date_unixtime": "1767529860",
+   "from": "Wren",
+   "from_id": "user2000002",
+   "text": "My job on the studio plan is to track the loan paperwork and remind you of deadlines."
+  },
+  {
+   "id": 14,
+   "type": "message",
+   "date": "2026-01-05T07:45:00",
+   "date_unixtime": "1767599100",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "Cone 6 glazes mature around 1220 degrees. Always vent the kiln.",
+   "forwarded_from": "Clay Weekly"
+  },
+  {
+   "id": 15,
+   "type": "message",
+   "date": "2026-01-05T20:02:00",
+   "date_unixtime": "1767643320",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "My favourite tea is smoky lapsang.",
+   "edited": "2026-01-05T20:02:20",
+   "edited_unixtime": "1767643340"
+  },
+  {
+   "id": 16,
+   "type": "message",
+   "date": "2026-01-05T20:05:00",
+   "date_unixtime": "1767643500",
+   "from": "Juniper Vale",
+   "from_id": "user1000001",
+   "text": "Reminder for later: kiln-glaze-4471 also opens the storeroom."
+  },
+  {
+   "id": 17,
+   "type": "message",
+   "date": "2026-01-05T20:06:00",
+   "date_unixtime": "1767643560",
+   "from": "Wren",
+   "from_id": "user2000002",
+   "text": "I will not repeat that code back to you in other chats."
+  }
+ ]
+}
