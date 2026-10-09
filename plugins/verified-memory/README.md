@@ -190,3 +190,7 @@ Consult `VALIDATION.md` for the actual tested host/SDK scope and remaining limit
 ## License
 
 MIT — see [LICENSE](LICENSE). All functionality is free and open; no paid tier.
+
+## Quote fidelity
+
+Tool results are verified and exact. A model may still alter wording when restating them (for example, changing punctuation). Instruct your agent to quote `verified_memory_search` / `verified_memory_get` results verbatim and cite the record ID.
