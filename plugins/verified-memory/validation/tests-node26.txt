@@ -1,0 +1,32 @@
+✔ real SDK entry registers exactly declared tools and matching config schema (4.374959ms)
+✔ search returns attributed verbatim citation and ID retrievable as a full record (0.679208ms)
+✔ agent voice retained; all query terms required; unknown IDs and no hits are explicit (0.646583ms)
+✔ tampered records.jsonl refuses load before any tool is registered (2.3825ms)
+✔ tampered MEMORY.md refuses load before any tool is registered (1.58225ms)
+✔ tampered README.md refuses load before any tool is registered (1.876583ms)
+✔ manifest duplicate rejected (1.702416ms)
+✔ manifest missing rejected (1.938583ms)
+✔ manifest traversal rejected (1.513709ms)
+✔ manifest malformed rejected (1.4645ms)
+✔ manifest self rejected (1.49025ms)
+✔ missing, extra and symlink files rejected (2.099041ms)
+✔ symlink pack root rejected (1.402666ms)
+✔ correctly hashed but invalid records: duplicate-id (1.97225ms)
+✔ correctly hashed but invalid records: broken-json (1.902959ms)
+✔ correctly hashed but invalid records: missing-citations (1.700416ms)
+✔ correctly hashed but invalid records: wrong-offset (1.67525ms)
+✔ correctly hashed but invalid records: invalid-utf8 (1.613166ms)
+✔ immutable verified snapshot survives disk edits and result mutation (1.827375ms)
+✔ old instructions stay historical quoted data, including later correction (0.365541ms)
+✔ invalid config and input rejected without arbitrary file lookup (0.419ms)
+✔ runtime succeeds with filesystem writes, network, subprocesses and workers denied (161.628458ms)
+✔ sample citations match the public fictional source exactly (2.417292ms)
+✔ plugin coexists with the default memory tools (0.393792ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 427.523209

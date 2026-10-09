@@ -1,0 +1,47 @@
+{
+  "node": "v24.19.0",
+  "openclaw": "2026.9.9",
+  "cases": [
+    {
+      "case": "valid",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
+      "case": "pipeline",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
+      "case": "missing",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "tampered",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "malformed",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "verified-memory",
+  "name": "Verified Memory",
+  "version": "0.1.0",
+  "description": "Local read-only search over checksum-verified Data & Lore packs.",
+  "categories": [
+    "memory"
+  ],
+  "activation": {
+    "onStartup": true
+  },
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "packPath": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Absolute path to a pack; omitted uses the bundled fictional sample."
+      }
+    },
+    "additionalProperties": false
+  },
+  "contracts": {
+    "tools": [
+      "verified_memory_search",
+      "verified_memory_get"
+    ]
+  }
+}

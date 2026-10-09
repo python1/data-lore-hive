@@ -1,0 +1,50 @@
+{
+  "name": "@data-lore-hive/verified-memory",
+  "version": "0.1.0",
+  "description": "Read-only, checksum-verified Data & Lore memory tools",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "sample-pack",
+    "openclaw.plugin.json",
+    "README.md",
+    "LICENSE",
+    "VALIDATION.md",
+    "validation"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "sample": "python3 scripts/build-sample.py",
+    "test:host": "npm run build && node scripts/host-smoke.mjs",
+    "plugin:build": "npm run build && node scripts/authoring.mjs build",
+    "plugin:validate": "npm run build && node scripts/authoring.mjs validate --json",
+    "plugin:check": "npm run build && node scripts/authoring.mjs build --check",
+    "test:conversation": "npm run build && node scripts/conversation-smoke.mjs"
+  },
+  "engines": {
+    "node": ">=24.16.0 <25 || >=26.1.0"
+  },
+  "dependencies": {
+    "typebox": "1.3.34"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.9.9"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0",
+    "openclaw": "2026.9.9"
+  },
+  "openclaw": {
+    "extensions": [
+      "./dist/index.js"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.9.9",
+      "minGatewayVersion": "2026.9.9"
+    }
+  }
+}

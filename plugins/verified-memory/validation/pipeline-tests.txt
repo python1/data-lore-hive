@@ -1,0 +1,5 @@
+python3 -m unittest discover -s tests
+Ran 36 tests
+OK
+
+Fictional fixtures only; the local HTTP stub required loopback socket permission.

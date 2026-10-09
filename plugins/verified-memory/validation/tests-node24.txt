@@ -1,0 +1,44 @@
+
+> @data-lore-hive/verified-memory@0.1.0 test
+> npm run build && node --test test/*.test.mjs
+
+
+> @data-lore-hive/verified-memory@0.1.0 build
+> tsc
+
+✔ real SDK entry registers exactly declared tools and matching config schema (4.2635ms)
+✔ search returns attributed verbatim citation and ID retrievable as a full record (0.922208ms)
+✔ agent voice retained; all query terms required; unknown IDs and no hits are explicit (0.85025ms)
+✔ tampered records.jsonl refuses load before any tool is registered (3.168458ms)
+✔ tampered MEMORY.md refuses load before any tool is registered (1.849292ms)
+✔ tampered README.md refuses load before any tool is registered (1.92325ms)
+✔ manifest duplicate rejected (1.685125ms)
+✔ manifest missing rejected (1.660083ms)
+✔ manifest traversal rejected (1.688666ms)
+✔ manifest malformed rejected (1.727709ms)
+✔ manifest self rejected (1.497708ms)
+✔ missing, extra and symlink files rejected (2.096458ms)
+✔ symlink pack root rejected (1.555ms)
+✔ correctly hashed but invalid records: duplicate-id (2.099833ms)
+✔ correctly hashed but invalid records: broken-json (1.802166ms)
+✔ correctly hashed but invalid records: missing-citations (1.756334ms)
+✔ correctly hashed but invalid records: wrong-offset (2.01675ms)
+✔ correctly hashed but invalid records: invalid-utf8 (1.782042ms)
+✔ immutable verified snapshot survives disk edits and result mutation (2.220166ms)
+✔ old instructions stay historical quoted data, including later correction (0.457458ms)
+✔ invalid config and input rejected without arbitrary file lookup (0.50275ms)
+✔ runtime succeeds with filesystem writes, network, subprocesses and workers denied (228.228375ms)
+✔ sample citations match the public fictional source exactly (2.035958ms)
+✔ plugin coexists with the default memory tools (0.423ms)
+✔ missing configured pack gives actionable error and registers zero tools (1.859625ms)
+✔ registrations retain separate verified snapshots (2.868ms)
+✔ public pipeline exporter produces accepted pack and callable cited tools (162.291958ms)
+✔ official authoring metadata can be read without permission to read any pack (223.465125ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 984.129625
