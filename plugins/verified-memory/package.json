@@ -1,5 +1,5 @@
 {
-  "name": "@data-lore-hive/verified-memory",
+  "name": "@python1/verified-memory",
   "version": "0.1.0",
   "description": "Read-only, checksum-verified Data & Lore memory tools",
   "license": "MIT",
@@ -45,6 +45,9 @@
     "compat": {
       "pluginApi": ">=2026.9.9",
       "minGatewayVersion": "2026.9.9"
+    },
+    "build": {
+      "openclawVersion": "2026.9.9"
     }
   }
 }
