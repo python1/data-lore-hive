@@ -165,3 +165,5 @@ The Python code and tests are at the top level, except for the self-contained [`
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+☕ Support this project: https://buymeacoffee.com/python1
