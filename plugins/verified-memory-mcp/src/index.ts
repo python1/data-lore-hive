@@ -1,10 +1,16 @@
+#!/usr/bin/env node
+import { existsSync } from 'node:fs';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createServer } from './server.js';
 
 try {
   const args = process.argv.slice(2);
   if (args.length !== 0 && (args.length !== 2 || args[0] !== '--pack' || !args[1])) {
-    throw new Error('Usage: node dist/index.js [--pack /absolute/path/to/pack]');
+    throw new Error('Usage: verified-memory-mcp [--pack /absolute/path/to/pack]');
+  }
+  // The npm package ships no pack; only a repository build has the fictional sample.
+  if (args.length === 0 && !existsSync(new URL('../sample-pack/', import.meta.url))) {
+    throw new Error('Usage: verified-memory-mcp --pack /absolute/path/to/pack (no bundled sample pack in this install)');
   }
   const server = createServer(args[1]);
   // No transport connection (and no stdout) until verification succeeds.

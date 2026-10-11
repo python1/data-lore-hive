@@ -3,13 +3,28 @@
 Free, MIT-licensed local **stdio MCP server** exposing `verified_memory_search`
 and `verified_memory_get` using the official
 [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk/tree/v1.x)
-(`@modelcontextprotocol/sdk` 1.32.1). Private development package: no publishing step.
+(`@modelcontextprotocol/sdk` 1.32.1). Prepared for npm as `@python1/verified-memory-mcp`
+and for the MCP Registry as `io.github.python1/verified-memory`; not yet published.
 
 Runtime is read-only and offline: no network transport, sockets, telemetry,
 embeddings, accounts, filesystem writes, subprocesses or shell execution. It reads
 one configured pack at startup and serves an isolated in-memory snapshot. Stdout
 is exclusively MCP protocol output; startup errors go to stderr and exit nonzero.
 Only these two tools are exposed; no resources, prompts, filesystem or command tools.
+
+## Run with npx (after publishing)
+
+The npm package contains only `dist/`, this README and LICENSE. It ships **no pack**,
+so `--pack` is required:
+
+```sh
+npx -y @python1/verified-memory-mcp --pack /absolute/path/to/pack
+```
+
+Claude Code: `claude mcp add verified-memory -- npx -y @python1/verified-memory-mcp --pack /absolute/path/to/pack`.
+Running through npx does not apply Node's permission mode, because npx starts its own
+Node process. For the read-only filesystem allowlist described below, install the
+package and run its `dist/index.js` with `node` directly.
 
 ## Build and run
 
@@ -63,8 +78,9 @@ No configuration is installed or edited automatically.
 }
 ```
 
-Omitting `--pack` uses the bundled fictional Juniper Vale/Wren sample regardless
-of the client's working directory. To use your own pack, append
+In a repository build, omitting `--pack` uses the bundled fictional Juniper Vale/Wren
+sample regardless of the client's working directory. An npm install has no sample and
+refuses to start without `--pack`. To use your own pack, append
 `"--pack", "/absolute/path/to/pack"` to `args`, and also add
 `"--allow-fs-read=/absolute/path/to/pack"` before the entry-point argument.
 Choose a pack that the connecting client is permitted to read.
@@ -145,6 +161,7 @@ plugins/verified-memory-mcp/
 ├── VALIDATION.md
 ├── package.json
 ├── package-lock.json
+├── server.json             # MCP Registry metadata
 ├── tsconfig.json
 ├── scripts/prepare.mjs
 ├── src/
