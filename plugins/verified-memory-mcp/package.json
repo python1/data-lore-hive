@@ -1,8 +1,23 @@
 {
   "name": "@python1/verified-memory-mcp",
   "version": "0.1.0",
-  "private": true,
   "description": "Local read-only stdio MCP server for checksum-verified memory packs",
+  "mcpName": "io.github.python1/verified-memory",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/python1/data-lore-hive.git",
+    "directory": "plugins/verified-memory-mcp"
+  },
+  "bin": {
+    "verified-memory-mcp": "dist/index.js",
+    "verified-memory-build-pack": "tools/build-pack.mjs"
+  },
+  "files": [
+    "dist",
+    "tools/build-pack.mjs",
+    "README.md",
+    "LICENSE"
+  ],
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -11,7 +26,8 @@
   "scripts": {
     "build": "node scripts/prepare.mjs && tsc",
     "start": "node dist/index.js",
-    "test": "npm run build && node --test test/*.test.mjs"
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepublishOnly": "npm test"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.1",

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.python1/verified-memory",
+  "title": "Verified Memory",
+  "description": "Read-only, offline search over a checksum-verified memory pack, with exact cited quotes",
+  "repository": {
+    "url": "https://github.com/python1/data-lore-hive",
+    "source": "github",
+    "subfolder": "plugins/verified-memory-mcp"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@python1/verified-memory-mcp",
+      "version": "0.1.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "named",
+          "name": "--pack",
+          "valueHint": "pack_dir",
+          "description": "Absolute path to a pack directory containing exactly MEMORY.md, README.md, records.jsonl and SHA256SUMS. The whole pack is verified at startup; the server refuses to start if any check fails.",
+          "format": "filepath",
+          "isRequired": true
+        }
+      ]
+    }
+  ]
+}
