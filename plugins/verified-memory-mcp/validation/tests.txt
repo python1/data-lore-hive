@@ -1,0 +1,41 @@
+
+> @python1/verified-memory-mcp@0.1.0 test
+> npm run build && node --test test/*.test.mjs
+
+
+> @python1/verified-memory-mcp@0.1.0 build
+> node scripts/prepare.mjs && tsc
+
+✔ build reuses byte-identical verifier and fictional pack without modifying source plugin (2.080083ms)
+✔ valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP (13.535666ms)
+✔ no matches, unknown ID, historical instructions and lexical semantics preserved (2.129375ms)
+✔ invalid requests return errors without path lookup or extra tool capabilities (2.643084ms)
+✔ tampered MEMORY.md: startup refuses with no stdout (149.3005ms)
+✔ tampered README.md: startup refuses with no stdout (151.536083ms)
+✔ tampered records.jsonl: startup refuses with no stdout (153.962792ms)
+✔ malformed rehashed pack broken-json: startup refuses (151.572125ms)
+✔ malformed rehashed pack invalid-utf8: startup refuses (150.221ms)
+✔ malformed rehashed pack duplicate-id: startup refuses (151.060083ms)
+✔ malformed rehashed pack missing-citations: startup refuses (152.288291ms)
+✔ malformed rehashed pack wrong-offset: startup refuses (155.519958ms)
+✔ malformed rehashed pack invalid-id: startup refuses (158.668917ms)
+✔ malformed rehashed pack invalid-date: startup refuses (155.226792ms)
+✔ malformed rehashed pack invalid-hash: startup refuses (153.003584ms)
+✔ malformed manifest duplicate: startup refuses (147.529125ms)
+✔ malformed manifest missing: startup refuses (152.806291ms)
+✔ malformed manifest traversal: startup refuses (150.165791ms)
+✔ malformed manifest malformed: startup refuses (152.195666ms)
+✔ malformed manifest self: startup refuses (153.136458ms)
+✔ missing, extra, symlink entries and symlink root rejected (892.499125ms)
+✔ verified snapshot survives disk edits and returned-object mutation (157.259167ms)
+✔ actual stdio protocol works under Node permissions denying writes, network, subprocesses and workers (443.684042ms)
+✔ every bundled citation matches only the public fictional source (1.79675ms)
+✔ invalid CLI flags refuse before protocol output (448.461875ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4609.095958

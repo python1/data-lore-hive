@@ -1,0 +1,4 @@
+node_modules/
+dist/
+src/pack.ts
+sample-pack/

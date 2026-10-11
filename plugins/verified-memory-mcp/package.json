@@ -1,0 +1,24 @@
+{
+  "name": "@python1/verified-memory-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local read-only stdio MCP server for verified fictional memory packs",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=25.8.0"
+  },
+  "scripts": {
+    "build": "node scripts/prepare.mjs && tsc",
+    "start": "node dist/index.js",
+    "test": "npm run build && node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "~5.9.3"
+  }
+}
