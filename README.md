@@ -88,6 +88,25 @@ Demo state is written to `state/` unless you pass `--state-dir`. Databases are g
 
 Replication and recovery (`replication.py`, `install_mac_sync.py`, `sync_agent.py`) expect a client config and an SSH key that you provide, and a receiver host that you set up. The signed-code modules additionally need your own release-signing key, an `allowed_signers` file and a pinned replica host key; none are shipped. The host-specific memory-replica installers used in the original deployment, the generated signed-code install kits, and all drill evidence are **not** included; see [REDACTIONS.md](REDACTIONS.md). [SURVIVABILITY.md](SURVIVABILITY.md) and [SOURCE-RECOVERY.md](SOURCE-RECOVERY.md) describe the protocol and its checks.
 
+## Use with Claude Code / Claude Desktop (MCP)
+
+[`plugins/verified-memory-mcp/`](plugins/verified-memory-mcp/README.md) is a local, read-only stdio MCP server. It exposes two tools, `verified_memory_search` and `verified_memory_get`, over a checksum-verified memory pack such as the ones `agent-memory/` exports. It needs Node 22 or newer and is not published to npm, so you build it from this checkout:
+
+```bash
+cd plugins/verified-memory-mcp
+npm ci --ignore-scripts && npm run build && npm test
+```
+
+Register it with Claude Code. The paths are placeholders, so replace them with absolute paths:
+
+```bash
+claude mcp add verified-memory -- /absolute/path/to/node --experimental-permission \
+  --allow-fs-read=/absolute/path/to/hive-public/plugins/verified-memory-mcp \
+  /absolute/path/to/hive-public/plugins/verified-memory-mcp/dist/index.js
+```
+
+For Claude Desktop, use the `mcpServers` example in the [plugin README](plugins/verified-memory-mcp/README.md#claude-desktop-configuration-example). With no `--pack`, the server serves the bundled fictional sample, so asking it to search for "pottery" should return record `M-sample-2` with its quote and source message ID. The checksum check proves the pack wasn't altered, not that its contents are true. See the plugin's README and [VALIDATION.md](plugins/verified-memory-mcp/VALIDATION.md) for its limits.
+
 ## Measured results
 
 Setup for these runs:
