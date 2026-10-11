@@ -9,10 +9,12 @@
     "directory": "plugins/verified-memory-mcp"
   },
   "bin": {
-    "verified-memory-mcp": "dist/index.js"
+    "verified-memory-mcp": "dist/index.js",
+    "verified-memory-build-pack": "tools/build-pack.mjs"
   },
   "files": [
     "dist",
+    "tools/build-pack.mjs",
     "README.md",
     "LICENSE"
   ],

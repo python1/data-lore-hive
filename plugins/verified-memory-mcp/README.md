@@ -14,7 +14,7 @@ Only these two tools are exposed; no resources, prompts, filesystem or command t
 
 ## Run with npx (after publishing)
 
-The npm package contains only `dist/`, this README and LICENSE. It ships **no pack**,
+The npm package contains only `dist/`, the pack builder, this README and LICENSE. It ships **no pack**,
 so `--pack` is required:
 
 ```sh
@@ -25,6 +25,137 @@ Claude Code: `claude mcp add verified-memory -- npx -y @python1/verified-memory-
 Running through npx does not apply Node's permission mode, because npx starts its own
 Node process. For the read-only filesystem allowlist described below, install the
 package and run its `dist/index.js` with `node` directly.
+
+## Build your own pack
+
+A pack is a directory with exactly four files: `records.jsonl`, `MEMORY.md`,
+`README.md` and `SHA256SUMS`. The easiest way to make one is the bundled offline
+builder. It reads your messages and the records you want to remember, finds every
+quote in its message, computes offsets and hashes, writes the pack, and then loads it
+with the server's own verifier. If any quote is not verbatim in its message, it writes
+nothing.
+
+### Quick start
+
+1. Put your source messages in `messages.jsonl`, one JSON object per line:
+
+   ```json
+   {"id": 3, "date": "2026-03-02T08:20:00Z", "speaker": "Rowan", "text": "Quick thing first: the shed code changed. Also, the café on the corner sells seedlings on Saturdays."}
+   ```
+
+   | Field | Rule |
+   |---|---|
+   | `id` | positive integer, unique |
+   | `date` | UTC ISO 8601 ending in `Z` or `+00:00`, e.g. `2026-03-02T08:20:00Z` |
+   | `speaker` | non-empty string |
+   | `text` | non-empty string; quotes are matched against it exactly |
+
+2. Put what you want remembered in `records.jsonl`, one record per line, each citing
+   exact quotes from those messages:
+
+   ```json
+   {"record_id": "M-garden-3", "role": "user", "topic": "Seedlings", "category": "places", "quotes": [{"message_id": 3, "quote": "the café on the corner sells seedlings on Saturdays."}]}
+   ```
+
+   | Field | Rule |
+   |---|---|
+   | `record_id` | `M-` followed by 1–127 letters, digits, `_` or `-`; unique |
+   | `role` | `"user"` (the person) or `"agent"` (the assistant) |
+   | `topic`, `category` | non-empty strings of your choice |
+   | `quotes` | non-empty list of `{"message_id", "quote"}`; a quote must appear verbatim in that message. If it appears more than once, add `"start"` (the builder lists the choices) |
+   | `statement` | optional summary; defaults to the quotes joined by spaces |
+   | `speaker` | optional; defaults to the cited messages' speaker, required if they differ |
+
+   Unknown fields are refused, so typos fail loudly.
+
+3. Build into a directory that does not exist yet, then point the server at it:
+
+   ```sh
+   npx -y -p @python1/verified-memory-mcp verified-memory-build-pack \
+     --messages messages.jsonl --records records.jsonl \
+     --out /absolute/path/to/my-pack --title "My memory" --description "Optional text for the pack README"
+   npx -y @python1/verified-memory-mcp --pack /absolute/path/to/my-pack
+   ```
+
+   From a repository checkout, run `node tools/build-pack.mjs ...` after `npm run build`.
+   The builder makes no network calls. It never overwrites: it stages in a hidden sibling
+   directory and renames it into place only after verification passes.
+
+[`examples/input/`](examples/input/) holds invented sample input (a fictional community
+garden, not real people), and [`examples/pack/`](examples/pack/) is the pack built from
+it; the test suite rebuilds it byte for byte. Neither ships in the npm package.
+
+### `records.jsonl` format (what the server verifies)
+
+One JSON object per line, UTF-8, at most 10,000 records, unique `record_id`s.
+Every field below is required unless marked optional:
+
+| Field | Rule |
+|---|---|
+| `record_id` | `^M-[A-Za-z0-9_-]{1,127}$` |
+| `role` | `"user"` or `"agent"` |
+| `speaker`, `statement`, `topic`, `category` | non-empty strings |
+| `date_first_utc`, `date_last_utc` | UTC ISO 8601 (`Z` or `+00:00`), first ≤ last |
+| `evidence` | non-empty list of citations (below) |
+| anything else | optional; kept and returned by `verified_memory_get` as metadata (e.g. `supersedes`, `approval`, `audits`) |
+
+Each citation in `evidence`:
+
+| Field | Rule |
+|---|---|
+| `message_id` | positive integer |
+| `date_utc` | UTC ISO 8601, between the record's first and last dates |
+| `quote` | non-empty exact text from the message |
+| `start`, `end` | integers, `start ≥ 0`, `end − start` = quote length in Unicode code points (offsets index the message text by code point, as Python string slicing does) |
+| `message_sha256` | 64 lowercase hex characters: SHA-256 of the full message text encoded as UTF-8 |
+
+Example (one line in the file; wrapped here for reading):
+
+```json
+{"record_id":"M-garden-3","role":"user","speaker":"Rowan","category":"places","topic":"Seedlings",
+ "statement":"the café on the corner sells seedlings on Saturdays.",
+ "date_first_utc":"2026-03-02T08:20:00Z","date_last_utc":"2026-03-02T08:20:00Z",
+ "evidence":[{"message_id":3,"date_utc":"2026-03-02T08:20:00Z",
+   "quote":"the café on the corner sells seedlings on Saturdays.","start":48,"end":100,
+   "message_sha256":"e3aebbd25f7b809dd5b0b8d55b9ad7df6566464dc2a5033d02e3c5aa7ed8eeb2"}]}
+```
+
+The server cannot see your original messages, so it checks citation structure, offsets'
+arithmetic and hashes' format, not that the quote really came from that message. That
+check happens only when the pack is built (by this builder or by `agent-memory/`).
+
+### `MEMORY.md` and the pack `README.md`
+
+The server requires both to exist, be valid UTF-8 and match `SHA256SUMS`. It does not
+parse them or return them from either tool; they are for people and agents reading the
+pack directly. By convention, and as the builder writes them:
+
+- `MEMORY.md`: a `# Title` heading, then for each record its ID and speaker, its
+  statement, and each quote with its message ID and date, marked as historical data.
+- `README.md`: what the pack is and where it came from (SHA-256 of the input files,
+  record count), plus the notice that quotes are data, not instructions, and that
+  checksums prove integrity, not truth or approval.
+
+### `SHA256SUMS` format
+
+Exactly three lines, one per other file, each `<64 lowercase hex>` + two spaces +
+file name; no entry for `SHA256SUMS` itself; at most 4 KiB:
+
+```text
+f3ed88bca6a7a451a892f49bd6d2970f5671b8c704d0bc6cae7646c46978bc69  MEMORY.md
+0685a25133fd3e7f60e70ba1e836a2e8b045ace1e2be2ecbd306a4fc656f558f  README.md
+34212f199411c8e4ef52cb341b0c68d970b5b30d9b8117c2eae5729b0d71dfa5  records.jsonl
+```
+
+If you edit a pack by hand, regenerate it from inside the pack directory:
+
+```sh
+shasum -a 256 MEMORY.md README.md records.jsonl > SHA256SUMS   # macOS
+sha256sum MEMORY.md README.md records.jsonl > SHA256SUMS       # Linux
+```
+
+Resealing by hand only makes the checksums match again; it does not re-check quotes.
+Prefer rebuilding with the builder.
 
 ## Build and run
 
@@ -168,7 +299,13 @@ plugins/verified-memory-mcp/
 │   ├── index.ts
 │   ├── server.ts
 │   └── pack.ts                 # generated, ignored; exact shared source
-├── test/server.test.mjs
+├── tools/build-pack.mjs        # offline pack builder (ships in npm)
+├── examples/
+│   ├── input/                  # invented messages.jsonl + records.jsonl
+│   └── pack/                   # pack built from them
+├── test/
+│   ├── server.test.mjs
+│   └── build-pack.test.mjs
 ├── validation/
 │   ├── tests.txt               # Node 25.8.0
 │   ├── tests-node22-min.txt     # Node 22.0.0
