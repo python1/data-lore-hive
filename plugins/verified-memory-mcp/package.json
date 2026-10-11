@@ -2,11 +2,11 @@
   "name": "@python1/verified-memory-mcp",
   "version": "0.1.0",
   "private": true,
-  "description": "Local read-only stdio MCP server for verified fictional memory packs",
+  "description": "Local read-only stdio MCP server for checksum-verified memory packs",
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=25.8.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "build": "node scripts/prepare.mjs && tsc",
@@ -18,7 +18,7 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
+    "@types/node": "^22.20.5",
     "typescript": "~5.9.3"
   }
 }

@@ -11,6 +11,8 @@ import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { createServer, notice } from '../dist/server.js';
 import { loadPack } from '../dist/pack.js';
 const sample = resolve('sample-pack');
+const permissionFlag = process.allowedNodeEnvironmentFlags.has('--permission') ? '--permission' : '--experimental-permission';
+const networkPermissions = process.allowedNodeEnvironmentFlags.has('--allow-net');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'fictional-mcp-test-'));
@@ -36,6 +38,7 @@ function refuse(dir, pattern) {
   });
   assert.equal(p.status, 1, p.stderr); assert.equal(p.stdout, ''); assert.match(p.stderr, /verified-memory-mcp:/);
   assert.ok(!p.stderr.includes(dir), 'startup diagnostics do not expose configured paths');
+  assert.ok(!p.stderr.includes('fictional'), 'user-facing startup errors are pack-neutral');
 }
 test('build reuses byte-identical verifier and fictional pack without modifying source plugin', () => {
   assert.deepEqual(readFileSync('src/pack.ts'), readFileSync('../verified-memory/src/pack.ts'));
@@ -123,9 +126,9 @@ test('verified snapshot survives disk edits and returned-object mutation', async
   assert.match((await call(client, 'verified_memory_search', { query: 'pottery' })).structuredContent.matches[0].citations[0].quote, /pottery/);
   refuse(dir, /checksum mismatch/);
 });
-test('actual stdio protocol works under Node permissions denying writes, network, subprocesses and workers', { timeout: 10000 }, async t => {
+test('actual stdio protocol works under Node permissions denying writes, subprocesses and workers', { timeout: 10000 }, async t => {
   const transport = new StdioClientTransport({ command: process.execPath,
-    args: ['--permission', '--allow-fs-read=' + process.cwd(), resolve('dist/index.js')],
+    args: [permissionFlag, '--allow-fs-read=' + process.cwd(), resolve('dist/index.js')],
     cwd: tmpdir(), stderr: 'pipe', env: {} });
   const client = new Client({ name: 'fictional-stdio-test', version: '1.0.0' });
   t.after(() => client.close());
@@ -135,13 +138,22 @@ test('actual stdio protocol works under Node permissions denying writes, network
   const result = (await call(client, 'verified_memory_search', { query: 'pottery' })).structuredContent;
   assert.equal(result.matched, 1);
   assert.equal((await call(client, 'verified_memory_get', { id: result.matches[0].id })).structuredContent.found, true);
-  assert.equal(diagnostic, '');
+  if (permissionFlag === '--experimental-permission') {
+    assert.match(diagnostic, /ExperimentalWarning: Permission is an experimental feature/);
+  } else {
+    assert.equal(diagnostic, '');
+  }
   // Prove the runtime policy actually denies the prohibited operations.
-  for (const code of ["require('node:fs').writeFileSync('forbidden','x')", "require('node:child_process').spawnSync(process.execPath,['-v'])", "require('node:net').connect(9,'127.0.0.1')", "new (require('node:worker_threads').Worker)('',{eval:true})"]) {
-    const p = spawnSync(process.execPath, ['--permission', '-e', code], { encoding: 'utf8', timeout: 5000 });
+  for (const code of ["require('node:fs').writeFileSync('forbidden','x')", "require('node:child_process').spawnSync(process.execPath,['-v'])", "new (require('node:worker_threads').Worker)('',{eval:true})"]) {
+    const p = spawnSync(process.execPath, [permissionFlag, '-e', code], { encoding: 'utf8', timeout: 5000 });
     assert.notEqual(p.status, 0); assert.match(p.stderr, /ERR_ACCESS_DENIED/);
   }
 });
+test('network permission policy denies socket access when supported', { skip: networkPermissions ? false : 'This Node version has no network permission scope' }, () => {
+  const p = spawnSync(process.execPath, [permissionFlag, '-e', "require('node:net').connect(9,'127.0.0.1')"], { encoding: 'utf8', timeout: 5000 });
+  assert.notEqual(p.status, 0); assert.match(p.stderr, /ERR_ACCESS_DENIED/);
+});
+
 test('every bundled citation matches only the public fictional source', () => {
   const source = JSON.parse(readFileSync('../../agent-memory/sample/telegram-export.json'));
   const messages = new Map(source.messages.map(m => [m.id, m]));
@@ -156,5 +168,7 @@ test('invalid CLI flags refuse before protocol output', () => {
   for (const args of [['--pack'], ['--other'], ['--pack', sample, 'extra']]) {
     const p = spawnSync(process.execPath, ['dist/index.js', ...args], { encoding: 'utf8', timeout: 5000 });
     assert.equal(p.status, 1); assert.equal(p.stdout, ''); assert.match(p.stderr, /Usage:/);
+    assert.ok(!p.stderr.includes('fictional'));
+    assert.match(p.stderr, /--pack \/absolute\/path\/to\/pack/);
   }
 });

@@ -1,0 +1,148 @@
+
+> @python1/verified-memory-mcp@0.1.0 test
+> npm run build && node --test test/*.test.mjs
+
+
+> @python1/verified-memory-mcp@0.1.0 build
+> node scripts/prepare.mjs && tsc
+
+TAP version 13
+# Subtest: build reuses byte-identical verifier and fictional pack without modifying source plugin
+ok 1 - build reuses byte-identical verifier and fictional pack without modifying source plugin
+  ---
+  duration_ms: 1.389084
+  ...
+# Subtest: valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
+ok 2 - valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
+  ---
+  duration_ms: 13.999791
+  ...
+# Subtest: no matches, unknown ID, historical instructions and lexical semantics preserved
+ok 3 - no matches, unknown ID, historical instructions and lexical semantics preserved
+  ---
+  duration_ms: 2.966333
+  ...
+# Subtest: invalid requests return errors without path lookup or extra tool capabilities
+ok 4 - invalid requests return errors without path lookup or extra tool capabilities
+  ---
+  duration_ms: 3.065709
+  ...
+# Subtest: tampered MEMORY.md: startup refuses with no stdout
+ok 5 - tampered MEMORY.md: startup refuses with no stdout
+  ---
+  duration_ms: 136.597583
+  ...
+# Subtest: tampered README.md: startup refuses with no stdout
+ok 6 - tampered README.md: startup refuses with no stdout
+  ---
+  duration_ms: 143.223875
+  ...
+# Subtest: tampered records.jsonl: startup refuses with no stdout
+ok 7 - tampered records.jsonl: startup refuses with no stdout
+  ---
+  duration_ms: 138.138333
+  ...
+# Subtest: malformed rehashed pack broken-json: startup refuses
+ok 8 - malformed rehashed pack broken-json: startup refuses
+  ---
+  duration_ms: 135.536583
+  ...
+# Subtest: malformed rehashed pack invalid-utf8: startup refuses
+ok 9 - malformed rehashed pack invalid-utf8: startup refuses
+  ---
+  duration_ms: 142.064542
+  ...
+# Subtest: malformed rehashed pack duplicate-id: startup refuses
+ok 10 - malformed rehashed pack duplicate-id: startup refuses
+  ---
+  duration_ms: 143.601333
+  ...
+# Subtest: malformed rehashed pack missing-citations: startup refuses
+ok 11 - malformed rehashed pack missing-citations: startup refuses
+  ---
+  duration_ms: 142.307083
+  ...
+# Subtest: malformed rehashed pack wrong-offset: startup refuses
+ok 12 - malformed rehashed pack wrong-offset: startup refuses
+  ---
+  duration_ms: 139.376875
+  ...
+# Subtest: malformed rehashed pack invalid-id: startup refuses
+ok 13 - malformed rehashed pack invalid-id: startup refuses
+  ---
+  duration_ms: 138.459458
+  ...
+# Subtest: malformed rehashed pack invalid-date: startup refuses
+ok 14 - malformed rehashed pack invalid-date: startup refuses
+  ---
+  duration_ms: 136.212875
+  ...
+# Subtest: malformed rehashed pack invalid-hash: startup refuses
+ok 15 - malformed rehashed pack invalid-hash: startup refuses
+  ---
+  duration_ms: 145.842125
+  ...
+# Subtest: malformed manifest duplicate: startup refuses
+ok 16 - malformed manifest duplicate: startup refuses
+  ---
+  duration_ms: 144.356167
+  ...
+# Subtest: malformed manifest missing: startup refuses
+ok 17 - malformed manifest missing: startup refuses
+  ---
+  duration_ms: 143.713709
+  ...
+# Subtest: malformed manifest traversal: startup refuses
+ok 18 - malformed manifest traversal: startup refuses
+  ---
+  duration_ms: 145.769667
+  ...
+# Subtest: malformed manifest malformed: startup refuses
+ok 19 - malformed manifest malformed: startup refuses
+  ---
+  duration_ms: 142.561084
+  ...
+# Subtest: malformed manifest self: startup refuses
+ok 20 - malformed manifest self: startup refuses
+  ---
+  duration_ms: 143.094167
+  ...
+# Subtest: missing, extra, symlink entries and symlink root rejected
+ok 21 - missing, extra, symlink entries and symlink root rejected
+  ---
+  duration_ms: 824.082458
+  ...
+# Subtest: verified snapshot survives disk edits and returned-object mutation
+ok 22 - verified snapshot survives disk edits and returned-object mutation
+  ---
+  duration_ms: 143.436708
+  ...
+# Subtest: actual stdio protocol works under Node permissions denying writes, subprocesses and workers
+ok 23 - actual stdio protocol works under Node permissions denying writes, subprocesses and workers
+  ---
+  duration_ms: 310.77025
+  ...
+# Subtest: network permission policy denies socket access when supported
+ok 24 - network permission policy denies socket access when supported # SKIP This Node version has no network permission scope
+  ---
+  duration_ms: 0.062084
+  ...
+# Subtest: every bundled citation matches only the public fictional source
+ok 25 - every bundled citation matches only the public fictional source
+  ---
+  duration_ms: 1.679042
+  ...
+# Subtest: invalid CLI flags refuse before protocol output
+ok 26 - invalid CLI flags refuse before protocol output
+  ---
+  duration_ms: 402.768459
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 4131.957792

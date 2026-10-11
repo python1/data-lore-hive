@@ -13,21 +13,27 @@ Only these two tools are exposed; no resources, prompts, filesystem or command t
 
 ## Build and run
 
-From a checkout of this repository, using Node **25.8.0 or newer** (tested on
-25.8.0), in `plugins/verified-memory-mcp`:
+From a checkout of this repository, using Node **22.0.0 or newer** (use the
+latest patch release of your chosen Node line), in `plugins/verified-memory-mcp`:
 
 ```sh
 npm ci --ignore-scripts
 npm run build
 npm test
-node --permission --allow-fs-read="$PWD" "$PWD/dist/index.js"
+node --experimental-permission --allow-fs-read="$PWD" "$PWD/dist/index.js"
 ```
 
 The last command starts the stdio server, waiting for an MCP client on stdin.
 It is not an interactive terminal search interface. Connect it through Claude
 Desktop or another MCP client, then request a pottery search and retrieve
 `M-sample-2`. Node's permission mode grants only reads under this project directory;
-filesystem writes, network, subprocesses, workers and native addons are denied.
+filesystem writes, subprocesses, workers and native addons are denied. The
+`--experimental-permission` spelling works at the Node 22.0.0 floor; early Node 22
+releases emit an experimental warning on stderr. On Node 22.13+ you can use
+`--permission` instead. Node 22 does not enforce network permissions; this server
+makes no network calls. Node 25.8.0 additionally passes the socket-denial probe.
+See the [Node 22.0 permission documentation](https://nodejs.org/download/release/v22.0.0/docs/api/permissions.html)
+and [Node 22.13 permission documentation](https://nodejs.org/download/release/v22.13.0/docs/api/permissions.html).
 Use direct `node` invocation at runtime, not npm/npx or a shell wrapper.
 
 Builds, dependency installation and tests are development operations: they write
@@ -48,7 +54,7 @@ No configuration is installed or edited automatically.
     "verified-memory": {
       "command": "/absolute/path/to/node",
       "args": [
-        "--permission",
+        "--experimental-permission",
         "--allow-fs-read=/absolute/path/to/hive-public/plugins/verified-memory-mcp",
         "/absolute/path/to/hive-public/plugins/verified-memory-mcp/dist/index.js"
       ]
@@ -58,9 +64,10 @@ No configuration is installed or edited automatically.
 ```
 
 Omitting `--pack` uses the bundled fictional Juniper Vale/Wren sample regardless
-of the client's working directory. To select a different **fictional** fixture,
-append `"--pack", "/absolute/path/to/fictional-pack"` to `args`, and also add
-`"--allow-fs-read=/absolute/path/to/fictional-pack"` before the entry-point argument.
+of the client's working directory. To use your own pack, append
+`"--pack", "/absolute/path/to/pack"` to `args`, and also add
+`"--allow-fs-read=/absolute/path/to/pack"` before the entry-point argument.
+Choose a pack that the connecting client is permitted to read.
 Relative pack paths and unknown CLI flags are rejected. Tools cannot choose paths.
 There is no discovery of home directories, other agents, real memory or configuration.
 There are no watchers or reloads; restart to verify a different snapshot.
@@ -145,7 +152,10 @@ plugins/verified-memory-mcp/
 │   ├── server.ts
 │   └── pack.ts                 # generated, ignored; exact shared source
 ├── test/server.test.mjs
-├── validation/tests.txt
+├── validation/
+│   ├── tests.txt               # Node 25.8.0
+│   ├── tests-node22-min.txt     # Node 22.0.0
+│   └── tests-node22-current.txt # Node 22.23.3
 ├── sample-pack/                # generated, ignored; four fictional files
 └── dist/                       # generated, ignored; JS and declarations
 ```
