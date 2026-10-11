@@ -6,37 +6,44 @@
 > @python1/verified-memory-mcp@0.1.0 build
 > node scripts/prepare.mjs && tsc
 
-✔ build reuses byte-identical verifier and fictional pack without modifying source plugin (1.84925ms)
-✔ valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP (12.69625ms)
-✔ no matches, unknown ID, historical instructions and lexical semantics preserved (1.952542ms)
-✔ invalid requests return errors without path lookup or extra tool capabilities (2.672917ms)
-✔ tampered MEMORY.md: startup refuses with no stdout (138.801958ms)
-✔ tampered README.md: startup refuses with no stdout (141.535625ms)
-✔ tampered records.jsonl: startup refuses with no stdout (140.016959ms)
-✔ malformed rehashed pack broken-json: startup refuses (139.36975ms)
-✔ malformed rehashed pack invalid-utf8: startup refuses (137.04275ms)
-✔ malformed rehashed pack duplicate-id: startup refuses (140.029125ms)
-✔ malformed rehashed pack missing-citations: startup refuses (139.205125ms)
-✔ malformed rehashed pack wrong-offset: startup refuses (144.603959ms)
-✔ malformed rehashed pack invalid-id: startup refuses (141.889625ms)
-✔ malformed rehashed pack invalid-date: startup refuses (143.549417ms)
-✔ malformed rehashed pack invalid-hash: startup refuses (138.668875ms)
-✔ malformed manifest duplicate: startup refuses (143.732ms)
-✔ malformed manifest missing: startup refuses (147.631333ms)
-✔ malformed manifest traversal: startup refuses (147.936292ms)
-✔ malformed manifest malformed: startup refuses (146.052916ms)
-✔ malformed manifest self: startup refuses (151.516375ms)
-✔ missing, extra, symlink entries and symlink root rejected (876.660625ms)
-✔ verified snapshot survives disk edits and returned-object mutation (147.807667ms)
-✔ actual stdio protocol works under Node permissions denying writes, subprocesses and workers (345.166125ms)
-✔ network permission policy denies socket access when supported (62.56725ms)
-✔ every bundled citation matches only the public fictional source (0.756167ms)
-✔ invalid CLI flags refuse before protocol output (413.269833ms)
-ℹ tests 26
+✔ builder reproduces the committed example pack byte for byte (83.552541ms)
+✔ installed-style stdio server loads the example pack and returns an exact quote (166.583833ms)
+✔ builder refuses a quote that is not verbatim (78.766042ms)
+✔ builder refuses an ambiguous quote unless start is given (155.172791ms)
+✔ builder refuses unknown messages, unknown fields, bad dates and duplicate IDs (381.236625ms)
+✔ builder accepts a disambiguated quote and computes code-point offsets (80.59725ms)
+✔ builder never overwrites an existing directory (75.510417ms)
+✔ build reuses byte-identical verifier and fictional pack without modifying source plugin (2.082291ms)
+✔ valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP (12.672541ms)
+✔ no matches, unknown ID, historical instructions and lexical semantics preserved (2.086541ms)
+✔ invalid requests return errors without path lookup or extra tool capabilities (2.75675ms)
+✔ tampered MEMORY.md: startup refuses with no stdout (147.613125ms)
+✔ tampered README.md: startup refuses with no stdout (150.012416ms)
+✔ tampered records.jsonl: startup refuses with no stdout (150.5115ms)
+✔ malformed rehashed pack broken-json: startup refuses (153.877542ms)
+✔ malformed rehashed pack invalid-utf8: startup refuses (150.7725ms)
+✔ malformed rehashed pack duplicate-id: startup refuses (151.629708ms)
+✔ malformed rehashed pack missing-citations: startup refuses (152.976375ms)
+✔ malformed rehashed pack wrong-offset: startup refuses (146.1615ms)
+✔ malformed rehashed pack invalid-id: startup refuses (149.561959ms)
+✔ malformed rehashed pack invalid-date: startup refuses (144.469542ms)
+✔ malformed rehashed pack invalid-hash: startup refuses (146.466625ms)
+✔ malformed manifest duplicate: startup refuses (148.786875ms)
+✔ malformed manifest missing: startup refuses (151.135875ms)
+✔ malformed manifest traversal: startup refuses (147.045708ms)
+✔ malformed manifest malformed: startup refuses (147.084167ms)
+✔ malformed manifest self: startup refuses (148.676417ms)
+✔ missing, extra, symlink entries and symlink root rejected (864.616084ms)
+✔ verified snapshot survives disk edits and returned-object mutation (150.736084ms)
+✔ actual stdio protocol works under Node permissions denying writes, subprocesses and workers (363.520958ms)
+✔ network permission policy denies socket access when supported (66.288209ms)
+✔ every bundled citation matches only the public fictional source (0.7695ms)
+✔ invalid CLI flags refuse before protocol output (427.745166ms)
+ℹ tests 33
 ℹ suites 0
-ℹ pass 26
+ℹ pass 33
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 4312.29875
+ℹ duration_ms 4449.1055

@@ -3,14 +3,16 @@
 Tested on macOS ARM64 with TypeScript 5.9.3, Node 22 type definitions, and
 official MCP TypeScript SDK 1.32.1. **Minimum supported Node: 22.0.0**;
 `engines.node` is `>=22.0.0`. The complete `npm test` workflow, including the build,
-was rerun on each runtime below. Node 22 runs use npm 10.9.3. No system runtime
-was replaced, and `private: true` is retained.
+was rerun on each runtime below. Node 22 runs use the official nodejs.org darwin-arm64
+builds, checked against the published SHA256SUMS, with their bundled npm (10.5.1 on
+22.0.0, 10.9.9 on 22.23.3); 25.8.0 uses npm 11.11.0. No system runtime was replaced.
+The package is prepared for npm and the MCP Registry but has not been published.
 
 | Node runtime | Passed | Failed | Skipped | Evidence |
 |---|---:|---:|---:|---|
-| 22.0.0 (minimum) | 25 | 0 | 1 | [tests-node22-min.txt](validation/tests-node22-min.txt) |
-| 22.23.3 | 25 | 0 | 1 | [tests-node22-current.txt](validation/tests-node22-current.txt) |
-| 25.8.0 | 26 | 0 | 0 | [tests.txt](validation/tests.txt) |
+| 22.0.0 (minimum) | 32 | 0 | 1 | [tests-node22-min.txt](validation/tests-node22-min.txt) |
+| 22.23.3 | 32 | 0 | 1 | [tests-node22-current.txt](validation/tests-node22-current.txt) |
+| 25.8.0 | 33 | 0 | 0 | [tests.txt](validation/tests.txt) |
 
 The one explicit skip on Node 22 is the **additional socket-denial probe**: that
 runtime has no network permission scope. All core server tests run and pass on
@@ -29,6 +31,10 @@ deny it, so testing does not open a socket on Node 22.
 | Duplicate, missing, traversal, malformed or self-referential manifest entries | Each refuses startup, exit 1, no stdout |
 | Missing pack/files, extra files, symlink file/root, relative path | Startup refuses |
 | Actual stdio client under Node permission restrictions | Both tool calls succeed with writes/subprocesses/workers denied on every tested version |
+| Pack builder on the invented `examples/input` | Rebuilds `examples/pack` byte for byte; stdio server returns the exact "café" quote from message 3 and both citations of the two-message record |
+| Builder: non-verbatim, ambiguous or mis-positioned quote; unknown message, unknown field, bad date, duplicate message or record ID | Each exits 1 and leaves no pack or staging directory |
+| Builder: text with a non-BMP character (emoji) before the quote | Offsets counted in code points, matching the verifier |
+| Builder: `--out` already exists | Refuses; existing directory untouched |
 
 The stdio test launches the server directly with a project filesystem read
 allowlist and an unrelated working directory. It selects `--experimental-permission`
@@ -46,7 +52,9 @@ resource/prompt capabilities, immutable snapshots after disk edits and client-si
 mutation, invalid CLI options, pack-neutral usage/error messages, and byte-identical shared
 verifier/sample copies.
 Every sample quote and message hash is independently compared against the public
-fictional source. Temporary tests use only copies of that sample, not real data.
+fictional source. Temporary tests use only copies of that sample or the invented
+`examples/input` garden data, not real data. The builder test spawns the builder as a
+local Node process; the builder itself makes no network calls.
 
 The original `plugins/verified-memory` is unchanged. No Gateway, live agent,
 Claude Desktop configuration change, model service, publishing or merge is used.
