@@ -10,7 +10,8 @@
   "scripts": {
     "build": "npm --prefix .. run build && node build.mjs",
     "pretest": "npm --prefix .. run build",
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs",
+    "test:e2e": "npm run build && playwright test"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0"

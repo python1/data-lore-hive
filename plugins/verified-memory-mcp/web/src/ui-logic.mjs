@@ -35,6 +35,11 @@ export function newRecord(records, message, quote, uid) {
   return { uid, record_id: nextRecordId(records), role: message.role ?? 'user', topic: '', category: '', statement: '', speaker: '', quotes: [quote] };
 }
 
+/** "1 record", "2 records"; pass the plural when it is not the singular plus "s". */
+export function plural(n, singular, pluralForm = `${singular}s`) {
+  return `${n} ${n === 1 ? singular : pluralForm}`;
+}
+
 export function slug(title) {
   const s = (title || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
   return s || 'memory-pack';
@@ -98,7 +103,7 @@ const WARNINGS = {
 };
 export function warningText({ code, detail, count }) {
   const text = WARNINGS[code] ? WARNINGS[code](detail) : `${code}${detail ? ` (${detail})` : ''}`;
-  return `${count} × ${text}`;
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)} (${count})`;
 }
 
 export function makeDraft({ format, speakers, title, description, records }) {

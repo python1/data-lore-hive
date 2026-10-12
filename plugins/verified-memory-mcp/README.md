@@ -35,6 +35,16 @@ quote in its message, computes offsets and hashes, writes the pack, and then loa
 with the server's own verifier. If any quote is not verbatim in its message, it writes
 nothing.
 
+### From a ChatGPT or Claude export, in your browser
+
+[`web/`](web/) holds a pack maker page: load your data export, search your chats, select
+the exact sentences to remember, and download a ready pack. It runs entirely in the
+browser (no server, and its Content-Security-Policy forbids network requests), uses the
+same building code as the command-line builder, and checks the pack with the server's
+own verifier before offering the download. It is not hosted yet; to use it now, run
+`npm install && npm run build` in `web/` and open `web/dist/index.html`. See
+[`web/README.md`](web/README.md).
+
 ### Quick start
 
 1. Put your source messages in `messages.jsonl`, one JSON object per line:
@@ -303,6 +313,7 @@ plugins/verified-memory-mcp/
 │   ├── server.ts
 │   ├── pack.ts                 # generated, ignored; exact shared source
 │   └── verify.ts               # generated, ignored; exact shared source
+├── web/                        # repo-only: browser pack maker (see web/README.md)
 ├── tools/
 │   ├── build-pack.mjs          # offline pack builder (ships in npm)
 │   ├── pack-core.mjs           # its import-free building rules (ships in npm)

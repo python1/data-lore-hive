@@ -5,7 +5,7 @@ import { blobSource, writeZip } from './zip.mjs';
 import { buildPack } from './pack-inputs.mjs';
 import { sha256 } from '../../tools/pack-core.mjs';
 import { verifyPackEntries } from '../../dist/verify.js';
-import { DEFAULT_AGENT, applyDraft, locateError, makeDraft, makeQuote, newRecord, rebuildCommand, recordsForBuild, searchConversations, slug, visibleMessages, warningText } from './ui-logic.mjs';
+import { DEFAULT_AGENT, applyDraft, locateError, makeDraft, makeQuote, newRecord, plural, rebuildCommand, recordsForBuild, searchConversations, slug, visibleMessages, warningText } from './ui-logic.mjs';
 
 const $ = (id) => document.getElementById(id);
 const PROPS = new Set(['value', 'checked', 'disabled', 'hidden', 'selected', 'placeholder', 'type', 'rows']);
@@ -79,10 +79,11 @@ async function loadFile(file) {
   $('speaker-user').disabled = $('speaker-agent').disabled = data.format === 'messages-jsonl';
 
   const undated = [...state.messages.values()].filter((m) => !m.date).length;
-  setStatus(status, `${FORMAT_NAMES[data.format]}: ${data.conversations.length} conversations, ${state.messages.size} messages.${undated ? ` ${undated} have no date and cannot be quoted.` : ''}`, 'ok');
+  const undatedNote = undated ? ` ${undated} ${undated === 1 ? 'has' : 'have'} no date and cannot be quoted.` : '';
+  setStatus(status, `${FORMAT_NAMES[data.format]}: ${plural(data.conversations.length, 'conversation')}, ${plural(state.messages.size, 'message')}.${undatedNote}`, 'ok');
   const warnings = $('warnings');
   warnings.hidden = !data.warnings.length;
-  $('warnings-summary').textContent = `${data.warnings.length} kinds of content were skipped or adjusted`;
+  $('warnings-summary').textContent = `${plural(data.warnings.length, 'kind')} of content ${data.warnings.length === 1 ? 'was' : 'were'} skipped or adjusted`;
   $('warnings-list').replaceChildren(...data.warnings.map((w) => h('li', {}, warningText(w))));
 
   $('workspace').hidden = false;
@@ -98,11 +99,11 @@ function renderList() {
   const results = searchConversations(state.data.conversations, state.search, viewOptions());
   const shown = results.slice(0, state.listLimit);
   $('search-count').textContent = state.search.trim()
-    ? `${results.length} conversations match` : `${results.length} conversations`;
+    ? `${plural(results.length, 'conversation')} ${results.length === 1 ? 'matches' : 'match'}` : plural(results.length, 'conversation');
   $('conversation-list').replaceChildren(...shown.map(({ conversation: c, hits }) => h('li', {},
     h('button', { type: 'button', 'aria-current': c.id === state.active ? 'true' : 'false', onclick: () => openConversation(c.id) },
       c.title || 'Untitled conversation',
-      h('span', { class: 'meta' }, `${c.date ? c.date.slice(0, 10) : 'no date'} · ${hits ? `${hits} matching messages` : `${visibleMessages(c, viewOptions()).length} messages`}`)))));
+      h('span', { class: 'meta' }, `${c.date ? c.date.slice(0, 10) : 'no date'} · ${hits ? `${plural(hits, 'matching message')}` : plural(visibleMessages(c, viewOptions()).length, 'message')}`)))));
   $('more-conversations').hidden = results.length <= shown.length;
 }
 
@@ -294,7 +295,7 @@ const validate = debounce(async () => {
     if (token !== buildToken) return;
     state.built = { ...built, bytes };
     for (const b of ['download-pack', 'download-inputs', 'save-folder']) $(b).disabled = false;
-    setStatus(status, `Verified: ${records.size} record${records.size === 1 ? '' : 's'}. Every quote matches its message word for word, and the checksums pass.`, 'ok');
+    setStatus(status, `Verified: ${plural(records.size, 'record')}. Every quote matches its message word for word, and the checksums pass.`, 'ok');
   } catch (error) {
     if (token !== buildToken) return;
     const where = locateError(error.message);
@@ -367,8 +368,8 @@ async function openDraft(file) {
     if (applied.speakers && state.data.format !== 'messages-jsonl') { state.speakers = applied.speakers; $('speaker-user').value = applied.speakers.user; $('speaker-agent').value = applied.speakers.agent; }
     state.title = $('title').value = applied.title; state.description = $('description').value = applied.description;
     renderRecords(); renderThread(); renderSelection(); validate();
-    if (applied.dropped.length) setStatus($('load-status'), `Draft opened, but ${applied.dropped.length} quote(s) did not match this export and were left out: ${applied.dropped.join('; ')}`, 'error');
-    else setStatus($('load-status'), `Draft opened: ${state.records.length} records.`, 'ok');
+    if (applied.dropped.length) setStatus($('load-status'), `Draft opened, but ${plural(applied.dropped.length, 'quote')} did not match this export and ${applied.dropped.length === 1 ? 'was' : 'were'} left out: ${applied.dropped.join('; ')}`, 'error');
+    else setStatus($('load-status'), `Draft opened: ${plural(state.records.length, 'record')}.`, 'ok');
   } catch (error) { setStatus(status, `Could not open the draft: ${error instanceof SyntaxError ? 'not a JSON file' : error.message}`, 'error'); }
 }
 

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { applyDraft, codePointToUtf16, locateError, makeDraft, makeQuote, nextRecordId, rebuildCommand, recordsForBuild, searchConversations, slug, trimSelection, visibleMessages, warningText } from '../src/ui-logic.mjs';
+import { applyDraft, codePointToUtf16, locateError, makeDraft, makeQuote, nextRecordId, plural, rebuildCommand, recordsForBuild, searchConversations, slug, trimSelection, visibleMessages, warningText } from '../src/ui-logic.mjs';
 
 const message = (text, extra = {}) => ({ key: 'c/1', conversationId: 'c', role: 'user', kind: 'text', date: '2026-03-02T08:15:00Z', text, current: true, attachments: 0, order: 0, ...extra });
 
@@ -65,7 +65,8 @@ test('drafts round-trip and drop quotes that no longer match the export', () => 
 });
 
 test('warning texts and the rebuild command', () => {
-  assert.equal(warningText({ code: 'skipped-role', detail: 'tool', count: 3 }), '3 × messages from “tool” (not you or the assistant) were left out');
-  assert.equal(warningText({ code: 'brand-new-code', detail: 'x', count: 1 }), '1 × brand-new-code (x)');
+  assert.equal(warningText({ code: 'skipped-role', detail: 'tool', count: 3 }), 'Messages from “tool” (not you or the assistant) were left out (3)');
+  assert.equal(warningText({ code: 'brand-new-code', detail: 'x', count: 1 }), 'Brand-new-code (x) (1)');
+  assert.deepEqual([plural(0, 'record'), plural(1, 'record'), plural(2, 'record'), plural(1, 'kind'), plural(3, 'matching message')], ['0 records', '1 record', '2 records', '1 kind', '3 matching messages']);
   assert.equal(rebuildCommand("Rowan's garden", ''), "npx -y -p @python1/verified-memory-mcp verified-memory-build-pack \\\n  --messages messages.jsonl --records records.jsonl --out NEW_FOLDER \\\n  --title 'Rowan'\\''s garden'");
 });
