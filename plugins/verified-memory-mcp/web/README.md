@@ -1,4 +1,4 @@
-# Pack maker
+# Pack maker (beta)
 
 A static page that builds a verified-memory pack from a ChatGPT or Claude data export,
 entirely in the browser. This folder is repo-only: it is not part of the npm package.

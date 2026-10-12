@@ -229,4 +229,6 @@ test('choosing only a non-chat part of a Claude export explains which file to ch
   await expect(page.locator('#load-status')).toHaveText('memories-000.zip: not needed for a memory pack (only the conversations files are). Choose conversations-000.zip instead (and conversations-001.zip and so on, if your export has more parts).');
   await page.click('text=How do I get my export?');
   await expect(page.locator('.help').first()).toContainText('Each link works only once');
+  await expect(page.locator('.help').first()).toContainText('Not yet confirmed against a real ChatGPT export');
+  await expect(page.locator('h1 .beta')).toHaveText('Beta');
 });
