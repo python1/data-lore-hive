@@ -11,7 +11,7 @@
 </head>
 <body>
 <header class="top">
-  <h1>Verified Memory pack maker</h1>
+  <h1>Verified Memory pack maker <span class="beta">Beta</span></h1>
   <p class="lede">Turn your ChatGPT or Claude data export into a memory pack: pick the exact sentences worth remembering, and download a pack whose every quote is checked word for word against your chats.</p>
   <p class="privacy" id="privacy"><strong>Your export never leaves this browser.</strong> There is no server, no analytics, and this page is not allowed to make network requests. You can also save the page and use it offline.</p>
 </header>
@@ -27,7 +27,7 @@
     <details class="help">
       <summary>How do I get my export?</summary>
       <ul>
-        <li><strong>ChatGPT:</strong> Settings → Data controls → Export data. You get an email with a .zip.</li>
+        <li><strong>ChatGPT:</strong> Settings → Data controls → Export data. You get an email with a .zip. <em>Not yet confirmed against a real ChatGPT export:</em> it should work, but check the summary of skipped content after loading, and every quote is still checked word for word before you can download.</li>
         <li><strong>Claude:</strong> Settings → Privacy → Export data. Your export comes as a short list of files (the manifest), each with its own download link, one file per kind of data: conversations, memories, projects and so on. Each link works only once, so save every file you download.
           <ul>
             <li>Here you only need the <strong>conversations</strong> files: <code>conversations-000.zip</code>, and also <code>conversations-001.zip</code>, <code>conversations-002.zip</code> and so on if your export has more parts. Choose them all at once (hold Shift, or ⌘ on a Mac / Ctrl on Windows, to pick several).</li>
