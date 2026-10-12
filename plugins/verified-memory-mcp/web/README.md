@@ -3,8 +3,23 @@
 A static page that builds a verified-memory pack from a ChatGPT or Claude data export,
 entirely in the browser. This folder is repo-only: it is not part of the npm package.
 
-Status: the export parsers, zip reader/writer and pack assembly are done and tested in Node.
-The page itself is not built yet.
+Status: the page works in Chromium, Firefox and WebKit, from `file://` and over http.
+The automated browser tests and the GitHub Pages workflow come next.
+
+## Try it locally
+
+```sh
+npm install        # dev-only: Playwright, for the browser tests
+npm run build      # builds the parent package (for the verifier), then dist/index.html
+open dist/index.html
+```
+
+`dist/index.html` is one self-contained file (app, worker and styles inlined). Its
+Content-Security-Policy pins the inline script and style by hash and sets
+`connect-src 'none'`, so the page cannot send anything anywhere. Load
+`test/fixtures/chatgpt-conversations.json` or `claude-conversations.json` to try it with
+invented data. Large exports are parsed in a Web Worker; where a browser cannot read the
+file inside a worker (WebKit on `file://`), the page parses on the main thread instead.
 
 ## Modules (`src/`, no dependencies, run in browsers and Node 22+)
 
@@ -15,6 +30,8 @@ The page itself is not built yet.
 | `export-chatgpt.mjs` | Walks the `mapping` tree from `current_node`; other branches are kept but marked. |
 | `export-claude.mjs` | Reads `chat_messages` content blocks; thinking becomes its own message; tree branches if `parent_message_uuid` is present. |
 | `export-common.mjs` | Message shape, warnings, dates, lone-surrogate repair. |
+| `ui-logic.mjs` | Page logic without the DOM: selection trimming, error placement, search, drafts. |
+| `app.mjs`, `app.css`, `worker.mjs` | The page. Export text is only ever inserted as text nodes, never as HTML. |
 | `pack-inputs.mjs` | Browser selection → code-point quote; selections → the CLI's `messages.jsonl` + `records.jsonl` → pack via `../tools/pack-core.mjs`. |
 
 The pack is built by the same `tools/pack-core.mjs` as the CLI, and the page can offer the

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="__CSP__">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pack maker</title>
+<link rel="icon" href="data:,">
+<style>__STYLE__</style>
+</head>
+<body>
+<header class="top">
+  <h1>Verified Memory pack maker</h1>
+  <p class="lede">Turn your ChatGPT or Claude data export into a memory pack: pick the exact sentences worth remembering, and download a pack whose every quote is checked word for word against your chats.</p>
+  <p class="privacy" id="privacy"><strong>Your export never leaves this browser.</strong> There is no server, no analytics, and this page is not allowed to make network requests. You can also save the page and use it offline.</p>
+</header>
+
+<main>
+  <section class="card" id="step-load" aria-labelledby="load-heading">
+    <h2 id="load-heading"><span class="step">1</span> Load your export</h2>
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept=".zip,.json,.jsonl,application/zip,application/json">
+      <span class="drop-main">Choose or drop your export</span>
+      <span class="drop-hint">The .zip as downloaded, or the conversations.json inside it</span>
+    </label>
+    <details class="help">
+      <summary>How do I get my export?</summary>
+      <ul>
+        <li><strong>ChatGPT:</strong> Settings → Data controls → Export data. You get an email with a .zip.</li>
+        <li><strong>Claude:</strong> Settings → Privacy → Export data. You get an email with a .zip.</li>
+        <li>Also accepted: a <code>messages.jsonl</code> in the format of <code>verified-memory-build-pack</code>.</li>
+      </ul>
+    </details>
+    <p id="load-status" class="status" role="status" aria-live="polite"></p>
+    <details id="warnings" class="warnings" hidden>
+      <summary id="warnings-summary"></summary>
+      <ul id="warnings-list"></ul>
+    </details>
+  </section>
+
+  <section id="workspace" class="workspace" hidden>
+    <nav class="pane conversations" aria-label="Conversations">
+      <label class="visually-hidden" for="search">Search all messages</label>
+      <input type="search" id="search" placeholder="Search all messages" autocomplete="off">
+      <div class="toggles">
+        <label><input type="checkbox" id="show-branches"> Show earlier versions</label>
+        <label><input type="checkbox" id="show-other"> Show reasoning and code</label>
+      </div>
+      <p id="search-count" class="muted" aria-live="polite"></p>
+      <ul id="conversation-list" class="conversation-list"></ul>
+      <button type="button" id="more-conversations" class="link" hidden>Show more</button>
+    </nav>
+
+    <section class="pane thread-pane" aria-labelledby="thread-title">
+      <h2 id="thread-title" class="thread-title">Pick a conversation</h2>
+      <p class="muted thread-hint">Select text in a message, then use <em>Quote selection</em> on the right.</p>
+      <div id="thread" class="thread"></div>
+    </section>
+
+    <aside class="pane records-pane" aria-labelledby="records-heading">
+      <h2 id="records-heading"><span class="step">2</span> Records</h2>
+      <div class="speakers">
+        <label>Your name <input type="text" id="speaker-user" autocomplete="off"></label>
+        <label>Assistant name <input type="text" id="speaker-agent" autocomplete="off"></label>
+      </div>
+      <div class="selection-bar" id="selection-bar">
+        <p id="selection-preview" class="selection-preview muted">No text selected.</p>
+        <div class="row">
+          <button type="button" id="new-record" disabled>Quote selection as new record</button>
+        </div>
+        <div class="row">
+          <label class="visually-hidden" for="target-record">Record to add the quote to</label>
+          <select id="target-record" disabled></select>
+          <button type="button" id="add-to-record" disabled>Add to record</button>
+        </div>
+        <p id="selection-error" class="error" role="alert"></p>
+      </div>
+      <ol id="records" class="records"></ol>
+      <p id="records-empty" class="muted">No records yet. Each record is one thing to remember, backed by one or more exact quotes.</p>
+
+      <section class="download" aria-labelledby="download-heading">
+        <h2 id="download-heading"><span class="step">3</span> Download</h2>
+        <label>Pack title <input type="text" id="title" value="My memory pack" autocomplete="off"></label>
+        <label>Description <span class="muted">(optional)</span> <textarea id="description" rows="2"></textarea></label>
+        <p id="build-status" class="status" role="status" aria-live="polite"></p>
+        <div class="row">
+          <button type="button" id="download-pack" class="primary" disabled>Download pack (.zip)</button>
+          <button type="button" id="save-folder" hidden disabled>Save as folder…</button>
+        </div>
+        <details class="help">
+          <summary>Rebuild or check it yourself</summary>
+          <p>The input files hold only the messages you quoted. The command-line builder turns them into the identical pack:</p>
+          <pre id="rebuild-command"></pre>
+          <button type="button" id="download-inputs" disabled>Download input files (.zip)</button>
+        </details>
+        <div class="row drafts">
+          <button type="button" id="save-draft" disabled>Save draft</button>
+          <label class="button">Open draft <input type="file" id="load-draft" accept=".json,application/json" disabled></label>
+        </div>
+        <p class="muted small">A draft is a file with your records and quotes, so you can continue later with the same export. Nothing is kept in the browser.</p>
+      </section>
+    </aside>
+  </section>
+</main>
+<script type="text/plain" id="worker-source">__WORKER__</script>
+<script>__APP__</script>
+</body>
+</html>
