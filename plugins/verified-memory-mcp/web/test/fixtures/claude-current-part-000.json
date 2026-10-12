@@ -1,0 +1,238 @@
+[
+ {
+  "uuid": "00000000-0000-4000-8000-000000003001",
+  "name": "Tool shed inventory",
+  "summary": "Invented summary.",
+  "created_at": "2026-04-04T10:00:00Z",
+  "updated_at": "2026-04-04T10:20:00Z",
+  "account": {
+   "uuid": "00000000-0000-4000-8000-000000009999"
+  },
+  "chat_messages": [
+   {
+    "uuid": "00000000-0000-4000-8000-000000000071",
+    "text": "Can you list what is in the tool shed?",
+    "content": [
+     {
+      "start_timestamp": "2026-04-04T10:00:00Z",
+      "stop_timestamp": "2026-04-04T10:00:01Z",
+      "flags": null,
+      "type": "text",
+      "text": "Can you list what is in the tool shed?",
+      "citations": []
+     },
+     {
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "flags": null,
+      "type": "injected_prompt_block",
+      "prompt": "INJECTED: invented instructions the app added; never quotable.",
+      "injection_source": "invented_source",
+      "initial_turn_only": true,
+      "skip_on_truncated_continuation": false
+     }
+    ],
+    "sender": "human",
+    "created_at": "2026-04-04T10:00:00Z",
+    "updated_at": "2026-04-04T10:00:00Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000000"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000072",
+    "text": "The shed holds two spades, a wheelbarrow and the seed tin.",
+    "content": [
+     {
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "flags": null,
+      "type": "thinking",
+      "thinking": "",
+      "summaries": [
+       {
+        "summary": "Listing the shed"
+       }
+      ],
+      "cut_off": false,
+      "truncated": false,
+      "hidden": true,
+      "thinking_hidden": true,
+      "alternative_display_type": null,
+      "signature": null
+     },
+     {
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "flags": null,
+      "type": "tool_use",
+      "id": "toolu_invented",
+      "name": "web_search",
+      "input": {
+       "query": "invented shed list"
+      },
+      "message": null,
+      "integration_name": null,
+      "icon_name": "globe",
+      "context": null,
+      "display_content": null
+     },
+     {
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "flags": null,
+      "type": "tool_result",
+      "tool_use_id": "toolu_invented",
+      "name": "web_search",
+      "is_error": false,
+      "content": [
+       {
+        "type": "knowledge",
+        "title": "Invented page",
+        "url": "https://example.invalid/shed",
+        "metadata": {
+         "type": "webpage_metadata",
+         "site_domain": "example.invalid",
+         "favicon_url": "https://example.invalid/icon",
+         "site_name": "Example"
+        },
+        "is_missing": false,
+        "text": "invented search text"
+       }
+      ]
+     },
+     {
+      "start_timestamp": "2026-04-04T10:00:00Z",
+      "stop_timestamp": "2026-04-04T10:00:01Z",
+      "flags": null,
+      "type": "text",
+      "text": "The shed holds two spades, a wheelbarrow and the seed tin.",
+      "citations": [
+       {
+        "uuid": "00000000-0000-4000-8000-000000000081",
+        "start_index": 0,
+        "end_index": 8,
+        "details": {
+         "type": "web_search_citation",
+         "url": "https://example.invalid/shed"
+        }
+       }
+      ]
+     }
+    ],
+    "sender": "assistant",
+    "created_at": "2026-04-04T10:00:09Z",
+    "updated_at": "2026-04-04T10:00:09Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000071"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000073",
+    "text": "INJECTED ONLY: invented text that is not from the person.",
+    "content": [
+     {
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "flags": null,
+      "type": "injected_prompt_block",
+      "prompt": "INJECTED ONLY: invented text that is not from the person.",
+      "injection_source": "invented_source",
+      "initial_turn_only": true,
+      "skip_on_truncated_continuation": false
+     }
+    ],
+    "sender": "human",
+    "created_at": "2026-04-04T10:05:00Z",
+    "updated_at": "2026-04-04T10:05:00Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000072"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000074",
+    "text": "Noted. The seed tin stays on the top shelf.",
+    "content": [
+     {
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "flags": null,
+      "type": "flag",
+      "flag": "invented_flag",
+      "helpline": {
+       "id": "invented",
+       "name": "Invented Helpline",
+       "phone_number": "000",
+       "sms_number": "000",
+       "web_chat_url": "https://example.invalid/help",
+       "url": null
+      }
+     },
+     {
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "flags": null,
+      "type": "token_budget",
+      "remaining": null
+     },
+     {
+      "start_timestamp": "2026-04-04T10:00:00Z",
+      "stop_timestamp": "2026-04-04T10:00:01Z",
+      "flags": null,
+      "type": "text",
+      "text": "Noted. The seed tin stays on the top shelf.",
+      "citations": []
+     }
+    ],
+    "sender": "assistant",
+    "created_at": "2026-04-04T10:05:04Z",
+    "updated_at": "2026-04-04T10:05:04Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000073"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000075",
+    "text": "Here is the shed map.",
+    "content": [
+     {
+      "start_timestamp": "2026-04-04T10:00:00Z",
+      "stop_timestamp": "2026-04-04T10:00:01Z",
+      "flags": null,
+      "type": "text",
+      "text": "Here is the shed map.",
+      "citations": []
+     },
+     {
+      "type": "image",
+      "file_uuid": "00000000-0000-4000-8000-000000000082",
+      "source": null
+     },
+     {
+      "type": "document",
+      "file_uuid": "00000000-0000-4000-8000-000000000083",
+      "source": null
+     }
+    ],
+    "sender": "human",
+    "created_at": "2026-04-04T10:10:00Z",
+    "updated_at": "2026-04-04T10:10:00Z",
+    "attachments": [
+     {
+      "file_name": "",
+      "file_size": 10,
+      "file_type": "txt",
+      "extracted_content": "invented attachment text"
+     }
+    ],
+    "files": [
+     {
+      "file_uuid": "00000000-0000-4000-8000-000000000082",
+      "file_name": "shed-map.png"
+     }
+    ],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000074"
+   }
+  ]
+ }
+]

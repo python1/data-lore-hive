@@ -26,9 +26,9 @@ file inside a worker (WebKit on `file://`), the page parses on the main thread i
 | File | Does |
 |---|---|
 | `zip.mjs` | Reads zip exports through random access (only the central directory and `conversations*.json` are read, never the media), stored/deflate, zip64, CRC-checked. Writes the download zip (stored, deterministic). |
-| `load-export.mjs` | Recognises the format from the data, not the file name: ChatGPT, Claude, or a plain `messages.jsonl` in the builder's format. |
+| `load-export.mjs` | Loads one file or several parts of one export. Recognises the format from the data, not the file name: ChatGPT, Claude, or a plain `messages.jsonl` in the builder's format. |
 | `export-chatgpt.mjs` | Walks the `mapping` tree from `current_node`; other branches are kept but marked. |
-| `export-claude.mjs` | Reads `chat_messages` content blocks; thinking becomes its own message; tree branches if `parent_message_uuid` is present. |
+| `export-claude.mjs` | Reads `chat_messages` content blocks; thinking becomes its own message; injected prompts are never used; tree branches from `parent_message_uuid`. |
 | `export-common.mjs` | Message shape, warnings, dates, lone-surrogate repair. |
 | `ui-logic.mjs` | Page logic without the DOM: selection trimming, error placement, search, drafts. |
 | `app.mjs`, `app.css`, `worker.mjs` | The page. Export text is only ever inserted as text nodes, never as HTML. |
@@ -37,28 +37,43 @@ file inside a worker (WebKit on `file://`), the page parses on the main thread i
 The pack is built by the same `tools/pack-core.mjs` as the CLI, and the page can offer the
 two input files for download, so `verified-memory-build-pack` reproduces the pack byte for byte.
 
-## Format assumptions to confirm with real exports
+## Export formats
 
-Neither vendor documents the export schema. These choices come from public descriptions and
-must be checked with `tools/export-shape.mjs` (structure only, no text) on real exports:
+Neither vendor documents its export schema. Each format is checked with
+`tools/export-shape.mjs` (structure only, no text) on a real export, and the invented
+fixtures follow what it shows.
 
-- ChatGPT: text is `content.parts` strings joined with a blank line; `multimodal_text` voice
-  transcripts (`audio_transcription`) count as text; `code`, `thoughts`, `reasoning_recap` are
-  kept as separate kinds; `system`/`tool` roles, hidden messages and assistant messages addressed
-  to a tool (`recipient` other than `all`) are skipped; dates are `create_time` epoch seconds.
-- Claude: `sender` is `human`/`assistant`; `content` blocks of type `text` make the message,
-  `thinking` a separate one, tool blocks are skipped; `text` is the fallback; `created_at` is ISO.
+- **Claude: checked against a real export (October 2026).** The export is a manifest plus
+  one zip per kind of data, each with its own one-time download link. Only
+  `conversations-NNN.zip` holds chats, and there may be several parts; each holds a
+  `conversations.json`. The page accepts any number of parts at once. It recognises
+  `memories`, `projects`, `frames`, `light_metadata` and `users` files by name and never
+  opens them. Any other chosen file without conversations (such as the manifest) is noted
+  and skipped. A broken conversations part is an error, so chats are never silently lost.
+  Inside: `sender` is `human`/`assistant`; `created_at` is UTC ISO; every message has
+  `parent_message_uuid`; `content` blocks of type `text` make the message.
+  `injected_prompt_block` (text the app adds to a turn) is never used, and once a message
+  has content blocks its plain `text` field is never used either, because it can echo an
+  injected prompt. A non-empty `thinking` block becomes a separate reasoning message;
+  empty (hidden) ones are counted. `tool_use`, `tool_result`, `flag` and `token_budget` are
+  skipped and counted. `image` and `document` count as attachments. A conversation found
+  in two parts is kept once.
+- **ChatGPT: not yet checked against a real export.** Text is `content.parts` strings
+  joined with a blank line; `multimodal_text` voice transcripts (`audio_transcription`)
+  count as text; `code`, `thoughts` and `reasoning_recap` are kept as separate kinds;
+  `system`/`tool` roles, hidden messages and assistant messages addressed to a tool
+  (`recipient` other than `all`) are skipped; dates are `create_time` epoch seconds.
 - A message with no date is shown but cannot be quoted (the pack needs a date per quote).
 
-Anything unexpected never crashes the loader: it is skipped and counted in `warnings`, which the
-page will show. A fuzz test mutates the fixtures 800 times to hold that line.
+Anything unexpected never crashes the loader: it is skipped and counted in `warnings`,
+which the page shows. A fuzz test mutates every fixture 400 times to hold that line.
 
 ## Tests
 
 - `npm test`: Node tests for every module, the build and its CSP (builds the parent
   package first, for the verifier).
 - `npm run test:e2e`: Playwright tests of `dist/index.html` in Chromium, Firefox and
-  WebKit, each over http and from `file://` (60 runs). They rebuild a golden pack through
+  WebKit, each over http and from `file://` (72 runs). They rebuild a golden pack through
   the UI byte for byte, reopen a draft, use a real triple-click selection, check that
   export text is never run as HTML, that the CSP blocks requests, and that no request
   other than local `blob:` URLs happens after the page loads. First run:

@@ -45,6 +45,9 @@ main { max-width: 96rem; margin: 0 auto; padding: 1rem; }
 .status.ok { color: var(--accent); }
 .error:empty { display: none; }
 .warnings { margin-top: .5rem; font-size: .9rem; }
+.notes { margin: .25rem 0 0; padding-left: 1.25rem; font-size: .9rem; color: var(--muted); overflow-wrap: anywhere; }
+.notes:empty { display: none; }
+.help ul ul { margin-top: .25rem; }
 
 button, .button { font: inherit; padding: .4rem .8rem; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
 .button input { position: absolute; opacity: 0; width: 1px; height: 1px; }

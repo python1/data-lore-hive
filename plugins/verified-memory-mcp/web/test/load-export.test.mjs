@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { ExportError, loadExport } from '../src/load-export.mjs';
+import { ExportError, loadExport, loadExports } from '../src/load-export.mjs';
 import { bytesSource } from '../src/zip.mjs';
 import { nodeZip } from './helpers.mjs';
 
@@ -117,7 +117,7 @@ test('randomly mutated exports never crash the loader and never produce malforme
     return v;
   };
   let ok = 0, refused = 0;
-  for (const source of [chatgptJson, claudeJson]) {
+  for (const source of [chatgptJson, claudeJson, ...[0, 1].map((i) => readFileSync(join(fixtures, `claude-current-part-00${i}.json`)))]) {
     const base = JSON.parse(source);
     for (let i = 0; i < 400; i++) {
       const bytes = Buffer.from(JSON.stringify(mutate(base, 0)));
@@ -133,5 +133,74 @@ test('randomly mutated exports never crash the loader and never produce malforme
       }
     }
   }
-  assert.ok(ok > 400 && refused > 0, `ok ${ok}, refused ${refused}`);
+  assert.ok(ok > 600 && refused > 0, `ok ${ok}, refused ${refused}`); // single-conversation parts are often emptied by mutation
+});
+
+// Current Claude exports: one zip per kind of data, downloaded one by one; chats are in
+// conversations-NNN.zip parts. The manifest's real structure is not known here; this one is invented.
+const claudePart = (i) => readFileSync(join(fixtures, `claude-current-part-00${i}.json`));
+const part = (i) => ({ name: `conversations-00${i}.zip`, bytes: nodeZip({ 'conversations.json': claudePart(i) }) });
+const loadMany = (files) => loadExports(files.map(({ name, bytes }) => ({ name, source: bytesSource(new Uint8Array(bytes)) })));
+const neverRead = (name) => ({ name, source: { size: 100, read: async () => { throw new Error(`${name} was opened`); } } });
+
+test('current Claude export: conversations parts load together; injected prompts never become messages', async () => {
+  const r = await loadMany([part(1), part(0)]);
+  assert.equal(r.format, 'claude');
+  assert.equal(r.used, 2);
+  assert.deepEqual(r.notes, []);
+  assert.deepEqual(rows(r), [
+    ['Tool shed inventory', 'current', 'user', 'text', '2026-04-04T10:00:00Z', 0, 'Can you list what is in the tool shed?'],
+    ['Tool shed inventory', 'current', 'agent', 'text', '2026-04-04T10:00:09Z', 0, 'The shed holds two spades, a wheelbarrow and the seed tin.'],
+    ['Tool shed inventory', 'current', 'agent', 'text', '2026-04-04T10:05:04Z', 0, 'Noted. The seed tin stays on the top shelf.'],
+    ['Tool shed inventory', 'current', 'user', 'text', '2026-04-04T10:10:00Z', 4, 'Here is the shed map.'],
+    ['Pond day', 'current', 'user', 'text', '2026-04-11T08:00:00Z', 0, 'When do we clear the pond?'],
+    ['Pond day', 'branch', 'agent', 'reasoning', '2026-04-11T08:00:06Z', 0, 'The plan said late April.'],
+    ['Pond day', 'branch', 'agent', 'text', '2026-04-11T08:00:06Z', 0, 'Late April, I believe.'],
+    ['Pond day', 'current', 'agent', 'text', '2026-04-11T08:01:00Z', 0, 'The pond gets cleared on the last Sunday of April.'],
+    ['Pond day', 'current', 'user', 'text', '2026-04-11T08:02:00Z', 0, 'Last Sunday of April. Got it, café after.']
+  ]);
+  assert.ok(!JSON.stringify(r.conversations).includes('INJECTED'), 'no injected prompt text anywhere in the loaded data');
+  assert.deepEqual(sortWarnings(r.warnings), sortWarnings([
+    { code: 'skipped-injected-prompt', detail: '', count: 2 }, { code: 'skipped-hidden-thinking', detail: '', count: 1 },
+    { code: 'skipped-content-type', detail: 'tool_use', count: 1 }, { code: 'skipped-content-type', detail: 'tool_result', count: 1 },
+    { code: 'skipped-content-type', detail: 'flag', count: 1 }, { code: 'skipped-content-type', detail: 'token_budget', count: 1 },
+    { code: 'skipped-empty-message', detail: '', count: 1 }
+  ]));
+  // The conversations.json inside a part loads on its own too.
+  assert.equal((await loadExport({ name: 'conversations.json', source: bytesSource(new Uint8Array(claudePart(0))) })).conversations.length, 1);
+});
+
+test('other parts of a Claude export are noted and never opened; an unknown manifest is noted, not fatal', async () => {
+  const manifest = { name: 'manifest.json', bytes: Buffer.from(JSON.stringify({ invented: 'manifest', files: [{ kind: 'conversations' }] })) };
+  const r = await loadExports([
+    ...[part(0), manifest].map(({ name, bytes }) => ({ name, source: bytesSource(new Uint8Array(bytes)) })),
+    ...['memories-000.zip', 'projects-000.zip', 'frames-000.zip', 'light_metadata-000.zip'].map(neverRead)
+  ]);
+  assert.equal(r.used, 1);
+  assert.deepEqual(r.notes.map((n) => [n.name, n.text]), [
+    ['frames-000.zip', 'not needed for a memory pack (only the conversations files are), so it was not opened'],
+    ['light_metadata-000.zip', 'not needed for a memory pack (only the conversations files are), so it was not opened'],
+    ['manifest.json', 'not used: not a ChatGPT or Claude conversations file (expected a list of conversations)'],
+    ['memories-000.zip', 'not needed for a memory pack (only the conversations files are), so it was not opened'],
+    ['projects-000.zip', 'not needed for a memory pack (only the conversations files are), so it was not opened']
+  ]);
+  const listManifest = { name: 'export-manifest.json', bytes: Buffer.from(JSON.stringify([{ invented: 'entry' }])) };
+  assert.match((await loadMany([part(0), listManifest])).notes[0].text, /^not used: conversations are in a format this page does not recognise yet/);
+});
+
+test('choosing only non-chat files, or a broken conversations part, fails with a clear message', async () => {
+  await assert.rejects(loadExports([neverRead('memories-000.zip')]),
+    (e) => e instanceof ExportError && e.message === 'memories-000.zip: not needed for a memory pack (only the conversations files are). Choose conversations-000.zip instead (and conversations-001.zip and so on, if your export has more parts).');
+  await assert.rejects(loadMany([{ name: 'manifest.json', bytes: Buffer.from('{}') }, { name: 'projects-000.zip', bytes: Buffer.from('x') }]),
+    (e) => e instanceof ExportError && /^None of the chosen files holds conversations \(manifest\.json, projects-000\.zip\)\. For a Claude export, choose conversations-000\.zip/.test(e.message));
+  const broken = part(1); broken.bytes = Buffer.from(broken.bytes); broken.bytes[60] ^= 0xff;
+  await assert.rejects(loadMany([part(0), broken]), (e) => e instanceof ExportError && /^conversations-001\.zip: /.test(e.message));
+  await assert.rejects(loadMany([part(0), { name: 'messages.jsonl', bytes: readFileSync(resolve('../examples/input/messages.jsonl')) }]), /mixes ChatGPT and Claude|on its own/);
+});
+
+test('a conversation present in two parts is kept once', async () => {
+  const both = JSON.stringify([...JSON.parse(claudePart(0)), ...JSON.parse(claudePart(1))]);
+  const r = await loadMany([part(0), { name: 'conversations-001.zip', bytes: nodeZip({ 'conversations.json': both }) }]);
+  assert.deepEqual(r.conversations.map((c) => c.title), ['Tool shed inventory', 'Pond day']);
+  assert.deepEqual(r.warnings.filter((w) => w.code === 'duplicate-conversation'), [{ code: 'duplicate-conversation', detail: '', count: 1 }]);
 });
