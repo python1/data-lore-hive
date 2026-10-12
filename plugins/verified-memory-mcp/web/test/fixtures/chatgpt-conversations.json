@@ -1,0 +1,748 @@
+[
+ {
+  "title": "Seed swap plans",
+  "create_time": 1772439300,
+  "update_time": 1772442000,
+  "id": "00000000-0000-4000-8000-000000001001",
+  "conversation_id": "00000000-0000-4000-8000-000000001001",
+  "current_node": "00000000-0000-4000-8000-000000000018",
+  "default_model_slug": "gpt-example",
+  "is_archived": false,
+  "mapping": {
+   "client-created-root": {
+    "id": "client-created-root",
+    "message": null,
+    "parent": null,
+    "children": [
+     "00000000-0000-4000-8000-000000000011"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000011": {
+    "id": "00000000-0000-4000-8000-000000000011",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000011",
+     "author": {
+      "role": "system",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": null,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       ""
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 0,
+     "metadata": {
+      "is_visually_hidden_from_conversation": true
+     },
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "client-created-root",
+    "children": [
+     "00000000-0000-4000-8000-000000000012"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000012": {
+    "id": "00000000-0000-4000-8000-000000000012",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000012",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": null,
+     "update_time": null,
+     "content": {
+      "content_type": "user_editable_context",
+      "user_profile": "Invented profile.",
+      "user_instructions": "Invented instructions."
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {
+      "is_visually_hidden_from_conversation": true
+     },
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000011",
+    "children": [
+     "00000000-0000-4000-8000-000000000013"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000013": {
+    "id": "00000000-0000-4000-8000-000000000013",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000013",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1772439300,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Morning! I look after the tomato beds at the Larkfield community garden. Can you help me plan the seed swap?"
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000012",
+    "children": [
+     "00000000-0000-4000-8000-000000000014",
+     "00000000-0000-4000-8000-000000000015"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000014": {
+    "id": "00000000-0000-4000-8000-000000000014",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000014",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1772439320,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Sure. Draft one: hold the swap sometime in April."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000013",
+    "children": []
+   },
+   "00000000-0000-4000-8000-000000000015": {
+    "id": "00000000-0000-4000-8000-000000000015",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000015",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1772439360,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Happy to help, Rowan. Let's hold the seed swap on the first Saturday in April."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {
+      "model_slug": "gpt-example"
+     },
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000013",
+    "children": [
+     "00000000-0000-4000-8000-000000000016",
+     "00000000-0000-4000-8000-000000000019"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000016": {
+    "id": "00000000-0000-4000-8000-000000000016",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000016",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1772439600,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Can we do it by the shed?"
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000015",
+    "children": [
+     "00000000-0000-4000-8000-000000000017"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000017": {
+    "id": "00000000-0000-4000-8000-000000000017",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000017",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1772439610,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Yes, by the shed works."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000016",
+    "children": []
+   },
+   "00000000-0000-4000-8000-000000000019": {
+    "id": "00000000-0000-4000-8000-000000000019",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000019",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1772439660,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Can we do it by the greenhouse instead? The shed code changed."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000015",
+    "children": [
+     "00000000-0000-4000-8000-000000000018"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000018": {
+    "id": "00000000-0000-4000-8000-000000000018",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000018",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1772439690.25,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "The greenhouse is a good spot. I'll note that the shed code changed."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000019",
+    "children": []
+   }
+  }
+ },
+ {
+  "title": "Shed rota",
+  "create_time": 1773079200,
+  "update_time": null,
+  "id": "00000000-0000-4000-8000-000000001002",
+  "current_node": "00000000-0000-4000-8000-000000000032",
+  "mapping": {
+   "root-b": {
+    "id": "root-b",
+    "message": null,
+    "parent": null,
+    "children": [
+     "00000000-0000-4000-8000-000000000021"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000021": {
+    "id": "00000000-0000-4000-8000-000000000021",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000021",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079200,
+     "update_time": null,
+     "content": {
+      "content_type": "multimodal_text",
+      "parts": [
+       {
+        "content_type": "image_asset_pointer",
+        "asset_pointer": "file-service://file-invented-0001",
+        "size_bytes": 1234,
+        "width": 640,
+        "height": 480
+       },
+       "Here is the rota photo. Ivy waters on Mondays 🌱, Rowan on Thursdays."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "root-b",
+    "children": [
+     "00000000-0000-4000-8000-000000000022"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000022": {
+    "id": "00000000-0000-4000-8000-000000000022",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000022",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079205,
+     "update_time": null,
+     "content": {
+      "content_type": "code",
+      "language": "python",
+      "text": "rota = {'Mon': 'Ivy'}"
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "python",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000021",
+    "children": [
+     "00000000-0000-4000-8000-000000000023"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000023": {
+    "id": "00000000-0000-4000-8000-000000000023",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000023",
+     "author": {
+      "role": "tool",
+      "name": "python",
+      "metadata": {}
+     },
+     "create_time": 1773079206,
+     "update_time": null,
+     "content": {
+      "content_type": "execution_output",
+      "text": "{'Mon': 'Ivy'}"
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000022",
+    "children": [
+     "00000000-0000-4000-8000-000000000024"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000024": {
+    "id": "00000000-0000-4000-8000-000000000024",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000024",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079207,
+     "update_time": null,
+     "content": {
+      "content_type": "thoughts",
+      "thoughts": [
+       {
+        "summary": "Reading the rota",
+        "content": "The photo lists two people and two days."
+       }
+      ],
+      "source_analysis_msg_id": "00000000-0000-4000-8000-000000000023"
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000023",
+    "children": [
+     "00000000-0000-4000-8000-000000000025"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000025": {
+    "id": "00000000-0000-4000-8000-000000000025",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000025",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079208,
+     "update_time": null,
+     "content": {
+      "content_type": "reasoning_recap",
+      "content": "Thought for 4 seconds"
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000024",
+    "children": [
+     "00000000-0000-4000-8000-000000000026"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000026": {
+    "id": "00000000-0000-4000-8000-000000000026",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000026",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079210,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Rota:\r\n- Ivy: Mondays\r\n- Rowan: Thursdays\r\nThe café opens at 9. Water early, water deeply, water early."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000025",
+    "children": [
+     "00000000-0000-4000-8000-000000000027"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000027": {
+    "id": "00000000-0000-4000-8000-000000000027",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000027",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": null,
+     "update_time": null,
+     "content": {
+      "content_type": "multimodal_text",
+      "parts": [
+       {
+        "content_type": "audio_transcription",
+        "text": "Thanks, that matches what I said on the phone.",
+        "direction": "in"
+       },
+       {
+        "content_type": "audio_asset_pointer",
+        "asset_pointer": "sediment://file-invented-0002",
+        "size_bytes": 999
+       }
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000026",
+    "children": [
+     "00000000-0000-4000-8000-000000000028"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000028": {
+    "id": "00000000-0000-4000-8000-000000000028",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000028",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079260,
+     "update_time": null,
+     "content": {
+      "content_type": "future_widget",
+      "parts": [
+       "A widget type this page doesn't know yet."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000027",
+    "children": [
+     "00000000-0000-4000-8000-000000000029"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000029": {
+    "id": "00000000-0000-4000-8000-000000000029",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000029",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079270,
+     "update_time": null,
+     "content": {
+      "content_type": "code",
+      "language": "python",
+      "text": "print('water early')"
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000028",
+    "children": [
+     "00000000-0000-4000-8000-000000000030"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000030": {
+    "id": "00000000-0000-4000-8000-000000000030",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000030",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079320,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Odd byte here: \ud800 end."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000029",
+    "children": [
+     "00000000-0000-4000-8000-000000000031"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000031": {
+    "id": "00000000-0000-4000-8000-000000000031",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000031",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079325,
+     "update_time": null,
+     "content": {
+      "content_type": "hologram"
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000030",
+    "children": [
+     "00000000-0000-4000-8000-000000000032"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000032": {
+    "id": "00000000-0000-4000-8000-000000000032",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000032",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773079380,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "   "
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000031",
+    "children": []
+   }
+  }
+ },
+ {
+  "title": "Empty chat",
+  "create_time": 1773136800,
+  "id": "00000000-0000-4000-8000-000000001003",
+  "current_node": "root-c",
+  "mapping": {
+   "root-c": {
+    "id": "root-c",
+    "message": null,
+    "parent": null,
+    "children": []
+   }
+  }
+ },
+ {
+  "title": "Compost day",
+  "create_time": 1773300600,
+  "id": "00000000-0000-4000-8000-000000001004",
+  "current_node": null,
+  "mapping": {
+   "root-d": {
+    "id": "root-d",
+    "message": null,
+    "parent": null,
+    "children": [
+     "00000000-0000-4000-8000-000000000041"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000041": {
+    "id": "00000000-0000-4000-8000-000000000041",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000041",
+     "author": {
+      "role": "user",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773300600,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "The compost bins get turned on the first of the month."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": null,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "root-d",
+    "children": [
+     "00000000-0000-4000-8000-000000000042"
+    ]
+   },
+   "00000000-0000-4000-8000-000000000042": {
+    "id": "00000000-0000-4000-8000-000000000042",
+    "message": {
+     "id": "00000000-0000-4000-8000-000000000042",
+     "author": {
+      "role": "assistant",
+      "name": null,
+      "metadata": {}
+     },
+     "create_time": 1773300604,
+     "update_time": null,
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Noted: compost on the first of each month."
+      ]
+     },
+     "status": "finished_successfully",
+     "end_turn": true,
+     "weight": 1,
+     "metadata": {},
+     "recipient": "all",
+     "channel": null
+    },
+    "parent": "00000000-0000-4000-8000-000000000041",
+    "children": []
+   }
+  }
+ },
+ {
+  "title": "Broken conversation",
+  "id": "00000000-0000-4000-8000-000000001005"
+ }
+]

@@ -35,6 +35,16 @@ quote in its message, computes offsets and hashes, writes the pack, and then loa
 with the server's own verifier. If any quote is not verbatim in its message, it writes
 nothing.
 
+### From a ChatGPT or Claude export, in your browser
+
+[`web/`](web/) holds a pack maker page: load your data export, search your chats, select
+the exact sentences to remember, and download a ready pack. It runs entirely in the
+browser (no server, and its Content-Security-Policy forbids network requests), uses the
+same building code as the command-line builder, and checks the pack with the server's
+own verifier before offering the download. It is not hosted yet; to use it now, run
+`npm install && npm run build` in `web/` and open `web/dist/index.html`. See
+[`web/README.md`](web/README.md).
+
 ### Quick start
 
 1. Put your source messages in `messages.jsonl`, one JSON object per line:
@@ -78,6 +88,8 @@ nothing.
    ```
 
    From a repository checkout, run `node tools/build-pack.mjs ...` after `npm run build`.
+   The building rules (verbatim quotes, code-point offsets, hashes, file layout) live in
+   `tools/pack-core.mjs`, which has no imports so a browser can run the same code.
    The builder makes no network calls. It never overwrites: it stages in a hidden sibling
    directory and renames it into place only after verification passes.
 
@@ -253,10 +265,11 @@ verifier. No OpenClaw runtime or dependencies are needed to build or run this se
 ## Shared verifier and fail-closed startup
 
 The development-only `scripts/prepare.mjs` copies the original
-`../verified-memory/src/pack.ts` **byte for byte** into ignored `src/pack.ts`, and
+`../verified-memory/src/pack.ts` and `verify.ts` **byte for byte** into ignored `src/`, and
 copies its public fictional sample into ignored `sample-pack/`. TypeScript compiles
-that same verifier into `dist/pack.js`. There is no second maintained verifier,
-and no modification to the published OpenClaw plugin. Build from the repository
+that same verifier into `dist/pack.js` (file reading) and `dist/verify.js` (the checks
+themselves, with no imports). There is no second maintained verifier, and this build
+never modifies the OpenClaw plugin. Build from the repository
 checkout so the sibling source and sample are present. Generated files are not committed.
 
 The whole pack must verify **before a server is created or stdio is connected**.
@@ -298,14 +311,21 @@ plugins/verified-memory-mcp/
 ├── src/
 │   ├── index.ts
 │   ├── server.ts
-│   └── pack.ts                 # generated, ignored; exact shared source
-├── tools/build-pack.mjs        # offline pack builder (ships in npm)
+│   ├── pack.ts                 # generated, ignored; exact shared source
+│   └── verify.ts               # generated, ignored; exact shared source
+├── web/                        # repo-only: browser pack maker (see web/README.md)
+├── tools/
+│   ├── build-pack.mjs          # offline pack builder (ships in npm)
+│   ├── pack-core.mjs           # its import-free building rules (ships in npm)
+│   └── export-shape.mjs        # repo-only: prints a chat export's structure, never its text
 ├── examples/
 │   ├── input/                  # invented messages.jsonl + records.jsonl
 │   └── pack/                   # pack built from them
 ├── test/
 │   ├── server.test.mjs
-│   └── build-pack.test.mjs
+│   ├── build-pack.test.mjs
+│   ├── pack-core.test.mjs
+│   └── export-shape.test.mjs
 ├── validation/
 │   ├── tests.txt               # Node 25.8.0
 │   ├── tests-node22-min.txt     # Node 22.0.0

@@ -1,0 +1,4 @@
+{"record_id":"M-friday","role":"agent","topic":"Greenhouse","category":"people","quotes":[{"message_id":2,"quote":"Tally waters the greenhouse on Fridays.","start":34}]}
+{"record_id":"M-compost","role":"user","topic":"Compost","category":"routine","quotes":[{"message_id":1,"quote":"the compost bins get turned on the first of the month.","start":18}]}
+{"record_id":"M-beans","role":"agent","topic":"Beds","category":"plans","quotes":[{"message_id":4,"quote":"Bed 4 gets the beans; bed 3 is resting this year.","start":0}]}
+{"record_id":"M-cafe","role":"user","topic":"Café","category":"places","quotes":[{"message_id":3,"quote":"the café 🌻","start":31}]}

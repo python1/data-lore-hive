@@ -1,0 +1,5 @@
+{"record_id":"M-role","role":"user","topic":"Role","category":"profile","quotes":[{"message_id":1,"quote":"I look after the tomato beds at the Larkfield community garden.","start":9}]}
+{"record_id":"M-swap-date","role":"agent","topic":"Seed swap","category":"plans","quotes":[{"message_id":2,"quote":"Let's hold the seed swap on the first Saturday in April.","start":22}]}
+{"record_id":"M-swap-place","role":"user","speaker":"Rowan and ChatGPT","topic":"Seed swap","category":"plans","statement":"The seed swap moves to the greenhouse.","quotes":[{"message_id":3,"quote":"Can we do it by the greenhouse instead?","start":0},{"message_id":4,"quote":"The greenhouse is a good spot.","start":0}]}
+{"record_id":"M-rota","role":"user","topic":"Watering rota","category":"people","quotes":[{"message_id":5,"quote":"Ivy waters on Mondays 🌱, Rowan on Thursdays.","start":24}]}
+{"record_id":"M-water","role":"agent","topic":"Watering","category":"advice","statement":"Water early; the café opens at 9.","quotes":[{"message_id":6,"quote":"water","start":92},{"message_id":6,"quote":"The café opens at 9.","start":43}]}

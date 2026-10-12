@@ -1,0 +1,49 @@
+# Publishes the browser pack maker (plugins/verified-memory-mcp/web) to GitHub Pages.
+# Manual only: it never runs on push. Before the first run, enable Pages in the repository
+# settings (Settings -> Pages -> Source: GitHub Actions), then run it from the Actions tab.
+# The page is one static file; it has no server side and its CSP forbids network requests.
+name: pack maker pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: plugins/verified-memory-mcp/web } }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            plugins/verified-memory-mcp/package-lock.json
+            plugins/verified-memory-mcp/web/package-lock.json
+      - run: npm ci --prefix .. && npm ci
+      # Unit tests build the parent package (the verifier) first; then build the page.
+      - run: npm test
+      - run: node build.mjs
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with: { path: plugins/verified-memory-mcp/web/dist }
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

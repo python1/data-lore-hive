@@ -1,0 +1,19 @@
+{
+  "name": "verified-memory-pack-maker",
+  "private": true,
+  "description": "Browser pack maker for verified-memory-mcp: build a pack from a ChatGPT or Claude export, entirely client-side",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "npm --prefix .. run build && node build.mjs",
+    "pretest": "npm --prefix .. run build",
+    "test": "node --test test/*.test.mjs",
+    "test:e2e": "npm run build && playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

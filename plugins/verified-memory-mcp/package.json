@@ -15,6 +15,7 @@
   "files": [
     "dist",
     "tools/build-pack.mjs",
+    "tools/pack-core.mjs",
     "README.md",
     "LICENSE"
   ],
