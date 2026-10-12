@@ -37,13 +37,13 @@ nothing.
 
 ### From a ChatGPT or Claude export, in your browser
 
-[`web/`](web/) holds a pack maker page: load your data export, search your chats, select
+**Pack maker (beta): <https://python1.github.io/data-lore-hive/>.** Load your data export, search your chats, select
 the exact sentences to remember, and download a ready pack. It runs entirely in the
 browser (no server, and its Content-Security-Policy forbids network requests), uses the
 same building code as the command-line builder, and checks the pack with the server's
-own verifier before offering the download. It is not hosted yet; to use it now, run
-`npm install && npm run build` in `web/` and open `web/dist/index.html`. See
-[`web/README.md`](web/README.md).
+own verifier before offering the download. Its source is in [`web/`](web/); to run it
+from a checkout instead, run `npm install && npm run build` there and open
+`web/dist/index.html`. See [`web/README.md`](web/README.md).
 
 ### Quick start
 

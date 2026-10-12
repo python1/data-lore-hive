@@ -105,6 +105,8 @@ claude mcp add verified-memory -- /absolute/path/to/node --experimental-permissi
   /absolute/path/to/hive-public/plugins/verified-memory-mcp/dist/index.js
 ```
 
+To make your own pack from a ChatGPT or Claude data export, use the **pack maker (beta)** at <https://python1.github.io/data-lore-hive/>. It runs entirely in your browser: your export is never uploaded, and the page cannot make network requests.
+
 For Claude Desktop, use the `mcpServers` example in the [plugin README](plugins/verified-memory-mcp/README.md#claude-desktop-configuration-example). With no `--pack`, the server serves the bundled fictional sample, so asking it to search for "pottery" should return record `M-sample-2` with its quote and source message ID. The checksum check proves the pack wasn't altered, not that its contents are true. See the plugin's README and [VALIDATION.md](plugins/verified-memory-mcp/VALIDATION.md) for its limits.
 
 ## Measured results
