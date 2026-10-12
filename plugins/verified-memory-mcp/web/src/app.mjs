@@ -1,6 +1,6 @@
 // Pack maker page. Export data is only ever put into the page with textContent or text
 // nodes, never as HTML. Nothing here makes a network request; the page's CSP forbids it.
-import { ExportError, loadExport } from './load-export.mjs';
+import { ExportError, loadExports } from './load-export.mjs';
 import { blobSource, writeZip } from './zip.mjs';
 import { buildPack } from './pack-inputs.mjs';
 import { sha256 } from '../../tools/pack-core.mjs';
@@ -41,31 +41,34 @@ function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTi
 // ---------- loading ----------
 
 /** Parse in a Web Worker; fall back to the main thread where workers are unavailable (e.g. some file:// setups). */
-async function parse(file) {
+const onMainThread = (files) => loadExports(files.map((file) => ({ name: file.name, source: blobSource(file) })));
+async function parse(files) {
   let url, worker;
   try {
     url = URL.createObjectURL(new Blob([$('worker-source').textContent], { type: 'text/javascript' }));
     worker = new Worker(url);
-  } catch { if (url) URL.revokeObjectURL(url); return loadExport({ name: file.name, source: blobSource(file) }); }
+  } catch { if (url) URL.revokeObjectURL(url); return onMainThread(files); }
   const result = await new Promise((resolve) => {
     worker.onmessage = ({ data }) => resolve(data);
     worker.onerror = (event) => { event.preventDefault(); resolve(null); };
-    worker.postMessage(file);
+    worker.postMessage(files);
   });
   worker.terminate(); URL.revokeObjectURL(url);
   if (result?.ok) return result.result;
   if (result && result.expected) throw new ExportError(result.message);
   // The worker could not start or could not read the file (WebKit cannot read a File inside a
   // worker on file:// pages): parse on the main thread instead.
-  return loadExport({ name: file.name, source: blobSource(file) });
+  return onMainThread(files);
 }
 
-async function loadFile(file) {
+async function loadFiles(files) {
+  if (!files.length) return;
   if (state.records.length && !confirm('Loading another export removes your current records. Save a draft first if you want to keep them. Continue?')) return;
   const status = $('load-status');
-  setStatus(status, `Reading ${file.name}…`);
+  setStatus(status, `Reading ${files.length === 1 ? files[0].name : plural(files.length, 'file')}…`);
+  $('load-notes').replaceChildren();
   let data;
-  try { data = await parse(file); }
+  try { data = await parse(files); }
   catch (error) {
     setStatus(status, error instanceof ExportError ? error.message : `Could not read this file: ${error.message}`, 'error');
     return;
@@ -80,7 +83,9 @@ async function loadFile(file) {
 
   const undated = [...state.messages.values()].filter((m) => !m.date).length;
   const undatedNote = undated ? ` ${undated} ${undated === 1 ? 'has' : 'have'} no date and cannot be quoted.` : '';
-  setStatus(status, `${FORMAT_NAMES[data.format]}: ${plural(data.conversations.length, 'conversation')}, ${plural(state.messages.size, 'message')}.${undatedNote}`, 'ok');
+  const fromFiles = data.used > 1 ? ` (${plural(data.used, 'file')})` : '';
+  setStatus(status, `${FORMAT_NAMES[data.format]}${fromFiles}: ${plural(data.conversations.length, 'conversation')}, ${plural(state.messages.size, 'message')}.${undatedNote}`, 'ok');
+  $('load-notes').replaceChildren(...data.notes.map((n) => h('li', {}, h('strong', {}, n.name), `: ${n.text}.`)));
   const warnings = $('warnings');
   warnings.hidden = !data.warnings.length;
   $('warnings-summary').textContent = `${plural(data.warnings.length, 'kind')} of content ${data.warnings.length === 1 ? 'was' : 'were'} skipped or adjusted`;
@@ -377,10 +382,10 @@ async function openDraft(file) {
 
 function init() {
   const drop = $('drop');
-  $('file').addEventListener('change', (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) loadFile(f); });
+  $('file').addEventListener('change', (e) => { const files = [...e.target.files]; e.target.value = ''; loadFiles(files); });
   drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
   drop.addEventListener('dragleave', () => drop.classList.remove('over'));
-  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); const f = e.dataTransfer.files[0]; if (f) loadFile(f); });
+  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); loadFiles([...e.dataTransfer.files]); });
   // Dropping a file anywhere else must not make the browser navigate away to it.
   addEventListener('dragover', (e) => e.preventDefault());
   addEventListener('drop', (e) => e.preventDefault());

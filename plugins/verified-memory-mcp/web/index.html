@@ -20,19 +20,25 @@
   <section class="card" id="step-load" aria-labelledby="load-heading">
     <h2 id="load-heading"><span class="step">1</span> Load your export</h2>
     <label class="drop" id="drop">
-      <input type="file" id="file" accept=".zip,.json,.jsonl,application/zip,application/json">
+      <input type="file" id="file" multiple accept=".zip,.json,.jsonl,application/zip,application/json">
       <span class="drop-main">Choose or drop your export</span>
-      <span class="drop-hint">The .zip as downloaded, or the conversations.json inside it</span>
+      <span class="drop-hint">ChatGPT: the .zip as downloaded. Claude: conversations-000.zip, plus any further conversations parts. Or the conversations.json inside.</span>
     </label>
     <details class="help">
       <summary>How do I get my export?</summary>
       <ul>
         <li><strong>ChatGPT:</strong> Settings → Data controls → Export data. You get an email with a .zip.</li>
-        <li><strong>Claude:</strong> Settings → Privacy → Export data. You get an email with a .zip.</li>
+        <li><strong>Claude:</strong> Settings → Privacy → Export data. Your export comes as a short list of files (the manifest), each with its own download link, one file per kind of data: conversations, memories, projects and so on. Each link works only once, so save every file you download.
+          <ul>
+            <li>Here you only need the <strong>conversations</strong> files: <code>conversations-000.zip</code>, and also <code>conversations-001.zip</code>, <code>conversations-002.zip</code> and so on if your export has more parts. Choose them all at once (hold Shift, or ⌘ on a Mac / Ctrl on Windows, to pick several).</li>
+            <li>The other files (memories, projects, the manifest itself) are not needed. If you choose them anyway, the page leaves them unopened and says so.</li>
+          </ul>
+        </li>
         <li>Also accepted: a <code>messages.jsonl</code> in the format of <code>verified-memory-build-pack</code>.</li>
       </ul>
     </details>
     <p id="load-status" class="status" role="status" aria-live="polite"></p>
+    <ul id="load-notes" class="notes"></ul>
     <details id="warnings" class="warnings" hidden>
       <summary id="warnings-summary"></summary>
       <ul id="warnings-list"></ul>

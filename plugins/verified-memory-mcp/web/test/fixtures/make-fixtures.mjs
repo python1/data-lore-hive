@@ -86,5 +86,44 @@ const claude = [
   { uuid: u(2004), name: 'Empty list', created_at: '2026-03-08T10:00:00Z', chat_messages: [] }
 ];
 
+// Current Claude export (seen October 2026 via tools/export-shape.mjs): conversations arrive as
+// one or more conversations-NNN.zip parts, each holding a conversations.json in this shape.
+// Every message has parent_message_uuid; content blocks carry timestamps, flags and citations.
+// Everything below is invented, including the injected prompt text and the helpline.
+const ROOT = u(0);
+const tb = (s, extra = {}) => ({ start_timestamp: '2026-04-04T10:00:00Z', stop_timestamp: '2026-04-04T10:00:01Z', flags: null, type: 'text', text: s, citations: [], ...extra });
+const cur = (n, sender, created, parent, content, extra = {}) => ({ uuid: u(n), text: content.filter((b) => b.type === 'text').map((b) => b.text).join(''),
+  content, sender, created_at: created, updated_at: created, attachments: [], files: [], parent_message_uuid: parent, ...extra });
+const injected = (prompt) => ({ start_timestamp: null, stop_timestamp: null, flags: null, type: 'injected_prompt_block', prompt, injection_source: 'invented_source', initial_turn_only: true, skip_on_truncated_continuation: false });
+const claudeCurrent = [
+  [{ uuid: u(3001), name: 'Tool shed inventory', summary: 'Invented summary.', created_at: '2026-04-04T10:00:00Z', updated_at: '2026-04-04T10:20:00Z', account: { uuid: u(9999) },
+    chat_messages: [
+      cur(71, 'human', '2026-04-04T10:00:00Z', ROOT, [tb('Can you list what is in the tool shed?'), injected('INJECTED: invented instructions the app added; never quotable.')]),
+      cur(72, 'assistant', '2026-04-04T10:00:09Z', u(71), [
+        { start_timestamp: null, stop_timestamp: null, flags: null, type: 'thinking', thinking: '', summaries: [{ summary: 'Listing the shed' }], cut_off: false, truncated: false, hidden: true, thinking_hidden: true, alternative_display_type: null, signature: null },
+        { start_timestamp: null, stop_timestamp: null, flags: null, type: 'tool_use', id: 'toolu_invented', name: 'web_search', input: { query: 'invented shed list' }, message: null, integration_name: null, icon_name: 'globe', context: null, display_content: null },
+        { start_timestamp: null, stop_timestamp: null, flags: null, type: 'tool_result', tool_use_id: 'toolu_invented', name: 'web_search', is_error: false, content: [{ type: 'knowledge', title: 'Invented page', url: 'https://example.invalid/shed', metadata: { type: 'webpage_metadata', site_domain: 'example.invalid', favicon_url: 'https://example.invalid/icon', site_name: 'Example' }, is_missing: false, text: 'invented search text' }] },
+        tb('The shed holds two spades, a wheelbarrow and the seed tin.', { citations: [{ uuid: u(81), start_index: 0, end_index: 8, details: { type: 'web_search_citation', url: 'https://example.invalid/shed' } }] })]),
+      // A turn made only of an injected block: its plain `text` echoes the injected prompt and must not become a message.
+      { ...cur(73, 'human', '2026-04-04T10:05:00Z', u(72), [injected('INJECTED ONLY: invented text that is not from the person.')]), text: 'INJECTED ONLY: invented text that is not from the person.' },
+      cur(74, 'assistant', '2026-04-04T10:05:04Z', u(73), [
+        { start_timestamp: null, stop_timestamp: null, flags: null, type: 'flag', flag: 'invented_flag', helpline: { id: 'invented', name: 'Invented Helpline', phone_number: '000', sms_number: '000', web_chat_url: 'https://example.invalid/help', url: null } },
+        { start_timestamp: null, stop_timestamp: null, flags: null, type: 'token_budget', remaining: null },
+        tb('Noted. The seed tin stays on the top shelf.')]),
+      cur(75, 'human', '2026-04-04T10:10:00Z', u(74), [tb('Here is the shed map.'), { type: 'image', file_uuid: u(82), source: null }, { type: 'document', file_uuid: u(83), source: null }],
+        { files: [{ file_uuid: u(82), file_name: 'shed-map.png' }], attachments: [{ file_name: '', file_size: 10, file_type: 'txt', extracted_content: 'invented attachment text' }] })
+    ] }],
+  [{ uuid: u(3002), name: 'Pond day', summary: '', created_at: '2026-04-11T08:00:00Z', updated_at: '2026-04-11T08:30:00Z', account: { uuid: u(9999) },
+    chat_messages: [
+      cur(91, 'human', '2026-04-11T08:00:00Z', ROOT, [tb('When do we clear the pond?')]),
+      cur(92, 'assistant', '2026-04-11T08:00:06Z', u(91), [
+        { start_timestamp: null, stop_timestamp: null, flags: null, type: 'thinking', thinking: 'The plan said late April.', summaries: [{ summary: 'Checking the plan' }], cut_off: false, truncated: false, hidden: false, thinking_hidden: false, alternative_display_type: null, signature: null },
+        tb('Late April, I believe.')]),
+      cur(93, 'assistant', '2026-04-11T08:01:00Z', u(91), [tb('The pond gets cleared on the last Sunday of April.')]),
+      cur(94, 'human', '2026-04-11T08:02:00Z', u(93), [tb('Last Sunday of April. Got it, café after.')])
+    ] }]
+];
+claudeCurrent.forEach((part, i) => writeFileSync(`${out}/claude-current-part-${String(i).padStart(3, '0')}.json`, JSON.stringify(part, null, 1) + '\n'));
+
 writeFileSync(`${out}/chatgpt-conversations.json`, JSON.stringify(chatgpt, null, 1) + '\n');
 writeFileSync(`${out}/claude-conversations.json`, JSON.stringify(claude, null, 1) + '\n');

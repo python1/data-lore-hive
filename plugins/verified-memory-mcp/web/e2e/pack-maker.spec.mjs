@@ -190,3 +190,43 @@ test('fits a phone screen without sideways scrolling', async ({ app: { page } })
   await page.click('#new-record');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('current Claude export: several conversations parts at once; other files are noted, injected text never shown', async ({ app: { page, requests } }, testInfo) => {
+  const dir = testInfo.outputPath('claude-export');
+  mkdirSync(dir, { recursive: true });
+  const paths = {
+    'conversations-000.zip': nodeZip({ 'conversations.json': readFileSync(join(fixtures, 'claude-current-part-000.json')) }),
+    'conversations-001.zip': nodeZip({ 'conversations.json': readFileSync(join(fixtures, 'claude-current-part-001.json')) }),
+    'memories-000.zip': nodeZip({ 'memories.json': '[]' }),
+    'manifest.json': JSON.stringify({ invented: 'manifest' })
+  };
+  for (const [name, bytes] of Object.entries(paths)) writeFileSync(join(dir, name), bytes);
+  await page.setInputFiles('#file', Object.keys(paths).map((name) => join(dir, name)));
+  await expect(page.locator('#load-status')).toHaveText('Claude export (2 files): 2 conversations, 9 messages.');
+  await expect(page.locator('#load-notes li')).toHaveText([
+    'manifest.json: not used: not a ChatGPT or Claude conversations file (expected a list of conversations).',
+    'memories-000.zip: not needed for a memory pack (only the conversations files are), so it was not opened.'
+  ]);
+  await page.click('#warnings summary');
+  await expect(page.locator('#warnings-list')).toContainText('Text the Claude app added to messages (not typed by you) was left out and cannot be quoted (2)');
+  await openConversation(page, 'Tool shed inventory');
+  await page.check('#show-other');
+  await page.check('#show-branches');
+  await expect(page.locator('.message-text')).toHaveCount(4);
+  await expect(page.locator('body')).not.toContainText('INJECTED');
+  await openConversation(page, 'Pond day');
+  await select(page, 'Got it', 'Last Sunday of April. Got it, café after.');
+  await page.click('#new-record');
+  await fillRecord(page, 0, { topic: 'Pond', category: 'routine' });
+  await expect(page.locator('#build-status')).toHaveClass(/\bok\b/);
+  expectNoNetwork(requests);
+});
+
+test('choosing only a non-chat part of a Claude export explains which file to choose', async ({ app: { page } }, testInfo) => {
+  const path = testInfo.outputPath('memories-000.zip');
+  writeFileSync(path, nodeZip({ 'memories.json': '[]' }));
+  await loadFile(page, path);
+  await expect(page.locator('#load-status')).toHaveText('memories-000.zip: not needed for a memory pack (only the conversations files are). Choose conversations-000.zip instead (and conversations-001.zip and so on, if your export has more parts).');
+  await page.click('text=How do I get my export?');
+  await expect(page.locator('.help').first()).toContainText('Each link works only once');
+});

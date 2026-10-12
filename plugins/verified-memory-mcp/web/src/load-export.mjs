@@ -42,12 +42,8 @@ function adaptJsonl(bytes, label, warn) {
   return { format: 'messages-jsonl', conversations: [{ id: 'jsonl', title: label, date: messages[0].date, messages }] };
 }
 
-/**
- * file: { name, source } where source is a zip.mjs source (bytesSource / blobSource).
- * Throws ExportError with a message suitable for showing to the person.
- */
-export async function loadExport({ name, source }) {
-  const warn = makeWarnings();
+/** One file -> list of { format, conversations } parts. Errors name the file. */
+async function readFile({ name, source }, warn) {
   const parts = [];
   if (await isZip(source)) {
     let entries;
@@ -64,10 +60,60 @@ export async function loadExport({ name, source }) {
     const bytes = await source.read(0, source.size);
     parts.push(/\.jsonl$/i.test(name) ? adaptJsonl(bytes, name, warn) : adapt(decodeJson(bytes, name), name, warn));
   }
+  return parts;
+}
+
+// A Claude export is downloaded file by file: a manifest plus one zip per kind of data.
+// Only conversations-NNN.zip holds chats. The other kinds are recognised by name and never opened.
+const CONVERSATIONS_NAME = /^conversations(-\d+)?\.(zip|json)$/i;
+const OTHER_KIND = /^(memories|projects|frames|light_metadata|users)(-\d+)?\.(zip|json)$/i;
+const NOT_NEEDED = 'not needed for a memory pack (only the conversations files are), so it was not opened';
+const baseName = (name) => name.split(/[\\/]/).pop();
+
+/**
+ * files: [{ name, source }] where each source is a zip.mjs source (bytesSource / blobSource);
+ * one export file, or several parts of one export (conversations-000.zip, conversations-001.zip, ...).
+ * Returns { format, conversations, warnings, notes, used } where notes lists chosen files that
+ * were not used and why. Throws ExportError with a message suitable for showing to the person.
+ */
+export async function loadExports(files) {
+  const warn = makeWarnings();
+  const notes = [];
+  const parts = [];
+  let used = 0;
+  const sorted = [...files].sort((a, b) => a.name.localeCompare(b.name));
+  for (const file of sorted) {
+    const base = baseName(file.name);
+    if (OTHER_KIND.test(base)) { notes.push({ name: file.name, text: NOT_NEEDED }); continue; }
+    let read;
+    try { read = await readFile(file, warn); }
+    catch (error) {
+      // A broken conversations part is an error: skipping it would silently lose chats.
+      if (!(error instanceof ExportError) || sorted.length === 1 || CONVERSATIONS_NAME.test(base)) throw error;
+      notes.push({ name: file.name, text: `not used: ${error.message.startsWith(`${file.name}: `) ? error.message.slice(file.name.length + 2) : error.message}` });
+      continue;
+    }
+    parts.push(...read);
+    used++;
+  }
+  const label = sorted.length === 1 ? sorted[0].name : 'The chosen files';
+  if (!used) {
+    throw new ExportError(sorted.length === 1
+      ? `${label}: ${NOT_NEEDED.replace(', so it was not opened', '')}. Choose conversations-000.zip instead (and conversations-001.zip and so on, if your export has more parts).`
+      : `None of the chosen files holds conversations (${notes.map((n) => n.name).join(', ')}). For a Claude export, choose conversations-000.zip (and conversations-001.zip and so on, if there are more parts).`);
+  }
   const formats = [...new Set(parts.map((p) => p.format).filter(Boolean))];
-  if (formats.length > 1) throw new ExportError(`${name}: mixes ChatGPT and Claude conversation files`);
-  const conversations = parts.flatMap((p) => p.conversations);
-  if (!conversations.length) throw new ExportError(`${name}: the export contains no conversations with readable messages`);
+  if (formats.length > 1) throw new ExportError(`${label}: mixes ChatGPT and Claude conversation files`);
+  if (formats[0] === 'messages-jsonl' && used > 1) throw new ExportError('Load a messages.jsonl file on its own, not together with other files.');
+  // Parts of one export should not overlap; if a conversation does appear twice, keep the first.
+  const seen = new Set();
+  const conversations = parts.flatMap((p) => p.conversations).filter((c) => {
+    if (c.id.startsWith('#')) return true; // positional fallback IDs are per file, not real IDs
+    if (seen.has(c.id)) { warn('duplicate-conversation'); return false; }
+    seen.add(c.id);
+    return true;
+  });
+  if (!conversations.length) throw new ExportError(`${label}: the export contains no conversations with readable messages`);
   let order = 0;
   const keys = new Set();
   for (const c of conversations) for (const m of c.messages) {
@@ -75,5 +121,8 @@ export async function loadExport({ name, source }) {
     keys.add(m.key);
     m.order = order++;
   }
-  return { format: formats[0], conversations, warnings: warn.list() };
+  return { format: formats[0], conversations, warnings: warn.list(), notes, used };
 }
+
+/** Single-file form of loadExports. */
+export const loadExport = (file) => loadExports([file]);

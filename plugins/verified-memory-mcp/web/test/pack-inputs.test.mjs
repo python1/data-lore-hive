@@ -4,7 +4,8 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, 
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { loadExport } from '../src/load-export.mjs';
+import { loadExport, loadExports } from '../src/load-export.mjs';
+import { nodeZip } from './helpers.mjs';
 import { bytesSource } from '../src/zip.mjs';
 import { buildPack, InputError, packInputs, quoteFromSelection } from '../src/pack-inputs.mjs';
 import { sha256 } from '../../tools/pack-core.mjs';
@@ -15,8 +16,11 @@ import { loadPack } from '../../dist/pack.js';
 const golden = resolve('test/golden');
 const PACK_FILES = ['MEMORY.md', 'README.md', 'SHA256SUMS', 'records.jsonl'];
 
+/** One fixture as conversations.json, or several as conversations-NNN.zip parts of one export. */
 async function loaded(fixture) {
-  const r = await loadExport({ name: 'conversations.json', source: bytesSource(readFileSync(resolve('test/fixtures', fixture))) });
+  const r = Array.isArray(fixture)
+    ? await loadExports(fixture.map((f, i) => ({ name: `conversations-00${i}.zip`, source: bytesSource(new Uint8Array(nodeZip({ 'conversations.json': readFileSync(resolve('test/fixtures', f)) }))) })))
+    : await loadExport({ name: 'conversations.json', source: bytesSource(readFileSync(resolve('test/fixtures', fixture))) });
   return new Map(r.conversations.flatMap((c) => c.messages).map((m) => [m.key, m]));
 }
 /** Find a message by its text and select `quote` the way a browser range would (UTF-16 offsets). */
@@ -46,6 +50,15 @@ const cases = {
       { record_id: 'M-compost', role: 'user', topic: 'Compost', category: 'routine', quotes: [select(messages, 'Great. Remind me', 'the compost bins get turned on the first of the month.')] },
       { record_id: 'M-beans', role: 'agent', topic: 'Beds', category: 'plans', quotes: [select(messages, 'Bed 4 gets', 'Bed 4 gets the beans; bed 3 is resting this year.')] },
       { record_id: 'M-cafe', role: 'user', topic: 'Café', category: 'places', quotes: [select(messages, 'Legacy text', 'the café 🌻')] }
+    ] };
+  },
+  'claude-current': async () => {
+    const messages = await loaded(['claude-current-part-000.json', 'claude-current-part-001.json']);
+    return { messages, speakers: { user: 'Rowan', agent: 'Claude' }, title: 'Larkfield garden (current Claude export fixture)', records: [
+      { record_id: 'M-shed', role: 'agent', topic: 'Tool shed', category: 'places', quotes: [select(messages, 'The shed holds', 'two spades, a wheelbarrow and the seed tin')] },
+      { record_id: 'M-seed-tin', role: 'agent', topic: 'Tool shed', category: 'places', quotes: [select(messages, 'Noted.', 'The seed tin stays on the top shelf.')] },
+      { record_id: 'M-pond', role: 'user', speaker: 'Rowan and Claude', topic: 'Pond', category: 'routine', statement: 'The pond is cleared on the last Sunday of April.', quotes: [
+        select(messages, 'The pond gets cleared', 'the last Sunday of April'), select(messages, 'Got it', 'Last Sunday of April. Got it, café after.')] }
     ] };
   }
 };

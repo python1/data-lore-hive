@@ -1,17 +1,19 @@
 // Claude export adapter: conversations.json is an array of conversations, each with a
 // `chat_messages` list ({ uuid, sender, text, content: [blocks], created_at }). Text blocks
-// make the message; a thinking block becomes its own 'reasoning' message; tool blocks are
-// skipped. If every message has `parent_message_uuid`, the messages form a tree and the
-// current thread is the path to the most recent message. Field names were taken from public
-// descriptions of the format and must be checked against real exports with
-// tools/export-shape.mjs; anything unexpected becomes a warning.
+// make the message; a non-empty thinking block becomes its own 'reasoning' message; tool,
+// flag and token-budget blocks are skipped; image and document blocks count as attachments.
+// injected_prompt_block is text the app added to a turn, not something the person wrote: it
+// is never used, and neither is the message's plain `text` when content blocks exist (it can
+// echo an injected prompt). Every message has `parent_message_uuid` (checked October 2026 with
+// tools/export-shape.mjs), so messages form a tree and the current thread is the path to the
+// most recent message. Anything unexpected becomes a warning.
 import { isObject, pushMessage, utcDate } from './export-common.mjs';
 
 export const detectClaude = (first) => isObject(first) && Array.isArray(first.chat_messages);
 
 const ROLES = { human: 'user', assistant: 'agent' };
 const has = (o, k) => typeof k === 'string' && Object.hasOwn(o, k);
-const SKIP_BLOCKS = new Set(['tool_use', 'tool_result', 'server_tool_use', 'web_search_tool_result']);
+const SKIP_BLOCKS = new Set(['tool_use', 'tool_result', 'server_tool_use', 'web_search_tool_result', 'flag', 'token_budget']);
 const ATTACHMENT_BLOCKS = new Set(['image', 'document', 'file']);
 
 /** -> { text, thinking, attachments } from one message's content blocks (or its legacy `text`). */
@@ -22,13 +24,16 @@ function readBlocks(message, warn) {
   for (const block of blocks) {
     const type = isObject(block) && typeof block.type === 'string' ? block.type : '(missing)';
     if (type === 'text' && typeof block.text === 'string') texts.push(block.text);
-    else if (type === 'thinking' && typeof block.thinking === 'string') thoughts.push(block.thinking);
+    else if (type === 'thinking' && typeof block.thinking === 'string' && block.thinking.trim()) thoughts.push(block.thinking);
+    else if (type === 'thinking') warn('skipped-hidden-thinking');
+    else if (type === 'injected_prompt_block') warn('skipped-injected-prompt');
     else if (SKIP_BLOCKS.has(type)) warn('skipped-content-type', type);
     else if (ATTACHMENT_BLOCKS.has(type)) attachments++;
     else warn('unknown-content-type', type);
   }
-  // Older exports (or messages without blocks) carry the text only in `text`.
-  const text = texts.length ? texts.join('\n\n') : typeof message.text === 'string' ? message.text : '';
+  // Older exports carry the text only in `text`. Once a message has content blocks, `text` is
+  // never used: for a turn made of an injected_prompt_block it holds the injected prompt.
+  const text = texts.length ? texts.join('\n\n') : blocks.length ? '' : typeof message.text === 'string' ? message.text : '';
   return { text, thinking: thoughts.join('\n\n'), attachments };
 }
 
