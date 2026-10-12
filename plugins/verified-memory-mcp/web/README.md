@@ -3,8 +3,8 @@
 A static page that builds a verified-memory pack from a ChatGPT or Claude data export,
 entirely in the browser. This folder is repo-only: it is not part of the npm package.
 
-It works in Chromium, Firefox and WebKit, both opened from disk (`file://`) and served
-over http. It is not hosted yet (see *Publishing* below).
+**Live: <https://python1.github.io/data-lore-hive/>** (GitHub Pages). It works in Chromium, Firefox and WebKit, both
+served over http and opened from disk (`file://`).
 
 ## Try it locally
 
@@ -86,7 +86,8 @@ No real chat data belongs anywhere in this folder.
 
 ## Publishing
 
-`.github/workflows/pack-maker-pages.yml` builds the page and deploys it to GitHub Pages.
-It runs only when started by hand from the Actions tab, after Pages is enabled in the
-repository settings (Settings → Pages → Source: GitHub Actions). Hosting adds nothing
+`.github/workflows/pack-maker-pages.yml` builds the page and deploys it to GitHub Pages
+at <https://python1.github.io/data-lore-hive/> (Pages source: GitHub Actions). It runs only when started by hand from the
+Actions tab, so merging to `master` does not update the live page: run the workflow after
+a change is merged. Hosting adds nothing
 to the page: GitHub serves the one file, and the page cannot contact anything.
