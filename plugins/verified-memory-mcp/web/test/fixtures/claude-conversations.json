@@ -1,0 +1,250 @@
+[
+ {
+  "uuid": "00000000-0000-4000-8000-000000002001",
+  "name": "Greenhouse watering",
+  "summary": "",
+  "created_at": "2026-03-06T17:00:00.123456Z",
+  "updated_at": "2026-03-06T18:00:00Z",
+  "account": {
+   "uuid": "00000000-0000-4000-8000-000000009999"
+  },
+  "chat_messages": [
+   {
+    "uuid": "00000000-0000-4000-8000-000000000051",
+    "text": "",
+    "content": [
+     {
+      "type": "text",
+      "text": "Who waters the greenhouse on Fridays?",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "human",
+    "created_at": "2026-03-06T17:00:00.123456Z",
+    "updated_at": "2026-03-06T17:00:00.123456Z",
+    "attachments": [
+     {
+      "file_name": "rota.txt",
+      "file_size": 12,
+      "file_type": "txt",
+      "extracted_content": "Fri: Tally"
+     }
+    ],
+    "files": []
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000052",
+    "text": "",
+    "content": [
+     {
+      "type": "thinking",
+      "thinking": "The rota file says Tally on Fridays."
+     },
+     {
+      "type": "text",
+      "text": "According to the rota you shared, Tally waters the greenhouse on Fridays.",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "assistant",
+    "created_at": "2026-03-06T17:00:05.5+00:00",
+    "updated_at": "2026-03-06T17:00:05.5+00:00",
+    "attachments": [],
+    "files": []
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000053",
+    "text": "",
+    "content": [
+     {
+      "type": "text",
+      "text": "Great. Remind me: the compost bins get turned on the first of the month.",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "human",
+    "created_at": "2026-03-06T19:00:00+02:00",
+    "updated_at": "2026-03-06T19:00:00+02:00",
+    "attachments": [],
+    "files": []
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000054",
+    "text": "",
+    "content": [
+     {
+      "type": "tool_use",
+      "name": "web_search",
+      "input": {
+       "query": "compost"
+      }
+     },
+     {
+      "type": "tool_result",
+      "content": [
+       {
+        "type": "text",
+        "text": "invented search result"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": "Noted: compost bins are turned on the first of the month.",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     },
+     {
+      "type": "image",
+      "source": {}
+     }
+    ],
+    "sender": "assistant",
+    "created_at": "2026-03-06T17:00:20Z",
+    "updated_at": "2026-03-06T17:00:20Z",
+    "attachments": [],
+    "files": []
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000055",
+    "text": "Legacy text only message about the café 🌻.",
+    "sender": "human",
+    "created_at": "2026-03-06T17:01:00Z"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000056",
+    "text": "",
+    "content": [
+     {
+      "type": "hologram",
+      "data": "x"
+     }
+    ],
+    "sender": "assistant",
+    "created_at": "2026-03-06T17:01:05Z",
+    "updated_at": "2026-03-06T17:01:05Z",
+    "attachments": [],
+    "files": []
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000057",
+    "text": "",
+    "content": [
+     {
+      "type": "text",
+      "text": "system note",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "system",
+    "created_at": "2026-03-06T17:01:06Z",
+    "updated_at": "2026-03-06T17:01:06Z",
+    "attachments": [],
+    "files": []
+   }
+  ]
+ },
+ {
+  "uuid": "00000000-0000-4000-8000-000000002002",
+  "name": "Regenerated answer",
+  "created_at": "2026-03-07T09:00:00Z",
+  "chat_messages": [
+   {
+    "uuid": "00000000-0000-4000-8000-000000000061",
+    "text": "",
+    "content": [
+     {
+      "type": "text",
+      "text": "Which bed gets the beans?",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "human",
+    "created_at": "2026-03-07T09:00:00Z",
+    "updated_at": "2026-03-07T09:00:00Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000000"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000062",
+    "text": "",
+    "content": [
+     {
+      "type": "text",
+      "text": "Bed 3, I think.",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "assistant",
+    "created_at": "2026-03-07T09:00:05Z",
+    "updated_at": "2026-03-07T09:00:05Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000061"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000063",
+    "text": "",
+    "content": [
+     {
+      "type": "text",
+      "text": "Bed 4 gets the beans; bed 3 is resting this year.",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "assistant",
+    "created_at": "2026-03-07T09:02:00Z",
+    "updated_at": "2026-03-07T09:02:00Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000061"
+   },
+   {
+    "uuid": "00000000-0000-4000-8000-000000000064",
+    "text": "",
+    "content": [
+     {
+      "type": "text",
+      "text": "Bed 4 it is.",
+      "start_timestamp": null,
+      "stop_timestamp": null,
+      "citations": []
+     }
+    ],
+    "sender": "human",
+    "created_at": "2026-03-07T09:03:00Z",
+    "updated_at": "2026-03-07T09:03:00Z",
+    "attachments": [],
+    "files": [],
+    "parent_message_uuid": "00000000-0000-4000-8000-000000000063"
+   }
+  ]
+ },
+ {
+  "uuid": "00000000-0000-4000-8000-000000002003",
+  "name": "No messages field",
+  "created_at": "2026-03-08T09:00:00Z"
+ },
+ {
+  "uuid": "00000000-0000-4000-8000-000000002004",
+  "name": "Empty list",
+  "created_at": "2026-03-08T10:00:00Z",
+  "chat_messages": []
+ }
+]
