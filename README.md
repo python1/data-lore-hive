@@ -90,14 +90,20 @@ Replication and recovery (`replication.py`, `install_mac_sync.py`, `sync_agent.p
 
 ## Use with Claude Code / Claude Desktop (MCP)
 
-[`plugins/verified-memory-mcp/`](plugins/verified-memory-mcp/README.md) is a local, read-only stdio MCP server. It exposes two tools, `verified_memory_search` and `verified_memory_get`, over a checksum-verified memory pack such as the ones `agent-memory/` exports. It needs Node 22 or newer and is not published to npm, so you build it from this checkout:
+[`plugins/verified-memory-mcp/`](plugins/verified-memory-mcp/README.md) is a local, read-only stdio MCP server. It exposes two tools, `verified_memory_search` and `verified_memory_get`, over a checksum-verified memory pack such as the ones `agent-memory/` exports. It needs Node 22 or newer and is published on npm as [`@python1/verified-memory-mcp`](https://www.npmjs.com/package/@python1/verified-memory-mcp) and in the MCP Registry as `io.github.python1/verified-memory`. The npm package ships no pack, so `--pack` is required:
+
+```bash
+claude mcp add verified-memory -- npx -y @python1/verified-memory-mcp --pack /absolute/path/to/pack
+```
+
+Running through npx does not apply Node's permission mode. To run under the read-only filesystem allowlist, or to try the bundled fictional sample, build from this checkout instead:
 
 ```bash
 cd plugins/verified-memory-mcp
 npm ci --ignore-scripts && npm run build && npm test
 ```
 
-Register it with Claude Code. The paths are placeholders, so replace them with absolute paths:
+Then register the build with Claude Code. The paths are placeholders, so replace them with absolute paths:
 
 ```bash
 claude mcp add verified-memory -- /absolute/path/to/node --experimental-permission \
