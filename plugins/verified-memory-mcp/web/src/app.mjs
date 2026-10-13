@@ -4,8 +4,9 @@ import { ExportError, loadExports } from './load-export.mjs';
 import { blobSource, writeZip } from './zip.mjs';
 import { buildPack } from './pack-inputs.mjs';
 import { sha256 } from '../../tools/pack-core.mjs';
+import { checkPack, describeCheck, readPackFiles } from './check-pack.mjs';
 import { verifyPackEntries } from '../../dist/verify.js';
-import { DEFAULT_AGENT, applyDraft, locateError, makeDraft, makeQuote, newRecord, plural, rebuildCommand, recordsForBuild, searchConversations, slug, visibleMessages, warningText } from './ui-logic.mjs';
+import { DEFAULT_AGENT, applyDraft, locateError, makeDraft, makeQuote, newRecord, plural, rebuildCommand, recordsForBuild, searchConversations, signCommand, slug, visibleMessages, warningText } from './ui-logic.mjs';
 
 const $ = (id) => document.getElementById(id);
 const PROPS = new Set(['value', 'checked', 'disabled', 'hidden', 'selected', 'placeholder', 'type', 'rows']);
@@ -286,6 +287,7 @@ const validate = debounce(async () => {
   state.built = null;
   for (const b of ['download-pack', 'download-inputs', 'save-folder']) $(b).disabled = true;
   $('rebuild-command').textContent = rebuildCommand(state.title.trim(), state.description.trim());
+  $('sign-command').textContent = signCommand(folderName());
   for (const { li, error, quoteErrors } of refs.values()) { li.classList.remove('invalid'); error.textContent = ''; quoteErrors.forEach((e) => { e.textContent = ''; }); }
   if (!state.records.length) { setStatus(status, 'Add at least one record to build a pack.'); return; }
   setStatus(status, 'Checking…');
@@ -378,6 +380,24 @@ async function openDraft(file) {
   } catch (error) { setStatus(status, `Could not open the draft: ${error instanceof SyntaxError ? 'not a JSON file' : error.message}`, 'error'); }
 }
 
+// ---------- check a signed pack ----------
+
+let checkFiles = [];
+let checkToken = 0;
+async function runCheck() {
+  const token = ++checkToken;
+  const status = $('check-status');
+  setStatus(status, 'Checking…');
+  let result, error;
+  try {
+    const files = await readPackFiles(checkFiles.map((file) => ({ name: file.name, source: blobSource(file) })));
+    result = await checkPack(files, $('check-keys').value, $('check-require').checked);
+  } catch (e) { error = e; }
+  if (token !== checkToken) return;
+  const { text, kind } = describeCheck(result, error);
+  setStatus(status, text, kind);
+}
+
 // ---------- wiring ----------
 
 function init() {
@@ -414,6 +434,14 @@ function init() {
   $('save-draft').addEventListener('click', saveDraft);
   $('load-draft').addEventListener('change', (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) openDraft(f); });
   addEventListener('beforeunload', (e) => { if (state.records.length) e.preventDefault(); });
+
+  $('check-files').addEventListener('change', (e) => {
+    checkFiles = [...e.target.files]; e.target.value = '';
+    $('check-chosen').textContent = checkFiles.map((f) => f.name).join(', ');
+    $('check-run').disabled = !checkFiles.length; setStatus($('check-status'), '');
+  });
+  for (const id of ['check-keys', 'check-require']) $(id).addEventListener('input', () => setStatus($('check-status'), ''));
+  $('check-run').addEventListener('click', runCheck);
 }
 
 init();
