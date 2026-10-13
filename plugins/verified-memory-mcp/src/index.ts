@@ -20,6 +20,9 @@ function parseArgs(args: string[]) {
       opts[name] = value === 'true';
       continue;
     }
+    // An empty `--trusted-keys=` means no keys file: Claude Desktop passes the bundle's
+    // optional file setting this way when the user leaves it blank.
+    if (flag === '--trusted-keys' && inline === '') continue;
     const key = flag === '--pack' ? 'pack' : flag === '--trusted-keys' ? 'trustedKeys' : undefined;
     const value = inline ?? args[++i];
     if (!key || opts[key] !== undefined || !value || value.startsWith('--')) throw new Error(USAGE);

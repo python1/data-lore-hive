@@ -1,0 +1,59 @@
+{
+  "manifest_version": "0.4",
+  "name": "verified-memory",
+  "display_name": "Verified Memory",
+  "version": "0.2.0",
+  "description": "Offline read-only search over a checksum-verified, optionally signed memory pack, with exact quotes",
+  "long_description": "Pick a memory pack folder (made with the pack maker at https://python1.github.io/data-lore-hive/) and Claude can search it and quote it exactly. The whole pack is verified when the extension starts; if any check fails, it refuses to start. Read-only and offline: no network, no file writes, no accounts. Optionally require that the pack is signed by a key you trust.",
+  "author": { "name": "python1", "url": "https://github.com/python1" },
+  "repository": { "type": "git", "url": "https://github.com/python1/data-lore-hive" },
+  "homepage": "https://github.com/python1/data-lore-hive/tree/master/plugins/verified-memory-mcp",
+  "documentation": "https://github.com/python1/data-lore-hive/blob/master/plugins/verified-memory-mcp/README.md#claude-desktop-one-click-install",
+  "support": "https://github.com/python1/data-lore-hive/issues",
+  "license": "MIT",
+  "keywords": ["memory", "offline", "read-only", "checksum", "signed"],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js",
+        "--pack=${user_config.pack_dir}",
+        "--trusted-keys=${user_config.trusted_keys}",
+        "--require-signature=${user_config.require_signature}"
+      ],
+      "env": {}
+    }
+  },
+  "tools": [
+    { "name": "verified_memory_search", "description": "Search the verified memory pack by all query words; returns up to 10 matches with exact quotes, source message IDs, dates and speakers." },
+    { "name": "verified_memory_get", "description": "Retrieve one full record from the verified memory pack by its M- record ID, with citations and provenance." }
+  ],
+  "user_config": {
+    "pack_dir": {
+      "type": "directory",
+      "title": "Memory pack folder",
+      "description": "The folder holding your pack: MEMORY.md, README.md, records.jsonl and SHA256SUMS (and SHA256SUMS.sig if it is signed).",
+      "required": true
+    },
+    "trusted_keys": {
+      "type": "file",
+      "title": "Trusted keys file (optional)",
+      "description": "A file of public keys you trust to sign packs, one per line: name ssh-ed25519 AAAA…. Leave empty if your pack is not signed.",
+      "required": false,
+      "default": ""
+    },
+    "require_signature": {
+      "type": "boolean",
+      "title": "Require a trusted signature",
+      "description": "Refuse to start unless the pack is signed by a key in the trusted keys file.",
+      "required": false,
+      "default": false
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32"],
+    "runtimes": { "node": ">=22.0.0" }
+  }
+}

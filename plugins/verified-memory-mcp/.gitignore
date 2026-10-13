@@ -3,3 +3,4 @@ dist/
 src/pack.ts
 src/verify.ts
 sample-pack/
+build/
