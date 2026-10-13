@@ -42,7 +42,9 @@ nothing.
 the exact sentences to remember, and download a ready pack. It runs entirely in the
 browser (no server, and its Content-Security-Policy forbids network requests), uses the
 same building code as the command-line builder, and checks the pack with the server's
-own verifier before offering the download. Its source is in [`web/`](web/); to run it
+own verifier before offering the download. It does not sign packs (sign with `ssh-keygen`,
+below), but its *Check a signed pack* panel runs the same verifier on a signed pack and
+the public keys you paste. Its source is in [`web/`](web/); to run it
 from a checkout instead, run `npm install && npm run build` there and open
 `web/dist/index.html`. See [`web/README.md`](web/README.md).
 

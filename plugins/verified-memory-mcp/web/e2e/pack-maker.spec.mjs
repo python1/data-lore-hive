@@ -65,6 +65,8 @@ test('builds the golden ChatGPT pack through the UI, byte for byte, without any 
   expect(inputs.files['larkfield-garden-chatgpt-fixture-inputs/messages.jsonl'].equals(readFileSync(join(golden, 'chatgpt', 'messages.jsonl')))).toBe(true);
   expect(inputs.files['larkfield-garden-chatgpt-fixture-inputs/records.jsonl'].equals(readFileSync(join(golden, 'chatgpt', 'records.jsonl')))).toBe(true);
   expect(inputs.files['larkfield-garden-chatgpt-fixture-inputs/REBUILD.txt'].toString()).toContain("--title 'Larkfield garden (ChatGPT fixture)'");
+  await page.click('text=Sign it (optional)');
+  await expect(page.locator('#sign-command')).toHaveText('ssh-keygen -Y sign -f ~/.ssh/YOUR_KEY -n verified-memory-pack-v1 larkfield-garden-chatgpt-fixture/SHA256SUMS');
 
   expectNoNetwork(requests);
   expectNoProblems(problems, browserName, pageUrl);
@@ -231,4 +233,44 @@ test('choosing only a non-chat part of a Claude export explains which file to ch
   await expect(page.locator('.help').first()).toContainText('Each link works only once');
   await expect(page.locator('.help').first()).toContainText('Not yet confirmed against a real ChatGPT export');
   await expect(page.locator('h1 .beta')).toHaveText('Beta');
+});
+
+// ---------- check a signed pack ----------
+// The fixture key is invented; its private half was deleted after it signed the sample pack.
+const samplePack = resolve('../../verified-memory/sample-pack');
+const signedFixture = resolve('../../verified-memory/test/fixtures/signed-sample');
+const fixtureKeys = readFileSync(join(signedFixture, 'trusted_keys'), 'utf8');
+const signedFiles = () => [...PACK_FILES.map((name) => ({ name, mimeType: 'application/octet-stream', buffer: readFileSync(join(samplePack, name)) })),
+  { name: 'SHA256SUMS.sig', mimeType: 'application/octet-stream', buffer: readFileSync(join(signedFixture, 'SHA256SUMS.sig')) }];
+async function check(page, files, keys, require) {
+  await page.setInputFiles('#check-files', files);
+  await page.fill('#check-keys', keys);
+  await page.setChecked('#check-require', require);
+  await page.click('#check-run');
+  await expect(page.locator('#check-status')).not.toHaveText(/^(Checking…)?$/);
+  return page.locator('#check-status');
+}
+
+test('check panel: signed fixture verifies with its listed key, loose or zipped, without any network request', async ({ app: { page, requests, problems }, browserName, pageUrl }) => {
+  const verified = /^Checksums pass for 8 records\. Signed by “fictional-signer” \(SHA256:QdQEQAWD\+03v\/nksLJaA\+zSSRPOSa\/V\/eODKuTXBY94\), a key you listed\. This proves that key signed these exact files, not that what they say is true\.$/;
+  await expect(await check(page, signedFiles(), fixtureKeys, true)).toHaveText(verified);
+  await expect(page.locator('#check-status')).toHaveClass(/\bok\b/);
+  const zip = nodeZip(Object.fromEntries(signedFiles().map(({ name, buffer }) => [`signed-pack/${name}`, buffer])));
+  await expect(await check(page, [{ name: 'signed-pack.zip', mimeType: 'application/zip', buffer: zip }], fixtureKeys, true)).toHaveText(verified);
+  expectNoNetwork(requests);
+  expectNoProblems(problems, browserName, pageUrl);
+});
+
+test('check panel: unlisted key, broken signature, unsigned pack and require-without-keys', async ({ app: { page, problems }, browserName, pageUrl }) => {
+  await expect(await check(page, signedFiles(), '', false)).toHaveText(/The signature is valid, but its key \(SHA256:\S+\) is not one you listed, so the signer is unknown\.$/);
+  await expect(await check(page, signedFiles(), '', true)).toHaveText('Not accepted: Requiring a signature needs at least one trusted key.');
+  const broken = signedFiles();
+  const sig = broken[4].buffer.toString('utf8').split('\n');
+  const blob = Buffer.from(sig.slice(1, -2).join(''), 'base64'); blob[blob.length - 10] ^= 1;
+  broken[4].buffer = Buffer.from(`-----BEGIN SSH SIGNATURE-----\n${blob.toString('base64').match(/.{1,70}/g).join('\n')}\n-----END SSH SIGNATURE-----\n`);
+  await expect(await check(page, broken, fixtureKeys, false)).toHaveText('Not accepted: Pack signature does not verify.');
+  await expect(page.locator('#check-status')).toHaveClass(/\berror\b/);
+  await expect(await check(page, signedFiles().slice(0, 4), fixtureKeys, false)).toHaveText('Checksums pass for 8 records. This pack is not signed, so nothing here says who made it.');
+  await expect(await check(page, signedFiles().slice(0, 4), fixtureKeys, true)).toHaveText('Not accepted: Pack is unsigned (no SHA256SUMS.sig) but a signature is required.');
+  expectNoProblems(problems, browserName, pageUrl);
 });
