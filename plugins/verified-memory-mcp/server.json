@@ -24,7 +24,7 @@
           "type": "named",
           "name": "--pack",
           "valueHint": "pack_dir",
-          "description": "Absolute path to a pack directory containing exactly MEMORY.md, README.md, records.jsonl and SHA256SUMS, plus an optional SHA256SUMS.sig. The whole pack is verified at startup; the server refuses to start if any check fails.",
+          "description": "Absolute path to a pack directory containing exactly MEMORY.md, README.md, records.jsonl and SHA256SUMS, plus an optional PACK.json (creation and expiry dates) and SHA256SUMS.sig. The whole pack is verified at startup; the server refuses to start if any check fails.",
           "format": "filepath",
           "isRequired": true
         },
@@ -39,7 +39,15 @@
         {
           "type": "named",
           "name": "--require-signature",
-          "description": "Set to true to refuse to start unless the pack is signed by a key in --trusted-keys. When false or omitted, unsigned packs load as before.",
+          "description": "Set to true to refuse to start unless the pack is signed by a key in --trusted-keys. Freshness is reported but not enforced. When false or omitted, unsigned packs load and are reported as unsigned.",
+          "format": "boolean",
+          "default": "false",
+          "isRequired": false
+        },
+        {
+          "type": "named",
+          "name": "--strict",
+          "description": "Set to true to refuse to start (and to stop serving) unless the pack is signed by a key in --trusted-keys and is fresh: PACK.json present and not expired. Implies --require-signature. When false or omitted, undated and stale packs load and every result reports their status.",
           "format": "boolean",
           "default": "false",
           "isRequired": false

@@ -4,7 +4,7 @@
 // So a result the page has not computed yet stops the run, gets computed, and the run starts
 // again from the top. Every rule is decided by the shared verifier; this file only supplies
 // bytes and crypto, and never claims a signature it could not check.
-import { FILE_MAX, checkPackSignature, parseTrustedKeys, requireValue, verifyPackEntries } from '../../dist/verify.js';
+import { FILE_MAX, checkPackFreshness, checkPackSignature, parseTrustedKeys, requireValue, verifyPackEntries } from '../../dist/verify.js';
 import { isZip, openZip, readEntry } from './zip.mjs';
 
 export class CheckError extends Error {}
@@ -68,15 +68,15 @@ export async function readPackFiles(files) {
   return out;
 }
 
-/** Pack files + the trusted keys text -> { records, signature } exactly as the server would decide. */
-export async function checkPack(files, trustedKeysText, requireSignature, subtle) {
+/** Pack files + the trusted keys text -> { records, signature, freshness } exactly as the server would decide now. */
+export async function checkPack(files, trustedKeysText, strict, subtle, now = Date.now()) {
   // Trust configuration is checked first, as loadPack does: a misconfiguration never loads.
   const trusted = parseTrustedKeys([trustedKeysText]);
-  requireValue(!requireSignature || trusted.length > 0, 'requiring a signature needs at least one trusted key');
+  requireValue(!strict || trusted.length > 0, 'requiring a signature needs at least one trusted key');
   const read = (name, max) => { const bytes = files.get(name); requireValue(bytes.length <= max, 'unsafe or oversized pack file'); return bytes; };
   const pack = await withAsyncCrypto(({ sha256hex }) => verifyPackEntries([...files.keys()], read, sha256hex), subtle);
-  const signature = await withAsyncCrypto(({ sha256hex, crypto }) => checkPackSignature(pack.manifest, pack.signature, trusted, requireSignature, crypto, sha256hex), subtle);
-  return { records: pack.records.size, signature };
+  const signature = await withAsyncCrypto(({ sha256hex, crypto }) => checkPackSignature(pack.manifest, pack.signature, trusted, strict, crypto, sha256hex), subtle);
+  return { records: pack.records.size, signature, freshness: checkPackFreshness(pack.dates, signature, strict, now) };
 }
 
 /** Result or error -> { text, kind } for the status line. Never reports an unchecked signature. */
@@ -87,8 +87,15 @@ export function describeCheck(result, error) {
     return { text: `Not accepted: ${message.charAt(0).toUpperCase()}${message.slice(1)}.`, kind: 'error' };
   }
   const records = `Checksums pass for ${result.records} record${result.records === 1 ? '' : 's'}.`;
-  const s = result.signature;
-  if (!s) return { text: `${records} This pack is not signed, so nothing here says who made it.`, kind: 'ok' };
-  if (s.status === 'untrusted') return { text: `${records} The signature is valid, but its key (${s.fingerprint}) is not one you listed, so the signer is unknown.`, kind: '' };
-  return { text: `${records} Signed by “${s.signer}” (${s.fingerprint}), a key you listed. This proves that key signed these exact files, not that what they say is true.`, kind: 'ok' };
+  const s = result.signature, f = result.freshness;
+  const who = s.status === 'unsigned' ? 'This pack is not signed, so nothing here says who made it.'
+    : s.status === 'untrusted' ? `The signature is valid, but its key (${s.fingerprint}) is not one you listed, so the signer is unknown.`
+    : `Signed by “${s.signer}” (${s.fingerprint}), a key you listed. This proves that key signed these exact files, not that what they say is true.`;
+  const unsigned = f.status !== 'unknown' && !f.authenticated ? ' (these dates are not signed by a key you listed)' : '';
+  const when = f.status === 'unknown' ? 'It has no expiry date.'
+    : f.status === 'fresh' ? `Fresh until ${f.expires_utc}${unsigned}.`
+    : f.status === 'stale' ? `It expired at ${f.expires_utc}${unsigned}, so its records may be out of date.`
+    : `It says it was made at ${f.created_utc}, which is in the future by this computer's clock${unsigned}.`;
+  const kind = f.status === 'stale' || f.status === 'not_yet_valid' || s.status === 'untrusted' ? '' : 'ok';
+  return { text: `${records} ${who} ${when}`, kind };
 }

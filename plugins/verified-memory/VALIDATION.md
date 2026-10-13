@@ -1,11 +1,12 @@
-# Validation — 2026-10-12 (v0.2.0, signed packs)
+# Validation — 2026-10-12 (0.3.0 candidate: signed and dated packs)
 
 ## Environment and scope
 
 - TypeScript 5.9, ESM output, actual OpenClaw npm SDK **2026.9.9**.
 - Current checks: **Node 24.19.0** and **Node 26.1.0**, macOS ARM64, using official
   nodejs.org darwin-arm64 builds checked against the published SHASUMS256.txt,
-  without replacing system Node. Both transcripts were regenerated for v0.2.0. The declared Node range is
+  without replacing system Node. Both transcripts were regenerated for the 0.3.0 candidate
+  (version strings still read 0.2.0). The declared Node range is
   `>=24.16.0 <25 || >=26.1.0`.
 - Public fictional Juniper/Wren sample only. Tests create isolated fixture copies.
 - Only disposable OpenClaw HOME/state/config/workspace and public fictional
@@ -18,7 +19,7 @@
 
 ## Automated tests
 
-54/54 passed on Node 24.19.0 and 54/54 on Node 26.1.0. Complete sanitized output:
+78/78 passed on Node 24.19.0 and 78/78 on Node 26.1.0. Complete sanitized output:
 [validation/tests-node24.txt](validation/tests-node24.txt),
 [validation/tests-node26.txt](validation/tests-node26.txt).
 The upstream fictional pipeline suite also passed **36/36**; its local HTTP stub
@@ -41,11 +42,11 @@ Coverage includes:
 - Invalid input/configuration, including attempts to use an ID as a file path.
 - Every fixture quote independently compared with the public source message.
 - Signed packs (all keys invented: fresh in-memory keys, plus a committed fixture
-  signature made by `ssh-keygen` whose private key was deleted): unsigned packs keep
-  the exact v0.1 verification object; a trusted signer is reported by the name in
+  signature made by `ssh-keygen` whose private key was deleted): unsigned v0.1 packs
+  still load, with the v0.1 fields unchanged plus `signature.status: "unsigned"`; a trusted signer is reported by the name in
   the user's list, with the `ssh-keygen -l` fingerprint; a valid signature by an
-  unlisted key loads as `untrusted`; `requireSignature` refuses unsigned and
-  untrusted packs and refuses to start with no trusted keys; a re-sealed edit
+  unlisted key loads as `untrusted`; `requireSignature` (0.2.0 meaning) and `strict`
+  both refuse unsigned and untrusted packs and refuses to start with no trusted keys; a re-sealed edit
   fails the signature; each malformed signature (flipped byte, other namespace,
   sha256, version, reserved field, trailing bytes, short signature, RSA key or
   signature type, bad armor, oversize, symlink) refuses with its own message;
@@ -53,6 +54,16 @@ Coverage includes:
   and we verify; test signatures pass `ssh-keygen -Y verify`); the npm file list
   contains no keys, signatures or fixtures. Mutating the namespace, trust-match or
   signature checks in the compiled verifier makes these tests fail.
+- Freshness (`PACK.json`): v0.1 packs load as `unknown`; a trusted signed fresh pack
+  loads in strict mode with `authenticated: true`; expired packs load as `stale` with a
+  logged warning, and strict refuses them; expiry is exclusive and re-judged on every
+  read, so a strict host stops serving when a loaded pack expires (injected clock, and
+  a real 3-second expiry through the plugin's tools); `created_utc` beyond 5 minutes of
+  skew is `not_yet_valid`; a signed but undated v0.2 pack loads under `requireSignature` (freshness `unknown`)
+  and is refused by strict; `requireSignature` reports but never enforces expiry; dates in
+  unsigned or untrusted packs are never `authenticated`; extending an expiry fails the
+  checksum, or the signature once re-sealed; removing or not pinning `PACK.json` is
+  refused; twelve malformed `PACK.json` variants each refuse even outside strict.
 - Runtime import, registration and both tool calls succeed under Node's
   permission model with filesystem writes, network, subprocesses and workers
   unavailable; only reads inside the plugin directory are allowed.
@@ -65,8 +76,8 @@ integration uses scripted proposal/audit fixtures, not real model or human appro
 
 ## Actual OpenClaw runtime-loader checks
 
-8/8 passed using `plugins inspect verified-memory --runtime --json`, each in
-separate temporary HOME/state/configuration:
+15/15 passed on Node 26.1.0 using `plugins inspect verified-memory --runtime --json`,
+each in separate temporary HOME/state/configuration:
 
 | Pack | Runtime status | Tools registered | Result |
 |---|---|---|---|
@@ -75,9 +86,16 @@ separate temporary HOME/state/configuration:
 | Missing pack directory | error | None | Expected refusal |
 | Tampered records, original checksums | error | None | Expected refusal |
 | Invalid JSON, newly matching checksums | error | None | Expected refusal |
-| Signed fixture, its key in `trustedKeys`, `requireSignature: true` | loaded | Both prefixed tools | Pass |
+| Signed fixture, its key in `trustedKeys` | loaded | Both prefixed tools | Pass |
+| Unsigned pack, `strict: true` | error | None | Expected refusal |
 | Unsigned pack, `requireSignature: true` | error | None | Expected refusal |
+| Signed fixture without `PACK.json`, `strict: true` | error | None | Expected refusal |
+| Signed fixture without `PACK.json`, `requireSignature: true` | loaded | Both prefixed tools | Pass (as in 0.2.0) |
 | Malformed `SHA256SUMS.sig` | error | None | Expected refusal |
+| Signed, fresh `PACK.json`, `strict: true` | loaded | Both prefixed tools | Pass |
+| Signed, expired `PACK.json`, strict off | loaded | Both prefixed tools | Pass (reported stale) |
+| Signed, expired `PACK.json`, `requireSignature: true` | loaded | Both prefixed tools | Pass (reported stale) |
+| Signed, expired `PACK.json`, `strict: true` | error | None | Expected refusal |
 
 Sanitized evidence: [validation/host-smoke.json](validation/host-smoke.json).
 Reproduce with `npm run test:host` on a supported Node runtime. This invokes a
@@ -106,7 +124,8 @@ See [OpenClaw authoring docs](https://docs.openclaw.ai/cli/plugins/authoring).
 
 ## Local model conversation
 
-Passed with **Mac-local Ollama `qwen3.5:4b`**, OpenClaw's embedded agent,
+Not rerun for the 0.3.0 candidate (it does not exercise signatures or dates). From 0.2.0:
+passed with **Mac-local Ollama `qwen3.5:4b`**, OpenClaw's embedded agent,
 a disposable copy of the published-package layout, and the eight-record fictional
 sample. There were two tool calls, zero tool failures, and no fallback provider.
 Only the two plugin tools were exposed. Test HOME, workspace, cwd, config and
