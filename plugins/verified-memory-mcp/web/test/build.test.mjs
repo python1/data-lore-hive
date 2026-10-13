@@ -13,8 +13,15 @@ const styleBodies = [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) =>
 const csp = /http-equiv="Content-Security-Policy" content="([^"]*)"/.exec(html)[1];
 const hash = (s) => `'sha256-${createHash('sha256').update(s, 'utf8').digest('base64')}'`;
 
-test('page is self-contained: no external URLs, one inline script and style, both pinned by CSP hash', () => {
-  assert.doesNotMatch(html, /https?:\/\/|\bsrc=|<link (?!rel="icon" href="data:,")/);
+// The one URL allowed in the page: a plain link to the Claude Desktop add-on. It loads nothing
+// into the page; only a click navigates, and the page sends no referrer.
+const DESKTOP_DOWNLOAD = 'https://github.com/python1/data-lore-hive/releases/download/verified-memory-v0.3.0/verified-memory-0.3.0.mcpb';
+
+test('page is self-contained: no external URLs but the add-on link, one inline script and style, both pinned by CSP hash', () => {
+  assert.equal(html.split(DESKTOP_DOWNLOAD).length - 1, 1);
+  assert.ok(html.includes(`<a id="desktop-download" href="${DESKTOP_DOWNLOAD}" rel="noopener noreferrer">`));
+  assert.match(html, /<meta name="referrer" content="no-referrer">/);
+  assert.doesNotMatch(html.replace(DESKTOP_DOWNLOAD, ''), /https?:\/\/|\bsrc=|<link (?!rel="icon" href="data:,")/);
   assert.equal(scriptBodies.length, 1); assert.equal(styleBodies.length, 1);
   const directives = Object.fromEntries(csp.split(';').map((d) => d.trim().split(/\s+/)).map(([k, ...v]) => [k, v.join(' ')]));
   assert.deepEqual(directives, {

@@ -90,6 +90,12 @@ Replication and recovery (`replication.py`, `install_mac_sync.py`, `sync_agent.p
 
 ## Use with Claude Code / Claude Desktop (MCP)
 
+**[Download for Claude Desktop](https://github.com/python1/data-lore-hive/releases/download/verified-memory-v0.3.0/verified-memory-0.3.0.mcpb)**: a one-click add-on (`verified-memory-0.3.0.mcpb`,
+SHA-256 `bda22e402f73d8fbdc6ca72df504c04822738a3ca98c9dbe31920756d25c274a`). Download it,
+double-click it, and pick your pack folder in Claude Desktop. Claude Desktop shows its standard
+"not verified by Anthropic" warning for add-ons installed from a file. See the
+[release notes](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.3.0).
+
 [`plugins/verified-memory-mcp/`](plugins/verified-memory-mcp/README.md) is a local, read-only stdio MCP server. It exposes two tools, `verified_memory_search` and `verified_memory_get`, over a checksum-verified memory pack such as the ones `agent-memory/` exports. It needs Node 22 or newer and is published on npm as [`@python1/verified-memory-mcp`](https://www.npmjs.com/package/@python1/verified-memory-mcp) and in the MCP Registry as `io.github.python1/verified-memory`. The npm package ships no pack, so `--pack` is required:
 
 ```bash
