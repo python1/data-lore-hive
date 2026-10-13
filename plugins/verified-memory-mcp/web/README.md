@@ -33,9 +33,27 @@ file inside a worker (WebKit on `file://`), the page parses on the main thread i
 | `ui-logic.mjs` | Page logic without the DOM: selection trimming, error placement, search, drafts. |
 | `app.mjs`, `app.css`, `worker.mjs` | The page. Export text is only ever inserted as text nodes, never as HTML. |
 | `pack-inputs.mjs` | Browser selection → code-point quote; selections → the CLI's `messages.jsonl` + `records.jsonl` → pack via `../tools/pack-core.mjs`. |
+| `check-pack.mjs` | "Check a signed pack": reads a pack (zip or loose files) and runs the shared `../dist/verify.js` on it, supplying SHA-256, SHA-512 and Ed25519 from Web Crypto. |
 
 The pack is built by the same `tools/pack-core.mjs` as the CLI, and the page can offer the
 two input files for download, so `verified-memory-build-pack` reproduces the pack byte for byte.
+
+## Signed packs
+
+The page **does not sign**. A signing key in a web page would be exposed to everything
+else running there, and storage on `python1.github.io` is shared by every GitHub Pages
+site on that account. After a build, *Sign it (optional)* shows the `ssh-keygen -Y sign`
+command to run on your own computer, where the key stays.
+
+*Check a signed pack* takes a pack and the public keys you trust, and gives the same
+verdict as the MCP server and the OpenClaw plugin. That's because it runs the same
+`verify.js`. That verifier is synchronous, while Web Crypto is not. So when the verifier
+needs a hash or signature check the page has not computed yet, the run stops, the page
+computes it, and the run starts again. No rule is reimplemented here, and a Node test
+checks that the page reaches the server's verdict on signed, unsigned and broken packs.
+A browser without Ed25519 in Web Crypto is told it cannot check signatures; it is never
+shown a pass. Current Chrome, Firefox and Safari all have Ed25519 (the browser tests
+cover all three engines).
 
 ## Export formats
 
@@ -73,9 +91,10 @@ which the page shows. A fuzz test mutates every fixture 400 times to hold that l
 - `npm test`: Node tests for every module, the build and its CSP (builds the parent
   package first, for the verifier).
 - `npm run test:e2e`: Playwright tests of `dist/index.html` in Chromium, Firefox and
-  WebKit, each over http and from `file://` (72 runs). They rebuild a golden pack through
+  WebKit, each over http and from `file://` (84 runs). They rebuild a golden pack through
   the UI byte for byte, reopen a draft, use a real triple-click selection, check that
-  export text is never run as HTML, that the CSP blocks requests, and that no request
+  export text is never run as HTML, check signed, unsigned and broken packs in the
+  check panel (loose files and zipped), that the CSP blocks requests, and that no request
   other than local `blob:` URLs happens after the page loads. First run:
   `npx playwright install chromium firefox webkit`.
 - CI: `.github/workflows/verified-memory-tests.yml` runs both on pull requests.

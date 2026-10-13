@@ -139,3 +139,8 @@ export function rebuildCommand(title, description) {
   return ['npx -y -p @python1/verified-memory-mcp verified-memory-build-pack', '--messages messages.jsonl --records records.jsonl --out NEW_FOLDER',
     `--title ${q(title || 'Memory pack')}`, ...(description ? [`--description ${q(description)}`] : [])].join(' \\\n  ');
 }
+
+/** Shell command that signs a downloaded pack with the user's own ssh key; the page never sees the key. */
+export function signCommand(folder) {
+  return `ssh-keygen -Y sign -f ~/.ssh/YOUR_KEY -n verified-memory-pack-v1 ${folder}/SHA256SUMS`;
+}

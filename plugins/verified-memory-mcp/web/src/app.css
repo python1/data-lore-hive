@@ -115,3 +115,7 @@ label { display: block; }
   .conversations { position: static; max-height: 40vh; }
   .speakers, .record-grid { grid-template-columns: 1fr; }
 }
+
+#check-status { overflow-wrap: anywhere; }
+#check-keys { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; }
+#check-chosen { display: block; margin: .25rem 0 .5rem; overflow-wrap: anywhere; }

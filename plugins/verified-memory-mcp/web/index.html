@@ -100,6 +100,12 @@
           <pre id="rebuild-command"></pre>
           <button type="button" id="download-inputs" disabled>Download input files (.zip)</button>
         </details>
+        <details class="help">
+          <summary>Sign it (optional)</summary>
+          <p>A signature lets others check that a pack came from your key. Unzip the pack, then sign it with your own ssh key on your computer:</p>
+          <pre id="sign-command"></pre>
+          <p class="muted small">This page never asks for a private key, and has nowhere to keep one. A signature proves who signed the files, not that what they say is true.</p>
+        </details>
         <div class="row drafts">
           <button type="button" id="save-draft" disabled>Save draft</button>
           <label class="button">Open draft <input type="file" id="load-draft" accept=".json,application/json" disabled></label>
@@ -107,6 +113,18 @@
         <p class="muted small">A draft is a file with your records and quotes, so you can continue later with the same export. Nothing is kept in the browser.</p>
       </section>
     </aside>
+  </section>
+
+  <section class="card" id="check-pack" aria-labelledby="check-heading">
+    <h2 id="check-heading">Check a signed pack</h2>
+    <p class="muted small">Runs the same checks as the MCP server and the OpenClaw plugin, in this browser. The pack and keys never leave it.</p>
+    <label class="button">Choose a pack <input type="file" id="check-files" multiple accept=".zip,.md,.jsonl,.sig,application/zip"></label>
+    <span id="check-chosen" class="muted small"></span>
+    <label for="check-keys">Public keys you trust <span class="muted">(optional; one per line, <code>name ssh-ed25519 AAAA…</code>)</span></label>
+    <textarea id="check-keys" rows="3" spellcheck="false" autocomplete="off"></textarea>
+    <label><input type="checkbox" id="check-require"> Require a signature from one of these keys</label>
+    <div class="row"><button type="button" id="check-run" disabled>Check</button></div>
+    <p id="check-status" class="status" role="status" aria-live="polite"></p>
   </section>
 </main>
 <script type="text/plain" id="worker-source">__WORKER__</script>
