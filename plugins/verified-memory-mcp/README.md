@@ -29,7 +29,8 @@ package and run its `dist/index.js` with `node` directly.
 ## Build your own pack
 
 A pack is a directory with exactly four files: `records.jsonl`, `MEMORY.md`,
-`README.md` and `SHA256SUMS`. The easiest way to make one is the bundled offline
+`README.md` and `SHA256SUMS`, plus an optional signature, `SHA256SUMS.sig`
+(see [Signed packs](#signed-packs-v02)). The easiest way to make one is the bundled offline
 builder. It reads your messages and the records you want to remember, finds every
 quote in its message, computes offsets and hashes, writes the pack, and then loads it
 with the server's own verifier. If any quote is not verbatim in its message, it writes
@@ -167,7 +168,61 @@ sha256sum MEMORY.md README.md records.jsonl > SHA256SUMS       # Linux
 ```
 
 Resealing by hand only makes the checksums match again; it does not re-check quotes.
-Prefer rebuilding with the builder.
+Prefer rebuilding with the builder. Resealing also invalidates any signature: sign again.
+
+## Signed packs (v0.2)
+
+A pack can carry `SHA256SUMS.sig`, an OpenSSH signature over the exact `SHA256SUMS`
+bytes, which pin every other file. Only Ed25519 keys, the `sha512` hash and the
+namespace `verified-memory-pack-v1` are accepted, so a git or code-release signature
+cannot be reused as a pack signature. Make the key and sign with the stock
+`ssh-keygen`; this server and the builder never handle private keys:
+
+```sh
+ssh-keygen -t ed25519 -f ~/.ssh/verified-memory-pack -C "my packs"   # once; use a passphrase
+ssh-keygen -Y sign -f ~/.ssh/verified-memory-pack -n verified-memory-pack-v1 /absolute/path/to/pack/SHA256SUMS
+```
+
+That writes `/absolute/path/to/pack/SHA256SUMS.sig`. Keep the private key out of the
+pack, out of any repository and off shared machines. Share only the `.pub` file.
+
+**Choosing whom to trust.** Trust is only ever a public key you list. There is no
+network, key server or registry. Put keys in a file, one per line in `allowed_signers`
+form, `name ssh-ed25519 AAAA… [comment]` (blank lines and `#` comments are allowed):
+
+```text
+alice ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA… alice's laptop
+```
+
+```sh
+verified-memory-mcp --pack /absolute/path/to/pack --trusted-keys /absolute/path/to/trusted_keys
+verified-memory-mcp --pack /absolute/path/to/pack --trusted-keys /absolute/path/to/trusted_keys --require-signature
+```
+
+`--flag=value` and `--require-signature=true|false` forms are accepted too.
+
+| Pack | Without `--require-signature` | With `--require-signature` |
+|---|---|---|
+| Unsigned | Starts exactly as in 0.1.0, with identical tool output | Refuses to start |
+| Signature present but malformed or invalid | Refuses to start | Refuses to start |
+| Valid signature, key not in your file | Starts; `verification.signature.status` is `untrusted`, with the key fingerprint | Refuses to start |
+| Valid signature, key in your file | Starts; `status: "verified"`, `signer` (your name for the key), `fingerprint` | Starts |
+
+`--require-signature` with no trusted key, or a trusted key line that is not a
+single-name `ssh-ed25519` entry, refuses to start. The signer name always comes from
+your file, never from the pack, and fingerprints match `ssh-keygen -l`. Anyone can
+check a pack without this server:
+
+```sh
+ssh-keygen -Y verify -f trusted_keys -I alice -n verified-memory-pack-v1 -s SHA256SUMS.sig < SHA256SUMS
+```
+
+**A signature proves who signed, not that the content is true.** It shows that the
+holder of that key signed these exact bytes. It does not show that the quotes are
+accurate or complete, that the key's owner is who you think, or that this is their
+latest pack: there is no timestamp, revocation or rollback protection, so an older
+pack signed by the same key still verifies. Version 0.1.0 refuses signed packs (five
+files); remove `SHA256SUMS.sig` to load one there.
 
 ## Build and run
 
@@ -225,7 +280,8 @@ In a repository build, omitting `--pack` uses the bundled fictional Juniper Vale
 sample regardless of the client's working directory. An npm install has no sample and
 refuses to start without `--pack`. To use your own pack, append
 `"--pack", "/absolute/path/to/pack"` to `args`, and also add
-`"--allow-fs-read=/absolute/path/to/pack"` before the entry-point argument.
+`"--allow-fs-read=/absolute/path/to/pack"` before the entry-point argument. With
+`--trusted-keys`, also allow reading that file the same way.
 Choose a pack that the connecting client is permitted to read.
 Relative pack paths and unknown CLI flags are rejected. Tools cannot choose paths.
 There is no discovery of home directories, other agents, real memory or configuration.
@@ -274,7 +330,8 @@ checkout so the sibling source and sample are present. Generated files are not c
 
 The whole pack must verify **before a server is created or stdio is connected**.
 A failing pack cannot initialize, list tools or return records. The exact format
-is four regular files: `records.jsonl`, `MEMORY.md`, `README.md`, and `SHA256SUMS`.
+is four regular files: `records.jsonl`, `MEMORY.md`, `README.md`, and `SHA256SUMS`,
+plus an optional `SHA256SUMS.sig` checked by the same shared verifier.
 Checks include exact file inventory, SHA-256 hashes over the bytes actually parsed,
 UTF-8, JSON, unique IDs, citation structure and offsets, date ranges, manifest
 syntax, symlink roots/entries and file-size/count limits. Limits remain 16 MiB per
@@ -285,7 +342,7 @@ Inherited filesystem checks are not a sandbox against an adversary able to race
 ancestor directories. Use a trusted, stable local directory and the Node read allowlist.
 
 **Integrity is not authenticity or truth.** Replacing both data and checksums can
-produce a passing pack. Runtime cannot recheck quotations against original messages.
+produce a passing pack, unless you require a signature from a key you trust. Runtime cannot recheck quotations against original messages.
 Historical quotes are data, never instructions or permission; that notice accompanies
 every successful result. Host model behavior and automatic tool selection are not
 validated. Ask the host to quote tool text verbatim and cite record and message IDs.
@@ -339,3 +396,5 @@ See [VALIDATION.md](VALIDATION.md) for recorded tests and limitations.
 ## License
 
 MIT — [LICENSE](LICENSE). Free functionality, no paid tier.
+
+☕ Support this project: https://buymeacoffee.com/python1

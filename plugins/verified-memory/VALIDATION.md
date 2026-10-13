@@ -1,11 +1,11 @@
-# Validation — 2026-10-09
+# Validation — 2026-10-12 (v0.2.0, signed packs)
 
 ## Environment and scope
 
 - TypeScript 5.9, ESM output, actual OpenClaw npm SDK **2026.9.9**.
-- Current checks: **Node 24.19.0**, macOS ARM64, using the bundled development
-  runtime without replacing system Node. The earlier Node 26.1.0 evidence is
-  retained in `validation/tests-node26.txt`. The declared Node range is
+- Current checks: **Node 24.19.0** and **Node 26.1.0**, macOS ARM64, using official
+  nodejs.org darwin-arm64 builds checked against the published SHASUMS256.txt,
+  without replacing system Node. Both transcripts were regenerated for v0.2.0. The declared Node range is
   `>=24.16.0 <25 || >=26.1.0`.
 - Public fictional Juniper/Wren sample only. Tests create isolated fixture copies.
 - Only disposable OpenClaw HOME/state/config/workspace and public fictional
@@ -18,8 +18,9 @@
 
 ## Automated tests
 
-28/28 passed on Node 24.19.0. Complete sanitized output:
-[validation/tests-node24.txt](validation/tests-node24.txt).
+54/54 passed on Node 24.19.0 and 54/54 on Node 26.1.0. Complete sanitized output:
+[validation/tests-node24.txt](validation/tests-node24.txt),
+[validation/tests-node26.txt](validation/tests-node26.txt).
 The upstream fictional pipeline suite also passed **36/36**; its local HTTP stub
 required permission to bind a loopback socket outside the sandbox.
 
@@ -39,6 +40,19 @@ Coverage includes:
   change the stored snapshot.
 - Invalid input/configuration, including attempts to use an ID as a file path.
 - Every fixture quote independently compared with the public source message.
+- Signed packs (all keys invented: fresh in-memory keys, plus a committed fixture
+  signature made by `ssh-keygen` whose private key was deleted): unsigned packs keep
+  the exact v0.1 verification object; a trusted signer is reported by the name in
+  the user's list, with the `ssh-keygen -l` fingerprint; a valid signature by an
+  unlisted key loads as `untrusted`; `requireSignature` refuses unsigned and
+  untrusted packs and refuses to start with no trusted keys; a re-sealed edit
+  fails the signature; each malformed signature (flipped byte, other namespace,
+  sha256, version, reserved field, trailing bytes, short signature, RSA key or
+  signature type, bad armor, oversize, symlink) refuses with its own message;
+  strict trusted-key lines; OpenSSH interop in both directions (`ssh-keygen` signs
+  and we verify; test signatures pass `ssh-keygen -Y verify`); the npm file list
+  contains no keys, signatures or fixtures. Mutating the namespace, trust-match or
+  signature checks in the compiled verifier makes these tests fail.
 - Runtime import, registration and both tool calls succeed under Node's
   permission model with filesystem writes, network, subprocesses and workers
   unavailable; only reads inside the plugin directory are allowed.
@@ -51,7 +65,7 @@ integration uses scripted proposal/audit fixtures, not real model or human appro
 
 ## Actual OpenClaw runtime-loader checks
 
-5/5 passed using `plugins inspect verified-memory --runtime --json`, each in
+8/8 passed using `plugins inspect verified-memory --runtime --json`, each in
 separate temporary HOME/state/configuration:
 
 | Pack | Runtime status | Tools registered | Result |
@@ -61,6 +75,9 @@ separate temporary HOME/state/configuration:
 | Missing pack directory | error | None | Expected refusal |
 | Tampered records, original checksums | error | None | Expected refusal |
 | Invalid JSON, newly matching checksums | error | None | Expected refusal |
+| Signed fixture, its key in `trustedKeys`, `requireSignature: true` | loaded | Both prefixed tools | Pass |
+| Unsigned pack, `requireSignature: true` | error | None | Expected refusal |
+| Malformed `SHA256SUMS.sig` | error | None | Expected refusal |
 
 Sanitized evidence: [validation/host-smoke.json](validation/host-smoke.json).
 Reproduce with `npm run test:host` on a supported Node runtime. This invokes a

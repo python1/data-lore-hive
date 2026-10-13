@@ -42,6 +42,30 @@
       "tools": [],
       "expected": "refused",
       "passed": true
+    },
+    {
+      "case": "signed-trusted",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
+      "case": "unsigned-required",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "signed-invalid",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
     }
   ]
 }

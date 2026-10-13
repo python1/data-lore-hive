@@ -1,32 +1,70 @@
-✔ real SDK entry registers exactly declared tools and matching config schema (4.374959ms)
-✔ search returns attributed verbatim citation and ID retrievable as a full record (0.679208ms)
-✔ agent voice retained; all query terms required; unknown IDs and no hits are explicit (0.646583ms)
-✔ tampered records.jsonl refuses load before any tool is registered (2.3825ms)
-✔ tampered MEMORY.md refuses load before any tool is registered (1.58225ms)
-✔ tampered README.md refuses load before any tool is registered (1.876583ms)
-✔ manifest duplicate rejected (1.702416ms)
-✔ manifest missing rejected (1.938583ms)
-✔ manifest traversal rejected (1.513709ms)
-✔ manifest malformed rejected (1.4645ms)
-✔ manifest self rejected (1.49025ms)
-✔ missing, extra and symlink files rejected (2.099041ms)
-✔ symlink pack root rejected (1.402666ms)
-✔ correctly hashed but invalid records: duplicate-id (1.97225ms)
-✔ correctly hashed but invalid records: broken-json (1.902959ms)
-✔ correctly hashed but invalid records: missing-citations (1.700416ms)
-✔ correctly hashed but invalid records: wrong-offset (1.67525ms)
-✔ correctly hashed but invalid records: invalid-utf8 (1.613166ms)
-✔ immutable verified snapshot survives disk edits and result mutation (1.827375ms)
-✔ old instructions stay historical quoted data, including later correction (0.365541ms)
-✔ invalid config and input rejected without arbitrary file lookup (0.419ms)
-✔ runtime succeeds with filesystem writes, network, subprocesses and workers denied (161.628458ms)
-✔ sample citations match the public fictional source exactly (2.417292ms)
-✔ plugin coexists with the default memory tools (0.393792ms)
-ℹ tests 24
+
+> @python1/verified-memory@0.2.0 test
+> npm run build && node --test test/*.test.mjs
+
+
+> @python1/verified-memory@0.2.0 build
+> tsc
+
+✔ real SDK entry registers exactly declared tools and matching config schema (3.097292ms)
+✔ search returns attributed verbatim citation and ID retrievable as a full record (0.793ms)
+✔ agent voice retained; all query terms required; unknown IDs and no hits are explicit (1.157833ms)
+✔ tampered records.jsonl refuses load before any tool is registered (2.606917ms)
+✔ tampered MEMORY.md refuses load before any tool is registered (1.642458ms)
+✔ tampered README.md refuses load before any tool is registered (1.786166ms)
+✔ manifest duplicate rejected (1.60825ms)
+✔ manifest missing rejected (1.495917ms)
+✔ manifest traversal rejected (1.489375ms)
+✔ manifest malformed rejected (1.405291ms)
+✔ manifest self rejected (1.31075ms)
+✔ missing, extra and symlink files rejected (2.588041ms)
+✔ symlink pack root rejected (1.435125ms)
+✔ correctly hashed but invalid records: duplicate-id (2.055292ms)
+✔ correctly hashed but invalid records: broken-json (1.800375ms)
+✔ correctly hashed but invalid records: missing-citations (1.989041ms)
+✔ correctly hashed but invalid records: wrong-offset (1.950041ms)
+✔ correctly hashed but invalid records: invalid-utf8 (1.680791ms)
+✔ immutable verified snapshot survives disk edits and result mutation (2.060042ms)
+✔ old instructions stay historical quoted data, including later correction (0.546625ms)
+✔ invalid config and input rejected without arbitrary file lookup (0.558459ms)
+✔ runtime succeeds with filesystem writes, network, subprocesses and workers denied (218.577833ms)
+✔ sample citations match the public fictional source exactly (1.587042ms)
+✔ plugin coexists with the default memory tools (0.439291ms)
+✔ missing configured pack gives actionable error and registers zero tools (1.468959ms)
+✔ registrations retain separate verified snapshots (2.158292ms)
+✔ public pipeline exporter produces accepted pack and callable cited tools (99.444542ms)
+✔ official authoring metadata can be read without permission to read any pack (193.905208ms)
+✔ signature config: trusted signed pack reports its signer; require refuses unsigned with zero tools (4.316666ms)
+✔ invalid signature config types rejected (0.128958ms)
+✔ unsigned packs keep the exact v0.1 verification object, with or without trusted keys (5.492334ms)
+✔ committed fixture: an ssh-keygen signature verifies with the matching ssh-keygen fingerprint (4.013458ms)
+✔ valid signature by an unlisted key loads as untrusted, never as verified (4.228417ms)
+✔ trust is matched by key bytes; the name comes from the trust list, not the pack (2.758958ms)
+✔ require-signature refuses unsigned packs and refuses to start without trusted keys (0.50825ms)
+✔ a re-sealed edit is caught: the signature covers SHA256SUMS, which pins every file (2.502541ms)
+✔ present but malformed signature refuses load, even with no trust configured: flipped signature byte (2.577958ms)
+✔ present but malformed signature refuses load, even with no trust configured: other namespace (code release signature) (2.035875ms)
+✔ present but malformed signature refuses load, even with no trust configured: sha256 hash (2.131292ms)
+✔ present but malformed signature refuses load, even with no trust configured: version 2 (1.995958ms)
+✔ present but malformed signature refuses load, even with no trust configured: non-empty reserved field (1.944375ms)
+✔ present but malformed signature refuses load, even with no trust configured: trailing bytes (1.898ms)
+✔ present but malformed signature refuses load, even with no trust configured: short signature (1.859792ms)
+✔ present but malformed signature refuses load, even with no trust configured: rsa key type (1.79925ms)
+✔ present but malformed signature refuses load, even with no trust configured: rsa signature type (1.888666ms)
+✔ signature file must be armored, bounded and a regular file (4.699791ms)
+✔ trusted key lines: strict allowed_signers subset (13.180792ms)
+✔ trusted keys file must be absolute, regular, small UTF-8, and errors never show the path (2.561166ms)
+✔ parsePackSignature exposes exactly what was signed (used by the browser caller) (0.298708ms)
+✔ interop with OpenSSH: ssh-keygen signs, we verify; we sign in tests, ssh-keygen verifies (30.055875ms)
+✔ no private key material in the repository plugin tree or the npm package (307.323791ms)
+✔ pure verifier has no imports, so it can run outside Node (0.8825ms)
+✔ pure verifier agrees with loadPack on the sample pack (4.682458ms)
+✔ pure verifier rejects in-memory tampering with the loader messages (0.630208ms)
+ℹ tests 54
 ℹ suites 0
-ℹ pass 24
+ℹ pass 54
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 427.523209
+ℹ duration_ms 777.52725

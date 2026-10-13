@@ -8,32 +8,39 @@ import assert from 'node:assert/strict';
 const pluginRoot=resolve('.');
 const root=mkdtempSync(join(tmpdir(),'verified-memory-host-'));
 const summaries=[];
+// Signed cases use the committed fictional fixture; its private key no longer exists.
+const fixtureSig=join(pluginRoot,'test/fixtures/signed-sample');
+const trustedKeys=[readFileSync(join(fixtureSig,'trusted_keys'),'utf8')];
+const LOADS=['valid','pipeline','signed-trusted'];
 try {
- for(const name of ['valid','pipeline','missing','tampered','malformed']) {
+ for(const name of ['valid','pipeline','missing','tampered','malformed','signed-trusted','unsigned-required','signed-invalid']) {
   const dir=join(root,name);mkdirSync(dir);const pack=join(dir,'pack');
   if(name==='pipeline') {
    const exporter=spawnSync('python3',[join(pluginRoot,'scripts/export-fictional-pipeline.py'),pack],{encoding:'utf8'});
    assert.equal(exporter.status,0,exporter.stderr);
   } else if(name!=='missing') cpSync(join(pluginRoot,'sample-pack'),pack,{recursive:true});
   if(name==='tampered')writeFileSync(join(pack,'records.jsonl'),'tampered');
+  if(name.startsWith('signed-'))cpSync(join(fixtureSig,'SHA256SUMS.sig'),join(pack,'SHA256SUMS.sig'));
+  if(name==='signed-invalid')writeFileSync(join(pack,'SHA256SUMS.sig'),readFileSync(join(pack,'SHA256SUMS.sig'),'utf8').replace('-----END','x\n-----END'));
+  const signing=name==='signed-trusted'||name==='unsigned-required'?{trustedKeys,requireSignature:true}:{};
   if(name==='malformed') {
    writeFileSync(join(pack,'records.jsonl'),'{broken json\n');
    writeFileSync(join(pack,'SHA256SUMS'),['MEMORY.md','README.md','records.jsonl'].map(n=>createHash('sha256').update(readFileSync(join(pack,n))).digest('hex')+'  '+n+'\n').join(''));
   }
   const config=join(dir,'openclaw.json');
-  writeFileSync(config,JSON.stringify({plugins:{allow:['verified-memory'],load:{paths:[pluginRoot]},entries:{'verified-memory':{enabled:true,config:{packPath:pack}}}}}));
+  writeFileSync(config,JSON.stringify({plugins:{allow:['verified-memory'],load:{paths:[pluginRoot]},entries:{'verified-memory':{enabled:true,config:{packPath:pack,...signing}}}}}));
   const child=spawnSync(process.execPath,[join(pluginRoot,'node_modules/openclaw/openclaw.mjs'),'plugins','inspect','verified-memory','--runtime','--json'],{
    encoding:'utf8',timeout:120000,maxBuffer:4*1024*1024,
    env:{PATH:process.env.PATH,HOME:dir,OPENCLAW_STATE_DIR:join(dir,'state'),OPENCLAW_CONFIG_PATH:config,NO_COLOR:'1'}
   });
   assert.ifError(child.error);
   const output=JSON.parse(child.stdout);
-  if(name==='valid' || name==='pipeline') {
+  if(LOADS.includes(name)) {
    assert.equal(output.plugin.status,'loaded');assert.deepEqual(output.plugin.toolNames,['verified_memory_search','verified_memory_get']);assert.deepEqual(output.diagnostics,[]);
   } else {
    assert.notEqual(output.plugin.status,'loaded');assert.deepEqual(output.plugin.toolNames,[]);
   }
-  summaries.push({case:name,status:output.plugin.status,tools:output.plugin.toolNames,expected:['valid','pipeline'].includes(name)?'loaded':'refused',passed:true});
+  summaries.push({case:name,status:output.plugin.status,tools:output.plugin.toolNames,expected:LOADS.includes(name)?'loaded':'refused',passed:true});
  }
  console.log(JSON.stringify({node:process.version,openclaw:JSON.parse(readFileSync(join(pluginRoot,'node_modules/openclaw/package.json'))).version,cases:summaries},null,2));
 } finally {rmSync(root,{recursive:true,force:true});}

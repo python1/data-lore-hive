@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
-import { loadPack } from './pack.js';
+import { loadPack, type PackOptions } from './pack.js';
 
 export const searchSchema = { type: 'object' as const, properties: { query: { type: 'string', minLength: 1, maxLength: 512 } }, required: ['query'], additionalProperties: false };
 export const getSchema = { type: 'object' as const, properties: { id: { type: 'string', pattern: '^M-[A-Za-z0-9_-]{1,127}$' } }, required: ['id'], additionalProperties: false };
@@ -14,9 +14,9 @@ function argument(params: unknown, name: string): string {
 }
 
 /** Verify completely before creating a server or exposing any capabilities. */
-export function createServer(packPath = fileURLToPath(new URL('../sample-pack/', import.meta.url))) {
-  const pack = loadPack(packPath);
-  const server = new Server({ name: 'verified-memory-mcp', version: '0.1.0' }, { capabilities: { tools: {} } });
+export function createServer(packPath = fileURLToPath(new URL('../sample-pack/', import.meta.url)), options: PackOptions = {}) {
+  const pack = loadPack(packPath, options);
+  const server = new Server({ name: 'verified-memory-mcp', version: '0.2.0' }, { capabilities: { tools: {} } });
   const annotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: [
     { name: 'verified_memory_search', description: 'Search historical records by all query words; returns up to 10 matches with exact quotes, source message IDs, dates and speakers. ' + notice, inputSchema: searchSchema, annotations },

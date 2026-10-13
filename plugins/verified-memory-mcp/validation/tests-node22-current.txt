@@ -1,216 +1,330 @@
 
-> @python1/verified-memory-mcp@0.1.0 test
+> @python1/verified-memory-mcp@0.2.0 test
 > npm run build && node --test test/*.test.mjs
 
 
-> @python1/verified-memory-mcp@0.1.0 build
+> @python1/verified-memory-mcp@0.2.0 build
 > node scripts/prepare.mjs && tsc
 
 TAP version 13
 # Subtest: builder reproduces the committed example pack byte for byte
 ok 1 - builder reproduces the committed example pack byte for byte
   ---
-  duration_ms: 42.106875
+  duration_ms: 42.599458
   type: 'test'
   ...
 # Subtest: installed-style stdio server loads the example pack and returns an exact quote
 ok 2 - installed-style stdio server loads the example pack and returns an exact quote
   ---
-  duration_ms: 125.740916
+  duration_ms: 118.464125
   type: 'test'
   ...
 # Subtest: builder refuses a quote that is not verbatim
 ok 3 - builder refuses a quote that is not verbatim
   ---
-  duration_ms: 37.030125
+  duration_ms: 33.17625
   type: 'test'
   ...
 # Subtest: builder refuses an ambiguous quote unless start is given
 ok 4 - builder refuses an ambiguous quote unless start is given
   ---
-  duration_ms: 72.817625
+  duration_ms: 65.995333
   type: 'test'
   ...
 # Subtest: builder refuses unknown messages, unknown fields, bad dates and duplicate IDs
 ok 5 - builder refuses unknown messages, unknown fields, bad dates and duplicate IDs
   ---
-  duration_ms: 178.473375
+  duration_ms: 170.562834
   type: 'test'
   ...
 # Subtest: builder accepts a disambiguated quote and computes code-point offsets
 ok 6 - builder accepts a disambiguated quote and computes code-point offsets
   ---
-  duration_ms: 39.806875
+  duration_ms: 41.842291
   type: 'test'
   ...
 # Subtest: builder never overwrites an existing directory
 ok 7 - builder never overwrites an existing directory
   ---
-  duration_ms: 33.656958
+  duration_ms: 32.762208
+  type: 'test'
+  ...
+# Subtest: export-shape prints structure and enum tokens but none of the invented export content
+ok 8 - export-shape prints structure and enum tokens but none of the invented export content
+  ---
+  duration_ms: 40.586708
+  type: 'test'
+  ...
+# Subtest: export-shape reads a folder and a single JSON file, collapsing maps keyed by data
+ok 9 - export-shape reads a folder and a single JSON file, collapsing maps keyed by data
+  ---
+  duration_ms: 67.340625
+  type: 'test'
+  ...
+# Subtest: export-shape hides invalid JSON details and refuses bad input
+ok 10 - export-shape hides invalid JSON details and refuses bad input
+  ---
+  duration_ms: 65.205084
+  type: 'test'
+  ...
+# Subtest: pack core and the copied verifier have no imports, so a browser can load them
+ok 11 - pack core and the copied verifier have no imports, so a browser can load them
+  ---
+  duration_ms: 1.724958
+  type: 'test'
+  ...
+# Subtest: pack core builds the committed example pack in memory, byte for byte
+ok 12 - pack core builds the committed example pack in memory, byte for byte
+  ---
+  duration_ms: 5.82575
+  type: 'test'
+  ...
+# Subtest: in-memory pack passes the pure verifier with Web Crypto hashes, as a browser would run it
+ok 13 - in-memory pack passes the pure verifier with Web Crypto hashes, as a browser would run it
+  ---
+  duration_ms: 1.636958
   type: 'test'
   ...
 # Subtest: build reuses byte-identical verifier and fictional pack without modifying source plugin
-ok 8 - build reuses byte-identical verifier and fictional pack without modifying source plugin
+ok 14 - build reuses byte-identical verifier and fictional pack without modifying source plugin
   ---
-  duration_ms: 1.404709
+  duration_ms: 1.419542
   type: 'test'
   ...
 # Subtest: valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
-ok 9 - valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
+ok 15 - valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
   ---
-  duration_ms: 15.009167
+  duration_ms: 13.624917
   type: 'test'
   ...
 # Subtest: no matches, unknown ID, historical instructions and lexical semantics preserved
-ok 10 - no matches, unknown ID, historical instructions and lexical semantics preserved
+ok 16 - no matches, unknown ID, historical instructions and lexical semantics preserved
   ---
-  duration_ms: 4.663375
+  duration_ms: 4.4805
   type: 'test'
   ...
 # Subtest: invalid requests return errors without path lookup or extra tool capabilities
-ok 11 - invalid requests return errors without path lookup or extra tool capabilities
+ok 17 - invalid requests return errors without path lookup or extra tool capabilities
   ---
-  duration_ms: 3.153792
+  duration_ms: 2.9045
   type: 'test'
   ...
 # Subtest: tampered MEMORY.md: startup refuses with no stdout
-ok 12 - tampered MEMORY.md: startup refuses with no stdout
+ok 18 - tampered MEMORY.md: startup refuses with no stdout
   ---
-  duration_ms: 115.765
+  duration_ms: 112.469041
   type: 'test'
   ...
 # Subtest: tampered README.md: startup refuses with no stdout
-ok 13 - tampered README.md: startup refuses with no stdout
+ok 19 - tampered README.md: startup refuses with no stdout
   ---
-  duration_ms: 115.099042
+  duration_ms: 106.620792
   type: 'test'
   ...
 # Subtest: tampered records.jsonl: startup refuses with no stdout
-ok 14 - tampered records.jsonl: startup refuses with no stdout
+ok 20 - tampered records.jsonl: startup refuses with no stdout
   ---
-  duration_ms: 112.55325
+  duration_ms: 107.681208
   type: 'test'
   ...
 # Subtest: malformed rehashed pack broken-json: startup refuses
-ok 15 - malformed rehashed pack broken-json: startup refuses
+ok 21 - malformed rehashed pack broken-json: startup refuses
   ---
-  duration_ms: 113.6725
+  duration_ms: 106.312583
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-utf8: startup refuses
-ok 16 - malformed rehashed pack invalid-utf8: startup refuses
+ok 22 - malformed rehashed pack invalid-utf8: startup refuses
   ---
-  duration_ms: 117.861875
+  duration_ms: 107.809333
   type: 'test'
   ...
 # Subtest: malformed rehashed pack duplicate-id: startup refuses
-ok 17 - malformed rehashed pack duplicate-id: startup refuses
+ok 23 - malformed rehashed pack duplicate-id: startup refuses
   ---
-  duration_ms: 113.932917
+  duration_ms: 103.152541
   type: 'test'
   ...
 # Subtest: malformed rehashed pack missing-citations: startup refuses
-ok 18 - malformed rehashed pack missing-citations: startup refuses
+ok 24 - malformed rehashed pack missing-citations: startup refuses
   ---
-  duration_ms: 111.350334
+  duration_ms: 100.209417
   type: 'test'
   ...
 # Subtest: malformed rehashed pack wrong-offset: startup refuses
-ok 19 - malformed rehashed pack wrong-offset: startup refuses
+ok 25 - malformed rehashed pack wrong-offset: startup refuses
   ---
-  duration_ms: 111.298416
+  duration_ms: 101.980875
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-id: startup refuses
-ok 20 - malformed rehashed pack invalid-id: startup refuses
+ok 26 - malformed rehashed pack invalid-id: startup refuses
   ---
-  duration_ms: 112.686958
+  duration_ms: 102.67175
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-date: startup refuses
-ok 21 - malformed rehashed pack invalid-date: startup refuses
+ok 27 - malformed rehashed pack invalid-date: startup refuses
   ---
-  duration_ms: 112.656542
+  duration_ms: 101.259416
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-hash: startup refuses
-ok 22 - malformed rehashed pack invalid-hash: startup refuses
+ok 28 - malformed rehashed pack invalid-hash: startup refuses
   ---
-  duration_ms: 118.861458
+  duration_ms: 102.584167
   type: 'test'
   ...
 # Subtest: malformed manifest duplicate: startup refuses
-ok 23 - malformed manifest duplicate: startup refuses
+ok 29 - malformed manifest duplicate: startup refuses
   ---
-  duration_ms: 108.795416
+  duration_ms: 101.105791
   type: 'test'
   ...
 # Subtest: malformed manifest missing: startup refuses
-ok 24 - malformed manifest missing: startup refuses
+ok 30 - malformed manifest missing: startup refuses
   ---
-  duration_ms: 111.863625
+  duration_ms: 100.776959
   type: 'test'
   ...
 # Subtest: malformed manifest traversal: startup refuses
-ok 25 - malformed manifest traversal: startup refuses
+ok 31 - malformed manifest traversal: startup refuses
   ---
-  duration_ms: 111.514166
+  duration_ms: 100.914292
   type: 'test'
   ...
 # Subtest: malformed manifest malformed: startup refuses
-ok 26 - malformed manifest malformed: startup refuses
+ok 32 - malformed manifest malformed: startup refuses
   ---
-  duration_ms: 111.488042
+  duration_ms: 101.258375
   type: 'test'
   ...
 # Subtest: malformed manifest self: startup refuses
-ok 27 - malformed manifest self: startup refuses
+ok 33 - malformed manifest self: startup refuses
   ---
-  duration_ms: 115.068083
+  duration_ms: 100.313041
   type: 'test'
   ...
 # Subtest: missing, extra, symlink entries and symlink root rejected
-ok 28 - missing, extra, symlink entries and symlink root rejected
+ok 34 - missing, extra, symlink entries and symlink root rejected
   ---
-  duration_ms: 641.168375
+  duration_ms: 589.657958
   type: 'test'
   ...
 # Subtest: verified snapshot survives disk edits and returned-object mutation
-ok 29 - verified snapshot survives disk edits and returned-object mutation
+ok 35 - verified snapshot survives disk edits and returned-object mutation
   ---
-  duration_ms: 116.460459
+  duration_ms: 103.5875
   type: 'test'
   ...
 # Subtest: actual stdio protocol works under Node permissions denying writes, subprocesses and workers
-ok 30 - actual stdio protocol works under Node permissions denying writes, subprocesses and workers
+ok 36 - actual stdio protocol works under Node permissions denying writes, subprocesses and workers
   ---
-  duration_ms: 221.441959
+  duration_ms: 200.909416
   type: 'test'
   ...
 # Subtest: network permission policy denies socket access when supported
-ok 31 - network permission policy denies socket access when supported # SKIP This Node version has no network permission scope
+ok 37 - network permission policy denies socket access when supported # SKIP This Node version has no network permission scope
   ---
-  duration_ms: 0.081917
+  duration_ms: 0.074541
   type: 'test'
   ...
 # Subtest: every bundled citation matches only the public fictional source
-ok 32 - every bundled citation matches only the public fictional source
+ok 38 - every bundled citation matches only the public fictional source
   ---
-  duration_ms: 0.801542
+  duration_ms: 0.690625
   type: 'test'
   ...
 # Subtest: invalid CLI flags refuse before protocol output
-ok 33 - invalid CLI flags refuse before protocol output
+ok 39 - invalid CLI flags refuse before protocol output
   ---
-  duration_ms: 321.306625
+  duration_ms: 285.307416
   type: 'test'
   ...
-1..33
-# tests 33
+# Subtest: unsigned packs keep the exact v0.1 tool output, with or without trusted keys
+ok 40 - unsigned packs keep the exact v0.1 tool output, with or without trusted keys
+  ---
+  duration_ms: 2.829208
+  type: 'test'
+  ...
+# Subtest: signed pack over real stdio, under permission mode, with trust file and either flag form
+ok 41 - signed pack over real stdio, under permission mode, with trust file and either flag form
+  ---
+  duration_ms: 229.635792
+  type: 'test'
+  ...
+# Subtest: valid signature by an unlisted key starts and reports untrusted
+ok 42 - valid signature by an unlisted key starts and reports untrusted
+  ---
+  duration_ms: 105.759416
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: unsigned pack with --require-signature
+ok 43 - startup refuses with no stdout: unsigned pack with --require-signature
+  ---
+  duration_ms: 100.315959
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: --require-signature with no trusted keys
+ok 44 - startup refuses with no stdout: --require-signature with no trusted keys
+  ---
+  duration_ms: 99.682917
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: comment-only trust file with --require-signature
+ok 45 - startup refuses with no stdout: comment-only trust file with --require-signature
+  ---
+  duration_ms: 101.281459
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: untrusted signer with --require-signature
+ok 46 - startup refuses with no stdout: untrusted signer with --require-signature
+  ---
+  duration_ms: 103.642625
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: tampered signature
+ok 47 - startup refuses with no stdout: tampered signature
+  ---
+  duration_ms: 104.791083
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: malformed trust file
+ok 48 - startup refuses with no stdout: malformed trust file
+  ---
+  duration_ms: 98.56575
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: missing trust file
+ok 49 - startup refuses with no stdout: missing trust file
+  ---
+  duration_ms: 101.415916
+  type: 'test'
+  ...
+# Subtest: startup refuses with no stdout: relative trust file
+ok 50 - startup refuses with no stdout: relative trust file
+  ---
+  duration_ms: 103.589334
+  type: 'test'
+  ...
+# Subtest: signature CLI flags: duplicates, missing values and bad switch values refuse
+ok 51 - signature CLI flags: duplicates, missing values and bad switch values refuse
+  ---
+  duration_ms: 772.755041
+  type: 'test'
+  ...
+# Subtest: npm package ships the funding link and no keys, signatures or test fixtures
+ok 52 - npm package ships the funding link and no keys, signatures or test fixtures
+  ---
+  duration_ms: 367.734333
+  type: 'test'
+  ...
+1..52
+# tests 52
 # suites 0
-# pass 32
+# pass 51
 # fail 0
 # cancelled 0
 # skipped 1
 # todo 0
-# duration_ms 3262.824125
+# duration_ms 5271.967667

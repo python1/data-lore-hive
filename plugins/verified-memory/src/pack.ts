@@ -1,10 +1,15 @@
 import { constants, openSync, closeSync, fstatSync, readFileSync, lstatSync, readdirSync } from 'node:fs';
 import { join, isAbsolute } from 'node:path';
-import { createHash } from 'node:crypto';
-import { requireValue, verifyPackEntries } from './verify.js';
+import { createHash, createPublicKey, verify } from 'node:crypto';
+import { checkPackSignature, parseTrustedKeys, requireValue, verifyPackEntries, type SignatureCrypto } from './verify.js';
 
-export type { Citation, MemoryRecord } from './verify.js';
+export type { Citation, MemoryRecord, SignatureResult } from './verify.js';
+export type PackOptions = { trustedKeys?: string[]; requireSignature?: boolean };
 const hash = (data: Uint8Array) => createHash('sha256').update(data).digest('hex');
+const signatureCrypto: SignatureCrypto = {
+  sha512: data => createHash('sha512').update(data).digest(),
+  ed25519Verify: (key, message, signature) => verify(null, message, createPublicKey({ key: { kty: 'OKP', crv: 'Ed25519', x: Buffer.from(key).toString('base64url') }, format: 'jwk' }), signature)
+};
 function readRegular(path: string, max: number): Buffer {
   const before = lstatSync(path);
   requireValue(before.isFile() && !before.isSymbolicLink(), 'pack entries must be regular files');
@@ -17,10 +22,20 @@ function readRegular(path: string, max: number): Buffer {
     return bytes;
   } finally { closeSync(fd); }
 }
+/** Read a trusted keys file (allowed_signers lines) without following symlinks. */
+export function readTrustedKeys(path: string): string[] {
+  requireValue(isAbsolute(path), 'trusted keys path must be absolute');
+  try { return [new TextDecoder('utf-8', { fatal: true }).decode(readRegular(path, 64 * 1024))]; }
+  catch { throw new Error('verified-memory: cannot read trusted keys file; it must be a regular UTF-8 file of at most 64 KiB'); }
+}
 export function tokens(s: string): string[] { return s.normalize('NFKC').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []; }
 
 /** Read once, hash those exact bytes, then serve an isolated in-memory snapshot. */
-export function loadPack(folder: string) {
+export function loadPack(folder: string, options: PackOptions = {}) {
+  // Trust configuration is checked before the pack is read: a misconfiguration never loads.
+  const trusted = parseTrustedKeys(options.trustedKeys ?? []);
+  const requireSignature = options.requireSignature === true;
+  requireValue(!requireSignature || trusted.length > 0, 'requiring a signature needs at least one trusted key');
   requireValue(isAbsolute(folder), 'packPath must be absolute');
   let root;
   try { root = lstatSync(folder); }
@@ -29,10 +44,12 @@ export function loadPack(folder: string) {
     throw error;
   }
   requireValue(root.isDirectory() && !root.isSymbolicLink(), 'pack root must be a real directory');
-  const { records, manifest_sha256 } = verifyPackEntries(readdirSync(folder), (name, max) => readRegular(join(folder,name), max), hash);
+  const { records, manifest, manifest_sha256, signature: signatureBytes } = verifyPackEntries(readdirSync(folder), (name, max) => readRegular(join(folder,name), max), hash);
+  const signature = checkPackSignature(manifest, signatureBytes, trusted, requireSignature, signatureCrypto, hash);
   const indexed = [...records.values()].map(record => ({ record, words: tokens([record.statement,record.topic,...record.evidence.map(c=>c.quote)].join(' ')) }));
   return {
-    verification: { sha256sums: 'passed' as const, manifest_sha256, records: records.size, scope: 'Checksum integrity of loaded snapshot; not authenticity or factual truth.' },
+    // Unsigned packs keep exactly the v0.1 verification object; signed ones add `signature`.
+    verification: { sha256sums: 'passed' as const, manifest_sha256, records: records.size, scope: 'Checksum integrity of loaded snapshot; not authenticity or factual truth.', ...(signature && { signature }) },
     search(query: string) {
       requireValue(typeof query === 'string' && query.trim().length > 0 && query.length <= 512, 'query must contain 1–512 characters');
       const words = [...new Set(tokens(query))];

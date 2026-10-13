@@ -10,6 +10,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { createServer, notice } from '../dist/server.js';
 import { loadPack } from '../dist/pack.js';
+import { newKey, armor } from '../../verified-memory/test/sshsig.mjs';
 const sample = resolve('sample-pack');
 const permissionFlag = process.allowedNodeEnvironmentFlags.has('--permission') ? '--permission' : '--experimental-permission';
 const networkPermissions = process.allowedNodeEnvironmentFlags.has('--allow-net');
@@ -42,6 +43,7 @@ function refuse(dir, pattern) {
 }
 test('build reuses byte-identical verifier and fictional pack without modifying source plugin', () => {
   assert.deepEqual(readFileSync('src/pack.ts'), readFileSync('../verified-memory/src/pack.ts'));
+  assert.deepEqual(readFileSync('src/verify.ts'), readFileSync('../verified-memory/src/verify.ts'));
   for (const file of ['MEMORY.md', 'README.md', 'records.jsonl', 'SHA256SUMS']) assert.deepEqual(readFileSync('sample-pack/' + file), readFileSync('../verified-memory/sample-pack/' + file));
 });
 test('valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP', async t => {
@@ -171,4 +173,73 @@ test('invalid CLI flags refuse before protocol output', () => {
     assert.ok(!p.stderr.includes('fictional'));
     assert.match(p.stderr, /--pack \/absolute\/path\/to\/pack/);
   }
+});
+
+// Signed packs (v0.2). The fixture key is invented; its private half was deleted after signing.
+const signedFixture = resolve('../verified-memory/test/fixtures/signed-sample');
+const trustFile = join(signedFixture, 'trusted_keys');
+function signedCopy(t) { const dir = fixture(t); cpSync(join(signedFixture, 'SHA256SUMS.sig'), join(dir, 'SHA256SUMS.sig')); return dir; }
+function startup(args) {
+  return spawnSync(process.execPath, ['dist/index.js', ...args], {
+    input: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'fictional-test', version: '1' } } }) + '\n',
+    encoding: 'utf8', timeout: 5000
+  });
+}
+test('unsigned packs keep the exact v0.1 tool output, with or without trusted keys', async t => {
+  const plain = (await call(await clientFor(t), 'verified_memory_search', { query: 'pottery' })).content[0].text;
+  const server = createServer(undefined, { trustedKeys: [readFileSync(trustFile, 'utf8')] });
+  const client = new Client({ name: 'fictional-test', version: '1.0.0' }); const [ct, st] = InMemoryTransport.createLinkedPair();
+  t.after(async () => { await client.close(); await server.close(); }); await server.connect(st); await client.connect(ct);
+  assert.equal((await call(client, 'verified_memory_search', { query: 'pottery' })).content[0].text, plain);
+  assert.deepEqual(Object.keys(JSON.parse(plain).verification), ['sha256sums', 'manifest_sha256', 'records', 'scope']);
+});
+test('signed pack over real stdio, under permission mode, with trust file and either flag form', { timeout: 15000 }, async t => {
+  const dir = signedCopy(t);
+  for (const args of [['--pack', dir, '--trusted-keys', trustFile, '--require-signature'], [`--pack=${dir}`, `--trusted-keys=${trustFile}`, '--require-signature=true']]) {
+    const transport = new StdioClientTransport({ command: process.execPath,
+      args: [permissionFlag, '--allow-fs-read=' + process.cwd(), '--allow-fs-read=' + dir, '--allow-fs-read=' + trustFile, resolve('dist/index.js'), ...args],
+      cwd: tmpdir(), stderr: 'pipe', env: {} });
+    const client = new Client({ name: 'fictional-stdio-test', version: '1.0.0' });
+    await client.connect(transport);
+    const result = (await call(client, 'verified_memory_search', { query: 'pottery' })).structuredContent;
+    await client.close();
+    assert.equal(result.matched, 1);
+    assert.deepEqual({ ...result.verification.signature, scope: undefined }, { status: 'verified', signer: 'fictional-signer', fingerprint: 'SHA256:QdQEQAWD+03v/nksLJaA+zSSRPOSa/V/eODKuTXBY94', scope: undefined });
+    assert.match(result.verification.signature.scope, /does not establish that the content is true/);
+  }
+});
+test('valid signature by an unlisted key starts and reports untrusted', async t => {
+  const dir = signedCopy(t);
+  const p = startup(['--pack', dir]);
+  const line = p.stdout.split('\n').find(Boolean);
+  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.2.0');
+  const { verification } = (await call(await clientFor(t, dir), 'verified_memory_get', { id: 'M-sample-2' })).structuredContent;
+  assert.equal(verification.signature.status, 'untrusted'); assert.equal(verification.signature.signer, undefined);
+});
+for (const [name, setup, pattern] of [
+  ['unsigned pack with --require-signature', t => ['--pack', fixture(t), '--trusted-keys', trustFile, '--require-signature'], /unsigned .* a signature is required/],
+  ['--require-signature with no trusted keys', t => ['--pack', signedCopy(t), '--require-signature'], /at least one trusted key/],
+  ['comment-only trust file with --require-signature', t => { const dir = signedCopy(t); const other = join(dir, '..', 'other_keys'); writeFileSync(other, '# none trusted yet\n'); return ['--pack', dir, '--trusted-keys', other, '--require-signature']; }, /at least one trusted key/],
+  ['untrusted signer with --require-signature', t => { const dir = signedCopy(t); const other = join(dir, '..', 'other_keys'); writeFileSync(other, newKey().line('someone-else') + '\n'); return ['--pack', dir, '--trusted-keys', other, '--require-signature']; }, /not a trusted key, and a signature is required/],
+  ['tampered signature', t => { const dir = signedCopy(t); const blob = Buffer.from(readFileSync(join(dir, 'SHA256SUMS.sig'), 'utf8').split('\n').slice(1, -2).join(''), 'base64'); blob[blob.length - 10] ^= 1; writeFileSync(join(dir, 'SHA256SUMS.sig'), armor(blob)); return ['--pack', dir]; }, /pack signature does not verify/],
+  ['malformed trust file', t => { const dir = fixture(t); const bad = join(dir, '..', 'bad_keys'); writeFileSync(bad, 'alice ssh-rsa AAAA\n'); return ['--pack', dir, '--trusted-keys', bad]; }, /must be ssh-ed25519/],
+  ['missing trust file', t => ['--pack', fixture(t), '--trusted-keys', join(tmpdir(), 'fictional-missing-keys')], /cannot read trusted keys file/],
+  ['relative trust file', t => ['--pack', fixture(t), '--trusted-keys', 'trusted_keys'], /trusted keys path must be absolute/]
+]) test(`startup refuses with no stdout: ${name}`, t => {
+  const args = setup(t), p = startup(args);
+  assert.equal(p.status, 1, p.stderr); assert.equal(p.stdout, ''); assert.match(p.stderr, pattern);
+  for (const arg of args) if (arg.startsWith('/')) assert.ok(!p.stderr.includes(arg), 'diagnostics do not expose configured paths');
+});
+test('signature CLI flags: duplicates, missing values and bad switch values refuse', () => {
+  for (const args of [['--trusted-keys'], ['--trusted-keys', '--require-signature'], ['--require-signature', '--require-signature'], ['--require-signature=yes'],
+    ['--pack', sample, '--pack', sample], ['--trusted-keys', trustFile, '--trusted-keys=' + trustFile], ['--require-signature', 'maybe'], ['--pack=']]) {
+    const p = spawnSync(process.execPath, ['dist/index.js', ...args], { encoding: 'utf8', timeout: 5000 });
+    assert.equal(p.status, 1, args.join(' ')); assert.equal(p.stdout, ''); assert.match(p.stderr, /Usage: .*--trusted-keys .*--require-signature/);
+  }
+});
+test('npm package ships the funding link and no keys, signatures or test fixtures', () => {
+  assert.equal(JSON.parse(readFileSync('package.json')).funding, 'https://buymeacoffee.com/python1');
+  const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8' }).stdout)[0].files.map(f => f.path);
+  assert.ok(files.includes('dist/verify.js') && !files.some(f => /\.sig$|trusted_keys|(^|\/)id_|\.key$|^test\//.test(f)), files.join(', '));
+  for (const f of files) assert.doesNotMatch(readFileSync(f, 'latin1'), /PRIVATE KEY-----/, f);
 });

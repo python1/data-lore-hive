@@ -48,7 +48,8 @@ async function main() {
     rmSync(staging, { recursive: true, force: true });
     throw error;
   }
-  process.stdout.write(`wrote ${records.length} records to ${out}\nrun: verified-memory-mcp --pack ${out}\n`);
+  process.stdout.write(`wrote ${records.length} records to ${out}\nrun: verified-memory-mcp --pack ${out}\n`
+    + `optional, to sign it with your own ssh key: ssh-keygen -Y sign -f ~/.ssh/YOUR_KEY -n verified-memory-pack-v1 ${join(out, 'SHA256SUMS')}\n`);
 }
 
 main().catch((error) => {

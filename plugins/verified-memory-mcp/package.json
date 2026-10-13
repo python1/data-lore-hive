@@ -1,7 +1,7 @@
 {
   "name": "@python1/verified-memory-mcp",
-  "version": "0.1.0",
-  "description": "Local read-only stdio MCP server for checksum-verified memory packs",
+  "version": "0.2.0",
+  "description": "Local read-only stdio MCP server for checksum-verified, optionally signed memory packs",
   "mcpName": "io.github.python1/verified-memory",
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "LICENSE"
   ],
   "license": "MIT",
+  "funding": "https://buymeacoffee.com/python1",
   "type": "module",
   "engines": {
     "node": ">=22.0.0"

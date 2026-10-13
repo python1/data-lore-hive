@@ -2,19 +2,19 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.python1/verified-memory",
   "title": "Verified Memory",
-  "description": "Read-only, offline search over a checksum-verified memory pack, with exact cited quotes",
+  "description": "Offline read-only search over a checksum-verified, optionally signed memory pack, with exact quotes",
   "repository": {
     "url": "https://github.com/python1/data-lore-hive",
     "source": "github",
     "subfolder": "plugins/verified-memory-mcp"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@python1/verified-memory-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"
@@ -24,9 +24,25 @@
           "type": "named",
           "name": "--pack",
           "valueHint": "pack_dir",
-          "description": "Absolute path to a pack directory containing exactly MEMORY.md, README.md, records.jsonl and SHA256SUMS. The whole pack is verified at startup; the server refuses to start if any check fails.",
+          "description": "Absolute path to a pack directory containing exactly MEMORY.md, README.md, records.jsonl and SHA256SUMS, plus an optional SHA256SUMS.sig. The whole pack is verified at startup; the server refuses to start if any check fails.",
           "format": "filepath",
           "isRequired": true
+        },
+        {
+          "type": "named",
+          "name": "--trusted-keys",
+          "valueHint": "trusted_keys_file",
+          "description": "Absolute path to a file of public keys you trust to sign packs, one per line: name ssh-ed25519 AAAA… [comment]. A pack signed by a listed key reports that signer; a valid signature by any other key is reported as untrusted.",
+          "format": "filepath",
+          "isRequired": false
+        },
+        {
+          "type": "named",
+          "name": "--require-signature",
+          "description": "Set to true to refuse to start unless the pack is signed by a key in --trusted-keys. When false or omitted, unsigned packs load as before.",
+          "format": "boolean",
+          "default": "false",
+          "isRequired": false
         }
       ]
     }

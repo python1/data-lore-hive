@@ -1,7 +1,7 @@
 {
   "name": "@python1/verified-memory",
-  "version": "0.1.0",
-  "description": "Read-only, checksum-verified Data & Lore memory tools",
+  "version": "0.2.0",
+  "description": "Read-only, checksum-verified, optionally signed Data & Lore memory tools",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
