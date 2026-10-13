@@ -256,6 +256,31 @@ local output; installing dependencies accesses the npm registry. Runtime does ne
 The test harness launches local Node processes and makes isolated temporary copies
 of the fictional pack; the server itself never launches another process.
 
+## Claude Desktop one-click install
+
+**Not released yet.** The bundle is built and tested in CI but has not been published.
+
+`verified-memory-<version>.mcpb` is an [MCP Bundle](https://github.com/modelcontextprotocol/mcpb)
+for Claude Desktop on macOS and Windows. It runs on Claude Desktop's built-in Node.js, so
+you need no Node install and no Terminal. Double-click it (or drag it into Claude Desktop,
+or use **Settings → Extensions → Advanced settings → Install Extension…**), then fill in:
+
+| Setting | Required | Passed as |
+|---|---|---|
+| Memory pack folder | yes | `--pack=<folder>` |
+| Trusted keys file | no (blank = none) | `--trusted-keys=<file>` |
+| Require a trusted signature | no (off) | `--require-signature=true\|false` |
+
+Change these later in **Settings → Extensions → Verified Memory**. The bundle holds the
+same `dist/` as the npm package plus its production dependencies, and nothing else: no pack,
+keys, signatures or tests. It is not code-signed with `mcpb sign`, because that would need a
+private key. It does not use Node's permission mode, because Claude Desktop starts the server itself.
+
+Build it locally with `npm ci && npm run build:mcpb` (output: `build/verified-memory-<version>.mcpb`).
+`npm run test:mcpb` builds it and runs [`test/mcpb/`](test/mcpb/). Those tests unpack the bundle with
+`@anthropic-ai/mcpb` and start the server with the arguments that its `getMcpConfigForManifest`
+produces from sample settings.
+
 ## Claude Desktop configuration example
 
 Merge this example into your Claude Desktop MCP configuration and restart Claude
@@ -366,7 +391,10 @@ plugins/verified-memory-mcp/
 ├── package-lock.json
 ├── server.json             # MCP Registry metadata
 ├── tsconfig.json
-├── scripts/prepare.mjs
+├── scripts/
+│   ├── prepare.mjs
+│   └── build-mcpb.mjs          # builds the Claude Desktop bundle into build/
+├── mcpb/manifest.json          # Claude Desktop bundle manifest (settings form, tools)
 ├── src/
 │   ├── index.ts
 │   ├── server.ts
@@ -384,12 +412,14 @@ plugins/verified-memory-mcp/
 │   ├── server.test.mjs
 │   ├── build-pack.test.mjs
 │   ├── pack-core.test.mjs
-│   └── export-shape.test.mjs
+│   ├── export-shape.test.mjs
+│   └── mcpb/bundle.test.mjs    # run by `npm run test:mcpb` against the built bundle
 ├── validation/
 │   ├── tests.txt               # Node 25.8.0
 │   ├── tests-node22-min.txt     # Node 22.0.0
 │   └── tests-node22-current.txt # Node 22.23.3
 ├── sample-pack/                # generated, ignored; four fictional files
+├── build/                      # generated, ignored; the .mcpb and its staging folder
 └── dist/                       # generated, ignored; JS and declarations
 ```
 

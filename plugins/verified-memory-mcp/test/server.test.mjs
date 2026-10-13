@@ -237,6 +237,14 @@ test('signature CLI flags: duplicates, missing values and bad switch values refu
     assert.equal(p.status, 1, args.join(' ')); assert.equal(p.stdout, ''); assert.match(p.stderr, /Usage: .*--trusted-keys .*--require-signature/);
   }
 });
+test('empty --trusted-keys= (a blank Claude Desktop setting) means no trusted keys', t => {
+  const dir = signedCopy(t);
+  const p = startup(['--pack', dir, '--trusted-keys=', '--require-signature=false']);
+  const line = p.stdout.split('\n').find(Boolean);
+  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.2.0');
+  const required = startup(['--pack', dir, '--trusted-keys=', '--require-signature=true']);
+  assert.equal(required.status, 1); assert.match(required.stderr, /at least one trusted key/);
+});
 test('npm package ships the funding link and no keys, signatures or test fixtures', () => {
   assert.equal(JSON.parse(readFileSync('package.json')).funding, 'https://buymeacoffee.com/python1');
   const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8' }).stdout)[0].files.map(f => f.path);
