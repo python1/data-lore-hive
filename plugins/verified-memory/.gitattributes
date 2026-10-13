@@ -1,0 +1,4 @@
+# Pack files are verified byte for byte against SHA256SUMS (and signatures cover those
+# bytes), so Git must never rewrite their line endings, e.g. core.autocrlf on Windows.
+sample-pack/** -text
+test/fixtures/** -text
