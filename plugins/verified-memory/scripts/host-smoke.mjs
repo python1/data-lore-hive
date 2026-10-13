@@ -5,15 +5,25 @@ import { resolve, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
+import { newKey, sshsig } from '../test/sshsig.mjs';
 const pluginRoot=resolve('.');
 const root=mkdtempSync(join(tmpdir(),'verified-memory-host-'));
 const summaries=[];
 // Signed cases use the committed fictional fixture; its private key no longer exists.
 const fixtureSig=join(pluginRoot,'test/fixtures/signed-sample');
 const trustedKeys=[readFileSync(join(fixtureSig,'trusted_keys'),'utf8')];
-const LOADS=['valid','pipeline','signed-trusted'];
+// Dated cases are signed in memory with an invented key, as sign-pack would sign them.
+const dateKey=newKey(),dateTrust=[dateKey.line('fictional-publisher')];
+const iso=ms=>new Date(Math.floor(ms/1000)*1000).toISOString().replace('.000Z','Z');
+const DAY=86400000,now=Date.now();
+function dated(pack,created,expires){
+ writeFileSync(join(pack,'PACK.json'),JSON.stringify({format:'verified-memory-pack',version:2,created_utc:iso(created),expires_utc:iso(expires)})+'\n');
+ writeFileSync(join(pack,'SHA256SUMS'),['MEMORY.md','PACK.json','README.md','records.jsonl'].map(n=>createHash('sha256').update(readFileSync(join(pack,n))).digest('hex')+'  '+n+'\n').join(''));
+ writeFileSync(join(pack,'SHA256SUMS.sig'),sshsig(dateKey,readFileSync(join(pack,'SHA256SUMS'))));
+}
+const LOADS=['valid','pipeline','signed-trusted','signed-undated-required','dated-fresh-strict','dated-expired','dated-expired-required'];
 try {
- for(const name of ['valid','pipeline','missing','tampered','malformed','signed-trusted','unsigned-required','signed-invalid']) {
+ for(const name of ['valid','pipeline','missing','tampered','malformed','signed-trusted','unsigned-strict','unsigned-required','signed-undated-strict','signed-undated-required','signed-invalid','dated-fresh-strict','dated-expired','dated-expired-required','dated-expired-strict']) {
   const dir=join(root,name);mkdirSync(dir);const pack=join(dir,'pack');
   if(name==='pipeline') {
    const exporter=spawnSync('python3',[join(pluginRoot,'scripts/export-fictional-pipeline.py'),pack],{encoding:'utf8'});
@@ -22,7 +32,9 @@ try {
   if(name==='tampered')writeFileSync(join(pack,'records.jsonl'),'tampered');
   if(name.startsWith('signed-'))cpSync(join(fixtureSig,'SHA256SUMS.sig'),join(pack,'SHA256SUMS.sig'));
   if(name==='signed-invalid')writeFileSync(join(pack,'SHA256SUMS.sig'),readFileSync(join(pack,'SHA256SUMS.sig'),'utf8').replace('-----END','x\n-----END'));
-  const signing=name==='signed-trusted'||name==='unsigned-required'?{trustedKeys,requireSignature:true}:{};
+  if(name.startsWith('dated-'))dated(pack,name.includes('expired')?now-60*DAY:now-DAY,name.includes('expired')?now-DAY:now+30*DAY);
+  const mode=name.endsWith('-strict')?{strict:true}:name.endsWith('-required')?{requireSignature:true}:{};
+  const signing=name.startsWith('dated-')?{trustedKeys:dateTrust,...mode}:name.startsWith('signed-')||name.startsWith('unsigned-')?{trustedKeys,...mode}:{};
   if(name==='malformed') {
    writeFileSync(join(pack,'records.jsonl'),'{broken json\n');
    writeFileSync(join(pack,'SHA256SUMS'),['MEMORY.md','README.md','records.jsonl'].map(n=>createHash('sha256').update(readFileSync(join(pack,n))).digest('hex')+'  '+n+'\n').join(''));

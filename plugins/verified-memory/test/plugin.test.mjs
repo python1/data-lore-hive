@@ -119,16 +119,23 @@ test('official authoring metadata can be read without permission to read any pac
  const p=spawnSync(process.execPath,['--permission','--allow-fs-read='+resolve('dist'),'--allow-fs-read='+resolve('node_modules'),'--input-type=module','-e',code],{encoding:'utf8'});
  assert.equal(p.status,0,p.stderr);assert.match(p.stdout,/metadata needs no pack reads/);
 });
-test('signature config: trusted signed pack reports its signer; require refuses unsigned with zero tools', async t => {
+test('signature config: requireSignature keeps its 0.2.0 meaning; strict also refuses undated packs; refusals register zero tools', async t => {
  const dir=fixture(t);cpSync('test/fixtures/signed-sample/SHA256SUMS.sig',join(dir,'SHA256SUMS.sig'));
  const trustedKeys=[readFileSync('test/fixtures/signed-sample/trusted_keys','utf8')];const tools=[];
- plugin.register({pluginConfig:{packPath:dir,trustedKeys,requireSignature:true},registerTool:t=>tools.push(t)});
- const r=await tools[0].execute('1',{query:'pottery'});assert.equal(r.details.verification.signature.status,'verified');assert.equal(r.details.verification.signature.signer,'fictional-signer');
- const refused=[];assert.throws(()=>plugin.register({pluginConfig:{trustedKeys,requireSignature:true},registerTool:t=>refused.push(t)}),/unsigned/);assert.equal(refused.length,0);
- assert.throws(()=>plugin.register({pluginConfig:{requireSignature:true},registerTool:t=>refused.push(t)}),/at least one trusted key/);assert.equal(refused.length,0);
- const unsigned=(await register()[0].execute('2',{query:'pottery'})).details.verification;assert.equal(unsigned.signature,undefined);
+ plugin.register({pluginConfig:{packPath:dir,trustedKeys},registerTool:t=>tools.push(t)});
+ const r=await tools[0].execute('1',{query:'pottery'});assert.equal(r.details.verification.signature.status,'verified');assert.equal(r.details.verification.signature.signer,'fictional-signer');assert.equal(r.details.verification.freshness.status,'unknown');
+ const refused=[];
+ for(const mode of [{strict:true},{requireSignature:true}]){
+  assert.throws(()=>plugin.register({pluginConfig:{trustedKeys,...mode},registerTool:t=>refused.push(t)}),/unsigned/);
+  assert.throws(()=>plugin.register({pluginConfig:mode,registerTool:t=>refused.push(t)}),/at least one trusted key/);
+ }
+ assert.throws(()=>plugin.register({pluginConfig:{packPath:dir,trustedKeys,strict:true},registerTool:t=>refused.push(t)}),/no PACK\.json/);
+ assert.equal(refused.length,0);
+ const required=[];plugin.register({pluginConfig:{packPath:dir,trustedKeys,requireSignature:true},registerTool:t=>required.push(t)});
+ const rv=(await required[0].execute('3',{query:'pottery'})).details.verification;assert.equal(rv.signature.status,'verified');assert.equal(rv.freshness.status,'unknown');
+ const unsigned=(await register()[0].execute('2',{query:'pottery'})).details.verification;assert.equal(unsigned.signature.status,'unsigned');assert.equal(unsigned.freshness.status,'unknown');
 });
 test('invalid signature config types rejected',()=>{
- for(const pluginConfig of [{trustedKeys:'alice ssh-ed25519 AAAA'},{trustedKeys:[1]},{requireSignature:'yes'},{trustedKeys:['not a key']}])
+ for(const pluginConfig of [{trustedKeys:'alice ssh-ed25519 AAAA'},{trustedKeys:[1]},{requireSignature:'yes'},{strict:'true'},{strict:1},{trustedKeys:['not a key']}])
   assert.throws(()=>plugin.register({pluginConfig,registerTool(){}}),/configuration|trusted key/);
 });

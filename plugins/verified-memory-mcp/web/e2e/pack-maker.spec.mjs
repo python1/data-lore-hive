@@ -3,6 +3,8 @@ import { join, resolve } from 'node:path';
 import { downloadZip, expect, expectNoNetwork, expectNoProblems, fillRecord, loadFile, openConversation, select, test } from './fixtures.mjs';
 import { nodeZip } from '../test/helpers.mjs';
 import { loadPack } from '../../dist/pack.js';
+import { createHash } from 'node:crypto';
+import { newKey, sshsig } from '../../../verified-memory/test/sshsig.mjs';
 
 const fixtures = resolve('test/fixtures');
 const golden = resolve('test/golden');
@@ -66,7 +68,7 @@ test('builds the golden ChatGPT pack through the UI, byte for byte, without any 
   expect(inputs.files['larkfield-garden-chatgpt-fixture-inputs/records.jsonl'].equals(readFileSync(join(golden, 'chatgpt', 'records.jsonl')))).toBe(true);
   expect(inputs.files['larkfield-garden-chatgpt-fixture-inputs/REBUILD.txt'].toString()).toContain("--title 'Larkfield garden (ChatGPT fixture)'");
   await page.click('text=Sign it (optional)');
-  await expect(page.locator('#sign-command')).toHaveText('ssh-keygen -Y sign -f ~/.ssh/YOUR_KEY -n verified-memory-pack-v1 larkfield-garden-chatgpt-fixture/SHA256SUMS');
+  await expect(page.locator('#sign-command')).toHaveText('node tools/sign-pack.mjs --pack larkfield-garden-chatgpt-fixture --key ~/.ssh/YOUR_KEY --expires 90d --out larkfield-garden-chatgpt-fixture-signed');
 
   expectNoNetwork(requests);
   expectNoProblems(problems, browserName, pageUrl);
@@ -252,17 +254,40 @@ async function check(page, files, keys, require) {
 }
 
 test('check panel: signed fixture verifies with its listed key, loose or zipped, without any network request', async ({ app: { page, requests, problems }, browserName, pageUrl }) => {
-  const verified = /^Checksums pass for 8 records\. Signed by “fictional-signer” \(SHA256:QdQEQAWD\+03v\/nksLJaA\+zSSRPOSa\/V\/eODKuTXBY94\), a key you listed\. This proves that key signed these exact files, not that what they say is true\.$/;
-  await expect(await check(page, signedFiles(), fixtureKeys, true)).toHaveText(verified);
+  const verified = /^Checksums pass for 8 records\. Signed by “fictional-signer” \(SHA256:QdQEQAWD\+03v\/nksLJaA\+zSSRPOSa\/V\/eODKuTXBY94\), a key you listed\. This proves that key signed these exact files, not that what they say is true\. It has no expiry date\.$/;
+  await expect(await check(page, signedFiles(), fixtureKeys, false)).toHaveText(verified);
   await expect(page.locator('#check-status')).toHaveClass(/\bok\b/);
   const zip = nodeZip(Object.fromEntries(signedFiles().map(({ name, buffer }) => [`signed-pack/${name}`, buffer])));
-  await expect(await check(page, [{ name: 'signed-pack.zip', mimeType: 'application/zip', buffer: zip }], fixtureKeys, true)).toHaveText(verified);
+  await expect(await check(page, [{ name: 'signed-pack.zip', mimeType: 'application/zip', buffer: zip }], fixtureKeys, false)).toHaveText(verified);
   expectNoNetwork(requests);
   expectNoProblems(problems, browserName, pageUrl);
 });
 
-test('check panel: unlisted key, broken signature, unsigned pack and require-without-keys', async ({ app: { page, problems }, browserName, pageUrl }) => {
-  await expect(await check(page, signedFiles(), '', false)).toHaveText(/The signature is valid, but its key \(SHA256:\S+\) is not one you listed, so the signer is unknown\.$/);
+// Dated packs, signed in Node with an invented in-memory key, as sign-pack makes them.
+const DAY = 86400000;
+const iso = (ms) => new Date(Math.floor(ms / 1000) * 1000).toISOString().replace('.000Z', 'Z');
+function datedFiles(key, created, expires) {
+  const files = Object.fromEntries(['MEMORY.md', 'README.md', 'records.jsonl'].map((n) => [n, readFileSync(join(samplePack, n))]));
+  files['PACK.json'] = Buffer.from(JSON.stringify({ format: 'verified-memory-pack', version: 2, created_utc: iso(created), expires_utc: iso(expires) }));
+  files.SHA256SUMS = Buffer.from(Object.keys(files).sort().map((n) => `${createHash('sha256').update(files[n]).digest('hex')}  ${n}\n`).join(''));
+  files['SHA256SUMS.sig'] = Buffer.from(sshsig(key, files.SHA256SUMS));
+  return Object.entries(files).map(([name, buffer]) => ({ name, mimeType: 'application/octet-stream', buffer }));
+}
+test('check panel: strict accepts a signed fresh pack and refuses expired and undated ones', async ({ app: { page, requests, problems }, browserName, pageUrl }) => {
+  const key = newKey(), keys = key.line('fictional-publisher'), now = Date.now();
+  const expires = now + 30 * DAY;
+  await expect(await check(page, datedFiles(key, now - DAY, expires), keys, true)).toHaveText(new RegExp(`^Checksums pass for 8 records\\. Signed by “fictional-publisher” \\(SHA256:\\S+\\), a key you listed\\. .* Fresh until ${iso(expires)}\\.$`));
+  await expect(page.locator('#check-status')).toHaveClass(/\bok\b/);
+  await expect(await check(page, datedFiles(key, now - 60 * DAY, now - DAY), keys, false)).toHaveText(new RegExp(` It expired at ${iso(now - DAY)}, so its records may be out of date\\.$`));
+  await expect(page.locator('#check-status')).not.toHaveClass(/\b(ok|error)\b/);
+  await expect(await check(page, datedFiles(key, now - 60 * DAY, now - DAY), keys, true)).toHaveText(`Not accepted: Pack expired at ${iso(now - DAY)} and strict mode refuses stale packs.`);
+  await expect(await check(page, signedFiles(), fixtureKeys, true)).toHaveText('Not accepted: Pack has no PACK.json, so no expiry date, and strict mode requires a fresh pack.');
+  expectNoNetwork(requests);
+  expectNoProblems(problems, browserName, pageUrl);
+});
+
+test('check panel: unlisted key, broken signature, unsigned pack and strict-without-keys', async ({ app: { page, problems }, browserName, pageUrl }) => {
+  await expect(await check(page, signedFiles(), '', false)).toHaveText(/The signature is valid, but its key \(SHA256:\S+\) is not one you listed, so the signer is unknown\. It has no expiry date\.$/);
   await expect(await check(page, signedFiles(), '', true)).toHaveText('Not accepted: Requiring a signature needs at least one trusted key.');
   const broken = signedFiles();
   const sig = broken[4].buffer.toString('utf8').split('\n');
@@ -270,7 +295,7 @@ test('check panel: unlisted key, broken signature, unsigned pack and require-wit
   broken[4].buffer = Buffer.from(`-----BEGIN SSH SIGNATURE-----\n${blob.toString('base64').match(/.{1,70}/g).join('\n')}\n-----END SSH SIGNATURE-----\n`);
   await expect(await check(page, broken, fixtureKeys, false)).toHaveText('Not accepted: Pack signature does not verify.');
   await expect(page.locator('#check-status')).toHaveClass(/\berror\b/);
-  await expect(await check(page, signedFiles().slice(0, 4), fixtureKeys, false)).toHaveText('Checksums pass for 8 records. This pack is not signed, so nothing here says who made it.');
+  await expect(await check(page, signedFiles().slice(0, 4), fixtureKeys, false)).toHaveText('Checksums pass for 8 records. This pack is not signed, so nothing here says who made it. It has no expiry date.');
   await expect(await check(page, signedFiles().slice(0, 4), fixtureKeys, true)).toHaveText('Not accepted: Pack is unsigned (no SHA256SUMS.sig) but a signature is required.');
   expectNoProblems(problems, browserName, pageUrl);
 });

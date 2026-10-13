@@ -1,5 +1,5 @@
 {
-  "node": "v24.19.0",
+  "node": "v26.1.0",
   "openclaw": "2026.9.9",
   "cases": [
     {
@@ -54,6 +54,13 @@
       "passed": true
     },
     {
+      "case": "unsigned-strict",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
       "case": "unsigned-required",
       "status": "error",
       "tools": [],
@@ -61,7 +68,61 @@
       "passed": true
     },
     {
+      "case": "signed-undated-strict",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "signed-undated-required",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
       "case": "signed-invalid",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "dated-fresh-strict",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
+      "case": "dated-expired",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
+      "case": "dated-expired-required",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
+      "case": "dated-expired-strict",
       "status": "error",
       "tools": [],
       "expected": "refused",

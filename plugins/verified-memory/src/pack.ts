@@ -1,10 +1,18 @@
 import { constants, openSync, closeSync, fstatSync, readFileSync, lstatSync, readdirSync } from 'node:fs';
 import { join, isAbsolute } from 'node:path';
 import { createHash, createPublicKey, verify } from 'node:crypto';
-import { checkPackSignature, parseTrustedKeys, requireValue, verifyPackEntries, type SignatureCrypto } from './verify.js';
+import { checkPackFreshness, checkPackSignature, parseTrustedKeys, requireValue, verifyPackEntries, type SignatureCrypto } from './verify.js';
 
-export type { Citation, MemoryRecord, SignatureResult } from './verify.js';
-export type PackOptions = { trustedKeys?: string[]; requireSignature?: boolean };
+export type { Citation, FreshnessResult, MemoryRecord, SignatureResult } from './verify.js';
+export type PackOptions = {
+  trustedKeys?: string[];
+  /** Refuse unless signed by a trusted key and fresh, at load and on every later read. */
+  strict?: boolean;
+  /** As in 0.2.0: refuse unless signed by a trusted key; freshness is reported, not enforced. */
+  requireSignature?: boolean;
+  /** Clock in ms for freshness; defaults to Date.now. */
+  now?: () => number;
+};
 const hash = (data: Uint8Array) => createHash('sha256').update(data).digest('hex');
 const signatureCrypto: SignatureCrypto = {
   sha512: data => createHash('sha512').update(data).digest(),
@@ -34,7 +42,8 @@ export function tokens(s: string): string[] { return s.normalize('NFKC').toLower
 export function loadPack(folder: string, options: PackOptions = {}) {
   // Trust configuration is checked before the pack is read: a misconfiguration never loads.
   const trusted = parseTrustedKeys(options.trustedKeys ?? []);
-  const requireSignature = options.requireSignature === true;
+  const strict = options.strict === true, requireSignature = strict || options.requireSignature === true;
+  const now = options.now ?? Date.now;
   requireValue(!requireSignature || trusted.length > 0, 'requiring a signature needs at least one trusted key');
   requireValue(isAbsolute(folder), 'packPath must be absolute');
   let root;
@@ -44,12 +53,16 @@ export function loadPack(folder: string, options: PackOptions = {}) {
     throw error;
   }
   requireValue(root.isDirectory() && !root.isSymbolicLink(), 'pack root must be a real directory');
-  const { records, manifest, manifest_sha256, signature: signatureBytes } = verifyPackEntries(readdirSync(folder), (name, max) => readRegular(join(folder,name), max), hash);
+  const { records, manifest, manifest_sha256, dates, signature: signatureBytes } = verifyPackEntries(readdirSync(folder), (name, max) => readRegular(join(folder,name), max), hash);
   const signature = checkPackSignature(manifest, signatureBytes, trusted, requireSignature, signatureCrypto, hash);
+  // Freshness is judged again on every read, so a long-running host notices expiry; in strict
+  // mode an expired snapshot then refuses to serve. This first call refuses at load.
+  const verification = () => ({ sha256sums: 'passed' as const, manifest_sha256, records: records.size, scope: 'Checksum integrity of loaded snapshot; not authenticity or factual truth.',
+    signature, freshness: checkPackFreshness(dates, signature, strict, now()) });
+  verification();
   const indexed = [...records.values()].map(record => ({ record, words: tokens([record.statement,record.topic,...record.evidence.map(c=>c.quote)].join(' ')) }));
   return {
-    // Unsigned packs keep exactly the v0.1 verification object; signed ones add `signature`.
-    verification: { sha256sums: 'passed' as const, manifest_sha256, records: records.size, scope: 'Checksum integrity of loaded snapshot; not authenticity or factual truth.', ...(signature && { signature }) },
+    get verification() { return verification(); },
     search(query: string) {
       requireValue(typeof query === 'string' && query.trim().length > 0 && query.length <= 512, 'query must contain 1–512 characters');
       const words = [...new Set(tokens(query))];

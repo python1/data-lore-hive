@@ -15,14 +15,17 @@ const signedFixture = resolve('test/fixtures/signed-sample');
 const fixtureTrust = [readFileSync(join(signedFixture, 'trusted_keys'), 'utf8')];
 const hash = b => createHash('sha256').update(b).digest('hex');
 const V01_KEYS = ['sha256sums', 'manifest_sha256', 'records', 'scope'];
+const KEYS = [...V01_KEYS, 'signature', 'freshness'];
+const UNSIGNED = { status: 'unsigned', scope: 'This pack has no SHA256SUMS.sig, so nothing establishes who made it.' };
 function fixture(t) { const root = mkdtempSync(join(tmpdir(), 'verified-memory-sig-')); t.after(() => rmSync(root, { recursive: true, force: true })); const dir = join(root, 'pack'); cpSync(sample, dir, { recursive: true }); return dir; }
 function signWith(dir, key, opts) { writeFileSync(join(dir, 'SHA256SUMS.sig'), sshsig(key, readFileSync(join(dir, 'SHA256SUMS')), opts)); return dir; }
 function reseal(dir) { writeFileSync(join(dir, 'SHA256SUMS'), ['MEMORY.md', 'README.md', 'records.jsonl'].map(n => hash(readFileSync(join(dir, n))) + '  ' + n + '\n').join('')); }
 const hasSshKeygen = spawnSync('ssh-keygen', ['-Y', 'verify'], { encoding: 'utf8' }).error === undefined;
 
-test('unsigned packs keep the exact v0.1 verification object, with or without trusted keys', () => {
+test('unsigned v0.1 packs still load: v0.1 fields unchanged, reported as unsigned with unknown freshness', () => {
   const plain = loadPack(sample).verification;
-  assert.deepEqual(Object.keys(plain), V01_KEYS);
+  assert.deepEqual(Object.keys(plain), KEYS);
+  assert.deepEqual(plain.signature, UNSIGNED); assert.equal(plain.freshness.status, 'unknown'); assert.match(plain.freshness.scope, /no PACK\.json/);
   assert.deepEqual(loadPack(sample, { trustedKeys: fixtureTrust }).verification, plain);
   assert.equal(JSON.stringify(loadPack(sample, { trustedKeys: [newKey().line('someone')] }).verification), JSON.stringify(plain));
 });
@@ -32,7 +35,7 @@ test('committed fixture: an ssh-keygen signature verifies with the matching ssh-
   const v = loadPack(dir, { trustedKeys: fixtureTrust, requireSignature: true }).verification;
   assert.deepEqual(v.signature, { status: 'verified', signer: 'fictional-signer', fingerprint: 'SHA256:QdQEQAWD+03v/nksLJaA+zSSRPOSa/V/eODKuTXBY94',
     scope: 'A key you listed as trusted signed these exact pack bytes. This does not establish that the content is true, complete or current.' });
-  assert.deepEqual(Object.keys(v), [...V01_KEYS, 'signature']);
+  assert.deepEqual(Object.keys(v), KEYS); assert.equal(v.freshness.status, 'unknown');
   assert.equal(v.manifest_sha256, loadPack(sample).verification.manifest_sha256);
 });
 
@@ -47,16 +50,17 @@ test('valid signature by an unlisted key loads as untrusted, never as verified',
 
 test('trust is matched by key bytes; the name comes from the trust list, not the pack', t => {
   const key = newKey(), dir = signWith(fixture(t), key);
-  assert.equal(loadPack(dir, { trustedKeys: [key.line('chosen-by-user')], requireSignature: true }).verification.signature.signer, 'chosen-by-user');
+  assert.equal(loadPack(dir, { trustedKeys: [key.line('chosen-by-user')] }).verification.signature.signer, 'chosen-by-user');
   const nearMiss = Buffer.from(key.blob); nearMiss[nearMiss.length - 1] ^= 1;
   assert.equal(loadPack(dir, { trustedKeys: [`near-miss ssh-ed25519 ${nearMiss.toString('base64')}`] }).verification.signature.status, 'untrusted');
 });
 
-test('require-signature refuses unsigned packs and refuses to start without trusted keys', t => {
-  assert.throws(() => loadPack(sample, { trustedKeys: fixtureTrust, requireSignature: true }), /pack is unsigned \(no SHA256SUMS\.sig\) but a signature is required/);
+test('requireSignature and strict both refuse unsigned packs and refuse to start without trusted keys', t => {
+  for (const mode of [{ strict: true }, { requireSignature: true }])
+    assert.throws(() => loadPack(sample, { trustedKeys: fixtureTrust, ...mode }), /^Error: verified-memory: pack is unsigned \(no SHA256SUMS\.sig\) but a signature is required$/);
   // Checked before the pack is read: a missing pack still reports the configuration error.
   for (const trustedKeys of [undefined, [], ['# only a comment\n']]) {
-    assert.throws(() => loadPack(join(sample, 'missing'), { trustedKeys, requireSignature: true }), /requiring a signature needs at least one trusted key/);
+    for (const mode of [{ strict: true }, { requireSignature: true }]) assert.throws(() => loadPack(join(sample, 'missing'), { trustedKeys, ...mode }), /requiring a signature needs at least one trusted key/);
   }
 });
 
@@ -93,7 +97,7 @@ test('signature file must be armored, bounded and a regular file', t => {
   writeFileSync(join(dir, '..', 'elsewhere.sig'), good); rmSync(join(dir, 'SHA256SUMS.sig'));
   symlinkSync(join(dir, '..', 'elsewhere.sig'), join(dir, 'SHA256SUMS.sig')); assert.throws(() => loadPack(dir), /regular files/);
   rmSync(join(dir, 'SHA256SUMS.sig')); writeFileSync(join(dir, 'SHA256SUMS.asc'), good);
-  assert.throws(() => loadPack(dir), /pack must contain exactly four expected files, plus an optional SHA256SUMS\.sig/);
+  assert.throws(() => loadPack(dir), /pack must contain exactly four expected files, plus an optional PACK\.json and SHA256SUMS\.sig/);
 });
 
 test('trusted key lines: strict allowed_signers subset', () => {
@@ -135,7 +139,7 @@ test('interop with OpenSSH: ssh-keygen signs, we verify; we sign in tests, ssh-k
   assert.equal(spawnSync('ssh-keygen', ['-q', '-t', 'ed25519', '-N', '', '-C', 'fictional', '-f', join(work, 'k')]).status, 0);
   assert.equal(spawnSync('ssh-keygen', ['-q', '-Y', 'sign', '-f', join(work, 'k'), '-n', 'verified-memory-pack-v1', join(dir, 'SHA256SUMS')]).status, 0);
   const line = 'fictional ' + readFileSync(join(work, 'k.pub'), 'utf8').split(' ').slice(0, 2).join(' ');
-  const v = loadPack(dir, { trustedKeys: [line], requireSignature: true }).verification.signature;
+  const v = loadPack(dir, { trustedKeys: [line] }).verification.signature;
   const printed = spawnSync('ssh-keygen', ['-l', '-f', join(work, 'k.pub')], { encoding: 'utf8' }).stdout;
   assert.equal(v.status, 'verified'); assert.ok(printed.includes(v.fingerprint), printed);
 

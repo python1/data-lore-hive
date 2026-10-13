@@ -49,7 +49,8 @@ async function main() {
     throw error;
   }
   process.stdout.write(`wrote ${records.length} records to ${out}\nrun: verified-memory-mcp --pack ${out}\n`
-    + `optional, to sign it with your own ssh key: ssh-keygen -Y sign -f ~/.ssh/YOUR_KEY -n verified-memory-pack-v1 ${join(out, 'SHA256SUMS')}\n`);
+    + `optional, to sign and date it with your own ssh key (sign-pack is in the repository, not this package; see the README):\n`
+    + `  node tools/sign-pack.mjs --pack ${out} --key ~/.ssh/YOUR_KEY --expires 90d --out ${out}-signed\n`);
 }
 
 main().catch((error) => {

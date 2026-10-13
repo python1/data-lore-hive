@@ -22,18 +22,28 @@ const asInputs = (map) => [...map].map(([name, data]) => ({ name, source: bytesS
 function copy(t) { const root = mkdtempSync(join(tmpdir(), 'fictional-check-')); t.after(() => rmSync(root, { recursive: true, force: true })); const dir = join(root, 'pack'); cpSync(sample, dir, { recursive: true }); return dir; }
 
 /** Same verdict from the browser path and from loadPack: both pass with equal results, or both fail with the same message. */
-async function same(dir, keysText, requireSignature) {
+async function same(dir, keysText, strict) {
   let server, serverError, browser, browserError;
-  try { server = loadPack(dir, { trustedKeys: [keysText], requireSignature }).verification; } catch (e) { serverError = e.message; }
-  try { browser = await checkPack(filesOf(dir), keysText, requireSignature); } catch (e) { browserError = e.message; }
+  try { server = loadPack(dir, { trustedKeys: [keysText], strict }).verification; } catch (e) { serverError = e.message; }
+  try { browser = await checkPack(filesOf(dir), keysText, strict); } catch (e) { browserError = e.message; }
   assert.equal(browserError, serverError);
-  if (!serverError) { assert.equal(browser.records, server.records); assert.deepEqual(browser.signature, server.signature); }
+  if (!serverError) { assert.equal(browser.records, server.records); assert.deepEqual(browser.signature, server.signature); assert.deepEqual(browser.freshness, server.freshness); }
   return { server, serverError };
 }
 
-test('browser check matches the server verdict across signed, unsigned and broken packs', async (t) => {
+const DAY = 86400000;
+const iso = (ms) => new Date(Math.floor(ms / 1000) * 1000).toISOString().replace('.000Z', 'Z');
+/** PACK.json + re-seal (+ signature by `key`), as sign-pack makes a pack. */
+function dated(dir, created, expires, key) {
+  writeFileSync(join(dir, 'PACK.json'), JSON.stringify({ format: 'verified-memory-pack', version: 2, created_utc: iso(created), expires_utc: iso(expires) }));
+  writeFileSync(join(dir, 'SHA256SUMS'), ['MEMORY.md', 'PACK.json', 'README.md', 'records.jsonl'].map((n) => `${hash(readFileSync(join(dir, n)))}  ${n}\n`).join(''));
+  if (key) writeFileSync(join(dir, 'SHA256SUMS.sig'), sshsig(key, readFileSync(join(dir, 'SHA256SUMS'))));
+}
+
+test('browser check matches the server verdict across signed, unsigned, dated and broken packs', async (t) => {
   const outcomes = [];
-  const fresh = newKey();
+  const fresh = newKey(), freshKeys = fresh.line('fictional-publisher');
+  const now = Date.now();
   const variants = {
     unsigned: () => {},
     'fixture signature': (dir) => cpSync(join(fixture, 'SHA256SUMS.sig'), join(dir, 'SHA256SUMS.sig')),
@@ -42,17 +52,29 @@ test('browser check matches the server verdict across signed, unsigned and broke
     'other namespace': (dir) => writeFileSync(join(dir, 'SHA256SUMS.sig'), sshsig(fresh, readFileSync(join(dir, 'SHA256SUMS')), { namespace: 'hive-release' })),
     'resealed edit': (dir) => { cpSync(join(fixture, 'SHA256SUMS.sig'), join(dir, 'SHA256SUMS.sig')); writeFileSync(join(dir, 'README.md'), 'edited\n'); writeFileSync(join(dir, 'SHA256SUMS'), ['MEMORY.md', 'README.md', 'records.jsonl'].map((n) => `${hash(readFileSync(join(dir, n)))}  ${n}\n`).join('')); },
     'tampered file': (dir) => writeFileSync(join(dir, 'records.jsonl'), 'tampered'),
-    'extra file': (dir) => writeFileSync(join(dir, 'notes.txt'), 'x')
+    'extra file': (dir) => writeFileSync(join(dir, 'notes.txt'), 'x'),
+    'dated fresh': (dir) => dated(dir, now - DAY, now + 30 * DAY, fresh),
+    'dated expired': (dir) => dated(dir, now - 60 * DAY, now - DAY, fresh),
+    'dated future': (dir) => dated(dir, now + 2 * DAY, now + 30 * DAY, fresh),
+    'dated unsigned': (dir) => dated(dir, now - DAY, now + DAY),
+    'dated, expiry extended': (dir) => { dated(dir, now - 60 * DAY, now - DAY, fresh); dated(dir, now - 60 * DAY, now + DAY); },
+    'bad PACK.json': (dir) => { dated(dir, now - DAY, now + DAY); writeFileSync(join(dir, 'PACK.json'), '{"format":"verified-memory-pack"}'); writeFileSync(join(dir, 'SHA256SUMS'), ['MEMORY.md', 'PACK.json', 'README.md', 'records.jsonl'].map((n) => `${hash(readFileSync(join(dir, n)))}  ${n}\n`).join('')); }
   };
   for (const [name, make] of Object.entries(variants)) {
     const dir = copy(t); make(dir);
-    for (const [keys, require] of [['', false], [fixtureKeys, false], [fixtureKeys, true], ['', true], ['alice ssh-rsa AAAA', false]]) {
-      const { server, serverError } = await same(dir, keys, require);
-      outcomes.push(`${name}|${require}|${serverError ?? server.signature?.status ?? 'unsigned'}`);
+    for (const [keys, strict] of [['', false], [fixtureKeys, false], [fixtureKeys, true], [freshKeys, false], [freshKeys, true], ['', true], ['alice ssh-rsa AAAA', false]]) {
+      const { server, serverError } = await same(dir, keys, strict);
+      outcomes.push(`${name}|${keys === freshKeys ? 'fresh-key' : keys === fixtureKeys ? 'fixture-key' : 'other'}|${strict}|${serverError ?? `${server.signature.status}/${server.freshness.status}`}`);
     }
   }
   // The comparison is only meaningful if every kind of outcome actually occurred.
-  for (const expected of ['unsigned|false|unsigned', 'fixture signature|true|verified', 'unlisted key|false|untrusted', 'flipped signature|false|verified-memory: pack signature does not verify'])
+  for (const expected of ['unsigned|other|false|unsigned/unknown', 'fixture signature|fixture-key|false|verified/unknown', 'unlisted key|other|false|untrusted/unknown',
+    'flipped signature|other|false|verified-memory: pack signature does not verify',
+    'fixture signature|fixture-key|true|verified-memory: pack has no PACK.json, so no expiry date, and strict mode requires a fresh pack',
+    'dated fresh|fresh-key|true|verified/fresh', 'dated expired|fresh-key|false|verified/stale', 'dated future|fresh-key|false|verified/not_yet_valid',
+    `dated expired|fresh-key|true|verified-memory: pack expired at ${iso(now - DAY)} and strict mode refuses stale packs`, 'dated unsigned|other|false|unsigned/fresh',
+    'dated, expiry extended|fresh-key|false|verified-memory: pack signature does not verify',
+    'bad PACK.json|other|false|verified-memory: PACK.json must have exactly format, version, created_utc and expires_utc'])
     assert.ok(outcomes.includes(expected), `${expected} not in ${outcomes.join(', ')}`);
 });
 
@@ -64,7 +86,7 @@ test('a browser without Ed25519 gets an explicit "cannot check", never a pass', 
   assert.deepEqual(describeCheck(undefined, error), { text: error.message, kind: 'error' });
   assert.match(error.message, /cannot check Ed25519 signatures/);
   // Unsigned packs need no Ed25519, so they still check.
-  assert.equal((await checkPack(filesOf(sample), '', false, subtle)).signature, undefined);
+  assert.equal((await checkPack(filesOf(sample), '', false, subtle)).signature.status, 'unsigned');
 });
 
 test('pack files from a zip (top level or one folder) or loose files; other layouts refused', async () => {
@@ -74,7 +96,7 @@ test('pack files from a zip (top level or one folder) or loose files; other layo
   for (const zip of [nodeZip(Object.fromEntries(files)), nodeZip({ 'my-pack/': '', ...inFolder, '__MACOSX/my-pack/._README.md': 'x' })]) {
     const read = await readPackFiles([{ name: 'my-pack.zip', source: bytesSource(new Uint8Array(zip)) }]);
     assert.deepEqual([...read.keys()].sort(), [...files.keys()].sort());
-    assert.equal((await checkPack(read, fixtureKeys, true)).signature.status, 'verified');
+    assert.equal((await checkPack(read, fixtureKeys, false)).signature.status, 'verified');
   }
   assert.deepEqual([...(await readPackFiles(asInputs(files))).keys()].sort(), [...files.keys()].sort());
   for (const layout of [{ ...inFolder, 'other/README.md': 'x' }, { 'a/b/MEMORY.md': 'x' }, { ...inFolder, 'loose.md': 'x' }])
@@ -82,11 +104,17 @@ test('pack files from a zip (top level or one folder) or loose files; other layo
   await assert.rejects(readPackFiles([...asInputs(files), ...asInputs(new Map([['README.md', new Uint8Array(1)]]))]), /chosen twice/);
 });
 
-test('status text: honest about what a signature does and does not show', () => {
-  assert.deepEqual(describeCheck({ records: 8 }), { text: 'Checksums pass for 8 records. This pack is not signed, so nothing here says who made it.', kind: 'ok' });
-  assert.match(describeCheck({ records: 1, signature: { status: 'untrusted', fingerprint: 'SHA256:x' } }).text, /^Checksums pass for 1 record\. .*not one you listed, so the signer is unknown\.$/);
-  const verified = describeCheck({ records: 8, signature: { status: 'verified', signer: 'fictional-signer', fingerprint: 'SHA256:x' } });
-  assert.equal(verified.kind, 'ok'); assert.match(verified.text, /Signed by “fictional-signer” \(SHA256:x\), a key you listed\. This proves that key signed these exact files, not that what they say is true\./);
+test('status text: honest about what a signature and a date do and do not show', () => {
+  const unknown = { status: 'unknown' };
+  assert.deepEqual(describeCheck({ records: 8, signature: { status: 'unsigned' }, freshness: unknown }), { text: 'Checksums pass for 8 records. This pack is not signed, so nothing here says who made it. It has no expiry date.', kind: 'ok' });
+  assert.match(describeCheck({ records: 1, signature: { status: 'untrusted', fingerprint: 'SHA256:x' }, freshness: unknown }).text, /^Checksums pass for 1 record\. .*not one you listed, so the signer is unknown\. It has no expiry date\.$/);
+  const signer = { status: 'verified', signer: 'fictional-signer', fingerprint: 'SHA256:x' };
+  const verified = describeCheck({ records: 8, signature: signer, freshness: { status: 'fresh', created_utc: '2026-10-01T00:00:00Z', expires_utc: '2027-01-01T00:00:00Z', authenticated: true } });
+  assert.equal(verified.kind, 'ok'); assert.match(verified.text, /Signed by “fictional-signer” \(SHA256:x\), a key you listed\. This proves that key signed these exact files, not that what they say is true\. Fresh until 2027-01-01T00:00:00Z\.$/);
+  const stale = describeCheck({ records: 8, signature: signer, freshness: { status: 'stale', created_utc: '2026-01-01T00:00:00Z', expires_utc: '2026-02-01T00:00:00Z', authenticated: true } });
+  assert.equal(stale.kind, ''); assert.match(stale.text, / It expired at 2026-02-01T00:00:00Z, so its records may be out of date\.$/);
+  const future = describeCheck({ records: 8, signature: { status: 'unsigned' }, freshness: { status: 'not_yet_valid', created_utc: '2030-01-01T00:00:00Z', expires_utc: '2031-01-01T00:00:00Z', authenticated: false } });
+  assert.equal(future.kind, ''); assert.match(future.text, /in the future by this computer's clock \(these dates are not signed by a key you listed\)\.$/);
   assert.deepEqual(describeCheck(undefined, new Error('verified-memory: pack signature does not verify')), { text: 'Not accepted: Pack signature does not verify.', kind: 'error' });
-  assert.equal(signCommand('my-memory-pack'), 'ssh-keygen -Y sign -f ~/.ssh/YOUR_KEY -n verified-memory-pack-v1 my-memory-pack/SHA256SUMS');
+  assert.equal(signCommand('my-memory-pack'), 'node tools/sign-pack.mjs --pack my-memory-pack --key ~/.ssh/YOUR_KEY --expires 90d --out my-memory-pack-signed');
 });

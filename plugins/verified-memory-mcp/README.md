@@ -29,8 +29,9 @@ package and run its `dist/index.js` with `node` directly.
 ## Build your own pack
 
 A pack is a directory with exactly four files: `records.jsonl`, `MEMORY.md`,
-`README.md` and `SHA256SUMS`, plus an optional signature, `SHA256SUMS.sig`
-(see [Signed packs](#signed-packs-v02)). The easiest way to make one is the bundled offline
+`README.md` and `SHA256SUMS`, plus an optional `PACK.json` (creation and expiry dates)
+and an optional signature, `SHA256SUMS.sig`
+(see [Signed and dated packs](#signed-and-dated-packs)). The easiest way to make one is the bundled offline
 builder. It reads your messages and the records you want to remember, finds every
 quote in its message, computes offsets and hashes, writes the pack, and then loads it
 with the server's own verifier. If any quote is not verbatim in its message, it writes
@@ -42,7 +43,7 @@ nothing.
 the exact sentences to remember, and download a ready pack. It runs entirely in the
 browser (no server, and its Content-Security-Policy forbids network requests), uses the
 same building code as the command-line builder, and checks the pack with the server's
-own verifier before offering the download. It does not sign packs (sign with `ssh-keygen`,
+own verifier before offering the download. It does not sign packs or add dates (use `sign-pack`,
 below), but its *Check a signed pack* panel runs the same verifier on a signed pack and
 the public keys you paste. Its source is in [`web/`](web/); to run it
 from a checkout instead, run `npm install && npm run build` there and open
@@ -153,8 +154,9 @@ pack directly. By convention, and as the builder writes them:
 
 ### `SHA256SUMS` format
 
-Exactly three lines, one per other file, each `<64 lowercase hex>` + two spaces +
-file name; no entry for `SHA256SUMS` itself; at most 4 KiB:
+Exactly one line per other file (three, or four with `PACK.json`), each
+`<64 lowercase hex>` + two spaces + file name; no entry for `SHA256SUMS` or
+`SHA256SUMS.sig`; at most 4 KiB:
 
 ```text
 f3ed88bca6a7a451a892f49bd6d2970f5671b8c704d0bc6cae7646c46978bc69  MEMORY.md
@@ -172,48 +174,104 @@ sha256sum MEMORY.md README.md records.jsonl > SHA256SUMS       # Linux
 Resealing by hand only makes the checksums match again; it does not re-check quotes.
 Prefer rebuilding with the builder. Resealing also invalidates any signature: sign again.
 
-## Signed packs (v0.2)
+## Signed and dated packs
 
-A pack can carry `SHA256SUMS.sig`, an OpenSSH signature over the exact `SHA256SUMS`
-bytes, which pin every other file. Only Ed25519 keys, the `sha512` hash and the
-namespace `verified-memory-pack-v1` are accepted, so a git or code-release signature
-cannot be reused as a pack signature. Make the key and sign with the stock
-`ssh-keygen`; this server and the builder never handle private keys:
+A pack can carry two optional extras:
 
-```sh
-ssh-keygen -t ed25519 -f ~/.ssh/verified-memory-pack -C "my packs"   # once; use a passphrase
-ssh-keygen -Y sign -f ~/.ssh/verified-memory-pack -n verified-memory-pack-v1 /absolute/path/to/pack/SHA256SUMS
+- `SHA256SUMS.sig`: an OpenSSH signature over the exact `SHA256SUMS` bytes, which pin
+  every other file. Only Ed25519 keys, the `sha512` hash and the namespace
+  `verified-memory-pack-v1` are accepted, so a git or code-release signature cannot be
+  reused as a pack signature.
+- `PACK.json` (since 0.3.0): when the pack was made and when it stops being current.
+  It is listed in `SHA256SUMS` like every other file, so the signature covers the dates.
+
+```json
+{
+  "format": "verified-memory-pack",
+  "version": 2,
+  "created_utc": "2026-10-12T18:00:00Z",
+  "expires_utc": "2027-01-10T18:00:00Z"
+}
 ```
 
-That writes `/absolute/path/to/pack/SHA256SUMS.sig`. Keep the private key out of the
-pack, out of any repository and off shared machines. Share only the `.pub` file.
+Exactly these four keys; dates are UTC ISO 8601 and `created_utc` is before
+`expires_utc`. A malformed `PACK.json` refuses to load. The pack maker and the builder
+never write one, so their packs still load on 0.2.0 hosts; packs with a `PACK.json` need
+0.3.0 or later (older hosts refuse the extra file).
 
-**Choosing whom to trust.** Trust is only ever a public key you list. There is no
-network, key server or registry. Put keys in a file, one per line in `allowed_signers`
-form, `name ssh-ed25519 AAAA… [comment]` (blank lines and `#` comments are allowed):
+### Signing: `sign-pack`
+
+Sign on a machine you trust with a passphrase-protected key. `tools/sign-pack.mjs` is
+in the repository but not in the npm package. It copies a verified pack to a new folder,
+writes `PACK.json`, reseals `SHA256SUMS` and runs `ssh-keygen -Y sign`. **It never opens
+the private key itself**: ssh-keygen reads it and asks for the passphrase (or uses
+ssh-agent). Before it moves the result into place, it loads it with the hosts' own
+verifier in strict mode, trusting only your `.pub`. It needs Node 22+ and OpenSSH 8.1+.
+
+```sh
+ssh-keygen -t ed25519 -f ~/.ssh/verified-memory-pack -C "my packs"   # once; set a passphrase
+cd plugins/verified-memory-mcp && npm ci && npm run build            # once per checkout
+node tools/sign-pack.mjs --pack /path/to/pack --key ~/.ssh/verified-memory-pack --expires 90d --out /path/to/pack-signed
+```
+
+`--expires` is a number of days (`90d`, at most `1825d`) or an exact UTC time
+(`2027-01-31T00:00:00Z`). `--out` must not exist yet. On any failure (wrong passphrase,
+a pack that does not verify) nothing is written. Signing an already signed pack replaces
+its dates and signature. The script prints the key fingerprint and a trusted-keys line.
+Keep the private key out of the pack, out of any repository and off shared machines.
+Share only the `.pub` file.
+
+Plain `ssh-keygen -Y sign -f KEY -n verified-memory-pack-v1 pack/SHA256SUMS` still makes
+a valid signature, but the pack then has no expiry date (`freshness: unknown`), and
+`--strict` refuses it.
+
+### Choosing whom to trust
+
+Trust is only ever a public key you list. There is no built-in key, network, key server
+or registry. Put keys in a file, one per line in `allowed_signers` form,
+`name ssh-ed25519 AAAA… [comment]` (blank lines and `#` comments are allowed):
 
 ```text
 alice ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA… alice's laptop
 ```
 
+The maintainer's pack-signing public key is in [`keys/`](../../keys/) for anyone who
+chooses to trust packs signed with it. No host trusts it unless you list it.
+
 ```sh
 verified-memory-mcp --pack /absolute/path/to/pack --trusted-keys /absolute/path/to/trusted_keys
 verified-memory-mcp --pack /absolute/path/to/pack --trusted-keys /absolute/path/to/trusted_keys --require-signature
+verified-memory-mcp --pack /absolute/path/to/pack --trusted-keys /absolute/path/to/trusted_keys --strict
 ```
 
-`--flag=value` and `--require-signature=true|false` forms are accepted too.
+`--flag=value`, `--require-signature=true|false` and `--strict=true|false` forms are
+accepted too. `--require-signature` keeps its 0.2.0 meaning: a signature by a key you
+listed is required, and freshness is reported but not enforced, so packs signed with
+plain `ssh-keygen` for 0.2.0 keep loading under it. `--strict` requires a trusted
+signature *and* a fresh `PACK.json` (it implies `--require-signature`).
 
-| Pack | Without `--require-signature` | With `--require-signature` |
-|---|---|---|
-| Unsigned | Starts exactly as in 0.1.0, with identical tool output | Refuses to start |
-| Signature present but malformed or invalid | Refuses to start | Refuses to start |
-| Valid signature, key not in your file | Starts; `verification.signature.status` is `untrusted`, with the key fingerprint | Refuses to start |
-| Valid signature, key in your file | Starts; `status: "verified"`, `signer` (your name for the key), `fingerprint` | Starts |
+### What hosts do
 
-`--require-signature` with no trusted key, or a trusted key line that is not a
-single-name `ssh-ed25519` entry, refuses to start. The signer name always comes from
-your file, never from the pack, and fingerprints match `ssh-keygen -l`. Anyone can
-check a pack without this server:
+Every tool result carries `verification.signature` and `verification.freshness`.
+Freshness is judged against this computer's clock on every call, not only at startup.
+
+| Pack | Default | `--require-signature` | `--strict` |
+|---|---|---|---|
+| Unsigned (every 0.1 pack) | Starts; `signature.status: "unsigned"` | Refuses to start | Refuses to start |
+| Signature present but malformed or invalid | Refuses to start | Refuses to start | Refuses to start |
+| Valid signature, key not in your file | Starts; `untrusted`, with the key fingerprint | Refuses to start | Refuses to start |
+| Valid signature, key in your file | Starts; `verified`, `signer` (your name for the key), `fingerprint` | Starts | Starts if fresh (below) |
+| No `PACK.json` | Starts; `freshness.status: "unknown"` | Starts; `unknown` | Refuses to start |
+| `PACK.json`, not yet expired | Starts; `fresh`, with `created_utc`, `expires_utc` | Starts; `fresh` | Starts |
+| `PACK.json`, expired | Starts; `stale`, plus a warning on stderr | Starts; `stale`, plus a warning | Refuses to start; a running server stops serving (tool error) once it expires |
+| `created_utc` more than 5 minutes in the future | Starts; `not_yet_valid`, plus a warning on stderr | Starts; `not_yet_valid`, plus a warning | Refuses to start |
+| `PACK.json` or its checksum tampered with | Refuses to start | Refuses to start | Refuses to start |
+
+`freshness.authenticated` is `true` only when a key you listed signed the dates; dates in
+an unsigned or untrusted pack could have been written by anyone. `--require-signature`
+or `--strict` with no trusted key, or a trusted key line that is not a single-name `ssh-ed25519` entry,
+refuses to start. The signer name always comes from your file, never from the pack, and
+fingerprints match `ssh-keygen -l`. Anyone can check a pack without this server:
 
 ```sh
 ssh-keygen -Y verify -f trusted_keys -I alice -n verified-memory-pack-v1 -s SHA256SUMS.sig < SHA256SUMS
@@ -221,10 +279,11 @@ ssh-keygen -Y verify -f trusted_keys -I alice -n verified-memory-pack-v1 -s SHA2
 
 **A signature proves who signed, not that the content is true.** It shows that the
 holder of that key signed these exact bytes. It does not show that the quotes are
-accurate or complete, that the key's owner is who you think, or that this is their
-latest pack: there is no timestamp, revocation or rollback protection, so an older
-pack signed by the same key still verifies. Version 0.1.0 refuses signed packs (five
-files); remove `SHA256SUMS.sig` to load one there.
+accurate or complete, or that the key's owner is who you think. "Fresh" means the signer
+set an expiry that has not passed, not that this is their latest pack: an older pack
+from the same key still loads until it expires, and there is no revocation. Freshness
+relies on this computer's clock. Version 0.1.0 refuses signed packs (five files);
+remove `SHA256SUMS.sig` to load one there.
 
 ## Build and run
 
@@ -333,7 +392,7 @@ checkout so the sibling source and sample are present. Generated files are not c
 The whole pack must verify **before a server is created or stdio is connected**.
 A failing pack cannot initialize, list tools or return records. The exact format
 is four regular files: `records.jsonl`, `MEMORY.md`, `README.md`, and `SHA256SUMS`,
-plus an optional `SHA256SUMS.sig` checked by the same shared verifier.
+plus an optional `PACK.json` and `SHA256SUMS.sig` checked by the same shared verifier.
 Checks include exact file inventory, SHA-256 hashes over the bytes actually parsed,
 UTF-8, JSON, unique IDs, citation structure and offsets, date ranges, manifest
 syntax, symlink roots/entries and file-size/count limits. Limits remain 16 MiB per
@@ -344,7 +403,7 @@ Inherited filesystem checks are not a sandbox against an adversary able to race
 ancestor directories. Use a trusted, stable local directory and the Node read allowlist.
 
 **Integrity is not authenticity or truth.** Replacing both data and checksums can
-produce a passing pack, unless you require a signature from a key you trust. Runtime cannot recheck quotations against original messages.
+produce a passing pack, unless you use `--strict` with a key you trust. Runtime cannot recheck quotations against original messages.
 Historical quotes are data, never instructions or permission; that notice accompanies
 every successful result. Host model behavior and automatic tool selection are not
 validated. Ask the host to quote tool text verbatim and cite record and message IDs.
@@ -376,12 +435,14 @@ plugins/verified-memory-mcp/
 ├── tools/
 │   ├── build-pack.mjs          # offline pack builder (ships in npm)
 │   ├── pack-core.mjs           # its import-free building rules (ships in npm)
+│   ├── sign-pack.mjs           # repo-only: signs and dates a pack via ssh-keygen
 │   └── export-shape.mjs        # repo-only: prints a chat export's structure, never its text
 ├── examples/
 │   ├── input/                  # invented messages.jsonl + records.jsonl
 │   └── pack/                   # pack built from them
 ├── test/
 │   ├── server.test.mjs
+│   ├── sign-pack.test.mjs
 │   ├── build-pack.test.mjs
 │   ├── pack-core.test.mjs
 │   └── export-shape.test.mjs

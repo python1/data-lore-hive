@@ -102,8 +102,9 @@
         </details>
         <details class="help">
           <summary>Sign it (optional)</summary>
-          <p>A signature lets others check that a pack came from your key. Unzip the pack, then sign it with your own ssh key on your computer:</p>
+          <p>A signature lets others check that a pack came from your key, and an expiry date tells them when to stop trusting it as current. Unzip the pack, then, in <code>plugins/verified-memory-mcp</code> of a checkout of this project on your computer, sign it with your own ssh key (ssh-keygen asks for its passphrase):</p>
           <pre id="sign-command"></pre>
+          <p class="muted small">Plain <code>ssh-keygen -Y sign -n verified-memory-pack-v1</code> on SHA256SUMS also works, but then the pack has no expiry date, and hosts in strict mode refuse it.</p>
           <p class="muted small">This page never asks for a private key, and has nowhere to keep one. A signature proves who signed the files, not that what they say is true.</p>
         </details>
         <div class="row drafts">
@@ -118,11 +119,11 @@
   <section class="card" id="check-pack" aria-labelledby="check-heading">
     <h2 id="check-heading">Check a signed pack</h2>
     <p class="muted small">Runs the same checks as the MCP server and the OpenClaw plugin, in this browser. The pack and keys never leave it.</p>
-    <label class="button">Choose a pack <input type="file" id="check-files" multiple accept=".zip,.md,.jsonl,.sig,application/zip"></label>
+    <label class="button">Choose a pack <input type="file" id="check-files" multiple accept=".zip,.md,.jsonl,.json,.sig,application/zip"></label>
     <span id="check-chosen" class="muted small"></span>
     <label for="check-keys">Public keys you trust <span class="muted">(optional; one per line, <code>name ssh-ed25519 AAAA…</code>)</span></label>
     <textarea id="check-keys" rows="3" spellcheck="false" autocomplete="off"></textarea>
-    <label><input type="checkbox" id="check-require"> Require a signature from one of these keys</label>
+    <label><input type="checkbox" id="check-require"> Strict: require a signature from one of these keys, and an unexpired pack</label>
     <div class="row"><button type="button" id="check-run" disabled>Check</button></div>
     <p id="check-status" class="status" role="status" aria-live="polite"></p>
   </section>

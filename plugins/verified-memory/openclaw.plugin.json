@@ -2,7 +2,7 @@
   "id": "verified-memory",
   "name": "Verified Memory",
   "version": "0.2.0",
-  "description": "Local read-only search over checksum-verified, optionally signed Data & Lore packs.",
+  "description": "Local read-only search over checksum-verified, optionally signed and dated Data & Lore packs.",
   "categories": [
     "memory"
   ],
@@ -26,9 +26,13 @@
         "maxItems": 256,
         "description": "Public keys you trust to sign packs, one per entry: name ssh-ed25519 AAAA… [comment]."
       },
+      "strict": {
+        "type": "boolean",
+        "description": "Refuse any pack that is not signed by one of trustedKeys and fresh (PACK.json present and not expired). Default false: unsigned, stale and undated packs load and are reported."
+      },
       "requireSignature": {
         "type": "boolean",
-        "description": "Refuse any pack that is not signed by one of trustedKeys. Default false."
+        "description": "Refuse any pack that is not signed by one of trustedKeys; freshness is reported but not enforced. Default false."
       }
     },
     "additionalProperties": false

@@ -32,22 +32,25 @@ function validateRecord(x: unknown): asserts x is MemoryRecord {
  * (the caller enforces `max`); `digest` returns lowercase hex SHA-256 of exactly those bytes.
  */
 export function verifyPackEntries(names: string[], read: (name: string, max: number) => Uint8Array, digest: (bytes: Uint8Array) => string) {
-  const signed = names.includes(SIGNATURE_FILE);
-  requireValue(JSON.stringify([...names].sort()) === JSON.stringify([...FILES,'SHA256SUMS',...(signed ? [SIGNATURE_FILE] : [])].sort()), `pack must contain exactly four expected files, plus an optional ${SIGNATURE_FILE}`);
+  const signed = names.includes(SIGNATURE_FILE), dated = names.includes(FRESHNESS_FILE);
+  const pinned = [...FILES, ...(dated ? [FRESHNESS_FILE] : [])];
+  requireValue(JSON.stringify([...names].sort()) === JSON.stringify([...pinned,'SHA256SUMS',...(signed ? [SIGNATURE_FILE] : [])].sort()), `pack must contain exactly four expected files, plus an optional ${FRESHNESS_FILE} and ${SIGNATURE_FILE}`);
   const manifest = read('SHA256SUMS', MANIFEST_MAX);
   const expected = new Map<string,string>();
   for (const line of decode(manifest).split(/\r?\n/).filter(x => x.length)) {
-    const m = /^([a-f0-9]{64})  (MEMORY\.md|README\.md|records\.jsonl)$/.exec(line);
+    const m = /^([a-f0-9]{64})  (MEMORY\.md|README\.md|records\.jsonl|PACK\.json)$/.exec(line);
     requireValue(m && !expected.has(m[2]), 'invalid or duplicate checksum entry');
+    requireValue(pinned.includes(m[2]), `checksum entry for a file not in the pack: ${m[2]}`);
     expected.set(m[2],m[1]);
   }
-  requireValue(expected.size === FILES.length, 'missing checksum entry');
-  let jsonl = '';
-  for (const name of FILES) {
-    const bytes = read(name, FILE_MAX);
+  requireValue(expected.size === pinned.length, 'missing checksum entry');
+  let jsonl = '', dates: PackDates | undefined;
+  for (const name of pinned) {
+    const bytes = read(name, name === FRESHNESS_FILE ? FRESHNESS_MAX : FILE_MAX);
     requireValue(digest(bytes) === expected.get(name), `checksum mismatch: ${name}`);
     const content = decode(bytes);
     if (name === 'records.jsonl') jsonl = content;
+    if (name === FRESHNESS_FILE) dates = parsePackDates(content);
   }
   const records = new Map<string,MemoryRecord>();
   for (const line of jsonl.split('\n').filter(x => x.trim())) {
@@ -57,7 +60,24 @@ export function verifyPackEntries(names: string[], read: (name: string, max: num
     requireValue(records.size < 10000, 'too many records');
     records.set(record.record_id,record);
   }
-  return { records, manifest, manifest_sha256: digest(manifest), signature: signed ? read(SIGNATURE_FILE, SIGNATURE_MAX) : undefined };
+  return { records, manifest, manifest_sha256: digest(manifest), dates, signature: signed ? read(SIGNATURE_FILE, SIGNATURE_MAX) : undefined };
+}
+
+// Freshness (v0.3): an optional PACK.json, pinned in SHA256SUMS like every other file, so a
+// signature over SHA256SUMS also covers its dates. Packs without it (all v0.1 and v0.2 packs)
+// load as before with freshness "unknown". The pack maker never writes it; sign-pack does.
+export const FRESHNESS_FILE = 'PACK.json';
+export const FRESHNESS_MAX = 4096;
+/** How far in the future created_utc may be before the pack is "not_yet_valid" (clock skew). */
+export const CLOCK_SKEW_MS = 5 * 60 * 1000;
+export type PackDates = { created_utc: string; expires_utc: string };
+function parsePackDates(content: string): PackDates {
+  let x: unknown;
+  try { x = JSON.parse(content); } catch { requireValue(false, `invalid ${FRESHNESS_FILE}: not JSON`); }
+  requireValue(object(x) && JSON.stringify(Object.keys(x).sort()) === '["created_utc","expires_utc","format","version"]', `${FRESHNESS_FILE} must have exactly format, version, created_utc and expires_utc`);
+  requireValue(x.format === 'verified-memory-pack' && x.version === 2, `${FRESHNESS_FILE} must be format verified-memory-pack, version 2`);
+  requireValue(date(x.created_utc) && date(x.expires_utc) && Date.parse(x.created_utc) < Date.parse(x.expires_utc), `${FRESHNESS_FILE} dates must be UTC ISO 8601, with created_utc before expires_utc`);
+  return { created_utc: x.created_utc, expires_utc: x.expires_utc };
 }
 
 // Signed packs: an OpenSSH signature (ssh-keygen -Y sign, PROTOCOL.sshsig) over the exact
@@ -70,6 +90,7 @@ export const SIGNATURE_MAX = 4096;
 export const SIGNATURE_NAMESPACE = 'verified-memory-pack-v1';
 export const TRUSTED_KEYS_MAX = 256;
 export const SIGNATURE_SCOPE = {
+  unsigned: 'This pack has no SHA256SUMS.sig, so nothing establishes who made it.',
   verified: 'A key you listed as trusted signed these exact pack bytes. This does not establish that the content is true, complete or current.',
   untrusted: 'The signature is valid, but its key is not one you listed as trusted, so the signer is unknown. This does not establish authenticity or truth.'
 };
@@ -78,7 +99,7 @@ export type SignatureCrypto = {
   sha512: (bytes: Uint8Array) => Uint8Array;
   ed25519Verify: (publicKey: Uint8Array, message: Uint8Array, signature: Uint8Array) => boolean;
 };
-export type SignatureResult = { status: 'verified'; signer: string; fingerprint: string; scope: string } | { status: 'untrusted'; fingerprint: string; scope: string };
+export type SignatureResult = { status: 'verified'; signer: string; fingerprint: string; scope: string } | { status: 'untrusted'; fingerprint: string; scope: string } | { status: 'unsigned'; scope: string };
 const ascii = (s: string) => Uint8Array.from(s, c => c.charCodeAt(0));
 const equal = (a: Uint8Array, b: Uint8Array) => a.length === b.length && a.every((x, i) => x === b[i]);
 const concat = (...parts: Uint8Array[]) => { const out = new Uint8Array(parts.reduce((n, p) => n + p.length, 0)); let at = 0; for (const p of parts) { out.set(p, at); at += p.length; } return out; };
@@ -157,14 +178,15 @@ export function parsePackSignature(bytes: Uint8Array) {
 }
 
 /**
- * The single signature policy. Unsigned packs return undefined (unchanged behaviour) unless a
- * signature is required. A present signature must be well formed and valid or the pack is
- * refused, even when no key is trusted; a valid one by an unlisted key is reported as untrusted.
+ * The single signature policy. A present signature must be well formed and valid or the pack is
+ * refused, even when no key is trusted; a valid one by an unlisted key is reported as untrusted,
+ * and a missing one as unsigned. `requireSignature` (--require-signature, and implied by
+ * --strict) refuses anything but a signature by a listed key, and needs a listed key to start.
  */
 export function checkPackSignature(manifest: Uint8Array, signatureBytes: Uint8Array | undefined, trusted: TrustedKey[], requireSignature: boolean,
-  crypto: SignatureCrypto, digest: (bytes: Uint8Array) => string): SignatureResult | undefined {
+  crypto: SignatureCrypto, digest: (bytes: Uint8Array) => string): SignatureResult {
   requireValue(!requireSignature || trusted.length > 0, 'requiring a signature needs at least one trusted key');
-  if (!signatureBytes) { requireValue(!requireSignature, `pack is unsigned (no ${SIGNATURE_FILE}) but a signature is required`); return undefined; }
+  if (!signatureBytes) { requireValue(!requireSignature, `pack is unsigned (no ${SIGNATURE_FILE}) but a signature is required`); return { status: 'unsigned', scope: SIGNATURE_SCOPE.unsigned }; }
   const parsed = parsePackSignature(signatureBytes);
   requireValue(crypto.ed25519Verify(parsed.key, parsed.signedData(crypto.sha512(manifest)), parsed.signature) === true, 'pack signature does not verify');
   const print = fingerprint(parsed.key, digest);
@@ -172,4 +194,36 @@ export function checkPackSignature(manifest: Uint8Array, signatureBytes: Uint8Ar
   if (signer) return { status: 'verified', signer: signer.name, fingerprint: print, scope: SIGNATURE_SCOPE.verified };
   requireValue(!requireSignature, `pack is signed by ${print}, which is not a trusted key, and a signature is required`);
   return { status: 'untrusted', fingerprint: print, scope: SIGNATURE_SCOPE.untrusted };
+}
+
+export type FreshnessResult = { status: 'fresh' | 'stale' | 'not_yet_valid'; created_utc: string; expires_utc: string; authenticated: boolean; scope: string } | { status: 'unknown'; scope: string };
+/**
+ * The single freshness policy, judged against the host clock at `now` (ms). Dates count as
+ * authenticated only when a key the user listed signed them. Outside strict mode (including
+ * with only requireSignature) every outcome loads and is reported; strict refuses all but "fresh".
+ */
+export function checkPackFreshness(dates: PackDates | undefined, signature: SignatureResult, strict: boolean, now: number): FreshnessResult {
+  if (!dates) {
+    requireValue(!strict, `pack has no ${FRESHNESS_FILE}, so no expiry date, and strict mode requires a fresh pack`);
+    return { status: 'unknown', scope: `This pack has no ${FRESHNESS_FILE}, so it carries no creation or expiry date and nothing says whether it is current.` };
+  }
+  const authenticated = signature.status === 'verified';
+  const { created_utc, expires_utc } = dates;
+  const dated = authenticated ? 'These dates are signed by a key you listed.' : 'These dates are not covered by a signature from a key you listed, so anyone could have written them.';
+  if (Date.parse(created_utc) > now + CLOCK_SKEW_MS) {
+    requireValue(!strict, `pack is dated in the future (created_utc ${created_utc}) and strict mode refuses it`);
+    return { status: 'not_yet_valid', created_utc, expires_utc, authenticated, scope: `This pack says it was created at ${created_utc}, which is in the future by this computer's clock. Check the clock or the pack. ${dated}` };
+  }
+  if (now >= Date.parse(expires_utc)) {
+    requireValue(!strict, `pack expired at ${expires_utc} and strict mode refuses stale packs`);
+    return { status: 'stale', created_utc, expires_utc, authenticated, scope: `This pack expired at ${expires_utc}; its records may be out of date. It is served only because strict mode is off. ${dated}` };
+  }
+  return { status: 'fresh', created_utc, expires_utc, authenticated, scope: `This pack is within its dates (expires ${expires_utc}). Fresh means it has not expired, not that it is complete or true. ${dated}` };
+}
+
+/** One-line host warnings for a pack that loaded outside strict mode but is not current. */
+export function freshnessWarning(freshness: FreshnessResult): string | undefined {
+  if (freshness.status === 'stale') return `warning: pack expired at ${freshness.expires_utc} (stale); serving it because strict mode is off`;
+  if (freshness.status === 'not_yet_valid') return `warning: pack is dated in the future (created_utc ${freshness.created_utc}); check the clock; serving it because strict mode is off`;
+  return undefined;
 }
