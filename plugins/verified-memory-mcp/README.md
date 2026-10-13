@@ -12,7 +12,7 @@ one configured pack at startup and serves an isolated in-memory snapshot. Stdout
 is exclusively MCP protocol output; startup errors go to stderr and exit nonzero.
 Only these two tools are exposed; no resources, prompts, filesystem or command tools.
 
-## Run with npx (after publishing)
+## Run with npx
 
 The npm package contains only `dist/`, the pack builder, this README and LICENSE. It ships **no pack**,
 so `--pack` is required:
