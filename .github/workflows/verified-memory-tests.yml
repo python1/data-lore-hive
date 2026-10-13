@@ -12,6 +12,15 @@ permissions:
   contents: read
 
 jobs:
+  no-private-keys:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Signed packs: private keys never go in the repo. The one excluded file is a masking
+      # test whose input is a fake key header with the body "AAAA".
+      - name: No private key material in the repository
+        run: "! git grep -I -n -E 'BEGIN ([A-Z]+ )?PRIVATE KEY' -- . ':(exclude)agent-memory/tests/test_export_and_masking.py'"
+
   openclaw-plugin:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: plugins/verified-memory } }

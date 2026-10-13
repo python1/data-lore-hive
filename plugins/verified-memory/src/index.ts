@@ -4,7 +4,9 @@ import { defineToolPlugin } from 'openclaw/plugin-sdk/tool-plugin';
 import { loadPack } from './pack.js';
 
 export const configSchema = Type.Object({
-  packPath: Type.Optional(Type.String({ minLength: 1, description: 'Absolute path to a pack; omitted uses the bundled fictional sample.' }))
+  packPath: Type.Optional(Type.String({ minLength: 1, description: 'Absolute path to a pack; omitted uses the bundled fictional sample.' })),
+  trustedKeys: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { maxItems: 256, description: 'Public keys you trust to sign packs, one per entry: name ssh-ed25519 AAAA… [comment].' })),
+  requireSignature: Type.Optional(Type.Boolean({ description: 'Refuse any pack that is not signed by one of trustedKeys. Default false.' }))
 }, { additionalProperties: false });
 export const searchSchema = Type.Object({ query: Type.String({ minLength: 1, maxLength: 512 }) }, { additionalProperties: false });
 export const getSchema = Type.Object({ id: Type.String({ pattern: '^M-[A-Za-z0-9_-]{1,127}$' }) }, { additionalProperties: false });
@@ -17,7 +19,7 @@ function argument(params: unknown, name: string): string {
 const snapshots = new WeakMap<object, ReturnType<typeof loadPack>>();
 const entry = defineToolPlugin({
   id: 'verified-memory', name: 'Verified Memory',
-  description: 'Local read-only search over checksum-verified Data & Lore packs.',
+  description: 'Local read-only search over checksum-verified, optionally signed Data & Lore packs.',
   configSchema,
   tools: tool => [
     tool({
@@ -47,9 +49,12 @@ const entry = defineToolPlugin({
 const registerTools = entry.register!;
 entry.register = api => {
   const config = api.pluginConfig ?? {};
-  if (Object.keys(config).some(k=>k !== 'packPath') || (config.packPath !== undefined && (typeof config.packPath !== 'string' || !config.packPath))) throw new Error('verified-memory: invalid configuration');
+  if (Object.keys(config).some(k=>!['packPath','trustedKeys','requireSignature'].includes(k)) || (config.packPath !== undefined && (typeof config.packPath !== 'string' || !config.packPath))
+    || (config.trustedKeys !== undefined && (!Array.isArray(config.trustedKeys) || config.trustedKeys.some(k=>typeof k !== 'string')))
+    || (config.requireSignature !== undefined && typeof config.requireSignature !== 'boolean')) throw new Error('verified-memory: invalid configuration');
   snapshots.delete(api);
-  const pack = loadPack(config.packPath as string ?? fileURLToPath(new URL('../sample-pack/', import.meta.url)));
+  const pack = loadPack(config.packPath as string ?? fileURLToPath(new URL('../sample-pack/', import.meta.url)),
+    { trustedKeys: config.trustedKeys as string[] | undefined, requireSignature: config.requireSignature as boolean | undefined });
   snapshots.set(api, pack);
   return registerTools(api);
 };

@@ -1,49 +1,68 @@
 
-> @python1/verified-memory-mcp@0.1.0 test
+> @python1/verified-memory-mcp@0.2.0 test
 > npm run build && node --test test/*.test.mjs
 
 
-> @python1/verified-memory-mcp@0.1.0 build
+> @python1/verified-memory-mcp@0.2.0 build
 > node scripts/prepare.mjs && tsc
 
-✔ builder reproduces the committed example pack byte for byte (83.552541ms)
-✔ installed-style stdio server loads the example pack and returns an exact quote (166.583833ms)
-✔ builder refuses a quote that is not verbatim (78.766042ms)
-✔ builder refuses an ambiguous quote unless start is given (155.172791ms)
-✔ builder refuses unknown messages, unknown fields, bad dates and duplicate IDs (381.236625ms)
-✔ builder accepts a disambiguated quote and computes code-point offsets (80.59725ms)
-✔ builder never overwrites an existing directory (75.510417ms)
-✔ build reuses byte-identical verifier and fictional pack without modifying source plugin (2.082291ms)
-✔ valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP (12.672541ms)
-✔ no matches, unknown ID, historical instructions and lexical semantics preserved (2.086541ms)
-✔ invalid requests return errors without path lookup or extra tool capabilities (2.75675ms)
-✔ tampered MEMORY.md: startup refuses with no stdout (147.613125ms)
-✔ tampered README.md: startup refuses with no stdout (150.012416ms)
-✔ tampered records.jsonl: startup refuses with no stdout (150.5115ms)
-✔ malformed rehashed pack broken-json: startup refuses (153.877542ms)
-✔ malformed rehashed pack invalid-utf8: startup refuses (150.7725ms)
-✔ malformed rehashed pack duplicate-id: startup refuses (151.629708ms)
-✔ malformed rehashed pack missing-citations: startup refuses (152.976375ms)
-✔ malformed rehashed pack wrong-offset: startup refuses (146.1615ms)
-✔ malformed rehashed pack invalid-id: startup refuses (149.561959ms)
-✔ malformed rehashed pack invalid-date: startup refuses (144.469542ms)
-✔ malformed rehashed pack invalid-hash: startup refuses (146.466625ms)
-✔ malformed manifest duplicate: startup refuses (148.786875ms)
-✔ malformed manifest missing: startup refuses (151.135875ms)
-✔ malformed manifest traversal: startup refuses (147.045708ms)
-✔ malformed manifest malformed: startup refuses (147.084167ms)
-✔ malformed manifest self: startup refuses (148.676417ms)
-✔ missing, extra, symlink entries and symlink root rejected (864.616084ms)
-✔ verified snapshot survives disk edits and returned-object mutation (150.736084ms)
-✔ actual stdio protocol works under Node permissions denying writes, subprocesses and workers (363.520958ms)
-✔ network permission policy denies socket access when supported (66.288209ms)
-✔ every bundled citation matches only the public fictional source (0.7695ms)
-✔ invalid CLI flags refuse before protocol output (427.745166ms)
-ℹ tests 33
+✔ builder reproduces the committed example pack byte for byte (82.01775ms)
+✔ installed-style stdio server loads the example pack and returns an exact quote (158.819792ms)
+✔ builder refuses a quote that is not verbatim (71.603458ms)
+✔ builder refuses an ambiguous quote unless start is given (138.127542ms)
+✔ builder refuses unknown messages, unknown fields, bad dates and duplicate IDs (347.331833ms)
+✔ builder accepts a disambiguated quote and computes code-point offsets (79.709625ms)
+✔ builder never overwrites an existing directory (66.484084ms)
+✔ export-shape prints structure and enum tokens but none of the invented export content (75.960292ms)
+✔ export-shape reads a folder and a single JSON file, collapsing maps keyed by data (144.979666ms)
+✔ export-shape hides invalid JSON details and refuses bad input (139.665ms)
+✔ pack core and the copied verifier have no imports, so a browser can load them (1.830458ms)
+✔ pack core builds the committed example pack in memory, byte for byte (7.372583ms)
+✔ in-memory pack passes the pure verifier with Web Crypto hashes, as a browser would run it (1.916ms)
+✔ build reuses byte-identical verifier and fictional pack without modifying source plugin (1.867833ms)
+✔ valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP (12.671583ms)
+✔ no matches, unknown ID, historical instructions and lexical semantics preserved (2.168958ms)
+✔ invalid requests return errors without path lookup or extra tool capabilities (2.944041ms)
+✔ tampered MEMORY.md: startup refuses with no stdout (145.556792ms)
+✔ tampered README.md: startup refuses with no stdout (143.807542ms)
+✔ tampered records.jsonl: startup refuses with no stdout (138.556917ms)
+✔ malformed rehashed pack broken-json: startup refuses (143.017208ms)
+✔ malformed rehashed pack invalid-utf8: startup refuses (139.262333ms)
+✔ malformed rehashed pack duplicate-id: startup refuses (141.10725ms)
+✔ malformed rehashed pack missing-citations: startup refuses (139.900333ms)
+✔ malformed rehashed pack wrong-offset: startup refuses (137.571875ms)
+✔ malformed rehashed pack invalid-id: startup refuses (137.926958ms)
+✔ malformed rehashed pack invalid-date: startup refuses (135.242542ms)
+✔ malformed rehashed pack invalid-hash: startup refuses (134.634542ms)
+✔ malformed manifest duplicate: startup refuses (140.824042ms)
+✔ malformed manifest missing: startup refuses (144.643875ms)
+✔ malformed manifest traversal: startup refuses (140.660833ms)
+✔ malformed manifest malformed: startup refuses (138.205959ms)
+✔ malformed manifest self: startup refuses (135.4675ms)
+✔ missing, extra, symlink entries and symlink root rejected (795.487ms)
+✔ verified snapshot survives disk edits and returned-object mutation (137.085959ms)
+✔ actual stdio protocol works under Node permissions denying writes, subprocesses and workers (335.007375ms)
+✔ network permission policy denies socket access when supported (59.994416ms)
+✔ every bundled citation matches only the public fictional source (0.737458ms)
+✔ invalid CLI flags refuse before protocol output (391.428458ms)
+✔ unsigned packs keep the exact v0.1 tool output, with or without trusted keys (2.739375ms)
+✔ signed pack over real stdio, under permission mode, with trust file and either flag form (293.674667ms)
+✔ valid signature by an unlisted key starts and reports untrusted (146.417375ms)
+✔ startup refuses with no stdout: unsigned pack with --require-signature (136.515292ms)
+✔ startup refuses with no stdout: --require-signature with no trusted keys (133.912666ms)
+✔ startup refuses with no stdout: comment-only trust file with --require-signature (133.917542ms)
+✔ startup refuses with no stdout: untrusted signer with --require-signature (137.27575ms)
+✔ startup refuses with no stdout: tampered signature (137.211375ms)
+✔ startup refuses with no stdout: malformed trust file (135.075292ms)
+✔ startup refuses with no stdout: missing trust file (132.938583ms)
+✔ startup refuses with no stdout: relative trust file (133.721959ms)
+✔ signature CLI flags: duplicates, missing values and bad switch values refuse (1050.230666ms)
+✔ npm package ships the funding link and no keys, signatures or test fixtures (291.838417ms)
+ℹ tests 52
 ℹ suites 0
-ℹ pass 33
+ℹ pass 52
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 4449.1055
+ℹ duration_ms 7007.774333

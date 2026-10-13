@@ -6,3 +6,8 @@ __pycache__/
 *.sqlite3-wal
 *.sqlite3-shm
 *.sqlite3-journal
+
+# Signing keys never belong in the repository; public keys are fine.
+id_*
+!id_*.pub
+*.key
