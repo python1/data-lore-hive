@@ -1,358 +1,363 @@
 
-> @python1/verified-memory-mcp@0.2.0 test
+> @python1/verified-memory-mcp@0.3.0 test
 > npm run build && node --test test/*.test.mjs
 
 
-> @python1/verified-memory-mcp@0.2.0 build
+> @python1/verified-memory-mcp@0.3.0 build
 > node scripts/prepare.mjs && tsc
 
 TAP version 13
 # Subtest: builder reproduces the committed example pack byte for byte
 ok 1 - builder reproduces the committed example pack byte for byte
   ---
-  duration_ms: 203.549958
+  duration_ms: 204.3145
   ...
 # Subtest: installed-style stdio server loads the example pack and returns an exact quote
 ok 2 - installed-style stdio server loads the example pack and returns an exact quote
   ---
-  duration_ms: 154.786584
+  duration_ms: 166.01125
   ...
 # Subtest: builder refuses a quote that is not verbatim
 ok 3 - builder refuses a quote that is not verbatim
   ---
-  duration_ms: 59.155625
+  duration_ms: 62.367333
   ...
 # Subtest: builder refuses an ambiguous quote unless start is given
 ok 4 - builder refuses an ambiguous quote unless start is given
   ---
-  duration_ms: 229.784541
+  duration_ms: 232.166209
   ...
 # Subtest: builder refuses unknown messages, unknown fields, bad dates and duplicate IDs
 ok 5 - builder refuses unknown messages, unknown fields, bad dates and duplicate IDs
   ---
-  duration_ms: 292.708333
+  duration_ms: 296.382417
   ...
 # Subtest: builder accepts a disambiguated quote and computes code-point offsets
 ok 6 - builder accepts a disambiguated quote and computes code-point offsets
   ---
-  duration_ms: 65.470083
+  duration_ms: 69.512875
   ...
 # Subtest: builder never overwrites an existing directory
 ok 7 - builder never overwrites an existing directory
   ---
-  duration_ms: 129.809
+  duration_ms: 157.943458
   ...
 # Subtest: export-shape prints structure and enum tokens but none of the invented export content
 ok 8 - export-shape prints structure and enum tokens but none of the invented export content
   ---
-  duration_ms: 302.665916
+  duration_ms: 206.752084
   ...
 # Subtest: export-shape reads a folder and a single JSON file, collapsing maps keyed by data
 ok 9 - export-shape reads a folder and a single JSON file, collapsing maps keyed by data
   ---
-  duration_ms: 120.857708
+  duration_ms: 172.097708
   ...
 # Subtest: export-shape hides invalid JSON details and refuses bad input
 ok 10 - export-shape hides invalid JSON details and refuses bad input
   ---
-  duration_ms: 270.445708
+  duration_ms: 127.170708
   ...
 # Subtest: pack core and the copied verifier have no imports, so a browser can load them
 ok 11 - pack core and the copied verifier have no imports, so a browser can load them
   ---
-  duration_ms: 1.814791
+  duration_ms: 1.691792
   ...
 # Subtest: pack core builds the committed example pack in memory, byte for byte
 ok 12 - pack core builds the committed example pack in memory, byte for byte
   ---
-  duration_ms: 7.129417
+  duration_ms: 8.846791
   ...
 # Subtest: in-memory pack passes the pure verifier with Web Crypto hashes, as a browser would run it
 ok 13 - in-memory pack passes the pure verifier with Web Crypto hashes, as a browser would run it
   ---
-  duration_ms: 1.994916
+  duration_ms: 2.332875
   ...
 # Subtest: build reuses byte-identical verifier and fictional pack without modifying source plugin
 ok 14 - build reuses byte-identical verifier and fictional pack without modifying source plugin
   ---
-  duration_ms: 1.58625
+  duration_ms: 1.376917
   ...
 # Subtest: valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
 ok 15 - valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
   ---
-  duration_ms: 13.914208
+  duration_ms: 13.209583
   ...
 # Subtest: no matches, unknown ID, historical instructions and lexical semantics preserved
 ok 16 - no matches, unknown ID, historical instructions and lexical semantics preserved
   ---
-  duration_ms: 3.040083
+  duration_ms: 3.272417
   ...
 # Subtest: invalid requests return errors without path lookup or extra tool capabilities
 ok 17 - invalid requests return errors without path lookup or extra tool capabilities
   ---
-  duration_ms: 3.498916
+  duration_ms: 3.915542
   ...
 # Subtest: tampered MEMORY.md: startup refuses with no stdout
 ok 18 - tampered MEMORY.md: startup refuses with no stdout
   ---
-  duration_ms: 250.847
+  duration_ms: 256.692334
   ...
 # Subtest: tampered README.md: startup refuses with no stdout
 ok 19 - tampered README.md: startup refuses with no stdout
   ---
-  duration_ms: 140.273959
+  duration_ms: 149.337458
   ...
 # Subtest: tampered records.jsonl: startup refuses with no stdout
 ok 20 - tampered records.jsonl: startup refuses with no stdout
   ---
-  duration_ms: 255.3015
+  duration_ms: 252.620208
   ...
 # Subtest: malformed rehashed pack broken-json: startup refuses
 ok 21 - malformed rehashed pack broken-json: startup refuses
   ---
-  duration_ms: 138.638166
+  duration_ms: 140.653917
   ...
 # Subtest: malformed rehashed pack invalid-utf8: startup refuses
 ok 22 - malformed rehashed pack invalid-utf8: startup refuses
   ---
-  duration_ms: 139.936708
+  duration_ms: 143.958542
   ...
 # Subtest: malformed rehashed pack duplicate-id: startup refuses
 ok 23 - malformed rehashed pack duplicate-id: startup refuses
   ---
-  duration_ms: 267.257458
+  duration_ms: 144.65075
   ...
 # Subtest: malformed rehashed pack missing-citations: startup refuses
 ok 24 - malformed rehashed pack missing-citations: startup refuses
   ---
-  duration_ms: 138.235375
+  duration_ms: 168.468541
   ...
 # Subtest: malformed rehashed pack wrong-offset: startup refuses
 ok 25 - malformed rehashed pack wrong-offset: startup refuses
   ---
-  duration_ms: 134.998666
+  duration_ms: 141.4875
   ...
 # Subtest: malformed rehashed pack invalid-id: startup refuses
 ok 26 - malformed rehashed pack invalid-id: startup refuses
   ---
-  duration_ms: 135.336625
+  duration_ms: 146.201583
   ...
 # Subtest: malformed rehashed pack invalid-date: startup refuses
 ok 27 - malformed rehashed pack invalid-date: startup refuses
   ---
-  duration_ms: 228.479042
+  duration_ms: 140.400083
   ...
 # Subtest: malformed rehashed pack invalid-hash: startup refuses
 ok 28 - malformed rehashed pack invalid-hash: startup refuses
   ---
-  duration_ms: 135.911333
+  duration_ms: 226.832958
   ...
 # Subtest: malformed manifest duplicate: startup refuses
 ok 29 - malformed manifest duplicate: startup refuses
   ---
-  duration_ms: 135.947166
+  duration_ms: 131.598167
   ...
 # Subtest: malformed manifest missing: startup refuses
 ok 30 - malformed manifest missing: startup refuses
   ---
-  duration_ms: 137.98875
+  duration_ms: 136.155667
   ...
 # Subtest: malformed manifest traversal: startup refuses
 ok 31 - malformed manifest traversal: startup refuses
   ---
-  duration_ms: 165.254875
+  duration_ms: 272.773292
   ...
 # Subtest: malformed manifest malformed: startup refuses
 ok 32 - malformed manifest malformed: startup refuses
   ---
-  duration_ms: 134.159833
+  duration_ms: 134.45775
   ...
 # Subtest: malformed manifest self: startup refuses
 ok 33 - malformed manifest self: startup refuses
   ---
-  duration_ms: 179.086959
+  duration_ms: 181.999625
   ...
 # Subtest: missing, extra, symlink entries and symlink root rejected
 ok 34 - missing, extra, symlink entries and symlink root rejected
   ---
-  duration_ms: 963.433
+  duration_ms: 956.767833
   ...
 # Subtest: verified snapshot survives disk edits and returned-object mutation
 ok 35 - verified snapshot survives disk edits and returned-object mutation
   ---
-  duration_ms: 169.638875
+  duration_ms: 162.419208
   ...
 # Subtest: actual stdio protocol works under Node permissions denying writes, subprocesses and workers
 ok 36 - actual stdio protocol works under Node permissions denying writes, subprocesses and workers
   ---
-  duration_ms: 316.012792
+  duration_ms: 314.284666
   ...
 # Subtest: network permission policy denies socket access when supported
 ok 37 - network permission policy denies socket access when supported # SKIP This Node version has no network permission scope
   ---
-  duration_ms: 0.06075
+  duration_ms: 0.070916
   ...
 # Subtest: every bundled citation matches only the public fictional source
 ok 38 - every bundled citation matches only the public fictional source
   ---
-  duration_ms: 0.939667
+  duration_ms: 1.267375
   ...
 # Subtest: invalid CLI flags refuse before protocol output
 ok 39 - invalid CLI flags refuse before protocol output
   ---
-  duration_ms: 405.800042
+  duration_ms: 392.442542
   ...
 # Subtest: unsigned v0.1 packs load with the same output with or without trusted keys, reported unsigned and undated
 ok 40 - unsigned v0.1 packs load with the same output with or without trusted keys, reported unsigned and undated
   ---
-  duration_ms: 2.927917
+  duration_ms: 4.345
   ...
 # Subtest: signed fresh pack over real stdio, under permission mode, with --strict, --strict=true, --require-signature and both
 ok 41 - signed fresh pack over real stdio, under permission mode, with --strict, --strict=true, --require-signature and both
   ---
-  duration_ms: 594.694
+  duration_ms: 592.157417
   ...
 # Subtest: committed ssh-keygen fixture (v0.2, undated): --require-signature starts as in 0.2.0, freshness unknown
 ok 42 - committed ssh-keygen fixture (v0.2, undated): --require-signature starts as in 0.2.0, freshness unknown
   ---
-  duration_ms: 6.702833
+  duration_ms: 8.058125
   ...
 # Subtest: stale pack without --strict: starts, warns once on stderr without the path, and reports stale in every result
 ok 43 - stale pack without --strict: starts, warns once on stderr without the path, and reports stale in every result
   ---
-  duration_ms: 204.867709
+  duration_ms: 151.087
   ...
 # Subtest: --strict server stops serving once the pack expires while it runs; --require-signature keeps serving and reports stale
 ok 44 - --strict server stops serving once the pack expires while it runs; --require-signature keeps serving and reports stale
   ---
-  duration_ms: 7.089625
+  duration_ms: 6.409458
   ...
 # Subtest: --require-signature with an expired signed pack starts as in 0.2.0, warns, and reports stale
 ok 45 - --require-signature with an expired signed pack starts as in 0.2.0, warns, and reports stale
   ---
-  duration_ms: 148.613167
+  duration_ms: 148.072709
   ...
 # Subtest: valid signature by an unlisted key starts and reports untrusted
 ok 46 - valid signature by an unlisted key starts and reports untrusted
   ---
-  duration_ms: 146.307
+  duration_ms: 147.366875
   ...
 # Subtest: startup refuses with no stdout: v0.1 unsigned pack with --strict
 ok 47 - startup refuses with no stdout: v0.1 unsigned pack with --strict
   ---
-  duration_ms: 132.091375
+  duration_ms: 134.38625
   ...
 # Subtest: startup refuses with no stdout: v0.1 unsigned pack with --require-signature
 ok 48 - startup refuses with no stdout: v0.1 unsigned pack with --require-signature
   ---
-  duration_ms: 134.846
+  duration_ms: 132.198458
   ...
 # Subtest: startup refuses with no stdout: --require-signature with no trusted keys
 ok 49 - startup refuses with no stdout: --require-signature with no trusted keys
   ---
-  duration_ms: 131.290833
+  duration_ms: 130.914458
   ...
 # Subtest: startup refuses with no stdout: wrong key: untrusted signer with --require-signature
 ok 50 - startup refuses with no stdout: wrong key: untrusted signer with --require-signature
   ---
-  duration_ms: 135.734209
+  duration_ms: 135.381458
   ...
 # Subtest: startup refuses with no stdout: --strict with no trusted keys
 ok 51 - startup refuses with no stdout: --strict with no trusted keys
   ---
-  duration_ms: 130.838
+  duration_ms: 131.534833
   ...
 # Subtest: startup refuses with no stdout: comment-only trust file with --strict
 ok 52 - startup refuses with no stdout: comment-only trust file with --strict
   ---
-  duration_ms: 134.382667
+  duration_ms: 133.203709
   ...
 # Subtest: startup refuses with no stdout: wrong key: untrusted signer with --strict
 ok 53 - startup refuses with no stdout: wrong key: untrusted signer with --strict
   ---
-  duration_ms: 136.896083
+  duration_ms: 133.911625
   ...
 # Subtest: startup refuses with no stdout: signed but undated (v0.2) pack with --strict
 ok 54 - startup refuses with no stdout: signed but undated (v0.2) pack with --strict
   ---
-  duration_ms: 133.163583
+  duration_ms: 138.185
   ...
 # Subtest: startup refuses with no stdout: expired pack with --strict
 ok 55 - startup refuses with no stdout: expired pack with --strict
   ---
-  duration_ms: 132.418167
+  duration_ms: 134.623375
   ...
 # Subtest: startup refuses with no stdout: future-dated pack with --strict
 ok 56 - startup refuses with no stdout: future-dated pack with --strict
   ---
-  duration_ms: 134.796083
+  duration_ms: 137.086084
   ...
 # Subtest: startup refuses with no stdout: extended expiry, re-sealed (tampered PACK.json)
 ok 57 - startup refuses with no stdout: extended expiry, re-sealed (tampered PACK.json)
   ---
-  duration_ms: 134.165084
+  duration_ms: 135.350083
   ...
 # Subtest: startup refuses with no stdout: tampered signature
 ok 58 - startup refuses with no stdout: tampered signature
   ---
-  duration_ms: 134.629834
+  duration_ms: 134.733708
   ...
 # Subtest: startup refuses with no stdout: malformed trust file
 ok 59 - startup refuses with no stdout: malformed trust file
   ---
-  duration_ms: 132.898
+  duration_ms: 129.353208
   ...
 # Subtest: startup refuses with no stdout: missing trust file
 ok 60 - startup refuses with no stdout: missing trust file
   ---
-  duration_ms: 131.491292
+  duration_ms: 129.72375
   ...
 # Subtest: startup refuses with no stdout: relative trust file
 ok 61 - startup refuses with no stdout: relative trust file
   ---
-  duration_ms: 133.403125
+  duration_ms: 129.904542
   ...
 # Subtest: signature CLI flags: duplicates, missing values and bad switch values refuse
 ok 62 - signature CLI flags: duplicates, missing values and bad switch values refuse
   ---
-  duration_ms: 1284.279792
+  duration_ms: 1285.993459
+  ...
+# Subtest: empty --trusted-keys= (a blank Claude Desktop setting) means no trusted keys
+ok 63 - empty --trusted-keys= (a blank Claude Desktop setting) means no trusted keys
+  ---
+  duration_ms: 269.397875
   ...
 # Subtest: npm package ships the funding link and no keys, signatures or test fixtures
-ok 63 - npm package ships the funding link and no keys, signatures or test fixtures
+ok 64 - npm package ships the funding link and no keys, signatures or test fixtures
   ---
-  duration_ms: 354.653334
+  duration_ms: 346.435667
   ...
 # Subtest: signs with a passphrase-protected key without ever being able to read it; hosts verify it in strict mode
-ok 64 - signs with a passphrase-protected key without ever being able to read it; hosts verify it in strict mode
+ok 65 - signs with a passphrase-protected key without ever being able to read it; hosts verify it in strict mode
   ---
-  duration_ms: 1198.595417
+  duration_ms: 1265.3185
   ...
 # Subtest: re-signing a signed, dated pack replaces its dates and signature
-ok 65 - re-signing a signed, dated pack replaces its dates and signature
+ok 66 - re-signing a signed, dated pack replaces its dates and signature
   ---
-  duration_ms: 1248.678167
+  duration_ms: 1237.287791
   ...
 # Subtest: wrong passphrase: ssh-keygen fails and nothing is written
-ok 66 - wrong passphrase: ssh-keygen fails and nothing is written
+ok 67 - wrong passphrase: ssh-keygen fails and nothing is written
   ---
-  duration_ms: 835.377834
+  duration_ms: 829.254416
   ...
 # Subtest: refuses bad input before signing, writing nothing
-ok 67 - refuses bad input before signing, writing nothing
+ok 68 - refuses bad input before signing, writing nothing
   ---
-  duration_ms: 1864.539375
+  duration_ms: 1885.076667
   ...
 # Subtest: sign-pack is not in the npm package and is not an installed command
-ok 68 - sign-pack is not in the npm package and is not an installed command
+ok 69 - sign-pack is not in the npm package and is not an installed command
   ---
-  duration_ms: 464.695708
+  duration_ms: 457.972333
   ...
-1..68
-# tests 68
+1..69
+# tests 69
 # suites 0
-# pass 67
+# pass 68
 # fail 0
 # cancelled 0
 # skipped 1
 # todo 0
-# duration_ms 9556.307
+# duration_ms 9797.8845

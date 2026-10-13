@@ -270,7 +270,7 @@ test('valid signature by an unlisted key starts and reports untrusted', async t 
   const dir = signedCopy(t);
   const p = startup(['--pack', dir]);
   const line = p.stdout.split('\n').find(Boolean);
-  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.2.0');
+  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.3.0');
   const { verification } = (await call(await clientFor(t, dir), 'verified_memory_get', { id: 'M-sample-2' })).structuredContent;
   assert.equal(verification.signature.status, 'untrusted'); assert.equal(verification.signature.signer, undefined);
 });
@@ -306,7 +306,7 @@ test('empty --trusted-keys= (a blank Claude Desktop setting) means no trusted ke
   const dir = signedCopy(t);
   const p = startup(['--pack', dir, '--trusted-keys=', '--require-signature=false']);
   const line = p.stdout.split('\n').find(Boolean);
-  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.2.0');
+  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.3.0');
   const required = startup(['--pack', dir, '--trusted-keys=', '--require-signature=true']);
   assert.equal(required.status, 1); assert.match(required.stderr, /at least one trusted key/);
 });

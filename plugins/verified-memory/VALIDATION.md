@@ -1,12 +1,11 @@
-# Validation — 2026-10-12 (0.3.0 candidate: signed and dated packs)
+# Validation — 2026-10-13 (v0.3.0: signed and dated packs)
 
 ## Environment and scope
 
 - TypeScript 5.9, ESM output, actual OpenClaw npm SDK **2026.9.9**.
 - Current checks: **Node 24.19.0** and **Node 26.1.0**, macOS ARM64, using official
   nodejs.org darwin-arm64 builds checked against the published SHASUMS256.txt,
-  without replacing system Node. Both transcripts were regenerated for the 0.3.0 candidate
-  (version strings still read 0.2.0). The declared Node range is
+  without replacing system Node. Both transcripts were regenerated for v0.3.0. The declared Node range is
   `>=24.16.0 <25 || >=26.1.0`.
 - Public fictional Juniper/Wren sample only. Tests create isolated fixture copies.
 - Only disposable OpenClaw HOME/state/config/workspace and public fictional
@@ -124,7 +123,7 @@ See [OpenClaw authoring docs](https://docs.openclaw.ai/cli/plugins/authoring).
 
 ## Local model conversation
 
-Not rerun for the 0.3.0 candidate (it does not exercise signatures or dates). From 0.2.0:
+Not rerun for v0.3.0 (it does not exercise signatures or dates). From 0.2.0:
 passed with **Mac-local Ollama `qwen3.5:4b`**, OpenClaw's embedded agent,
 a disposable copy of the published-package layout, and the eight-record fictional
 sample. There were two tool calls, zero tool failures, and no fallback provider.

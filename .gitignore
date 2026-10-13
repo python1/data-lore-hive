@@ -11,3 +11,7 @@ __pycache__/
 id_*
 !id_*.pub
 *.key
+
+# Local build output and macOS folder metadata
+build/
+.DS_Store

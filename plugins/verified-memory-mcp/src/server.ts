@@ -19,7 +19,7 @@ export function createServer(packPath = fileURLToPath(new URL('../sample-pack/',
   const pack = loadPack(packPath, options);
   const warning = freshnessWarning(pack.verification.freshness);
   if (warning) onWarning?.(warning);
-  const server = new Server({ name: 'verified-memory-mcp', version: '0.2.0' }, { capabilities: { tools: {} } });
+  const server = new Server({ name: 'verified-memory-mcp', version: '0.3.0' }, { capabilities: { tools: {} } });
   const annotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: [
     { name: 'verified_memory_search', description: 'Search historical records by all query words; returns up to 10 matches with exact quotes, source message IDs, dates and speakers. ' + notice, inputSchema: searchSchema, annotations },

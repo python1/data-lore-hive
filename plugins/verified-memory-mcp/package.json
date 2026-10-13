@@ -1,6 +1,6 @@
 {
   "name": "@python1/verified-memory-mcp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Local read-only stdio MCP server for checksum-verified, optionally signed memory packs",
   "mcpName": "io.github.python1/verified-memory",
   "repository": {

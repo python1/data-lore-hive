@@ -3,8 +3,8 @@
 Free, MIT-licensed local **stdio MCP server** exposing `verified_memory_search`
 and `verified_memory_get` using the official
 [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk/tree/v1.x)
-(`@modelcontextprotocol/sdk` 1.32.1). Prepared for npm as `@python1/verified-memory-mcp`
-and for the MCP Registry as `io.github.python1/verified-memory`; not yet published.
+(`@modelcontextprotocol/sdk` 1.32.1). Published on npm as `@python1/verified-memory-mcp`
+and in the MCP Registry as `io.github.python1/verified-memory`.
 
 Runtime is read-only and offline: no network transport, sockets, telemetry,
 embeddings, accounts, filesystem writes, subprocesses or shell execution. It reads

@@ -1,7 +1,7 @@
 {
   "id": "verified-memory",
   "name": "Verified Memory",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Local read-only search over checksum-verified, optionally signed and dated Data & Lore packs.",
   "categories": [
     "memory"

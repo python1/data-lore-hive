@@ -14,7 +14,11 @@ const { version } = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
 const manifest = JSON.parse(readFileSync(join(root, 'mcpb/manifest.json'), 'utf8'));
 if (manifest.version !== version) throw new Error(`mcpb/manifest.json version ${manifest.version} does not match package.json ${version}`);
 
-rmSync(build, { recursive: true, force: true });
+// Replace only this script's own outputs; anything else in build/ (such as a hand-made test
+// pack) is left alone.
+const output = join(build, `verified-memory-${version}.mcpb`);
+rmSync(stage, { recursive: true, force: true });
+rmSync(output, { force: true });
 mkdirSync(stage, { recursive: true });
 // Explicit allowlist: no sample pack, tests, web/, examples or tools.
 for (const file of ['package.json', 'package-lock.json', 'README.md', 'LICENSE']) copyFileSync(join(root, file), join(stage, file));
@@ -26,6 +30,5 @@ rmSync(join(stage, 'package-lock.json'));
 rmSync(join(stage, 'node_modules/.package-lock.json'), { force: true });
 
 if (!validateManifest(stage)) throw new Error('manifest.json failed MCPB schema validation');
-const output = join(build, `verified-memory-${version}.mcpb`);
 if (!(await packExtension({ extensionPath: stage, outputPath: output, silent: true }))) throw new Error('mcpb pack failed');
 console.log(output);

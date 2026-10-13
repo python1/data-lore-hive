@@ -1,4 +1,4 @@
-# Validation — 2026-10-12 (0.3.0 candidate: signed and dated packs)
+# Validation — 2026-10-13 (v0.3.0: signed and dated packs, Claude Desktop bundle)
 
 Tested on macOS ARM64 with TypeScript 5.9.3, Node 22 type definitions, and
 official MCP TypeScript SDK 1.32.1. **Minimum supported Node: 22.0.0**;
@@ -6,14 +6,18 @@ official MCP TypeScript SDK 1.32.1. **Minimum supported Node: 22.0.0**;
 was rerun on each runtime below. Node 22 runs use the official nodejs.org darwin-arm64
 builds, checked against the published SHA256SUMS, with their bundled npm (10.5.1 on
 22.0.0, 10.9.9 on 22.23.3); 25.8.0 uses npm 11.11.0. No system runtime was replaced.
-Versions 0.1.0 and 0.2.0 are published; these records are for the unreleased 0.3.0
-candidate (`PACK.json` freshness, `--strict`, `sign-pack`), whose version strings still read 0.2.0.
+Versions 0.1.0 and 0.2.0 are published; these records are for 0.3.0 (`PACK.json`
+freshness, `--strict`, `sign-pack`, and the Claude Desktop `.mcpb` bundle), not yet published.
 
 | Node runtime | Passed | Failed | Skipped | Evidence |
 |---|---:|---:|---:|---|
-| 22.0.0 (minimum) | 67 | 0 | 1 | [tests-node22-min.txt](validation/tests-node22-min.txt) |
-| 22.23.3 | 67 | 0 | 1 | [tests-node22-current.txt](validation/tests-node22-current.txt) |
-| 25.8.0 | 68 | 0 | 0 | [tests.txt](validation/tests.txt) |
+| 22.0.0 (minimum) | 68 | 0 | 1 | [tests-node22-min.txt](validation/tests-node22-min.txt) |
+| 22.23.3 | 68 | 0 | 1 | [tests-node22-current.txt](validation/tests-node22-current.txt) |
+| 25.8.0 | 69 | 0 | 0 | [tests.txt](validation/tests.txt) |
+
+The Claude Desktop bundle (`npm run test:mcpb`: builds `build/verified-memory-0.3.0.mcpb`,
+unpacks it and runs it with the arguments `@anthropic-ai/mcpb` generates) passed 7/7 on
+Node 25.8.0 and on Node 22.0.0.
 
 The one explicit skip on Node 22 is the **additional socket-denial probe**: that
 runtime has no network permission scope. All core server tests run and pass on
