@@ -48,6 +48,15 @@ async function connect(t, userConfig) {
 }
 const search = async (client, query) => (await client.callTool({ name: 'verified_memory_search', arguments: { query } })).structuredContent;
 
+// The packs below are checked byte for byte. A checkout that rewrote their line endings
+// (core.autocrlf on Windows, without the .gitattributes rules) fails here with a clear message
+// instead of as an opaque "checksum mismatch" in every server test.
+test('fixture packs are checked out byte for byte, with no CRLF conversion', () => {
+  for (const dir of ['examples/pack', 'sample-pack', '../verified-memory/sample-pack', signedFixture])
+    for (const name of readdirSync(dir))
+      assert.ok(!readFileSync(join(dir, name)).includes(13), `${dir}/${name} has CR bytes: line endings were converted at checkout; see .gitattributes`);
+});
+
 test('bundle manifest is valid, versioned with the package and lists the real tools', async t => {
   assert.equal(validateManifest(unpacked), true);
   assert.equal(manifest.version, version);

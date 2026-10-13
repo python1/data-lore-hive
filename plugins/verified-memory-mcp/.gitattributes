@@ -1,0 +1,6 @@
+# Pack files and their inputs are verified or rebuilt byte for byte (SHA256SUMS, message
+# hashes, golden packs), so Git must never rewrite their line endings, e.g. core.autocrlf
+# on Windows.
+examples/** -text
+web/test/fixtures/** -text
+web/test/golden/** -text
