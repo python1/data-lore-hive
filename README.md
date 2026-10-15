@@ -91,10 +91,20 @@ Replication and recovery (`replication.py`, `install_mac_sync.py`, `sync_agent.p
 ## Use with Claude Code / Claude Desktop (MCP)
 
 **[Download for Claude Desktop](https://github.com/python1/data-lore-hive/releases/download/verified-memory-v0.3.0/verified-memory-0.3.0.mcpb)**: a one-click add-on (`verified-memory-0.3.0.mcpb`,
-SHA-256 `bda22e402f73d8fbdc6ca72df504c04822738a3ca98c9dbe31920756d25c274a`). Download it,
-double-click it, and pick your pack folder in Claude Desktop. Claude Desktop shows its standard
-"not verified by Anthropic" warning for add-ons installed from a file. See the
-[release notes](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.3.0).
+SHA-256 `bda22e402f73d8fbdc6ca72df504c04822738a3ca98c9dbe31920756d25c274a`), tested by hand
+on macOS and Windows. Claude Desktop shows its standard "not verified by Anthropic" warning for
+add-ons installed from a file.
+
+1. Download it and double-click it. Windows may ask which app opens the `.mcpb` file: choose Claude.
+   Alternatively, drag the file into Claude Desktop → Settings → Extensions.
+2. Unzip the pack first (Windows: right-click → Extract All). Point the add-on at the folder that
+   contains `MEMORY.md`, `README.md`, `records.jsonl` and `SHA256SUMS`. The folder picker shows
+   folders only, so the pack folder will look empty; that's normal. You can also paste the folder path.
+3. Make sure the extension is switched on (Settings → Extensions → Enabled) before asking.
+   Example question: "Using verified memory, what did … ?"
+
+See the [release notes](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.3.0)
+and the plugin README's [one-click install section](plugins/verified-memory-mcp/README.md#claude-desktop-one-click-install) for the settings.
 
 [`plugins/verified-memory-mcp/`](plugins/verified-memory-mcp/README.md) is a local, read-only stdio MCP server. It exposes two tools, `verified_memory_search` and `verified_memory_get`, over a checksum-verified memory pack such as the ones `agent-memory/` exports. It needs Node 22 or newer and is published on npm as [`@python1/verified-memory-mcp`](https://www.npmjs.com/package/@python1/verified-memory-mcp) and in the MCP Registry as `io.github.python1/verified-memory`. The npm package ships no pack, so `--pack` is required:
 
@@ -119,7 +129,7 @@ claude mcp add verified-memory -- /absolute/path/to/node --experimental-permissi
 
 To make your own pack from a ChatGPT or Claude data export, use the **pack maker (beta)** at <https://python1.github.io/data-lore-hive/>. It runs entirely in your browser: your export is never uploaded, and the page cannot make network requests.
 
-For Claude Desktop, use the `mcpServers` example in the [plugin README](plugins/verified-memory-mcp/README.md#claude-desktop-configuration-example). With no `--pack`, the server serves the bundled fictional sample, so asking it to search for "pottery" should return record `M-sample-2` with its quote and source message ID. The checksum check proves the pack wasn't altered, not that its contents are true. See the plugin's README and [VALIDATION.md](plugins/verified-memory-mcp/VALIDATION.md) for its limits.
+To configure Claude Desktop by hand instead of using the add-on above, use the `mcpServers` example in the [plugin README](plugins/verified-memory-mcp/README.md#claude-desktop-configuration-example). With no `--pack`, the server serves the bundled fictional sample, so asking it to search for "pottery" should return record `M-sample-2` with its quote and source message ID. The checksum check proves the pack wasn't altered, not that its contents are true. See the plugin's README and [VALIDATION.md](plugins/verified-memory-mcp/VALIDATION.md) for its limits.
 
 ## Measured results
 

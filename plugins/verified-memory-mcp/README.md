@@ -317,12 +317,24 @@ of the fictional pack; the server itself never launches another process.
 
 ## Claude Desktop one-click install
 
-**Not released yet.** The bundle is built and tested in CI but has not been published.
+Download `verified-memory-<version>.mcpb` from the
+[latest release](https://github.com/python1/data-lore-hive/releases/latest).
 
 `verified-memory-<version>.mcpb` is an [MCP Bundle](https://github.com/modelcontextprotocol/mcpb)
-for Claude Desktop on macOS and Windows. It runs on Claude Desktop's built-in Node.js, so
-you need no Node install and no Terminal. Double-click it (or drag it into Claude Desktop,
-or use **Settings → Extensions → Advanced settings → Install Extension…**), then fill in:
+for Claude Desktop on macOS and Windows; it has been tested by hand on macOS and Windows.
+It runs on Claude Desktop's built-in Node.js, so you need no Node install and no Terminal.
+
+1. Double-click the `.mcpb` file. Windows may ask which app opens it: choose Claude.
+   Alternatively, drag the file into **Claude Desktop → Settings → Extensions**, or use
+   **Settings → Extensions → Advanced settings → Install Extension…**.
+2. Unzip the pack first (Windows: right-click → **Extract All**). Point the add-on at the folder
+   that contains `MEMORY.md`, `README.md`, `records.jsonl` and `SHA256SUMS`. The folder picker
+   shows folders only, so the pack folder will look empty; that's normal. You can also paste
+   the folder path.
+3. Make sure the extension is switched on (**Settings → Extensions → Enabled**) before asking.
+   Example question: "Using verified memory, what did … ?"
+
+The settings form has these fields:
 
 | Setting | Required | Passed as |
 |---|---|---|
