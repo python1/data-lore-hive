@@ -90,9 +90,9 @@ Replication and recovery (`replication.py`, `install_mac_sync.py`, `sync_agent.p
 
 ## Use with Claude Code / Claude Desktop (MCP)
 
-**[Download for Claude Desktop](https://github.com/python1/data-lore-hive/releases/download/verified-memory-v0.3.0/verified-memory-0.3.0.mcpb)**: a one-click add-on (`verified-memory-0.3.0.mcpb`,
-SHA-256 `bda22e402f73d8fbdc6ca72df504c04822738a3ca98c9dbe31920756d25c274a`), tested by hand
-on macOS and Windows. Claude Desktop shows its standard "not verified by Anthropic" warning for
+**[Download for Claude Desktop](https://github.com/python1/data-lore-hive/releases/download/verified-memory-v0.4.0/verified-memory-0.4.0.mcpb)**: a one-click add-on (`verified-memory-0.4.0.mcpb`,
+SHA-256 `576070d87208cee58482ab8f2dd04c6773f82b968952872fb12bcc004c251129`). Its automated bundle tests pass on macOS, Windows and Linux;
+the 0.3.0 add-on was also tested by hand in Claude Desktop on macOS and Windows. Claude Desktop shows its standard "not verified by Anthropic" warning for
 add-ons installed from a file.
 
 1. Download it and double-click it. Windows may ask which app opens the `.mcpb` file: choose Claude.
@@ -103,7 +103,7 @@ add-ons installed from a file.
 3. Make sure the extension is switched on (Settings → Extensions → Enabled) before asking.
    Example question: "Using verified memory, what did … ?"
 
-See the [release notes](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.3.0)
+See the [release notes](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.4.0)
 and the plugin README's [one-click install section](plugins/verified-memory-mcp/README.md#claude-desktop-one-click-install) for the settings.
 
 [`plugins/verified-memory-mcp/`](plugins/verified-memory-mcp/README.md) is a local, read-only stdio MCP server. It exposes two tools, `verified_memory_search` and `verified_memory_get`, over a checksum-verified memory pack such as the ones `agent-memory/` exports. It needs Node 22 or newer and is published on npm as [`@python1/verified-memory-mcp`](https://www.npmjs.com/package/@python1/verified-memory-mcp) and in the MCP Registry as `io.github.python1/verified-memory`. The npm package ships no pack, so `--pack` is required:

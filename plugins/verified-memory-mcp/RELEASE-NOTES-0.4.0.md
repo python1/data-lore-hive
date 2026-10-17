@@ -1,7 +1,4 @@
-# Verified Memory 0.4.0 (draft release notes)
-
-> Draft for the `verified-memory-v0.4.0` GitHub release. Not yet published to npm, the MCP
-> Registry or GitHub Releases. Fill in the `.mcpb` SHA-256 when the release asset is built.
+# Verified Memory 0.4.0
 
 ## Behavior change: editing the pack while it is in use now stops serving
 
@@ -93,6 +90,6 @@ pinned signer fingerprint`.
 
 ## Downloads
 
-- `verified-memory-0.4.0.mcpb`, SHA-256 `<fill in at release>`. It is not code-signed, so
+- `verified-memory-0.4.0.mcpb`, SHA-256 `576070d87208cee58482ab8f2dd04c6773f82b968952872fb12bcc004c251129`. It is not code-signed, so
   Claude Desktop shows its "not verified by Anthropic" warning for add-ons installed from a file.
-- npm: `@python1/verified-memory-mcp@0.4.0` (once published).
+- npm: `@python1/verified-memory-mcp@0.4.0` and `@python1/verified-memory@0.4.0`.
