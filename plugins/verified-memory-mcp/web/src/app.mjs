@@ -391,7 +391,8 @@ async function runCheck() {
   let result, error;
   try {
     const files = await readPackFiles(checkFiles.map((file) => ({ name: file.name, source: blobSource(file) })));
-    result = await checkPack(files, $('check-keys').value, $('check-require').checked);
+    result = await checkPack(files, { trustedKeys: $('check-keys').value, trustedFingerprints: $('check-pins').value, revokedKeys: $('check-revoked').value,
+      minSequence: $('check-min-sequence').value, strict: $('check-require').checked });
   } catch (e) { error = e; }
   if (token !== checkToken) return;
   const { text, kind } = describeCheck(result, error);
@@ -440,7 +441,7 @@ function init() {
     $('check-chosen').textContent = checkFiles.map((f) => f.name).join(', ');
     $('check-run').disabled = !checkFiles.length; setStatus($('check-status'), '');
   });
-  for (const id of ['check-keys', 'check-require']) $(id).addEventListener('input', () => setStatus($('check-status'), ''));
+  for (const id of ['check-keys', 'check-pins', 'check-revoked', 'check-min-sequence', 'check-require']) $(id).addEventListener('input', () => setStatus($('check-status'), ''));
   $('check-run').addEventListener('click', runCheck);
 }
 

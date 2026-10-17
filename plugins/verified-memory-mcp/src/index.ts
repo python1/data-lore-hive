@@ -2,14 +2,16 @@
 import { existsSync } from 'node:fs';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createServer } from './server.js';
-import { readTrustedKeys } from './pack.js';
+import { readRevokedKeys, readTrustedKeys } from './pack.js';
 
-const USAGE = 'Usage: verified-memory-mcp [--pack /absolute/path/to/pack] [--trusted-keys /absolute/path/to/trusted_keys] [--require-signature] [--strict]';
+const USAGE = 'Usage: verified-memory-mcp [--pack /absolute/path/to/pack] [--trusted-keys /absolute/path/to/trusted_keys] [--trusted-fingerprint SHA256:…]… [--revoked-keys /absolute/path/to/revoked_keys] [--min-sequence N] [--require-signature] [--strict]';
 // Accepts `--flag value` and the registry's `--flag=value` form. --require-signature and
 // --strict are switches, optionally given as =true/=false (or a following true/false) by
 // registry clients. --strict implies --require-signature and also enforces freshness.
+// --trusted-fingerprint may be repeated, and one value may hold several fingerprints
+// separated by commas or spaces (Claude Desktop passes one text setting).
 function parseArgs(args: string[]) {
-  const opts: { pack?: string; trustedKeys?: string; requireSignature?: boolean; strict?: boolean } = {};
+  const opts: { pack?: string; trustedKeys?: string; revokedKeys?: string; minSequence?: string; trustedFingerprints?: string[]; requireSignature?: boolean; strict?: boolean } = {};
   for (let i = 0; i < args.length; i++) {
     const [flag, inline] = args[i].includes('=') ? [args[i].slice(0, args[i].indexOf('=')), args[i].slice(args[i].indexOf('=') + 1)] : [args[i], undefined];
     if (flag === '--strict' || flag === '--require-signature') {
@@ -20,10 +22,16 @@ function parseArgs(args: string[]) {
       opts[name] = value === 'true';
       continue;
     }
-    // An empty `--trusted-keys=` means no keys file: Claude Desktop passes the bundle's
-    // optional file setting this way when the user leaves it blank.
-    if (flag === '--trusted-keys' && inline === '') continue;
-    const key = flag === '--pack' ? 'pack' : flag === '--trusted-keys' ? 'trustedKeys' : undefined;
+    // An empty `--flag=` means the setting is off: Claude Desktop passes the bundle's optional
+    // settings this way when the user leaves them blank.
+    if (['--trusted-keys', '--trusted-fingerprint', '--revoked-keys', '--min-sequence'].includes(flag) && inline === '') continue;
+    if (flag === '--trusted-fingerprint') {
+      const value = inline ?? args[++i];
+      if (!value || value.startsWith('--')) throw new Error(USAGE);
+      (opts.trustedFingerprints ??= []).push(...value.split(/[\s,]+/).filter(Boolean));
+      continue;
+    }
+    const key = flag === '--pack' ? 'pack' : flag === '--trusted-keys' ? 'trustedKeys' : flag === '--revoked-keys' ? 'revokedKeys' : flag === '--min-sequence' ? 'minSequence' : undefined;
     const value = inline ?? args[++i];
     if (!key || opts[key] !== undefined || !value || value.startsWith('--')) throw new Error(USAGE);
     opts[key] = value;
@@ -37,9 +45,13 @@ try {
   if (opts.pack === undefined && !existsSync(new URL('../sample-pack/', import.meta.url))) {
     throw new Error('Usage: verified-memory-mcp --pack /absolute/path/to/pack (no bundled sample pack in this install)');
   }
+  if (opts.minSequence !== undefined && !/^\d{1,15}$/.test(opts.minSequence)) throw new Error('verified-memory: --min-sequence must be a whole number, 0 or more');
+  const minSequence = opts.minSequence === undefined ? undefined : Number(opts.minSequence);
   const trustedKeys = opts.trustedKeys === undefined ? undefined : readTrustedKeys(opts.trustedKeys);
+  const revokedKeys = opts.revokedKeys === undefined ? undefined : readRevokedKeys(opts.revokedKeys);
   // A stale or future-dated pack still loads outside --strict; say so once on stderr (never stdout).
-  const server = createServer(opts.pack, { trustedKeys, requireSignature: opts.requireSignature, strict: opts.strict }, warning => process.stderr.write(`verified-memory-mcp: ${warning}\n`));
+  const server = createServer(opts.pack, { trustedKeys, trustedFingerprints: opts.trustedFingerprints, revokedKeys, minSequence, requireSignature: opts.requireSignature, strict: opts.strict },
+    warning => process.stderr.write(`verified-memory-mcp: ${warning}\n`));
   // No transport connection (and no stdout) until verification succeeds.
   await server.connect(new StdioServerTransport());
 } catch (error) {

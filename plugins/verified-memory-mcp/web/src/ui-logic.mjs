@@ -142,5 +142,5 @@ export function rebuildCommand(title, description) {
 
 /** Shell command that signs a downloaded pack with the user's own ssh key; the page never sees the key. */
 export function signCommand(folder) {
-  return `node tools/sign-pack.mjs --pack ${folder} --key ~/.ssh/YOUR_KEY --expires 90d --out ${folder}-signed`;
+  return `node tools/sign-pack.mjs --pack ${folder} --key ~/.ssh/YOUR_KEY --expires 90d --sequence 1 --out ${folder}-signed`;
 }
