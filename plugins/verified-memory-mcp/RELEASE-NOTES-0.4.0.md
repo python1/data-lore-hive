@@ -92,4 +92,4 @@ pinned signer fingerprint`.
 
 - `verified-memory-0.4.0.mcpb`, SHA-256 `576070d87208cee58482ab8f2dd04c6773f82b968952872fb12bcc004c251129`. It is not code-signed, so
   Claude Desktop shows its "not verified by Anthropic" warning for add-ons installed from a file.
-- npm: `@python1/verified-memory-mcp@0.4.0` and `@python1/verified-memory@0.4.0`.
+- npm: `@python1/verified-memory-mcp@0.4.0`. OpenClaw plugin: `@python1/verified-memory@0.4.0` on ClawHub, not npm.
