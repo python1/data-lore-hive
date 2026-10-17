@@ -14,22 +14,18 @@ const PASSPHRASE = 'fictional passphrase for tests';
 const permissionFlag = process.allowedNodeEnvironmentFlags.has('--permission') ? '--permission' : '--experimental-permission';
 const hasSshKeygen = spawnSync('ssh-keygen', ['-Y', 'verify'], { encoding: 'utf8' }).error === undefined;
 const skip = hasSshKeygen ? false : 'ssh-keygen not installed';
-// In CI, Windows OpenSSH's ssh-keygen did not take the passphrase from SSH_ASKPASS, so on
-// Windows the throwaway keys have no passphrase and only the wrong-passphrase test is skipped.
-// The permission-mode test still shows sign-pack cannot read the private key file itself.
-const askpassWorks = process.platform !== 'win32';
-const DEFAULT_PASSPHRASE = askpassWorks ? PASSPHRASE : '';
 
 /** root/{pack,keys,work}: the private key sits alone in keys/, apart from what the script may read. */
-function setup(t, { type = 'ed25519', passphrase = DEFAULT_PASSPHRASE } = {}) {
+function setup(t, { type = 'ed25519', passphrase = PASSPHRASE } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'verified-memory-sign-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const pack = join(root, 'pack'), keys = join(root, 'keys'), work = join(root, 'work');
   cpSync(sample, pack, { recursive: true }); mkdirSync(keys); mkdirSync(work);
   const key = join(keys, 'pack_signing');
   assert.equal(spawnSync('ssh-keygen', ['-q', '-t', type, '-N', passphrase, '-C', 'fictional-signing-key', '-f', key]).status, 0);
-  const askpass = join(root, 'askpass.sh');
-  writeFileSync(askpass, `#!/bin/sh\necho '${PASSPHRASE}'\n`); chmodSync(askpass, 0o700);
+  // Windows OpenSSH runs SSH_ASKPASS directly, so it gets a batch file there.
+  const askpass = join(root, process.platform === 'win32' ? 'askpass.cmd' : 'askpass.sh');
+  writeFileSync(askpass, process.platform === 'win32' ? `@echo ${PASSPHRASE}\r\n` : `#!/bin/sh\necho '${PASSPHRASE}'\n`); chmodSync(askpass, 0o700);
   return { root, pack, keys, work, key, askpass };
 }
 function sign(env, args, nodeArgs = []) {
@@ -112,7 +108,7 @@ test('re-signing a signed, dated pack replaces its dates and signature', { skip 
   assert.equal(loadPack(second, { trustedKeys: [pubLine(env.key)], strict: true }).verification.freshness.status, 'fresh');
 });
 
-test('wrong passphrase: ssh-keygen fails and nothing is written', { skip: skip || (askpassWorks ? false : 'Windows OpenSSH did not read SSH_ASKPASS in CI') }, (t) => {
+test('wrong passphrase: ssh-keygen fails and nothing is written', { skip }, (t) => {
   const env = setup(t, { passphrase: 'a different fictional passphrase' }), out = join(env.work, 'signed');
   const p = sign(env, ['--pack', env.pack, '--key', env.key, '--expires', '90d', '--out', out]);
   assert.equal(p.status, 1); assert.match(p.stderr, /verified-memory-sign-pack: ssh-keygen -Y sign failed \(nothing was written\)\n$/);
