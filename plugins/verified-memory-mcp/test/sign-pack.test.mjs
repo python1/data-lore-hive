@@ -35,7 +35,9 @@ function setup(t, { type = 'ed25519', passphrase = DEFAULT_PASSPHRASE } = {}) {
 function sign(env, args, nodeArgs = []) {
   return spawnSync(process.execPath, [...nodeArgs, script, ...args], {
     encoding: 'utf8', timeout: 30000, stdio: ['ignore', 'pipe', 'pipe'],
-    env: { PATH: process.env.PATH, HOME: env.root, SSH_ASKPASS: env.askpass, SSH_ASKPASS_REQUIRE: 'force', DISPLAY: ':0', ...(process.platform === 'win32' ? { SystemRoot: process.env.SystemRoot, USERPROFILE: env.root } : {}) }
+    // Windows OpenSSH's ssh-keygen exits 255 without a message in a minimal environment, so
+    // there it keeps the runner's environment.
+    env: { ...(process.platform === 'win32' ? process.env : { PATH: process.env.PATH, HOME: env.root }), SSH_ASKPASS: env.askpass, SSH_ASKPASS_REQUIRE: 'force', DISPLAY: ':0' }
   });
 }
 const pubLine = (key, name = 'publisher') => `${name} ${readFileSync(key + '.pub', 'utf8').split(' ').slice(0, 2).join(' ')}`;

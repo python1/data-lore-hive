@@ -1,4 +1,28 @@
-# Validation — 2026-10-13 (v0.3.0: signed and dated packs)
+# Validation — 2026-10-17 (v0.4.0: pinned signer, revocation, rollback gate, stop on change)
+
+Version 0.4.0 is not published. These records are for this branch.
+
+| Where | Runtime | Result |
+|---|---|---|
+| macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `npm test` 88/88; `npm run plugin:build` regenerated `openclaw.plugin.json`; `plugin:validate` reports no errors |
+| GitHub Actions macos-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | __MAC_CI__ |
+| GitHub Actions windows-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | __WIN_CI__ |
+| GitHub Actions ubuntu-latest | Node 24 (`openclaw-plugin` job) | __UBU_CI__ |
+
+New tests (`test/trust.test.mjs`): fingerprint format and parsing; pins and a minimum
+sequence imply a signature, revocation alone does not; the round-4 break (attacker's key
+in `trustedKeys`, poisoned pack re-signed) accepted without a pin and refused with one;
+revoked signers refused in every mode, naming the fingerprint, including when pinned;
+revoked keys file reading; sequence gate (equal accepted, lower, missing, unsigned and
+forged refused); malformed `sequence`; precedence with exactly one error per refusal;
+stop-on-change for appends, same-size edits with mtime restored, rename-replacement, added
+and removed files and a swapped folder; plugin config for the three new keys, with refusals
+registering zero tools. The 0.3.0 snapshot test was changed: a disk edit now stops serving.
+Node 26 was not rerun for 0.4.0.
+
+The v0.3.0 records below are kept unchanged.
+
+## Validation — 2026-10-13 (v0.3.0: signed and dated packs)
 
 ## Environment and scope
 

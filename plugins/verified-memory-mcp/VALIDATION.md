@@ -1,4 +1,53 @@
-# Validation — 2026-10-13 (v0.3.0: signed and dated packs, Claude Desktop bundle)
+# Validation — 2026-10-17 (v0.4.0: pinned signer, revocation, rollback gate, stop on change)
+
+Version 0.4.0 is not published. These records are for this branch.
+
+| Where | Runtime | Command | Result |
+|---|---|---|---|
+| macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `node scripts/test-all.mjs` | MCP 80 passed, 0 failed, 1 skipped; bundle 11/11 |
+| macOS ARM64 (local) | Node 25.8.0 | `npm test`, `npm run test:mcpb` | MCP 81/81 (includes the socket-denial probe); bundle 11/11 |
+| macOS ARM64 (local) | Node 25.8.0, Playwright 1.63.0 | `npm run test:e2e` in `web/` | 96/96 (Chromium, Firefox, WebKit; http and file) |
+| GitHub Actions macos-latest | Node 24 | `node scripts/test-all.mjs` | __MAC_CI__ |
+| GitHub Actions windows-latest | Node 24 | `node scripts/test-all.mjs` | __WIN_CI__ |
+
+The one skip under Node 24 is the existing socket-denial probe (no network permission
+scope in that runtime). On Windows, the sign-pack wrong-passphrase test is also skipped:
+in CI, Windows OpenSSH's `ssh-keygen` did not take the passphrase from `SSH_ASKPASS`, so on
+Windows the throwaway test keys have no passphrase. Passphrase entry remains covered on
+macOS and Linux.
+
+New in 0.4.0 (`test/redteam.test.mjs`, against the real server process over stdio; R2
+under Node's read-only permission mode):
+
+| Round | Attack | Result |
+|---|---|---|
+| R1 | Poisoned `records.jsonl` with recomputed `SHA256SUMS` (signature kept, or removed) | Refused: `pack signature does not verify`, or unsigned with a signature required; unsealed edits fail the checksum |
+| R2 | Edit while running: poisoned file; same-size edit with mtime restored; whole pack re-signed by the attacker | Both tools return `isError` "pack files changed on disk since startup", no record data |
+| R3 | Trusted keys file swapped to the attacker's key, no re-sign | Refused with `--trusted-keys`; with a pin the genuine pack still starts, signer `pinned` |
+| R4 | Key swap + poisoned pack re-signed by the attacker (the round-4 break) | Reproduced as accepted with `--trusted-keys --strict` alone; refused by `--trusted-fingerprint` in every combination, naming the attacker's fingerprint |
+| R5 | Older, validly signed, unexpired pack (sequence 3) | Refused by `--min-sequence 5`; missing sequence refused; raised sequence breaks the signature |
+| R6 | Expired pack under `--strict` | Refused; without `--strict` starts with a warning |
+| Revoked | Signer in `--revoked-keys`, with or without trusted keys and signature requirement | Refused, naming the fingerprint |
+| Revoked + pinned | Same key pinned and revoked | Refused: revocation wins |
+| Precedence | Packs failing several gates at once | One error, from the first gate: revoked, pinned, trusted, sequence, expiry |
+| Compatibility | None of the new flags | 0.3.0 verification keys and decisions unchanged |
+
+Also new: CLI parsing of the new flags (repeated and comma-separated pins, blank
+Desktop values, malformed values), `sign-pack --sequence` (the printed fingerprint pins the
+signed pack; a higher `--min-sequence` refuses it), and the bundle's three new settings
+(pin, revoked keys file, minimum sequence) through `getMcpConfigForManifest`.
+
+Behaviour change without new flags: editing the pack folder while the server runs now
+stops serving (0.3.0 kept serving the old snapshot).
+
+Limits: change detection uses file metadata (listing, size, mtime, ctime, device and
+inode), not a re-hash; an administrator who can reset the clock or the filesystem can
+defeat it. Revocation and the minimum sequence are only as current as the host's
+configuration, and nothing protects a host whose own configuration an attacker can write.
+
+The v0.3.0 records below are kept unchanged; the transcripts in `validation/` are from v0.3.0.
+
+## Validation — 2026-10-13 (v0.3.0: signed and dated packs, Claude Desktop bundle)
 
 Tested on macOS ARM64 with TypeScript 5.9.3, Node 22 type definitions, and
 official MCP TypeScript SDK 1.32.1. **Minimum supported Node: 22.0.0**;
