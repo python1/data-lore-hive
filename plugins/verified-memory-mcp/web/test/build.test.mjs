@@ -15,7 +15,7 @@ const hash = (s) => `'sha256-${createHash('sha256').update(s, 'utf8').digest('ba
 
 // The one URL allowed in the page: a plain link to the Claude Desktop add-on. It loads nothing
 // into the page; only a click navigates, and the page sends no referrer.
-const DESKTOP_DOWNLOAD = 'https://github.com/python1/data-lore-hive/releases/download/verified-memory-v0.3.0/verified-memory-0.3.0.mcpb';
+const DESKTOP_DOWNLOAD = 'https://github.com/python1/data-lore-hive/releases/download/verified-memory-v0.4.0/verified-memory-0.4.0.mcpb';
 
 test('page is self-contained: no external URLs but the add-on link, one inline script and style, both pinned by CSP hash', () => {
   assert.equal(html.split(DESKTOP_DOWNLOAD).length - 1, 1);
