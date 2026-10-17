@@ -106,7 +106,11 @@ jobs:
           cache-dependency-path: |
             plugins/verified-memory-mcp/package-lock.json
             plugins/verified-memory-mcp/web/package-lock.json
-      - run: node --version && npm ci && npm ci --prefix web
+      # npm 10.5.1's npm.cmd (bundled with Node 22.0.0) follows the runner's global prefix,
+      # C:\npm\prefix, which has no npm in it; point the prefix at this Node install instead.
+      - if: runner.os == 'Windows'
+        run: node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'NPM_CONFIG_PREFIX=' + require('path').dirname(process.execPath) + '\n')"
+      - run: node --version && npm --version && npm ci && npm ci --prefix web
       - run: npm test
       - run: npm test --prefix web
       - run: npm run test:mcpb
