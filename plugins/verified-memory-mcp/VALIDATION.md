@@ -8,10 +8,10 @@ Version 0.4.0 is not published. These records are for this branch.
 | macOS ARM64 (local) | Node 22.23.3, official build, SHA-256 checked | `npm test` | 80 passed, 1 skipped. Transcript: [tests-node22-current.txt](validation/tests-node22-current.txt) |
 | macOS ARM64 (local) | Node 24.22.0, official build, SHA-256 checked | `node scripts/test-all.mjs` | MCP 80 passed, 1 skipped; bundle 13/13 |
 | macOS ARM64 (local) | Node 25.8.0 | `npm test`, `npm run test:mcpb` | MCP 81/81 (includes the socket-denial probe); bundle 13/13. Transcript: [tests.txt](validation/tests.txt) |
-| GitHub Actions macos-latest, windows-latest | Node 22.0.0 (`mcp-node-minimum` job) | `npm test`, `npm test` in `web/`, `npm run test:mcpb` | macOS: MCP 80 passed, 1 skipped; web 35/35; bundle 13/13. Windows: MCP 80 passed, 1 skipped; web 34 passed, 1 skipped (no system `zip`); bundle 13/13 (run 39056417309, commit 90ff9a8) |
+| GitHub Actions macos-latest, windows-latest | Node 22.0.0 (`mcp-node-minimum` job) | `npm test`, `npm test` in `web/`, `npm run test:mcpb` | macOS: MCP 80 passed, 1 skipped; web 35/35; bundle 13/13. Windows: MCP 80 passed, 1 skipped; web 34 passed, 1 skipped (no system `zip`); bundle 13/13 (run 39065066467, commit ec4bb5b) |
 | macOS ARM64 (local) | Node 25.8.0, Playwright 1.63.0 | `npm run test:e2e` in `web/` | 96/96 (Chromium, Firefox, WebKit; http and file) |
-| GitHub Actions macos-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 13/13 (run 39056417309, commit 90ff9a8) |
-| GitHub Actions windows-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 13/13 (run 39056417309, commit 90ff9a8) |
+| GitHub Actions macos-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 90/90; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 13/13 (run 39065066467, commit ec4bb5b) |
+| GitHub Actions windows-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 90/90; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 13/13 (run 39065066467, commit ec4bb5b) |
 
 The one skip under Node 24 is the existing socket-denial probe (no network permission
 scope in that runtime). All sign-pack tests, including the passphrase-protected key and
