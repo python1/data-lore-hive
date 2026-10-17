@@ -446,10 +446,13 @@ The settings form has these fields:
 | Revoked keys file | no (blank = none) | `--revoked-keys=<file>` |
 | Minimum pack sequence | no (blank = off) | `--min-sequence=<N>` |
 | Require a trusted signature | no (off) | `--require-signature=true\|false` |
+| Strict: require a trusted signature and an unexpired pack | no (off) | `--strict=true\|false` |
 
 For a signed pack, paste the fingerprint `sign-pack` printed into *Pinned signer
 fingerprint*; you then need no trusted keys file. Raise *Minimum pack sequence* when you
-install a newer pack.
+install a newer pack. Turn on *Strict* for packs signed with an expiry date (`sign-pack`
+always adds one). Every new setting defaults to off, so an add-on upgraded from 0.3.0
+behaves as before (apart from [stop on change](#stop-on-change)).
 
 Change these later in **Settings → Extensions → Verified Memory**. The bundle holds the
 same `dist/` as the npm package plus its production dependencies, and nothing else: no pack,
@@ -572,6 +575,7 @@ plugins/verified-memory-mcp/
 ├── LICENSE
 ├── README.md
 ├── VALIDATION.md
+├── RELEASE-NOTES-0.4.0.md      # draft notes for the 0.4.0 release
 ├── package.json
 ├── package-lock.json
 ├── server.json             # MCP Registry metadata

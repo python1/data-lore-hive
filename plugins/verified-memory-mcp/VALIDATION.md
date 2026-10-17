@@ -4,8 +4,11 @@ Version 0.4.0 is not published. These records are for this branch.
 
 | Where | Runtime | Command | Result |
 |---|---|---|---|
-| macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `node scripts/test-all.mjs` | MCP 80 passed, 0 failed, 1 skipped; bundle 11/11 |
-| macOS ARM64 (local) | Node 25.8.0 | `npm test`, `npm run test:mcpb` | MCP 81/81 (includes the socket-denial probe); bundle 11/11 |
+| macOS ARM64 (local) | **Node 22.0.0 (minimum)**, npm 10.5.1, official nodejs.org build, SHA-256 checked | `npm test`, `npm test` in `web/`, `npm run test:mcpb` | MCP 80 passed, 1 skipped; web 35/35; bundle 13/13. Transcript: [tests-node22-min.txt](validation/tests-node22-min.txt) |
+| macOS ARM64 (local) | Node 22.23.3, official build, SHA-256 checked | `npm test` | 80 passed, 1 skipped. Transcript: [tests-node22-current.txt](validation/tests-node22-current.txt) |
+| macOS ARM64 (local) | Node 24.22.0, official build, SHA-256 checked | `node scripts/test-all.mjs` | MCP 80 passed, 1 skipped; bundle 13/13 |
+| macOS ARM64 (local) | Node 25.8.0 | `npm test`, `npm run test:mcpb` | MCP 81/81 (includes the socket-denial probe); bundle 13/13. Transcript: [tests.txt](validation/tests.txt) |
+| GitHub Actions macos-latest, windows-latest | Node 22.0.0 (`mcp-node-minimum` job) | `npm test`, `npm test` in `web/`, `npm run test:mcpb` | __MIN_CI__ |
 | macOS ARM64 (local) | Node 25.8.0, Playwright 1.63.0 | `npm run test:e2e` in `web/` | 96/96 (Chromium, Firefox, WebKit; http and file) |
 | GitHub Actions macos-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 11/11 (run 39053892404, commit 7d55f4d) |
 | GitHub Actions windows-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 11/11 (run 39053892404, commit 7d55f4d) |
@@ -44,7 +47,14 @@ inode), not a re-hash; an administrator who can reset the clock or the filesyste
 defeat it. Revocation and the minimum sequence are only as current as the host's
 configuration, and nothing protects a host whose own configuration an attacker can write.
 
-The v0.3.0 records below are kept unchanged; the transcripts in `validation/` are from v0.3.0.
+**Minimum Node stays 22.0.0**: the whole MCP package (server, red-team rounds, sign-pack,
+pack maker unit tests and bundle) passes on 22.0.0, so `engines.node` remains `>=22.0.0`.
+The Claude Desktop bundle gained an optional *Strict* setting (`--strict=true|false`, off
+by default); its tests cover strict refusing an undated pack and strict with no key, and
+a pinned, sequenced, fresh pack starting under strict with a minimum sequence.
+
+All three transcripts in `validation/` were regenerated for 0.4.0 on 2026-10-17. The
+v0.3.0 records below are kept for history; their counts refer to v0.3.0.
 
 ## Validation — 2026-10-13 (v0.3.0: signed and dated packs, Claude Desktop bundle)
 

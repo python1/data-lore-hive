@@ -1,4 +1,4 @@
-python3 -m unittest discover -s tests
+python3 -m unittest discover -s tests   (agent-memory/, Python 3.14.7, 2026-10-17)
 Ran 36 tests
 OK
 

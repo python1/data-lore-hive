@@ -89,6 +89,28 @@ jobs:
       - run: npm ci --ignore-scripts --prefix ../verified-memory && npm ci && npm ci --prefix web
       - run: node scripts/test-all.mjs
 
+  # The MCP package's stated minimum, engines.node >=22.0.0, on both desktop OSes: the server
+  # (with the red-team rounds), sign-pack, the pack maker's unit tests and the bundle.
+  mcp-node-minimum:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: { os: [macos-latest, windows-latest] }
+    defaults: { run: { working-directory: plugins/verified-memory-mcp } }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.0.0'
+          cache: npm
+          cache-dependency-path: |
+            plugins/verified-memory-mcp/package-lock.json
+            plugins/verified-memory-mcp/web/package-lock.json
+      - run: node --version && npm ci && npm ci --prefix web
+      - run: npm test
+      - run: npm test --prefix web
+      - run: npm run test:mcpb
+
   pack-maker-browsers:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: plugins/verified-memory-mcp/web } }

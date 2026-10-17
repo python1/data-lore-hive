@@ -24,7 +24,8 @@
         "--trusted-fingerprint=${user_config.trusted_fingerprint}",
         "--revoked-keys=${user_config.revoked_keys}",
         "--min-sequence=${user_config.min_sequence}",
-        "--require-signature=${user_config.require_signature}"
+        "--require-signature=${user_config.require_signature}",
+        "--strict=${user_config.strict}"
       ],
       "env": {}
     }
@@ -72,6 +73,13 @@
       "type": "boolean",
       "title": "Require a trusted signature",
       "description": "Refuse to start unless the pack is signed by a key in the trusted keys file.",
+      "required": false,
+      "default": false
+    },
+    "strict": {
+      "type": "boolean",
+      "title": "Strict: require a trusted signature and an unexpired pack",
+      "description": "Refuse to start unless the pack is signed by a pinned or trusted key and carries an expiry date that has not passed; a running server stops answering once the pack expires.",
       "required": false,
       "default": false
     }
