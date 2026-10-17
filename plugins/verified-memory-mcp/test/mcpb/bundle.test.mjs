@@ -3,7 +3,7 @@
 // Desktop uses, so these runs see the arguments a real install would pass.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, relative, resolve, sep } from 'node:path';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -79,9 +79,9 @@ test('bundle contains only the allowlisted files, the npm dist, and no keys or p
   for (const f of files) assert.doesNotMatch(readFileSync(join(unpacked, f), 'latin1'), /-----BEGIN ([A-Z]+ )?PRIVATE KEY-----\r?\n[A-Za-z0-9+/=]{16}/, f);
 });
 
-test('only the pack folder set: trusted keys blank and signature off by default', async t => {
+test('only the pack folder set: trusted keys, pin, revocation and minimum sequence blank, signature off by default', async t => {
   const config = await configFor({ pack_dir: '/fictional/pack' });
-  assert.deepEqual(config.args.slice(1), ['--pack=/fictional/pack', '--trusted-keys=', '--require-signature=false']);
+  assert.deepEqual(config.args.slice(1), ['--pack=/fictional/pack', '--trusted-keys=', '--trusted-fingerprint=', '--revoked-keys=', '--min-sequence=', '--require-signature=false']);
   const result = await search(await connect(t, { pack_dir: packCopy('unsigned', false) }), 'seedlings');
   assert.equal(result.matched, 1); assert.equal(result.verification.sha256sums, 'passed');
 });
@@ -104,4 +104,28 @@ test('signature required but pack unsigned: refuses to start', async t => {
 test('signature required with no trusted keys file: refuses to start', async t => {
   await assert.rejects(connect(t, { pack_dir: packCopy('signed-nokeys', true), require_signature: true }),
     e => /at least one trusted key/.test(e.stderr) || assert.fail(e.stderr ?? String(e)));
+});
+
+// v0.4 settings. The fixture key's fingerprint, as ssh-keygen -l prints it.
+const fixturePrint = 'SHA256:QdQEQAWD+03v/nksLJaA+zSSRPOSa/V/eODKuTXBY94';
+const otherPrint = 'SHA256:' + 'A'.repeat(43);
+
+test('pinned signer fingerprint setting: the pinned key starts (no trusted keys file needed); any other refuses', async t => {
+  const { signature } = (await search(await connect(t, { pack_dir: packCopy('pinned', true), trusted_fingerprint: `${otherPrint}, ${fixturePrint}` }), 'pottery')).verification;
+  assert.equal(signature.status, 'verified'); assert.equal(signature.pinned, true); assert.equal(signature.fingerprint, fixturePrint);
+  await assert.rejects(connect(t, { pack_dir: packCopy('pinned-other', true), trusted_keys: join(signedFixture, 'trusted_keys'), trusted_fingerprint: otherPrint }),
+    e => /which is not a pinned signer fingerprint/.test(e.stderr) || assert.fail(e.stderr ?? String(e)));
+});
+
+test('revoked keys file setting: a revoked signer refuses to start even when pinned', async t => {
+  const revoked = join(root, 'revoked keys.txt'); writeFileSync(revoked, `# lost\n${fixturePrint}\n`);
+  await assert.rejects(connect(t, { pack_dir: packCopy('revoked', true), trusted_fingerprint: fixturePrint, revoked_keys: revoked }),
+    e => new RegExp(`${fixturePrint.replace(/[+/]/g, '\\$&')}, which is revoked`).test(e.stderr) || assert.fail(e.stderr ?? String(e)));
+});
+
+test('minimum sequence setting: a pack without a signed sequence refuses to start; a bad value is a clear error', async t => {
+  await assert.rejects(connect(t, { pack_dir: packCopy('sequence', true), trusted_fingerprint: fixturePrint, min_sequence: '1' }),
+    e => /pack has no sequence in PACK\.json/.test(e.stderr) || assert.fail(e.stderr ?? String(e)));
+  await assert.rejects(connect(t, { pack_dir: packCopy('sequence-bad', true), trusted_fingerprint: fixturePrint, min_sequence: 'one' }),
+    e => /--min-sequence must be a whole number/.test(e.stderr) || assert.fail(e.stderr ?? String(e)));
 });

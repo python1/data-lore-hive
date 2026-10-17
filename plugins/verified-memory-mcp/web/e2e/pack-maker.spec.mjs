@@ -68,7 +68,7 @@ test('builds the golden ChatGPT pack through the UI, byte for byte, without any 
   expect(inputs.files['larkfield-garden-chatgpt-fixture-inputs/records.jsonl'].equals(readFileSync(join(golden, 'chatgpt', 'records.jsonl')))).toBe(true);
   expect(inputs.files['larkfield-garden-chatgpt-fixture-inputs/REBUILD.txt'].toString()).toContain("--title 'Larkfield garden (ChatGPT fixture)'");
   await page.click('text=Sign it (optional)');
-  await expect(page.locator('#sign-command')).toHaveText('node tools/sign-pack.mjs --pack larkfield-garden-chatgpt-fixture --key ~/.ssh/YOUR_KEY --expires 90d --out larkfield-garden-chatgpt-fixture-signed');
+  await expect(page.locator('#sign-command')).toHaveText('node tools/sign-pack.mjs --pack larkfield-garden-chatgpt-fixture --key ~/.ssh/YOUR_KEY --expires 90d --sequence 1 --out larkfield-garden-chatgpt-fixture-signed');
 
   expectNoNetwork(requests);
   expectNoProblems(problems, browserName, pageUrl);
@@ -244,9 +244,12 @@ const signedFixture = resolve('../../verified-memory/test/fixtures/signed-sample
 const fixtureKeys = readFileSync(join(signedFixture, 'trusted_keys'), 'utf8');
 const signedFiles = () => [...PACK_FILES.map((name) => ({ name, mimeType: 'application/octet-stream', buffer: readFileSync(join(samplePack, name)) })),
   { name: 'SHA256SUMS.sig', mimeType: 'application/octet-stream', buffer: readFileSync(join(signedFixture, 'SHA256SUMS.sig')) }];
-async function check(page, files, keys, require) {
+async function check(page, files, keys, require, { pins = '', revoked = '', minSequence = '' } = {}) {
   await page.setInputFiles('#check-files', files);
   await page.fill('#check-keys', keys);
+  await page.fill('#check-pins', pins);
+  await page.fill('#check-revoked', revoked);
+  await page.fill('#check-min-sequence', minSequence);
   await page.setChecked('#check-require', require);
   await page.click('#check-run');
   await expect(page.locator('#check-status')).not.toHaveText(/^(Checking…)?$/);
@@ -266,9 +269,9 @@ test('check panel: signed fixture verifies with its listed key, loose or zipped,
 // Dated packs, signed in Node with an invented in-memory key, as sign-pack makes them.
 const DAY = 86400000;
 const iso = (ms) => new Date(Math.floor(ms / 1000) * 1000).toISOString().replace('.000Z', 'Z');
-function datedFiles(key, created, expires) {
+function datedFiles(key, created, expires, sequence) {
   const files = Object.fromEntries(['MEMORY.md', 'README.md', 'records.jsonl'].map((n) => [n, readFileSync(join(samplePack, n))]));
-  files['PACK.json'] = Buffer.from(JSON.stringify({ format: 'verified-memory-pack', version: 2, created_utc: iso(created), expires_utc: iso(expires) }));
+  files['PACK.json'] = Buffer.from(JSON.stringify({ format: 'verified-memory-pack', version: 2, created_utc: iso(created), expires_utc: iso(expires), sequence }));
   files.SHA256SUMS = Buffer.from(Object.keys(files).sort().map((n) => `${createHash('sha256').update(files[n]).digest('hex')}  ${n}\n`).join(''));
   files['SHA256SUMS.sig'] = Buffer.from(sshsig(key, files.SHA256SUMS));
   return Object.entries(files).map(([name, buffer]) => ({ name, mimeType: 'application/octet-stream', buffer }));
@@ -286,9 +289,24 @@ test('check panel: strict accepts a signed fresh pack and refuses expired and un
   expectNoProblems(problems, browserName, pageUrl);
 });
 
+test('check panel: a pinned signer, revocation and a minimum sequence decide as the server does', async ({ app: { page, requests, problems }, browserName, pageUrl }) => {
+  const key = newKey(), attacker = newKey(), now = Date.now(), expires = now + 30 * DAY;
+  const print = /SHA256:\S+(?=\))/.exec(await (await check(page, datedFiles(key, now - DAY, expires, 5), '', false)).textContent())[0];
+  await expect(await check(page, datedFiles(key, now - DAY, expires, 5), '', true, { pins: print, minSequence: '5' }))
+    .toHaveText(`Checksums pass for 8 records. Signed by the key you pinned (${print}). This proves that key signed these exact files, not that what they say is true. Fresh until ${iso(expires)}. Sequence 5.`);
+  await expect(page.locator('#check-status')).toHaveClass(/\bok\b/);
+  // The round-4 break: the attacker's own key listed and the attacker's pack re-signed. The pin refuses it.
+  await expect(await check(page, datedFiles(attacker, now - DAY, expires, 6), attacker.line('publisher'), true, { pins: print })).toHaveText(/^Not accepted: Pack is signed by SHA256:\S+, which is not a pinned signer fingerprint\.$/);
+  await expect(await check(page, datedFiles(key, now - DAY, expires, 3), '', false, { pins: print, minSequence: '5' })).toHaveText('Not accepted: Pack sequence 3 is lower than the minimum 5; refusing a possible rollback to an older pack.');
+  await expect(await check(page, datedFiles(key, now - DAY, expires, 5), '', false, { pins: print, revoked: print })).toHaveText(`Not accepted: Pack is signed by ${print}, which is revoked.`);
+  await expect(page.locator('#check-status')).toHaveClass(/\berror\b/);
+  expectNoNetwork(requests);
+  expectNoProblems(problems, browserName, pageUrl);
+});
+
 test('check panel: unlisted key, broken signature, unsigned pack and strict-without-keys', async ({ app: { page, problems }, browserName, pageUrl }) => {
   await expect(await check(page, signedFiles(), '', false)).toHaveText(/The signature is valid, but its key \(SHA256:\S+\) is not one you listed, so the signer is unknown\. It has no expiry date\.$/);
-  await expect(await check(page, signedFiles(), '', true)).toHaveText('Not accepted: Requiring a signature needs at least one trusted key.');
+  await expect(await check(page, signedFiles(), '', true)).toHaveText('Not accepted: Requiring a signature needs at least one trusted key or pinned fingerprint.');
   const broken = signedFiles();
   const sig = broken[4].buffer.toString('utf8').split('\n');
   const blob = Buffer.from(sig.slice(1, -2).join(''), 'base64'); blob[blob.length - 10] ^= 1;

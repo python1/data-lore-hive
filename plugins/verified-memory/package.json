@@ -1,6 +1,6 @@
 {
   "name": "@python1/verified-memory",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Read-only, checksum-verified, optionally signed Data & Lore memory tools",
   "license": "MIT",
   "type": "module",

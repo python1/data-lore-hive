@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Pack signer, for the signing machine only. Copies a verified pack to a new folder, adds
-// PACK.json (created now, expiring when asked), re-seals SHA256SUMS, and has ssh-keygen sign
+// PACK.json (created now, expiring when asked, with the sequence number if given), re-seals
+// SHA256SUMS, and has ssh-keygen sign
 // SHA256SUMS. This script never opens the private key: ssh-keygen reads it and asks for its
 // passphrase (or uses ssh-agent). The result must pass the hosts' own loader in strict mode,
 // trusting only KEY.pub, before it is renamed into place.
@@ -11,7 +12,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync 
 import { homedir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 
-const USAGE = 'Usage: node tools/sign-pack.mjs --pack DIR --key ~/.ssh/KEY --expires 90d|2027-01-31T00:00:00Z --out NEW_DIR';
+const USAGE = 'Usage: node tools/sign-pack.mjs --pack DIR --key ~/.ssh/KEY --expires 90d|2027-01-31T00:00:00Z [--sequence N] --out NEW_DIR';
 const NAMESPACE = 'verified-memory-pack-v1';
 const MAX_DAYS = 1825;
 const DAY = 24 * 60 * 60 * 1000;
@@ -19,13 +20,14 @@ class InputError extends Error {}
 const check = (ok, message) => { if (!ok) throw new InputError(message); };
 
 function parseArgs(argv) {
-  const known = new Set(['--pack', '--key', '--expires', '--out']);
+  const known = new Set(['--pack', '--key', '--expires', '--sequence', '--out']);
   const opts = {};
   for (let i = 0; i < argv.length; i += 2) {
     check(known.has(argv[i]) && argv[i + 1] !== undefined && !argv[i + 1].startsWith('--') && !(argv[i].slice(2) in opts), USAGE);
     opts[argv[i].slice(2)] = argv[i + 1];
   }
   check(opts.pack && opts.key && opts.expires && opts.out, USAGE);
+  check(opts.sequence === undefined || /^\d{1,15}$/.test(opts.sequence), '--sequence must be a whole number, 0 or more; raise it with every pack you publish');
   return opts;
 }
 
@@ -66,7 +68,8 @@ async function main() {
   try {
     const files = {};
     for (const name of ['MEMORY.md', 'README.md', 'records.jsonl']) files[name] = readFileSync(join(source, name));
-    files['PACK.json'] = Buffer.from(JSON.stringify({ format: 'verified-memory-pack', version: 2, created_utc: iso(now), expires_utc: iso(expires) }, null, 2) + '\n');
+    const sequence = opts.sequence === undefined ? undefined : Number(opts.sequence);
+    files['PACK.json'] = Buffer.from(JSON.stringify({ format: 'verified-memory-pack', version: 2, created_utc: iso(now), expires_utc: iso(expires), sequence }, null, 2) + '\n');
     for (const [name, bytes] of Object.entries(files)) writeFileSync(join(staging, name), bytes, { flag: 'wx' });
     writeFileSync(join(staging, 'SHA256SUMS'), Object.keys(files).sort().map((name) => `${sha256(files[name])}  ${name}\n`).join(''), { flag: 'wx' });
 
@@ -75,11 +78,12 @@ async function main() {
     check(!signed.error, 'ssh-keygen not found; install OpenSSH 8.1 or later (nothing was written)');
     check(signed.status === 0, 'ssh-keygen -Y sign failed (nothing was written)');
 
-    const after = loadPack(staging, { trustedKeys: [trustLine], strict: true }).verification;
-    check(after.records === before.records && after.signature.status === 'verified' && after.freshness.status === 'fresh', 'the signed pack did not verify (nothing was written)');
+    const after = loadPack(staging, { trustedKeys: [trustLine], strict: true, minSequence: sequence }).verification;
+    check(after.records === before.records && after.signature.status === 'verified' && after.freshness.status === 'fresh' && after.freshness.sequence === sequence, 'the signed pack did not verify (nothing was written)');
     renameSync(staging, out);
     process.stdout.write(`signed ${after.records} records into ${out}\n`
-      + `key ${after.signature.fingerprint}; created ${after.freshness.created_utc}; expires ${after.freshness.expires_utc}\n`
+      + `key ${after.signature.fingerprint}; created ${after.freshness.created_utc}; expires ${after.freshness.expires_utc}${sequence === undefined ? '' : `; sequence ${sequence}`}\n`
+      + `pin this signer on hosts (recommended):\n--trusted-fingerprint ${after.signature.fingerprint}\n`
       + `trusted keys line for hosts (rename "signer" as you like):\n${trustLine}\n`);
   } catch (error) {
     rmSync(staging, { recursive: true, force: true });

@@ -150,7 +150,7 @@ test('interop with OpenSSH: ssh-keygen signs, we verify; we sign in tests, ssh-k
 });
 
 test('no private key material in the repository plugin tree or the npm package', () => {
-  const listed = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8' }).stdout)[0].files.map(f => f.path);
+  const listed = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8', shell: process.platform === 'win32' }).stdout)[0].files.map(f => f.path);
   assert.ok(listed.length > 0 && !listed.some(p => p.startsWith('test/') || /(^|\/)(id_|.*\.key$)/.test(p)), listed.join(', '));
   for (const p of listed) assert.doesNotMatch(readFileSync(p, 'latin1'), /PRIVATE KEY-----/, p);
   assert.ok(!existsSync('test/fixtures/signed-sample/k'));
