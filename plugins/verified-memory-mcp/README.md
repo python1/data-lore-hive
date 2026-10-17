@@ -306,7 +306,9 @@ identity (device and inode) with what it verified. If anything differs (an edit,
 added or removed file, a file or the whole folder replaced), both tools return
 `isError` with `verified-memory: pack files changed on disk since startup, so the
 verified snapshot no longer matches them; restart to verify the pack again`, and no
-record data, until you restart. This is metadata only: no background watchers, no
+record data, until you restart. The refusal is latched in memory: removing the added
+file or putting the folder back does not resume serving; only a restart, which verifies
+the pack again, does. This is metadata only: no background watchers, no
 re-reads, no writes. Change time cannot be set back by a normal user, so restoring a
 file's modification time does not hide an edit; an administrator who can change the
 system clock or the filesystem itself is outside what this detects.
@@ -369,7 +371,7 @@ With the 0.4.0 options, in any of the modes above:
 
 `freshness.authenticated` is `true` only when a key you listed signed the dates; dates in
 an unsigned or untrusted pack could have been written by anyone. `--require-signature`
-or `--strict` with no trusted key, or a trusted key line that is not a single-name `ssh-ed25519` entry,
+or `--strict` with no pinned fingerprint or trusted key, or a trusted key line that is not a single-name `ssh-ed25519` entry,
 refuses to start. The signer name always comes from your file, never from the pack, and
 fingerprints match `ssh-keygen -l`. Anyone can check a pack without this server:
 
@@ -445,8 +447,8 @@ The settings form has these fields:
 | Pinned signer fingerprint (recommended for signed packs) | no (blank = none) | `--trusted-fingerprint=<SHA256:…[,SHA256:…]>` |
 | Revoked keys file | no (blank = none) | `--revoked-keys=<file>` |
 | Minimum pack sequence | no (blank = off) | `--min-sequence=<N>` |
-| Require a trusted signature | no (off) | `--require-signature=true\|false` |
-| Strict: require a trusted signature and an unexpired pack | no (off) | `--strict=true\|false` |
+| Require a pinned or trusted signature | no (off) | `--require-signature=true\|false` |
+| Strict: require a pinned or trusted signature and an unexpired pack | no (off) | `--strict=true\|false` |
 
 For a signed pack, paste the fingerprint `sign-pack` printed into *Pinned signer
 fingerprint*; you then need no trusted keys file. Raise *Minimum pack sequence* when you
@@ -496,7 +498,8 @@ Choose a pack that the connecting client is permitted to read.
 Relative pack paths and unknown CLI flags are rejected. Tools cannot choose paths.
 There is no discovery of home directories, other agents, real memory or configuration.
 There are no watchers or reloads: if the pack folder changes while the server runs, the
-tools stop answering with an error; restart to verify the new pack. Add
+tools stop answering with an error, even if the change is undone, until you restart to
+verify the new pack. Add
 `--trusted-fingerprint`, `--revoked-keys` (and its `--allow-fs-read`) and
 `--min-sequence` to `args` the same way.
 

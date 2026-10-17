@@ -5,7 +5,7 @@
 // fictional sample, every key a fresh in-memory key; nothing here is a real key or real data.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, cpSync, readFileSync, writeFileSync, rmSync, readdirSync, statSync, utimesSync } from 'node:fs';
+import { mkdtempSync, cpSync, readFileSync, writeFileSync, rmSync, readdirSync, statSync, utimesSync, renameSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
@@ -86,27 +86,50 @@ test('R1 fake checksums: poisoned records with a recomputed SHA256SUMS are refus
   refused(['--pack', w2.dir, '--trusted-fingerprint', w2.pin], /^verified-memory-mcp: verified-memory: checksum mismatch: records\.jsonl$/);
 });
 
-test('R2 edit while running: the server stops serving once the pack on disk changes', { timeout: 30000 }, async t => {
+/** Puts every file back as it was: same names, bytes and modification times (ctime and inodes still move). */
+function snapshot(dir) {
+  const saved = readdirSync(dir).map(n => { const { atime, mtime } = statSync(join(dir, n)); return { n, bytes: readFileSync(join(dir, n)), atime, mtime }; });
+  return () => {
+    for (const n of readdirSync(dir)) if (!saved.some(f => f.n === n)) rmSync(join(dir, n));
+    for (const f of saved) { writeFileSync(join(dir, f.n), f.bytes); utimesSync(join(dir, f.n), f.atime, f.mtime); }
+  };
+}
+const CHANGED = 'verified-memory: pack files changed on disk since startup, so the verified snapshot no longer matches them; restart to verify the pack again';
+async function stopped(client, label) {
+  for (const call of [search(client), client.callTool({ name: 'verified_memory_get', arguments: { id: 'M-sample-2' } })]) {
+    const r = await call;
+    assert.equal(r.isError, true, label); assert.equal(r.structuredContent, undefined, label);
+    assert.equal(r.content[0].text, CHANGED, label);
+  }
+}
+
+test('R2 edit while running: the server stops serving once the pack on disk changes, and stays stopped until restart', { timeout: 60000 }, async t => {
+  // Each edit returns its undo. After the undo the pack is byte-for-byte the verified one again,
+  // yet the running server keeps refusing; only a restart (which verifies again) serves it.
   const edits = {
-    'poisoned records.jsonl': dir => poison(dir),
+    'poisoned records.jsonl': dir => { const undo = snapshot(dir); poison(dir); return undo; },
     'same-size edit with its mtime put back': dir => {
-      const file = join(dir, 'records.jsonl'), { atime, mtime } = statSync(file), bytes = readFileSync(file);
-      bytes[bytes.indexOf('pottery')] = 'P'.charCodeAt(0); writeFileSync(file, bytes); utimesSync(file, atime, mtime);
+      const undo = snapshot(dir), file = join(dir, 'records.jsonl'), { atime, mtime } = statSync(file), bytes = readFileSync(file);
+      bytes[bytes.indexOf('pottery')] = 'P'.charCodeAt(0); writeFileSync(file, bytes); utimesSync(file, atime, mtime); return undo;
     },
-    'whole pack re-signed by the attacker and swapped in': (dir, w) => { poison(dir); reseal(dir); sign(dir, w.attacker); }
+    'whole pack re-signed by the attacker and swapped in': (dir, w) => { const undo = snapshot(dir); poison(dir); reseal(dir); sign(dir, w.attacker); return undo; },
+    'extra file added': dir => { writeFileSync(join(dir, 'extra.txt'), 'x'); return () => rmSync(join(dir, 'extra.txt')); },
+    'pack directory moved away': dir => { renameSync(dir, dir + '-away'); return () => renameSync(dir + '-away', dir); }
   };
   for (const [name, edit] of Object.entries(edits)) {
-    const w = world(t);
-    const client = await serve(t, w.root, ['--pack', w.dir, '--trusted-fingerprint', w.pin, '--min-sequence', '5', '--strict']);
+    const w = world(t), args = ['--pack', w.dir, '--trusted-fingerprint', w.pin, '--min-sequence', '5', '--strict'];
+    const client = await serve(t, w.root, args);
     const before = await search(client);
     assert.equal(before.structuredContent.matched, 1, name);
     assert.equal(before.structuredContent.verification.signature.pinned, true);
-    edit(w.dir, w);
-    for (const call of [search(client), client.callTool({ name: 'verified_memory_get', arguments: { id: 'M-sample-2' } })]) {
-      const r = await call;
-      assert.equal(r.isError, true, name); assert.equal(r.structuredContent, undefined);
-      assert.equal(r.content[0].text, 'verified-memory: pack files changed on disk since startup, so the verified snapshot no longer matches them; restart to verify the pack again');
-    }
+    const undo = edit(w.dir, w);
+    await stopped(client, name);
+    undo();
+    await stopped(client, name + ', after the undo');
+    await stopped(client, name + ', still, on a later call');
+    const restarted = (await search(await serve(t, w.root, args))).structuredContent;
+    assert.equal(restarted.matched, 1, name + ': a restart verifies the restored pack and serves it');
+    assert.equal(restarted.verification.signature.pinned, true);
   }
 });
 
@@ -151,12 +174,21 @@ test('R5 rollback: an older, validly signed pack is refused below --min-sequence
   assert.equal(startup(['--pack', w.dir, '--trusted-fingerprint', w.pin, '--min-sequence', '5']).status, 0, 'the current pack (sequence 5) starts');
 });
 
-test('R6 expired pack: refused under --strict, served with a warning without it', t => {
+test('R6 expired pack: refused under --strict, served with a warning without it', async t => {
   const w = world(t), expired = pack(w.root, 'expired', w.publisher, { created: Date.now() - 60 * DAY, expires: Date.now() - DAY });
   refused(['--pack', expired, '--trusted-fingerprint', w.pin, '--strict'], /pack expired at \S+Z and strict mode refuses stale packs/);
   refused(['--pack', expired, '--trusted-keys', w.trust, '--strict'], /strict mode refuses stale packs/);
   const loose = startup(['--pack', expired, '--trusted-fingerprint', w.pin]);
   assert.equal(loose.status, 0); assert.match(loose.stderr, /warning: pack expired at \S+Z \(stale\); serving it because strict mode is off/);
+  // Without --strict the expired pack really serves records, each answer marked stale.
+  const client = await serve(t, w.root, ['--pack', expired, '--trusted-fingerprint', w.pin]);
+  const found = (await search(client)).structuredContent;
+  assert.equal(found.matched, 1); assert.equal(found.matches[0].id, 'M-sample-2');
+  assert.match(found.matches[0].citations[0].quote, /pottery/);
+  assert.equal(found.verification.freshness.status, 'stale'); assert.equal(found.verification.signature.pinned, true);
+  const got = await client.callTool({ name: 'verified_memory_get', arguments: { id: 'M-sample-2' } });
+  assert.notEqual(got.isError, true); assert.equal(got.structuredContent.record.record_id, 'M-sample-2');
+  assert.equal(got.structuredContent.verification.freshness.status, 'stale');
 });
 
 test('revoked key: refused even when trusted, and even with no signature requirement; the error names it', t => {

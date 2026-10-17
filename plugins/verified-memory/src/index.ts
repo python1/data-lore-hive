@@ -10,8 +10,8 @@ export const configSchema = Type.Object({
   trustedFingerprints: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { maxItems: 256, description: 'Recommended. Pinned signer fingerprints, one per entry, as ssh-keygen -l prints them: SHA256:…. If set, a pack must be signed by one of these keys, whatever trustedKeys says.' })),
   revokedKeys: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { maxItems: 256, description: 'Revoked key fingerprints, one per entry: SHA256:…. A pack signed by one is always refused, even if pinned or trusted.' })),
   minSequence: Type.Optional(Type.Integer({ minimum: 0, description: 'Refuse any pack whose signed PACK.json sequence is missing or lower than this, so an older pack cannot be served in place of a newer one. Implies requireSignature.' })),
-  strict: Type.Optional(Type.Boolean({ description: 'Refuse any pack that is not signed by one of trustedKeys and fresh (PACK.json present and not expired). Default false: unsigned, stale and undated packs load and are reported.' })),
-  requireSignature: Type.Optional(Type.Boolean({ description: 'Refuse any pack that is not signed by one of trustedKeys; freshness is reported but not enforced. Default false.' }))
+  strict: Type.Optional(Type.Boolean({ description: 'Refuse any pack that is not signed by a pinned (trustedFingerprints) or trusted (trustedKeys) key and fresh (PACK.json present and not expired). Default false: unsigned, stale and undated packs load and are reported.' })),
+  requireSignature: Type.Optional(Type.Boolean({ description: 'Refuse any pack that is not signed by a pinned (trustedFingerprints) or trusted (trustedKeys) key; freshness is reported but not enforced. Default false.' }))
 }, { additionalProperties: false });
 export const searchSchema = Type.Object({ query: Type.String({ minLength: 1, maxLength: 512 }) }, { additionalProperties: false });
 export const getSchema = Type.Object({ id: Type.String({ pattern: '^M-[A-Za-z0-9_-]{1,127}$' }) }, { additionalProperties: false });

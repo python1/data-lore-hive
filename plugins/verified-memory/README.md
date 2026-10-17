@@ -73,7 +73,7 @@ The tools cannot select paths.
 There is no automatic reload or watcher: reload the plugin to verify a new pack. Since
 0.4.0, if the pack folder changes after loading (an edit, an added or removed file, a
 file or the folder replaced), both tools fail with `pack files changed on disk since
-startup` until the plugin is reloaded. This is checked from file metadata on every call;
+startup` until the plugin is reloaded, even if the change is undone in the meantime. This is checked from file metadata on every call;
 nothing is re-read, watched or written.
 Never enable two plugins that register these same names. Host tool-policy configuration is controlled by the operator, never changed by this plugin.
 
@@ -193,9 +193,9 @@ Checks run in this order and the first failure is the one error reported: files 
 checksums; a present signature must be valid; revoked, then pinned, then trusted keys;
 sequence; then expiry under `strict`.
 
-`requireSignature: true` keeps its 0.2.0 meaning: a signature by a key in `trustedKeys`
-is required, and freshness is reported but not enforced. `strict: true` requires a
-trusted signature *and* a fresh `PACK.json` (it implies `requireSignature`). Every tool
+`requireSignature: true` keeps its 0.2.0 meaning, widened to pins: a signature by a pinned
+(`trustedFingerprints`) or trusted (`trustedKeys`) key is required, and freshness is
+reported but not enforced. `strict: true` requires a pinned or trusted signature *and* a fresh `PACK.json` (it implies `requireSignature`). Every tool
 result carries `verification.signature` and `verification.freshness`, judged against the
 host clock on every call.
 
@@ -214,7 +214,7 @@ host clock on every call.
 | `minSequence` set; `sequence` missing or lower | Refused | Refused | Refused |
 | Pack folder changes after loading | Tools fail until reload | Same | Same |
 
-`requireSignature` or `strict` without any trusted key, or a trusted key line that is not a single-name
+`requireSignature` or `strict` without any pinned fingerprint or trusted key, or a trusted key line that is not a single-name
 `ssh-ed25519` entry, refuses to load. The signer name always comes from your list, never
 from the pack. Fingerprints match `ssh-keygen -l`. `freshness.authenticated` is `true`
 only when a listed key signed the dates. Anyone can check a pack without this plugin:

@@ -10,487 +10,487 @@ TAP version 13
 # Subtest: builder reproduces the committed example pack byte for byte
 ok 1 - builder reproduces the committed example pack byte for byte
   ---
-  duration_ms: 47.314041
+  duration_ms: 45.897792
   type: 'test'
   ...
 # Subtest: installed-style stdio server loads the example pack and returns an exact quote
 ok 2 - installed-style stdio server loads the example pack and returns an exact quote
   ---
-  duration_ms: 128.600542
+  duration_ms: 128.74475
   type: 'test'
   ...
 # Subtest: builder refuses a quote that is not verbatim
 ok 3 - builder refuses a quote that is not verbatim
   ---
-  duration_ms: 34.384
+  duration_ms: 34.334417
   type: 'test'
   ...
 # Subtest: builder refuses an ambiguous quote unless start is given
 ok 4 - builder refuses an ambiguous quote unless start is given
   ---
-  duration_ms: 70.480916
+  duration_ms: 68.154
   type: 'test'
   ...
 # Subtest: builder refuses unknown messages, unknown fields, bad dates and duplicate IDs
 ok 5 - builder refuses unknown messages, unknown fields, bad dates and duplicate IDs
   ---
-  duration_ms: 165.496333
+  duration_ms: 173.334083
   type: 'test'
   ...
 # Subtest: builder accepts a disambiguated quote and computes code-point offsets
 ok 6 - builder accepts a disambiguated quote and computes code-point offsets
   ---
-  duration_ms: 45.450208
+  duration_ms: 44.026917
   type: 'test'
   ...
 # Subtest: builder never overwrites an existing directory
 ok 7 - builder never overwrites an existing directory
   ---
-  duration_ms: 33.032375
+  duration_ms: 33.036458
   type: 'test'
   ...
 # Subtest: export-shape prints structure and enum tokens but none of the invented export content
 ok 8 - export-shape prints structure and enum tokens but none of the invented export content
   ---
-  duration_ms: 38.763584
+  duration_ms: 40.962375
   type: 'test'
   ...
 # Subtest: export-shape reads a folder and a single JSON file, collapsing maps keyed by data
 ok 9 - export-shape reads a folder and a single JSON file, collapsing maps keyed by data
   ---
-  duration_ms: 72.339333
+  duration_ms: 72.351458
   type: 'test'
   ...
 # Subtest: export-shape hides invalid JSON details and refuses bad input
 ok 10 - export-shape hides invalid JSON details and refuses bad input
   ---
-  duration_ms: 69.966958
+  duration_ms: 66.399875
   type: 'test'
   ...
 # Subtest: pack core and the copied verifier have no imports, so a browser can load them
 ok 11 - pack core and the copied verifier have no imports, so a browser can load them
   ---
-  duration_ms: 1.960916
+  duration_ms: 1.85375
   type: 'test'
   ...
 # Subtest: pack core builds the committed example pack in memory, byte for byte
 ok 12 - pack core builds the committed example pack in memory, byte for byte
   ---
-  duration_ms: 6.851167
+  duration_ms: 6.524292
   type: 'test'
   ...
 # Subtest: in-memory pack passes the pure verifier with Web Crypto hashes, as a browser would run it
 ok 13 - in-memory pack passes the pure verifier with Web Crypto hashes, as a browser would run it
   ---
-  duration_ms: 2.199125
+  duration_ms: 1.884375
   type: 'test'
   ...
 # Subtest: R1 fake checksums: poisoned records with a recomputed SHA256SUMS are refused
 ok 14 - R1 fake checksums: poisoned records with a recomputed SHA256SUMS are refused
   ---
-  duration_ms: 935.486167
+  duration_ms: 923.987417
   type: 'test'
   ...
-# Subtest: R2 edit while running: the server stops serving once the pack on disk changes
-ok 15 - R2 edit while running: the server stops serving once the pack on disk changes
+# Subtest: R2 edit while running: the server stops serving once the pack on disk changes, and stays stopped until restart
+ok 15 - R2 edit while running: the server stops serving once the pack on disk changes, and stays stopped until restart
   ---
-  duration_ms: 415.351208
+  duration_ms: 1342.037625
   type: 'test'
   ...
 # Subtest: R3 key swap without re-signing: refused by trusted keys; a pin ignores the swapped file
 ok 16 - R3 key swap without re-signing: refused by trusted keys; a pin ignores the swapped file
   ---
-  duration_ms: 359.329917
+  duration_ms: 358.195084
   type: 'test'
   ...
 # Subtest: R4 key swap + re-sign (the round-4 break): accepted with trusted keys alone, refused by a pinned signer
 ok 17 - R4 key swap + re-sign (the round-4 break): accepted with trusted keys alone, refused by a pinned signer
   ---
-  duration_ms: 577.147916
+  duration_ms: 586.189375
   type: 'test'
   ...
 # Subtest: R5 rollback: an older, validly signed pack is refused below --min-sequence
 ok 18 - R5 rollback: an older, validly signed pack is refused below --min-sequence
   ---
-  duration_ms: 918.845208
+  duration_ms: 904.376709
   type: 'test'
   ...
 # Subtest: R6 expired pack: refused under --strict, served with a warning without it
 ok 19 - R6 expired pack: refused under --strict, served with a warning without it
   ---
-  duration_ms: 343.8305
+  duration_ms: 495.094208
   type: 'test'
   ...
 # Subtest: revoked key: refused even when trusted, and even with no signature requirement; the error names it
 ok 20 - revoked key: refused even when trusted, and even with no signature requirement; the error names it
   ---
-  duration_ms: 574.201
+  duration_ms: 569.5005
   type: 'test'
   ...
 # Subtest: revoked and pinned: revocation wins over the pin
 ok 21 - revoked and pinned: revocation wins over the pin
   ---
-  duration_ms: 236.485875
+  duration_ms: 237.551583
   type: 'test'
   ...
 # Subtest: precedence: revoked > pinned > trusted keys > sequence > expiry, one specific error each
 ok 22 - precedence: revoked > pinned > trusted keys > sequence > expiry, one specific error each
   ---
-  duration_ms: 645.54125
+  duration_ms: 578.878042
   type: 'test'
   ...
 # Subtest: backward compatible: with none of the new flags, 0.3.0 behaviour and output are unchanged
 ok 23 - backward compatible: with none of the new flags, 0.3.0 behaviour and output are unchanged
   ---
-  duration_ms: 259.136875
+  duration_ms: 253.733666
   type: 'test'
   ...
 # Subtest: build reuses byte-identical verifier and fictional pack without modifying source plugin
 ok 24 - build reuses byte-identical verifier and fictional pack without modifying source plugin
   ---
-  duration_ms: 1.436625
+  duration_ms: 1.365375
   type: 'test'
   ...
 # Subtest: valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
 ok 25 - valid pack exposes exactly matching schemas, read-only hints and exact cited results via MCP
   ---
-  duration_ms: 17.283875
+  duration_ms: 18.750708
   type: 'test'
   ...
 # Subtest: no matches, unknown ID, historical instructions and lexical semantics preserved
 ok 26 - no matches, unknown ID, historical instructions and lexical semantics preserved
   ---
-  duration_ms: 3.737375
+  duration_ms: 3.851833
   type: 'test'
   ...
 # Subtest: invalid requests return errors without path lookup or extra tool capabilities
 ok 27 - invalid requests return errors without path lookup or extra tool capabilities
   ---
-  duration_ms: 3.628667
+  duration_ms: 3.553417
   type: 'test'
   ...
 # Subtest: tampered MEMORY.md: startup refuses with no stdout
 ok 28 - tampered MEMORY.md: startup refuses with no stdout
   ---
-  duration_ms: 117.673042
+  duration_ms: 122.285458
   type: 'test'
   ...
 # Subtest: tampered README.md: startup refuses with no stdout
 ok 29 - tampered README.md: startup refuses with no stdout
   ---
-  duration_ms: 117.116625
+  duration_ms: 112.876666
   type: 'test'
   ...
 # Subtest: tampered records.jsonl: startup refuses with no stdout
 ok 30 - tampered records.jsonl: startup refuses with no stdout
   ---
-  duration_ms: 115.012
+  duration_ms: 111.227625
   type: 'test'
   ...
 # Subtest: malformed rehashed pack broken-json: startup refuses
 ok 31 - malformed rehashed pack broken-json: startup refuses
   ---
-  duration_ms: 114.951917
+  duration_ms: 110.827333
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-utf8: startup refuses
 ok 32 - malformed rehashed pack invalid-utf8: startup refuses
   ---
-  duration_ms: 116.528167
+  duration_ms: 112.101917
   type: 'test'
   ...
 # Subtest: malformed rehashed pack duplicate-id: startup refuses
 ok 33 - malformed rehashed pack duplicate-id: startup refuses
   ---
-  duration_ms: 113.788542
+  duration_ms: 112.0705
   type: 'test'
   ...
 # Subtest: malformed rehashed pack missing-citations: startup refuses
 ok 34 - malformed rehashed pack missing-citations: startup refuses
   ---
-  duration_ms: 111.16225
+  duration_ms: 107.914708
   type: 'test'
   ...
 # Subtest: malformed rehashed pack wrong-offset: startup refuses
 ok 35 - malformed rehashed pack wrong-offset: startup refuses
   ---
-  duration_ms: 111.720167
+  duration_ms: 111.234208
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-id: startup refuses
 ok 36 - malformed rehashed pack invalid-id: startup refuses
   ---
-  duration_ms: 116.638458
+  duration_ms: 115.948917
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-date: startup refuses
 ok 37 - malformed rehashed pack invalid-date: startup refuses
   ---
-  duration_ms: 116.013833
+  duration_ms: 111.740666
   type: 'test'
   ...
 # Subtest: malformed rehashed pack invalid-hash: startup refuses
 ok 38 - malformed rehashed pack invalid-hash: startup refuses
   ---
-  duration_ms: 118.03525
+  duration_ms: 110.656334
   type: 'test'
   ...
 # Subtest: malformed manifest duplicate: startup refuses
 ok 39 - malformed manifest duplicate: startup refuses
   ---
-  duration_ms: 118.774542
+  duration_ms: 118.838458
   type: 'test'
   ...
 # Subtest: malformed manifest missing: startup refuses
 ok 40 - malformed manifest missing: startup refuses
   ---
-  duration_ms: 113.808708
+  duration_ms: 120.277166
   type: 'test'
   ...
 # Subtest: malformed manifest traversal: startup refuses
 ok 41 - malformed manifest traversal: startup refuses
   ---
-  duration_ms: 112.825708
+  duration_ms: 113.211958
   type: 'test'
   ...
 # Subtest: malformed manifest malformed: startup refuses
 ok 42 - malformed manifest malformed: startup refuses
   ---
-  duration_ms: 111.63175
+  duration_ms: 112.37925
   type: 'test'
   ...
 # Subtest: malformed manifest self: startup refuses
 ok 43 - malformed manifest self: startup refuses
   ---
-  duration_ms: 111.916417
+  duration_ms: 113.259292
   type: 'test'
   ...
 # Subtest: missing, extra, symlink entries and symlink root rejected
 ok 44 - missing, extra, symlink entries and symlink root rejected
   ---
-  duration_ms: 659.683625
+  duration_ms: 669.477709
   type: 'test'
   ...
 # Subtest: verified snapshot survives returned-object mutation; a disk edit stops serving (v0.4)
 ok 45 - verified snapshot survives returned-object mutation; a disk edit stops serving (v0.4)
   ---
-  duration_ms: 114.79725
+  duration_ms: 113.249667
   type: 'test'
   ...
 # Subtest: actual stdio protocol works under Node permissions denying writes, subprocesses and workers
 ok 46 - actual stdio protocol works under Node permissions denying writes, subprocesses and workers
   ---
-  duration_ms: 222.664792
+  duration_ms: 229.662292
   type: 'test'
   ...
 # Subtest: network permission policy denies socket access when supported
 ok 47 - network permission policy denies socket access when supported # SKIP This Node version has no network permission scope
   ---
-  duration_ms: 0.087459
+  duration_ms: 0.072917
   type: 'test'
   ...
 # Subtest: every bundled citation matches only the public fictional source
 ok 48 - every bundled citation matches only the public fictional source
   ---
-  duration_ms: 1.378917
+  duration_ms: 1.444042
   type: 'test'
   ...
 # Subtest: invalid CLI flags refuse before protocol output
 ok 49 - invalid CLI flags refuse before protocol output
   ---
-  duration_ms: 334.824416
+  duration_ms: 326.9215
   type: 'test'
   ...
 # Subtest: unsigned v0.1 packs load with the same output with or without trusted keys, reported unsigned and undated
 ok 50 - unsigned v0.1 packs load with the same output with or without trusted keys, reported unsigned and undated
   ---
-  duration_ms: 4.172125
+  duration_ms: 3.346417
   type: 'test'
   ...
 # Subtest: signed fresh pack over real stdio, under permission mode, with --strict, --strict=true, --require-signature and both
 ok 51 - signed fresh pack over real stdio, under permission mode, with --strict, --strict=true, --require-signature and both
   ---
-  duration_ms: 517.011125
+  duration_ms: 521.214625
   type: 'test'
   ...
 # Subtest: committed ssh-keygen fixture (v0.2, undated): --require-signature starts as in 0.2.0, freshness unknown
 ok 52 - committed ssh-keygen fixture (v0.2, undated): --require-signature starts as in 0.2.0, freshness unknown
   ---
-  duration_ms: 8.278833
+  duration_ms: 7.896709
   type: 'test'
   ...
 # Subtest: stale pack without --strict: starts, warns once on stderr without the path, and reports stale in every result
 ok 53 - stale pack without --strict: starts, warns once on stderr without the path, and reports stale in every result
   ---
-  duration_ms: 122.225542
+  duration_ms: 122.439125
   type: 'test'
   ...
 # Subtest: --strict server stops serving once the pack expires while it runs; --require-signature keeps serving and reports stale
 ok 54 - --strict server stops serving once the pack expires while it runs; --require-signature keeps serving and reports stale
   ---
-  duration_ms: 6.454417
+  duration_ms: 6.670958
   type: 'test'
   ...
 # Subtest: --require-signature with an expired signed pack starts as in 0.2.0, warns, and reports stale
 ok 55 - --require-signature with an expired signed pack starts as in 0.2.0, warns, and reports stale
   ---
-  duration_ms: 120.723958
+  duration_ms: 118.7155
   type: 'test'
   ...
 # Subtest: valid signature by an unlisted key starts and reports untrusted
 ok 56 - valid signature by an unlisted key starts and reports untrusted
   ---
-  duration_ms: 120.141292
+  duration_ms: 141.08575
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: v0.1 unsigned pack with --strict
 ok 57 - startup refuses with no stdout: v0.1 unsigned pack with --strict
   ---
-  duration_ms: 114.919583
+  duration_ms: 121.235916
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: v0.1 unsigned pack with --require-signature
 ok 58 - startup refuses with no stdout: v0.1 unsigned pack with --require-signature
   ---
-  duration_ms: 118.562083
+  duration_ms: 120.504709
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: --require-signature with no trusted keys
 ok 59 - startup refuses with no stdout: --require-signature with no trusted keys
   ---
-  duration_ms: 115.499125
+  duration_ms: 118.965541
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: wrong key: untrusted signer with --require-signature
 ok 60 - startup refuses with no stdout: wrong key: untrusted signer with --require-signature
   ---
-  duration_ms: 123.536958
+  duration_ms: 123.787292
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: --strict with no trusted keys
 ok 61 - startup refuses with no stdout: --strict with no trusted keys
   ---
-  duration_ms: 117.047125
+  duration_ms: 115.28775
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: comment-only trust file with --strict
 ok 62 - startup refuses with no stdout: comment-only trust file with --strict
   ---
-  duration_ms: 171.830167
+  duration_ms: 117.025209
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: wrong key: untrusted signer with --strict
 ok 63 - startup refuses with no stdout: wrong key: untrusted signer with --strict
   ---
-  duration_ms: 114.985167
+  duration_ms: 119.791375
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: signed but undated (v0.2) pack with --strict
 ok 64 - startup refuses with no stdout: signed but undated (v0.2) pack with --strict
   ---
-  duration_ms: 114.8885
+  duration_ms: 113.335417
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: expired pack with --strict
 ok 65 - startup refuses with no stdout: expired pack with --strict
   ---
-  duration_ms: 114.46175
+  duration_ms: 115.796417
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: future-dated pack with --strict
 ok 66 - startup refuses with no stdout: future-dated pack with --strict
   ---
-  duration_ms: 114.945042
+  duration_ms: 121.709084
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: extended expiry, re-sealed (tampered PACK.json)
 ok 67 - startup refuses with no stdout: extended expiry, re-sealed (tampered PACK.json)
   ---
-  duration_ms: 110.040875
+  duration_ms: 119.307708
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: tampered signature
 ok 68 - startup refuses with no stdout: tampered signature
   ---
-  duration_ms: 106.819083
+  duration_ms: 118.213542
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: malformed trust file
 ok 69 - startup refuses with no stdout: malformed trust file
   ---
-  duration_ms: 106.552
+  duration_ms: 116.427042
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: missing trust file
 ok 70 - startup refuses with no stdout: missing trust file
   ---
-  duration_ms: 101.851666
+  duration_ms: 113.198792
   type: 'test'
   ...
 # Subtest: startup refuses with no stdout: relative trust file
 ok 71 - startup refuses with no stdout: relative trust file
   ---
-  duration_ms: 102.055958
+  duration_ms: 113.130417
   type: 'test'
   ...
 # Subtest: signature CLI flags: duplicates, missing values and bad switch values refuse
 ok 72 - signature CLI flags: duplicates, missing values and bad switch values refuse
   ---
-  duration_ms: 1617.026209
+  duration_ms: 1655.233291
   type: 'test'
   ...
 # Subtest: new trust flags: malformed values refuse with a specific error and no stdout
 ok 73 - new trust flags: malformed values refuse with a specific error and no stdout
   ---
-  duration_ms: 994.275375
+  duration_ms: 1010.040833
   type: 'test'
   ...
 # Subtest: empty --trusted-keys= (a blank Claude Desktop setting) means no trusted keys
 ok 74 - empty --trusted-keys= (a blank Claude Desktop setting) means no trusted keys
   ---
-  duration_ms: 202.730542
+  duration_ms: 210.3215
   type: 'test'
   ...
 # Subtest: npm package ships the funding link and no keys, signatures or test fixtures
 ok 75 - npm package ships the funding link and no keys, signatures or test fixtures
   ---
-  duration_ms: 250.589
+  duration_ms: 257.875417
   type: 'test'
   ...
 # Subtest: signs with a passphrase-protected key without ever being able to read it; hosts verify it in strict mode
 ok 76 - signs with a passphrase-protected key without ever being able to read it; hosts verify it in strict mode
   ---
-  duration_ms: 745.062209
+  duration_ms: 720.247209
   type: 'test'
   ...
 # Subtest: --sequence: signed into PACK.json; the server pins the printed fingerprint and gates on the sequence
 ok 77 - --sequence: signed into PACK.json; the server pins the printed fingerprint and gates on the sequence
   ---
-  duration_ms: 942.278542
+  duration_ms: 1003.308209
   type: 'test'
   ...
 # Subtest: re-signing a signed, dated pack replaces its dates and signature
 ok 78 - re-signing a signed, dated pack replaces its dates and signature
   ---
-  duration_ms: 823.994
+  duration_ms: 876.367958
   type: 'test'
   ...
 # Subtest: wrong passphrase: ssh-keygen fails and nothing is written
 ok 79 - wrong passphrase: ssh-keygen fails and nothing is written
   ---
-  duration_ms: 642.516833
+  duration_ms: 574.767916
   type: 'test'
   ...
 # Subtest: refuses bad input before signing, writing nothing
 ok 80 - refuses bad input before signing, writing nothing
   ---
-  duration_ms: 1151.341875
+  duration_ms: 1371.538167
   type: 'test'
   ...
 # Subtest: sign-pack is not in the npm package and is not an installed command
 ok 81 - sign-pack is not in the npm package and is not an installed command
   ---
-  duration_ms: 456.359042
+  duration_ms: 414.094417
   type: 'test'
   ...
 1..81
@@ -501,4 +501,4 @@ ok 81 - sign-pack is not in the npm package and is not an installed command
 # cancelled 0
 # skipped 1
 # todo 0
-# duration_ms 9084.52
+# duration_ms 9146.29825

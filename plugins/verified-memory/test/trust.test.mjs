@@ -159,6 +159,46 @@ test('stop on change: any edit, addition, removal or replacement of pack files s
   }
 });
 
+test('stop on change latches: undoing the change does not resume serving until the pack is loaded again', t => {
+  const key = newKey(), base = signed(fixture(t), key, { sequence: 1 });
+  const CHANGED = /^Error: verified-memory: pack files changed on disk since startup, so the verified snapshot no longer matches them; restart to verify the pack again$/;
+  const cases = {
+    'file added, then removed': dir => { writeFileSync(join(dir, 'extra.txt'), 'x'); return () => rmSync(join(dir, 'extra.txt')); },
+    'directory moved away, then restored': dir => { renameSync(dir, dir + '-away'); return () => renameSync(dir + '-away', dir); }
+  };
+  for (const [name, change] of Object.entries(cases)) {
+    const dir = join(fixture(t), '..', 'p'); cpSync(base, dir, { recursive: true });
+    const pack = loadPack(dir, { trustedFingerprints: [print(key)] });
+    const reads = [() => pack.search('pottery'), () => pack.get('M-sample-2'), () => pack.verification];
+    assert.equal(pack.search('pottery').length, 1);
+    const undo = change(dir);
+    for (const read of reads) assert.throws(read, CHANGED, name);
+    undo();
+    for (let i = 0; i < 2; i++) for (const read of reads) assert.throws(read, CHANGED, `${name}, after the undo`);
+    assert.equal(loadPack(dir, { trustedFingerprints: [print(key)] }).search('pottery').length, 1, `${name}: loading again serves`);
+  }
+});
+
+test('plugin: once a change is seen both tools keep refusing after it is undone', async t => {
+  const key = newKey(), fp = print(key);
+  for (const [name, change] of [
+    ['file added, then removed', dir => { writeFileSync(join(dir, 'extra.txt'), 'x'); return () => rmSync(join(dir, 'extra.txt')); }],
+    ['directory moved away, then restored', dir => { renameSync(dir, dir + '-away'); return () => renameSync(dir + '-away', dir); }]
+  ]) {
+    const dir = signed(fixture(t), key, { sequence: 2 }), tools = [];
+    plugin.register({ pluginConfig: { packPath: dir, trustedFingerprints: [fp], strict: true }, registerTool: x => tools.push(x) });
+    const calls = () => [tools[0].execute('s', { query: 'pottery' }), tools[1].execute('g', { id: 'M-sample-2' })];
+    assert.equal((await tools[0].execute('1', { query: 'pottery' })).details.matched, 1);
+    const undo = change(dir);
+    for (const call of calls()) await assert.rejects(call, /pack files changed on disk since startup/, name);
+    undo();
+    for (const call of calls()) await assert.rejects(call, /pack files changed on disk since startup/, `${name}, after the undo`);
+    const fresh = [];
+    plugin.register({ pluginConfig: { packPath: dir, trustedFingerprints: [fp], strict: true }, registerTool: x => fresh.push(x) });
+    assert.equal((await fresh[0].execute('2', { query: 'pottery' })).details.matched, 1, `${name}: a restart serves again`);
+  }
+});
+
 test('plugin: pin, revocation and minimum sequence config; refusals register zero tools; edits stop the tools', async t => {
   const key = newKey(), fp = print(key), dir = signed(fixture(t), key, { sequence: 4 });
   const tools = [];

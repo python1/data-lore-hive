@@ -12,9 +12,9 @@ export type PackOptions = {
   revokedKeys?: string[];
   /** Refuse unless PACK.json carries a signed sequence of at least this. Implies requireSignature. */
   minSequence?: number;
-  /** Refuse unless signed by a trusted key and fresh, at load and on every later read. */
+  /** Refuse unless signed by a pinned or trusted key and fresh, at load and on every later read. */
   strict?: boolean;
-  /** As in 0.2.0: refuse unless signed by a trusted key; freshness is reported, not enforced. */
+  /** As in 0.2.0: refuse unless signed by a pinned or trusted key; freshness is reported, not enforced. */
   requireSignature?: boolean;
   /** Clock in ms for freshness; defaults to Date.now. */
   now?: () => number;
@@ -70,15 +70,19 @@ export function loadPack(folder: string, options: PackOptions = {}) {
   checkPackSequence(dates, signature, policy.minSequence);
   // The snapshot is only served while the pack on disk is still the one that was verified: any
   // change to its listing or to a file's size, times or identity stops serving. Metadata only;
-  // nothing is re-read, watched or written.
+  // nothing is re-read, watched or written. Once a change is seen the refusal latches in memory
+  // until restart, so putting the pack back does not resume serving.
   const listing = JSON.stringify([...names].sort());
+  let changed = false;
   const unchanged = () => {
+    requireValue(!changed, 'pack files changed on disk since startup, so the verified snapshot no longer matches them; restart to verify the pack again');
     let same = false;
     try {
       const current = lstatSync(folder);
       same = current.isDirectory() && !current.isSymbolicLink() && current.dev === root.dev && current.ino === root.ino && JSON.stringify(readdirSync(folder).sort()) === listing
         && [...stamps].every(([name, s]) => stamp(lstatSync(join(folder, name))) === s);
     } catch { same = false; }
+    changed = !same;
     requireValue(same, 'pack files changed on disk since startup, so the verified snapshot no longer matches them; restart to verify the pack again');
   };
   // Freshness is judged again on every read, so a long-running host notices expiry; in strict

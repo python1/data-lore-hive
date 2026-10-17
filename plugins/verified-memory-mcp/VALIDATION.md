@@ -40,7 +40,11 @@ signed pack; a higher `--min-sequence` refuses it), and the bundle's three new s
 (pin, revoked keys file, minimum sequence) through `getMcpConfigForManifest`.
 
 Behaviour change without new flags: editing the pack folder while the server runs now
-stops serving (0.3.0 kept serving the old snapshot).
+stops serving (0.3.0 kept serving the old snapshot), and keeps refusing even after the
+change is undone, until a restart. R2 covers five changes (poisoned records, a same-size edit
+with mtime restored, an attacker re-sign, an added file, the folder moved away), each undone
+while the server runs: both tools still refuse, and a restarted server serves the restored
+pack. R6 retrieves a record (search and get) from the expired pack without `--strict`.
 
 Limits: change detection uses file metadata (listing, size, mtime, ctime, device and
 inode), not a re-hash; an administrator who can reset the clock or the filesystem can

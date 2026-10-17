@@ -51,11 +51,11 @@
       },
       "strict": {
         "type": "boolean",
-        "description": "Refuse any pack that is not signed by one of trustedKeys and fresh (PACK.json present and not expired). Default false: unsigned, stale and undated packs load and are reported."
+        "description": "Refuse any pack that is not signed by a pinned (trustedFingerprints) or trusted (trustedKeys) key and fresh (PACK.json present and not expired). Default false: unsigned, stale and undated packs load and are reported."
       },
       "requireSignature": {
         "type": "boolean",
-        "description": "Refuse any pack that is not signed by one of trustedKeys; freshness is reported but not enforced. Default false."
+        "description": "Refuse any pack that is not signed by a pinned (trustedFingerprints) or trusted (trustedKeys) key; freshness is reported but not enforced. Default false."
       }
     },
     "additionalProperties": false

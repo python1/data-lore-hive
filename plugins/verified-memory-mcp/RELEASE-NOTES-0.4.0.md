@@ -14,7 +14,9 @@ verified-memory: pack files changed on disk since startup, so the verified snaps
 ```
 
 This covers an edited file (even one whose modification time was put back), an added or
-removed file, and a file or the whole folder replaced. **To update a pack, replace it and
+removed file, and a file or the whole folder replaced. The refusal is latched: once a change
+is seen, the tools keep refusing even if the file is removed again or the folder is put
+back, until the process restarts and verifies the pack again. **To update a pack, replace it and
 then restart** Claude Desktop, the MCP client or the OpenClaw plugin. The check reads file
 metadata on each request; there are no watchers and nothing is re-read or written.
 This applies with every configuration, including one that sets none of the new options.

@@ -4,8 +4,8 @@ Version 0.4.0 is not published. These records are for this branch.
 
 | Where | Runtime | Result |
 |---|---|---|
-| macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `npm test` 88/88 ([tests-node24.txt](validation/tests-node24.txt)); `npm run plugin:build` regenerated `openclaw.plugin.json` |
-| macOS ARM64 (local) | Node 26.12.0, official build, SHA-256 checked | `npm test` 88/88 ([tests-node26.txt](validation/tests-node26.txt)); `plugin:validate` no errors ([authoring.json](validation/authoring.json)); `plugin:check` up to date; `test:host` 19/19 through the real OpenClaw CLI loader ([host-smoke.json](validation/host-smoke.json)); `test:conversation` passed with local `qwen3.5:4b`, exact quote preserved ([conversation.json](validation/conversation.json)) |
+| macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `npm test` 90/90 ([tests-node24.txt](validation/tests-node24.txt)); `npm run plugin:build` regenerated `openclaw.plugin.json` |
+| macOS ARM64 (local) | Node 26.12.0, official build, SHA-256 checked | `npm test` 90/90 ([tests-node26.txt](validation/tests-node26.txt)); `plugin:validate` no errors ([authoring.json](validation/authoring.json)); `plugin:check` up to date; `test:host` 19/19 through the real OpenClaw CLI loader ([host-smoke.json](validation/host-smoke.json)); `test:conversation` passed with local `qwen3.5:4b`, exact quote preserved ([conversation.json](validation/conversation.json)) |
 | macOS ARM64 (local) | Python 3.14.7 | Upstream `agent-memory` pipeline suite 36/36 ([pipeline-tests.txt](validation/pipeline-tests.txt)) |
 | GitHub Actions macos-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 13/13 (run 39056417309, commit 90ff9a8) |
 | GitHub Actions windows-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 13/13 (run 39056417309, commit 90ff9a8) |
@@ -18,7 +18,9 @@ revoked signers refused in every mode, naming the fingerprint, including when pi
 revoked keys file reading; sequence gate (equal accepted, lower, missing, unsigned and
 forged refused); malformed `sequence`; precedence with exactly one error per refusal;
 stop-on-change for appends, same-size edits with mtime restored, rename-replacement, added
-and removed files and a swapped folder; plugin config for the three new keys, with refusals
+and removed files and a swapped folder, and that the refusal latches (an added file removed
+again, or the folder moved away and back, keeps both tools refusing until the pack is loaded
+again); plugin config for the three new keys, with refusals
 registering zero tools. The 0.3.0 snapshot test was changed: a disk edit now stops serving.
 
 The host smoke test gained four 0.4.0 cases through the real OpenClaw loader: a pinned,
