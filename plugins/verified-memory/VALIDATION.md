@@ -5,9 +5,9 @@ Version 0.4.0 is not published. These records are for this branch.
 | Where | Runtime | Result |
 |---|---|---|
 | macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `npm test` 88/88; `npm run plugin:build` regenerated `openclaw.plugin.json`; `plugin:validate` reports no errors |
-| GitHub Actions macos-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | __MAC_CI__ |
-| GitHub Actions windows-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | __WIN_CI__ |
-| GitHub Actions ubuntu-latest | Node 24 (`openclaw-plugin` job) | __UBU_CI__ |
+| GitHub Actions macos-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 11/11 (run 39053892404, commit 7d55f4d) |
+| GitHub Actions windows-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 11/11 (run 39053892404, commit 7d55f4d) |
+| GitHub Actions ubuntu-latest | Node 24 (`openclaw-plugin` job) | 88/88 (run 39053892404, commit 7d55f4d) |
 
 New tests (`test/trust.test.mjs`): fingerprint format and parsing; pins and a minimum
 sequence imply a signature, revocation alone does not; the round-4 break (attacker's key

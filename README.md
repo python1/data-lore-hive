@@ -112,6 +112,12 @@ and the plugin README's [one-click install section](plugins/verified-memory-mcp/
 claude mcp add verified-memory -- npx -y @python1/verified-memory-mcp --pack /absolute/path/to/pack
 ```
 
+For a **signed** pack, pin the signer: add `--trusted-fingerprint SHA256:…` (the fingerprint
+`sign-pack` prints), and optionally `--min-sequence N` to refuse older packs and
+`--revoked-keys FILE` for keys you no longer trust. These arrive in 0.4.0 (in this
+repository; not yet on npm or in a release). See the plugin README's
+[recommended setup](plugins/verified-memory-mcp/README.md#recommended-setup-pin-the-signer).
+
 Running through npx does not apply Node's permission mode. To run under the read-only filesystem allowlist, or to try the bundled fictional sample, build from this checkout instead:
 
 ```bash
@@ -129,7 +135,7 @@ claude mcp add verified-memory -- /absolute/path/to/node --experimental-permissi
 
 To make your own pack from a ChatGPT or Claude data export, use the **pack maker (beta)** at <https://python1.github.io/data-lore-hive/>. It runs entirely in your browser: your export is never uploaded, and the page cannot make network requests.
 
-To configure Claude Desktop by hand instead of using the add-on above, use the `mcpServers` example in the [plugin README](plugins/verified-memory-mcp/README.md#claude-desktop-configuration-example). With no `--pack`, the server serves the bundled fictional sample, so asking it to search for "pottery" should return record `M-sample-2` with its quote and source message ID. The checksum check proves the pack wasn't altered, not that its contents are true. See the plugin's README and [VALIDATION.md](plugins/verified-memory-mcp/VALIDATION.md) for its limits.
+To configure Claude Desktop by hand instead of using the add-on above, use the `mcpServers` example in the [plugin README](plugins/verified-memory-mcp/README.md#claude-desktop-configuration-example). With no `--pack`, the server serves the bundled fictional sample, so asking it to search for "pottery" should return record `M-sample-2` with its quote and source message ID. The checksum check proves the pack wasn't altered, not that its contents are true. Since 0.4.0 the server also stops answering if the pack folder changes while it runs. See the plugin's README and [VALIDATION.md](plugins/verified-memory-mcp/VALIDATION.md) for its limits.
 
 ## Measured results
 

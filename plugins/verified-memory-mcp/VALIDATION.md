@@ -7,14 +7,13 @@ Version 0.4.0 is not published. These records are for this branch.
 | macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `node scripts/test-all.mjs` | MCP 80 passed, 0 failed, 1 skipped; bundle 11/11 |
 | macOS ARM64 (local) | Node 25.8.0 | `npm test`, `npm run test:mcpb` | MCP 81/81 (includes the socket-denial probe); bundle 11/11 |
 | macOS ARM64 (local) | Node 25.8.0, Playwright 1.63.0 | `npm run test:e2e` in `web/` | 96/96 (Chromium, Firefox, WebKit; http and file) |
-| GitHub Actions macos-latest | Node 24 | `node scripts/test-all.mjs` | __MAC_CI__ |
-| GitHub Actions windows-latest | Node 24 | `node scripts/test-all.mjs` | __WIN_CI__ |
+| GitHub Actions macos-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 11/11 (run 39053892404, commit 7d55f4d) |
+| GitHub Actions windows-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 88/88; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 11/11 (run 39053892404, commit 7d55f4d) |
 
 The one skip under Node 24 is the existing socket-denial probe (no network permission
-scope in that runtime). On Windows, the sign-pack wrong-passphrase test is also skipped:
-in CI, Windows OpenSSH's `ssh-keygen` did not take the passphrase from `SSH_ASKPASS`, so on
-Windows the throwaway test keys have no passphrase. Passphrase entry remains covered on
-macOS and Linux.
+scope in that runtime). All sign-pack tests, including the passphrase-protected key and
+wrong-passphrase cases, ran and passed on Windows with Windows OpenSSH (it needs the
+runner's full environment and an `askpass.cmd`).
 
 New in 0.4.0 (`test/redteam.test.mjs`, against the real server process over stdio; R2
 under Node's read-only permission mode):
