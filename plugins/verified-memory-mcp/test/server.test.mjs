@@ -51,7 +51,7 @@ test('valid pack exposes exactly matching schemas, read-only hints and exact cit
   const client = await clientFor(t);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map(x => x.name), ['verified_memory_search', 'verified_memory_get']);
-  const publishedReadme = readFileSync('../verified-memory/README.md', 'utf8');
+  const publishedReadme = readFileSync('../verified-memory/README.md', 'utf8').replace(/\r\n/g, '\n');
   const publishedSchemas = ['verified_memory_search', 'verified_memory_get'].map(name => {
     const section = publishedReadme.split('`' + name + '` input:')[1];
     return JSON.parse(section.split('```json\n')[1].split('```')[0]);
