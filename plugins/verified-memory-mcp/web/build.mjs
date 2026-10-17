@@ -11,6 +11,8 @@ import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
+// Sources may be checked out with CRLF (core.autocrlf on Windows); the page is the same either way.
+const text = (file) => readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
 const IMPORT = /^import \{([^}]*)\} from '([^']+)';[ \t]*$/;
 const EXPORT_DECL = /^export (?:async )?(?:function\*? |const |let |class )([A-Za-z_$][\w$]*)/;
 const EXPORT_LIST = /^export \{([^}]*)\};?[ \t]*$/;
@@ -21,7 +23,7 @@ export function bundle(entry) {
   const visit = (file, chain) => {
     if (ids.has(file)) return ids.get(file);
     if (chain.includes(file)) throw new Error(`import cycle: ${[...chain, file].map((f) => relative(here, f)).join(' -> ')}`);
-    const lines = readFileSync(file, 'utf8').split('\n');
+    const lines = text(file).split('\n');
     const exported = [];
     const body = lines.map((line, i) => {
       const where = `${relative(here, file)}:${i + 1}`;
@@ -52,13 +54,13 @@ const cspHash = (text) => `'sha256-${createHash('sha256').update(text, 'utf8').d
 export function buildPage() {
   const app = bundle(resolve(here, 'src/app.mjs'));
   const worker = bundle(resolve(here, 'src/worker.mjs'));
-  const style = readFileSync(resolve(here, 'src/app.css'), 'utf8');
+  const style = text(resolve(here, 'src/app.css'));
   for (const [name, code] of [['app', app], ['worker', worker]]) {
     if (/<\/script|<!--/i.test(code)) throw new Error(`${name} bundle contains </script or <!--, which would break inlining`);
   }
   const csp = [`default-src 'none'`, `script-src ${cspHash(app)}`, `style-src ${cspHash(style)}`, `worker-src blob:`, `img-src data:`,
     `connect-src 'none'`, `form-action 'none'`, `base-uri 'none'`, `object-src 'none'`].join('; ');
-  const template = readFileSync(resolve(here, 'index.html'), 'utf8');
+  const template = text(resolve(here, 'index.html'));
   const fill = { __CSP__: csp, __STYLE__: style, __WORKER__: worker, __APP__: app };
   for (const key of Object.keys(fill)) if (template.split(key).length !== 2) throw new Error(`index.html must contain ${key} exactly once`);
   return template.replace(/__CSP__|__STYLE__|__WORKER__|__APP__/g, (k) => fill[k]);

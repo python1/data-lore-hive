@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { newKey, sshsig } from '../test/sshsig.mjs';
+import { fingerprint } from '../dist/verify.js';
 const pluginRoot=resolve('.');
 const root=mkdtempSync(join(tmpdir(),'verified-memory-host-'));
 const summaries=[];
@@ -16,17 +17,25 @@ const trustedKeys=[readFileSync(join(fixtureSig,'trusted_keys'),'utf8')];
 const dateKey=newKey(),dateTrust=[dateKey.line('fictional-publisher')];
 const iso=ms=>new Date(Math.floor(ms/1000)*1000).toISOString().replace('.000Z','Z');
 const DAY=86400000,now=Date.now();
-function dated(pack,created,expires){
- writeFileSync(join(pack,'PACK.json'),JSON.stringify({format:'verified-memory-pack',version:2,created_utc:iso(created),expires_utc:iso(expires)})+'\n');
+// v0.4 cases: the pinned key is dateKey; the attacker's key is listed in trustedKeys and re-signs.
+const attackerKey=newKey(),pin=fingerprint(dateKey.raw,b=>createHash('sha256').update(b).digest('hex'));
+function dated(pack,created,expires,{key=dateKey,sequence}={}){
+ writeFileSync(join(pack,'PACK.json'),JSON.stringify({format:'verified-memory-pack',version:2,created_utc:iso(created),expires_utc:iso(expires),sequence})+'\n');
  writeFileSync(join(pack,'SHA256SUMS'),['MEMORY.md','PACK.json','README.md','records.jsonl'].map(n=>createHash('sha256').update(readFileSync(join(pack,n))).digest('hex')+'  '+n+'\n').join(''));
- writeFileSync(join(pack,'SHA256SUMS.sig'),sshsig(dateKey,readFileSync(join(pack,'SHA256SUMS'))));
+ writeFileSync(join(pack,'SHA256SUMS.sig'),sshsig(key,readFileSync(join(pack,'SHA256SUMS'))));
 }
-const LOADS=['valid','pipeline','signed-trusted','signed-undated-required','dated-fresh-strict','dated-expired','dated-expired-required'];
+const V04={
+ 'pinned-strict':{sign:{sequence:5},config:{trustedFingerprints:[pin],minSequence:5,strict:true}},
+ 'pinned-attacker-resigned':{sign:{key:attackerKey,sequence:6},config:{trustedKeys:[attackerKey.line('fictional-publisher')],trustedFingerprints:[pin],strict:true}},
+ 'pinned-revoked':{sign:{sequence:5},config:{trustedFingerprints:[pin],revokedKeys:[pin]}},
+ 'pinned-below-min-sequence':{sign:{sequence:3},config:{trustedFingerprints:[pin],minSequence:5}}
+};
+const LOADS=['valid','pipeline','signed-trusted','signed-undated-required','dated-fresh-strict','dated-expired','dated-expired-required','pinned-strict'];
 try {
- for(const name of ['valid','pipeline','missing','tampered','malformed','signed-trusted','unsigned-strict','unsigned-required','signed-undated-strict','signed-undated-required','signed-invalid','dated-fresh-strict','dated-expired','dated-expired-required','dated-expired-strict']) {
+ for(const name of ['valid','pipeline','missing','tampered','malformed','signed-trusted','unsigned-strict','unsigned-required','signed-undated-strict','signed-undated-required','signed-invalid','dated-fresh-strict','dated-expired','dated-expired-required','dated-expired-strict',...Object.keys(V04)]) {
   const dir=join(root,name);mkdirSync(dir);const pack=join(dir,'pack');
   if(name==='pipeline') {
-   const exporter=spawnSync('python3',[join(pluginRoot,'scripts/export-fictional-pipeline.py'),pack],{encoding:'utf8'});
+   const exporter=spawnSync(process.platform==='win32'?'python':'python3',[join(pluginRoot,'scripts/export-fictional-pipeline.py'),pack],{encoding:'utf8'});
    assert.equal(exporter.status,0,exporter.stderr);
   } else if(name!=='missing') cpSync(join(pluginRoot,'sample-pack'),pack,{recursive:true});
   if(name==='tampered')writeFileSync(join(pack,'records.jsonl'),'tampered');
@@ -34,7 +43,8 @@ try {
   if(name==='signed-invalid')writeFileSync(join(pack,'SHA256SUMS.sig'),readFileSync(join(pack,'SHA256SUMS.sig'),'utf8').replace('-----END','x\n-----END'));
   if(name.startsWith('dated-'))dated(pack,name.includes('expired')?now-60*DAY:now-DAY,name.includes('expired')?now-DAY:now+30*DAY);
   const mode=name.endsWith('-strict')?{strict:true}:name.endsWith('-required')?{requireSignature:true}:{};
-  const signing=name.startsWith('dated-')?{trustedKeys:dateTrust,...mode}:name.startsWith('signed-')||name.startsWith('unsigned-')?{trustedKeys,...mode}:{};
+  if(V04[name])dated(pack,now-DAY,now+30*DAY,V04[name].sign);
+  const signing=V04[name]?V04[name].config:name.startsWith('dated-')?{trustedKeys:dateTrust,...mode}:name.startsWith('signed-')||name.startsWith('unsigned-')?{trustedKeys,...mode}:{};
   if(name==='malformed') {
    writeFileSync(join(pack,'records.jsonl'),'{broken json\n');
    writeFileSync(join(pack,'SHA256SUMS'),['MEMORY.md','README.md','records.jsonl'].map(n=>createHash('sha256').update(readFileSync(join(pack,n))).digest('hex')+'  '+n+'\n').join(''));

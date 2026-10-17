@@ -117,5 +117,5 @@ label { display: block; }
 }
 
 #check-status { overflow-wrap: anywhere; }
-#check-keys { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; }
+#check-keys, #check-pins, #check-revoked { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; }
 #check-chosen { display: block; margin: .25rem 0 .5rem; overflow-wrap: anywhere; }

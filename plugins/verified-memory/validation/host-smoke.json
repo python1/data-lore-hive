@@ -1,5 +1,5 @@
 {
-  "node": "v26.1.0",
+  "node": "v26.12.0",
   "openclaw": "2026.9.9",
   "cases": [
     {
@@ -123,6 +123,37 @@
     },
     {
       "case": "dated-expired-strict",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "pinned-strict",
+      "status": "loaded",
+      "tools": [
+        "verified_memory_search",
+        "verified_memory_get"
+      ],
+      "expected": "loaded",
+      "passed": true
+    },
+    {
+      "case": "pinned-attacker-resigned",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "pinned-revoked",
+      "status": "error",
+      "tools": [],
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "pinned-below-min-sequence",
       "status": "error",
       "tools": [],
       "expected": "refused",

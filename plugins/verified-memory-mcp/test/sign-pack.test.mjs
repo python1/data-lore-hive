@@ -23,14 +23,17 @@ function setup(t, { type = 'ed25519', passphrase = PASSPHRASE } = {}) {
   cpSync(sample, pack, { recursive: true }); mkdirSync(keys); mkdirSync(work);
   const key = join(keys, 'pack_signing');
   assert.equal(spawnSync('ssh-keygen', ['-q', '-t', type, '-N', passphrase, '-C', 'fictional-signing-key', '-f', key]).status, 0);
-  const askpass = join(root, 'askpass.sh');
-  writeFileSync(askpass, `#!/bin/sh\necho '${PASSPHRASE}'\n`); chmodSync(askpass, 0o700);
+  // Windows OpenSSH runs SSH_ASKPASS directly, so it gets a batch file there.
+  const askpass = join(root, process.platform === 'win32' ? 'askpass.cmd' : 'askpass.sh');
+  writeFileSync(askpass, process.platform === 'win32' ? `@echo ${PASSPHRASE}\r\n` : `#!/bin/sh\necho '${PASSPHRASE}'\n`); chmodSync(askpass, 0o700);
   return { root, pack, keys, work, key, askpass };
 }
 function sign(env, args, nodeArgs = []) {
   return spawnSync(process.execPath, [...nodeArgs, script, ...args], {
     encoding: 'utf8', timeout: 30000, stdio: ['ignore', 'pipe', 'pipe'],
-    env: { PATH: process.env.PATH, HOME: env.root, SSH_ASKPASS: env.askpass, SSH_ASKPASS_REQUIRE: 'force', DISPLAY: ':0' }
+    // Windows OpenSSH's ssh-keygen exits 255 without a message in a minimal environment, so
+    // there it keeps the runner's environment.
+    env: { ...(process.platform === 'win32' ? process.env : { PATH: process.env.PATH, HOME: env.root }), SSH_ASKPASS: env.askpass, SSH_ASKPASS_REQUIRE: 'force', DISPLAY: ':0' }
   });
 }
 const pubLine = (key, name = 'publisher') => `${name} ${readFileSync(key + '.pub', 'utf8').split(' ').slice(0, 2).join(' ')}`;
@@ -58,7 +61,7 @@ test('signs with a passphrase-protected key without ever being able to read it; 
   const v = loadPack(out, { trustedKeys: [pubLine(env.key)], strict: true }).verification;
   assert.equal(v.signature.status, 'verified'); assert.equal(v.freshness.status, 'fresh'); assert.equal(v.freshness.authenticated, true);
   assert.match(p.stdout, new RegExp(`^signed 8 records into ${out.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\nkey ${v.signature.fingerprint.replace(/[+/]/g, '\\$&')}; created \\S+Z; expires \\S+Z\\n`));
-  assert.ok(p.stdout.endsWith(`\nsigner ${pubLine(env.key).split(' ').slice(1).join(' ')}\n`), p.stdout);
+  assert.ok(p.stdout.endsWith(`\npin this signer on hosts (recommended):\n--trusted-fingerprint ${v.signature.fingerprint}\ntrusted keys line for hosts (rename "signer" as you like):\nsigner ${pubLine(env.key).split(' ').slice(1).join(' ')}\n`), p.stdout);
   for (const f of readdirSync(out)) assert.doesNotMatch(readFileSync(join(out, f), 'latin1'), /PRIVATE KEY/, f);
 
   // OpenSSH agrees with the hosts.
@@ -72,6 +75,28 @@ test('signs with a passphrase-protected key without ever being able to read it; 
     input: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'fictional-test', version: '1' } } }) + '\n',
     encoding: 'utf8', timeout: 5000 });
   assert.equal(server.stderr, ''); assert.equal(JSON.parse(server.stdout.split('\n')[0]).result.serverInfo.name, 'verified-memory-mcp');
+});
+
+test('--sequence: signed into PACK.json; the server pins the printed fingerprint and gates on the sequence', { skip }, (t) => {
+  const env = setup(t), out = join(env.work, 'signed');
+  const p = sign(env, ['--pack', env.pack, '--key', env.key, '--expires', '30d', '--sequence', '7', '--out', out]);
+  assert.equal(p.status, 0, p.stderr);
+  const dates = JSON.parse(readFileSync(join(out, 'PACK.json'), 'utf8'));
+  assert.deepEqual(Object.keys(dates), ['format', 'version', 'created_utc', 'expires_utc', 'sequence']); assert.equal(dates.sequence, 7);
+  const fp = /^--trusted-fingerprint (SHA256:\S+)$/m.exec(p.stdout)[1];
+  assert.match(p.stdout, new RegExp(`^key ${fp.replace(/[+/]/g, '\\$&')}; created \\S+Z; expires \\S+Z; sequence 7$`, 'm'));
+  const start = (args) => spawnSync(process.execPath, ['dist/index.js', '--pack', out, ...args], {
+    input: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'fictional-test', version: '1' } } }) + '\n',
+    encoding: 'utf8', timeout: 5000 });
+  const ok = start(['--trusted-fingerprint', fp, '--min-sequence', '7', '--strict']);
+  assert.equal(ok.stderr, ''); assert.equal(JSON.parse(ok.stdout.split('\n')[0]).result.serverInfo.name, 'verified-memory-mcp');
+  const newer = start(['--trusted-fingerprint', fp, '--min-sequence', '8']);
+  assert.equal(newer.status, 1); assert.match(newer.stderr, /pack sequence 7 is lower than the minimum 8/);
+  for (const bad of ['-1', '1.5', 'seven', '1e3']) {
+    const r = sign(env, ['--pack', env.pack, '--key', env.key, '--expires', '30d', '--sequence', bad, '--out', join(env.work, 'bad')]);
+    assert.equal(r.status, 1, bad); assert.match(r.stderr, /--sequence must be a whole number, 0 or more|Usage: /);
+    assert.ok(!existsSync(join(env.work, 'bad')));
+  }
 });
 
 test('re-signing a signed, dated pack replaces its dates and signature', { skip }, (t) => {
@@ -121,6 +146,6 @@ test('refuses bad input before signing, writing nothing', { skip }, (t) => {
 test('sign-pack is not in the npm package and is not an installed command', () => {
   const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
   assert.ok(!Object.values(pkg.bin).some((p) => p.includes('sign')));
-  const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8' }).stdout)[0].files.map((f) => f.path);
+  const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8', shell: process.platform === 'win32' }).stdout)[0].files.map((f) => f.path);
   assert.ok(files.includes('tools/build-pack.mjs') && !files.some((f) => /sign/.test(f)), files.join(', '));
 });

@@ -103,9 +103,10 @@
         </details>
         <details class="help">
           <summary>Sign it (optional)</summary>
-          <p>A signature lets others check that a pack came from your key, and an expiry date tells them when to stop trusting it as current. Unzip the pack, then, in <code>plugins/verified-memory-mcp</code> of a checkout of this project on your computer, sign it with your own ssh key (ssh-keygen asks for its passphrase):</p>
+          <p>A signature lets others check that a pack came from your key, an expiry date tells them when to stop trusting it as current, and a sequence number, raised with every pack you publish, lets them refuse an older one. Unzip the pack, then, in <code>plugins/verified-memory-mcp</code> of a checkout of this project on your computer, sign it with your own ssh key (ssh-keygen asks for its passphrase):</p>
           <pre id="sign-command"></pre>
-          <p class="muted small">Plain <code>ssh-keygen -Y sign -n verified-memory-pack-v1</code> on SHA256SUMS also works, but then the pack has no expiry date, and hosts in strict mode refuse it.</p>
+          <p class="muted small">sign-pack prints your key's fingerprint. Give it to whoever uses the pack: pinning it (<code>--trusted-fingerprint</code>) is the recommended setup, because then a swapped trusted-keys file cannot vouch for someone else's pack.</p>
+          <p class="muted small">Plain <code>ssh-keygen -Y sign -n verified-memory-pack-v1</code> on SHA256SUMS also works, but then the pack has no expiry date or sequence, and hosts in strict mode or with a minimum sequence refuse it.</p>
           <p class="muted small">This page never asks for a private key, and has nowhere to keep one. A signature proves who signed the files, not that what they say is true.</p>
         </details>
         <div class="row drafts">
@@ -124,6 +125,12 @@
     <span id="check-chosen" class="muted small"></span>
     <label for="check-keys">Public keys you trust <span class="muted">(optional; one per line, <code>name ssh-ed25519 AAAA…</code>)</span></label>
     <textarea id="check-keys" rows="3" spellcheck="false" autocomplete="off"></textarea>
+    <label for="check-pins">Pinned signer fingerprints <span class="muted">(recommended for signed packs; one per line, <code>SHA256:…</code> as sign-pack or <code>ssh-keygen -l</code> prints it. If set, only these keys are accepted, whatever the list above says)</span></label>
+    <textarea id="check-pins" rows="2" spellcheck="false" autocomplete="off"></textarea>
+    <label for="check-revoked">Revoked key fingerprints <span class="muted">(optional; one per line; a pack signed by one is always refused)</span></label>
+    <textarea id="check-revoked" rows="2" spellcheck="false" autocomplete="off"></textarea>
+    <label for="check-min-sequence">Minimum sequence <span class="muted">(optional; refuse a pack whose signed sequence is missing or lower, so an older pack cannot pass for a newer one)</span></label>
+    <input id="check-min-sequence" type="text" inputmode="numeric" spellcheck="false" autocomplete="off">
     <label><input type="checkbox" id="check-require"> Strict: require a signature from one of these keys, and an unexpired pack</label>
     <div class="row"><button type="button" id="check-run" disabled>Check</button></div>
     <p id="check-status" class="status" role="status" aria-live="polite"></p>

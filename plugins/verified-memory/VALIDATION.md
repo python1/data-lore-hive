@@ -1,4 +1,39 @@
-# Validation — 2026-10-13 (v0.3.0: signed and dated packs)
+# Validation — 2026-10-17 (v0.4.0: pinned signer, revocation, rollback gate, stop on change)
+
+Version 0.4.0 is not published. These records are for this branch.
+
+| Where | Runtime | Result |
+|---|---|---|
+| macOS ARM64 (local) | Node 24.22.0, official nodejs.org build, SHA-256 checked | `npm test` 90/90 ([tests-node24.txt](validation/tests-node24.txt)); `npm run plugin:build` regenerated `openclaw.plugin.json` |
+| macOS ARM64 (local) | Node 26.12.0, official build, SHA-256 checked | `npm test` 90/90 ([tests-node26.txt](validation/tests-node26.txt)); `plugin:validate` no errors ([authoring.json](validation/authoring.json)); `plugin:check` up to date; `test:host` 19/19 through the real OpenClaw CLI loader ([host-smoke.json](validation/host-smoke.json)); `test:conversation` passed with local `qwen3.5:4b`, exact quote preserved ([conversation.json](validation/conversation.json)) |
+| macOS ARM64 (local) | Python 3.14.7 | Upstream `agent-memory` pipeline suite 36/36 ([pipeline-tests.txt](validation/pipeline-tests.txt)) |
+| GitHub Actions macos-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | OpenClaw 90/90; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 13/13 (run 39065066467, commit ec4bb5b) |
+| GitHub Actions windows-latest | Node 24, via `scripts/test-all.mjs` in the MCP package | OpenClaw 90/90; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 13/13 (run 39065066467, commit ec4bb5b) |
+| GitHub Actions ubuntu-latest | Node 24 (`openclaw-plugin` job) | 90/90 (run 39065066467, commit ec4bb5b) |
+
+New tests (`test/trust.test.mjs`): fingerprint format and parsing; pins and a minimum
+sequence imply a signature, revocation alone does not; the round-4 break (attacker's key
+in `trustedKeys`, poisoned pack re-signed) accepted without a pin and refused with one;
+revoked signers refused in every mode, naming the fingerprint, including when pinned;
+revoked keys file reading; sequence gate (equal accepted, lower, missing, unsigned and
+forged refused); malformed `sequence`; precedence with exactly one error per refusal;
+stop-on-change for appends, same-size edits with mtime restored, rename-replacement, added
+and removed files and a swapped folder, and that the refusal latches (an added file removed
+again, or the folder moved away and back, keeps both tools refusing until the pack is loaded
+again); plugin config for the three new keys, with refusals
+registering zero tools. The 0.3.0 snapshot test was changed: a disk edit now stops serving.
+
+The host smoke test gained four 0.4.0 cases through the real OpenClaw loader: a pinned,
+sequenced pack under `strict` loads; the attacker's re-signed pack (attacker key in
+`trustedKeys`, pin set) is refused; a pinned but revoked signer is refused; a pack below
+`minSequence` is refused. Refusals register zero tools.
+
+Every file in `validation/` was regenerated for 0.4.0 on 2026-10-17. The v0.3.0 sections
+below are kept for history; their counts and tables refer to v0.3.0.
+
+The v0.3.0 records below are kept unchanged.
+
+## Validation — 2026-10-13 (v0.3.0: signed and dated packs)
 
 ## Environment and scope
 
@@ -96,7 +131,7 @@ each in separate temporary HOME/state/configuration:
 | Signed, expired `PACK.json`, `requireSignature: true` | loaded | Both prefixed tools | Pass (reported stale) |
 | Signed, expired `PACK.json`, `strict: true` | error | None | Expected refusal |
 
-Sanitized evidence: [validation/host-smoke.json](validation/host-smoke.json).
+Sanitized evidence: [validation/host-smoke.json](validation/host-smoke.json) (now the 0.4.0 rerun on Node 26.12.0, a superset of these cases).
 Reproduce with `npm run test:host` on a supported Node runtime. This invokes a
 local CLI loader; it never starts a Gateway or installs into a real agent.
 
@@ -116,7 +151,7 @@ manifest and align package metadata. `npm run plugin:validate` passes:
 {"valid": true, "pluginId": "verified-memory", "errors": []}
 ```
 
-Evidence: [validation/authoring.json](validation/authoring.json).
+Evidence: [validation/authoring.json](validation/authoring.json) (0.4.0 rerun).
 `npm run plugin:check` also passes with `Plugin metadata is up to date.`
 The authoring wrapper supplies empty, disposable HOME/state/configuration.
 See [OpenClaw authoring docs](https://docs.openclaw.ai/cli/plugins/authoring).
@@ -133,7 +168,7 @@ A child-only preload supplied a fictional hostname and empty network-interface
 metadata. No real agent or remote Ollama endpoint was involved.
 
 Condensed actual transcript (full tool responses and calls are preserved in
-[validation/conversation.json](validation/conversation.json)):
+[validation/conversation.json](validation/conversation.json), which now holds the 0.4.0 rerun):
 
 ```text
 User: Use verified_memory_search to look up pottery, then verified_memory_get

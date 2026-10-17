@@ -12,6 +12,7 @@ import { createServer, notice } from '../dist/server.js';
 import { loadPack } from '../dist/pack.js';
 import { newKey, armor, sshsig } from '../../verified-memory/test/sshsig.mjs';
 const sample = resolve('sample-pack');
+const { version } = JSON.parse(readFileSync('package.json', 'utf8'));
 const permissionFlag = process.allowedNodeEnvironmentFlags.has('--permission') ? '--permission' : '--experimental-permission';
 const networkPermissions = process.allowedNodeEnvironmentFlags.has('--allow-net');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -50,7 +51,7 @@ test('valid pack exposes exactly matching schemas, read-only hints and exact cit
   const client = await clientFor(t);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map(x => x.name), ['verified_memory_search', 'verified_memory_get']);
-  const publishedReadme = readFileSync('../verified-memory/README.md', 'utf8');
+  const publishedReadme = readFileSync('../verified-memory/README.md', 'utf8').replace(/\r\n/g, '\n');
   const publishedSchemas = ['verified_memory_search', 'verified_memory_get'].map(name => {
     const section = publishedReadme.split('`' + name + '` input:')[1];
     return JSON.parse(section.split('```json\n')[1].split('```')[0]);
@@ -119,13 +120,17 @@ test('missing, extra, symlink entries and symlink root rejected', t => {
   writeFileSync(join(dir, '..', 'outside'), bytes); symlinkSync(join(dir, '..', 'outside'), join(dir, 'README.md')); refuse(dir);
   const link = join(dir, '..', 'link'); symlinkSync(dir, link); refuse(link);
 });
-test('verified snapshot survives disk edits and returned-object mutation', async t => {
+test('verified snapshot survives returned-object mutation; a disk edit stops serving (v0.4)', async t => {
   const dir = fixture(t), client = await clientFor(t, dir);
   const result = (await call(client, 'verified_memory_get', { id: 'M-sample-2' })).structuredContent;
   result.record.statement = 'changed'; result.record.evidence[0].quote = 'changed';
-  writeFileSync(join(dir, 'records.jsonl'), 'tampered');
   assert.match((await call(client, 'verified_memory_get', { id: 'M-sample-2' })).structuredContent.record.statement, /pottery/);
   assert.match((await call(client, 'verified_memory_search', { query: 'pottery' })).structuredContent.matches[0].citations[0].quote, /pottery/);
+  writeFileSync(join(dir, 'records.jsonl'), 'tampered');
+  for (const [name, args] of [['verified_memory_get', { id: 'M-sample-2' }], ['verified_memory_search', { query: 'pottery' }]]) {
+    const r = await call(client, name, args);
+    assert.equal(r.isError, true); assert.match(r.content[0].text, /^verified-memory: pack files changed on disk since startup/);
+  }
   refuse(dir, /checksum mismatch/);
 });
 test('actual stdio protocol works under Node permissions denying writes, subprocesses and workers', { timeout: 10000 }, async t => {
@@ -270,7 +275,7 @@ test('valid signature by an unlisted key starts and reports untrusted', async t 
   const dir = signedCopy(t);
   const p = startup(['--pack', dir]);
   const line = p.stdout.split('\n').find(Boolean);
-  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.3.0');
+  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, version);
   const { verification } = (await call(await clientFor(t, dir), 'verified_memory_get', { id: 'M-sample-2' })).structuredContent;
   assert.equal(verification.signature.status, 'untrusted'); assert.equal(verification.signature.signer, undefined);
 });
@@ -297,22 +302,44 @@ for (const [name, setup, pattern] of [
 });
 test('signature CLI flags: duplicates, missing values and bad switch values refuse', () => {
   for (const args of [['--trusted-keys'], ['--trusted-keys', '--strict'], ['--strict', '--strict'], ['--require-signature', '--require-signature=true'], ['--strict=yes'], ['--require-signature=yes'],
-    ['--pack', sample, '--pack', sample], ['--trusted-keys', trustFile, '--trusted-keys=' + trustFile], ['--strict', 'maybe'], ['--pack=']]) {
+    ['--pack', sample, '--pack', sample], ['--trusted-keys', trustFile, '--trusted-keys=' + trustFile], ['--strict', 'maybe'], ['--pack='],
+    ['--trusted-fingerprint'], ['--trusted-fingerprint', '--strict'], ['--revoked-keys'], ['--revoked-keys', trustFile, '--revoked-keys', trustFile], ['--min-sequence'], ['--min-sequence', '1', '--min-sequence=2']]) {
     const p = spawnSync(process.execPath, ['dist/index.js', ...args], { encoding: 'utf8', timeout: 5000 });
     assert.equal(p.status, 1, args.join(' ')); assert.equal(p.stdout, ''); assert.match(p.stderr, /Usage: .*--trusted-keys .*\[--require-signature\] \[--strict\]$/m);
   }
 });
+test('new trust flags: malformed values refuse with a specific error and no stdout', t => {
+  const dir = signedCopy(t), fp = 'SHA256:QdQEQAWD+03v/nksLJaA+zSSRPOSa/V/eODKuTXBY94';
+  for (const [args, message] of [
+    [['--min-sequence', 'five'], /--min-sequence must be a whole number, 0 or more/],
+    [['--min-sequence=-1'], /--min-sequence must be a whole number, 0 or more/],
+    [['--min-sequence', '1.5'], /--min-sequence must be a whole number, 0 or more/],
+    [['--trusted-fingerprint', 'SHA256:short'], /invalid pinned signer fingerprint; expected SHA256: and 43 base64 characters/],
+    [['--trusted-fingerprint', fp + ',MD5:00'], /invalid pinned signer fingerprint/],
+    [['--revoked-keys', trustFile], /invalid revoked key fingerprint/],
+    [['--revoked-keys', 'revoked_keys'], /revoked keys path must be absolute/],
+    [['--revoked-keys', join(tmpdir(), 'fictional-missing-revoked')], /cannot read revoked keys file/]
+  ]) {
+    const p = startup(['--pack', dir, ...args]);
+    assert.equal(p.status, 1, args.join(' ')); assert.equal(p.stdout, ''); assert.match(p.stderr, message);
+  }
+  // Repeated flags and comma- or space-separated values all add pins; the fixture's key is one of them.
+  for (const pins of [['--trusted-fingerprint', 'SHA256:' + 'A'.repeat(43), '--trusted-fingerprint', fp], [`--trusted-fingerprint=SHA256:${'A'.repeat(43)}, ${fp}`]]) {
+    const p = startup(['--pack', dir, ...pins]);
+    assert.ok(p.stdout.split('\n').find(Boolean), p.stderr);
+  }
+});
 test('empty --trusted-keys= (a blank Claude Desktop setting) means no trusted keys', t => {
   const dir = signedCopy(t);
-  const p = startup(['--pack', dir, '--trusted-keys=', '--require-signature=false']);
+  const p = startup(['--pack', dir, '--trusted-keys=', '--trusted-fingerprint=', '--revoked-keys=', '--min-sequence=', '--require-signature=false']);
   const line = p.stdout.split('\n').find(Boolean);
-  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, '0.3.0');
+  assert.ok(line, p.stderr); assert.equal(JSON.parse(line).result.serverInfo.version, version);
   const required = startup(['--pack', dir, '--trusted-keys=', '--require-signature=true']);
   assert.equal(required.status, 1); assert.match(required.stderr, /at least one trusted key/);
 });
 test('npm package ships the funding link and no keys, signatures or test fixtures', () => {
   assert.equal(JSON.parse(readFileSync('package.json')).funding, 'https://buymeacoffee.com/python1');
-  const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8' }).stdout)[0].files.map(f => f.path);
+  const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8', shell: process.platform === 'win32' }).stdout)[0].files.map(f => f.path);
   assert.ok(files.includes('dist/verify.js') && !files.some(f => /\.sig$|trusted_keys|(^|\/)id_|\.key$|^test\//.test(f)), files.join(', '));
   for (const f of files) assert.doesNotMatch(readFileSync(f, 'latin1'), /PRIVATE KEY-----/, f);
 });

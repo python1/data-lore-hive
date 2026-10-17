@@ -2,9 +2,9 @@
   "manifest_version": "0.4",
   "name": "verified-memory",
   "display_name": "Verified Memory",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Offline read-only search over a checksum-verified, optionally signed memory pack, with exact quotes",
-  "long_description": "Pick a memory pack folder (made with the pack maker at https://python1.github.io/data-lore-hive/) and Claude can search it and quote it exactly. The whole pack is verified when the extension starts; if any check fails, it refuses to start. Read-only and offline: no network, no file writes, no accounts. Optionally require that the pack is signed by a key you trust.",
+  "long_description": "Pick a memory pack folder (made with the pack maker at https://python1.github.io/data-lore-hive/) and Claude can search it and quote it exactly. The whole pack is verified when the extension starts; if any check fails, it refuses to start. Read-only and offline: no network, no file writes, no accounts. Optionally require that the pack is signed by a key you pin or trust, refuse revoked keys and older packs, and stop answering if the pack folder changes while running.",
   "author": { "name": "python1", "url": "https://github.com/python1" },
   "repository": { "type": "git", "url": "https://github.com/python1/data-lore-hive" },
   "homepage": "https://github.com/python1/data-lore-hive/tree/master/plugins/verified-memory-mcp",
@@ -21,7 +21,11 @@
         "${__dirname}/dist/index.js",
         "--pack=${user_config.pack_dir}",
         "--trusted-keys=${user_config.trusted_keys}",
-        "--require-signature=${user_config.require_signature}"
+        "--trusted-fingerprint=${user_config.trusted_fingerprint}",
+        "--revoked-keys=${user_config.revoked_keys}",
+        "--min-sequence=${user_config.min_sequence}",
+        "--require-signature=${user_config.require_signature}",
+        "--strict=${user_config.strict}"
       ],
       "env": {}
     }
@@ -44,10 +48,38 @@
       "required": false,
       "default": ""
     },
+    "trusted_fingerprint": {
+      "type": "string",
+      "title": "Pinned signer fingerprint (recommended for signed packs)",
+      "description": "The SHA256:… fingerprint of the key that signs your packs, as sign-pack or ssh-keygen -l prints it; separate several with commas. If set, only a pack signed by this key starts, whatever the trusted keys file says. Leave empty for unsigned packs.",
+      "required": false,
+      "default": ""
+    },
+    "revoked_keys": {
+      "type": "file",
+      "title": "Revoked keys file (optional)",
+      "description": "A file of key fingerprints you no longer trust, one SHA256:… per line. A pack signed by one of them never starts, even if pinned or trusted.",
+      "required": false,
+      "default": ""
+    },
+    "min_sequence": {
+      "type": "string",
+      "title": "Minimum pack sequence (optional)",
+      "description": "A whole number. Refuse to start on a pack whose signed sequence is missing or lower, so an older pack cannot be swapped in for a newer one. Raise it when you install a newer pack. Leave empty to turn off.",
+      "required": false,
+      "default": ""
+    },
     "require_signature": {
       "type": "boolean",
-      "title": "Require a trusted signature",
-      "description": "Refuse to start unless the pack is signed by a key in the trusted keys file.",
+      "title": "Require a pinned or trusted signature",
+      "description": "Refuse to start unless the pack is signed by a pinned or trusted key (the pinned signer fingerprint or the trusted keys file).",
+      "required": false,
+      "default": false
+    },
+    "strict": {
+      "type": "boolean",
+      "title": "Strict: require a pinned or trusted signature and an unexpired pack",
+      "description": "Refuse to start unless the pack is signed by a pinned or trusted key and carries an expiry date that has not passed; a running server stops answering once the pack expires.",
       "required": false,
       "default": false
     }

@@ -8,7 +8,9 @@ and in the MCP Registry as `io.github.python1/verified-memory`.
 
 Runtime is read-only and offline: no network transport, sockets, telemetry,
 embeddings, accounts, filesystem writes, subprocesses or shell execution. It reads
-one configured pack at startup and serves an isolated in-memory snapshot. Stdout
+one configured pack at startup and serves an isolated in-memory snapshot. On every
+request it checks, from file metadata only, that the pack folder is still the one it
+verified, and stops serving if it is not (no watchers, nothing re-read). Stdout
 is exclusively MCP protocol output; startup errors go to stderr and exit nonzero.
 Only these two tools are exposed; no resources, prompts, filesystem or command tools.
 
@@ -182,22 +184,28 @@ A pack can carry two optional extras:
   every other file. Only Ed25519 keys, the `sha512` hash and the namespace
   `verified-memory-pack-v1` are accepted, so a git or code-release signature cannot be
   reused as a pack signature.
-- `PACK.json` (since 0.3.0): when the pack was made and when it stops being current.
-  It is listed in `SHA256SUMS` like every other file, so the signature covers the dates.
+- `PACK.json` (since 0.3.0): when the pack was made and when it stops being current,
+  and (since 0.4.0) an optional `sequence` number. It is listed in `SHA256SUMS` like
+  every other file, so the signature covers the dates and the sequence.
 
 ```json
 {
   "format": "verified-memory-pack",
   "version": 2,
   "created_utc": "2026-10-12T18:00:00Z",
-  "expires_utc": "2027-01-10T18:00:00Z"
+  "expires_utc": "2027-01-10T18:00:00Z",
+  "sequence": 3
 }
 ```
 
-Exactly these four keys; dates are UTC ISO 8601 and `created_utc` is before
-`expires_utc`. A malformed `PACK.json` refuses to load. The pack maker and the builder
+Exactly these four keys plus the optional `sequence`; dates are UTC ISO 8601 and
+`created_utc` is before `expires_utc`. `version` is the format version and stays `2`;
+`sequence` is a whole number (0 or more) that the signer raises with every pack they
+publish, so hosts can refuse an older one (see [Rollback protection](#rollback-protection---min-sequence)).
+A malformed `PACK.json` refuses to load. The pack maker and the builder
 never write one, so their packs still load on 0.2.0 hosts; packs with a `PACK.json` need
-0.3.0 or later (older hosts refuse the extra file).
+0.3.0 or later (older hosts refuse the extra file), and packs with a `sequence` need
+0.4.0 or later (0.3.0 hosts refuse the extra key).
 
 ### Signing: `sign-pack`
 
@@ -211,19 +219,99 @@ verifier in strict mode, trusting only your `.pub`. It needs Node 22+ and OpenSS
 ```sh
 ssh-keygen -t ed25519 -f ~/.ssh/verified-memory-pack -C "my packs"   # once; set a passphrase
 cd plugins/verified-memory-mcp && npm ci && npm run build            # once per checkout
-node tools/sign-pack.mjs --pack /path/to/pack --key ~/.ssh/verified-memory-pack --expires 90d --out /path/to/pack-signed
+node tools/sign-pack.mjs --pack /path/to/pack --key ~/.ssh/verified-memory-pack --expires 90d --sequence 1 --out /path/to/pack-signed
 ```
 
 `--expires` is a number of days (`90d`, at most `1825d`) or an exact UTC time
-(`2027-01-31T00:00:00Z`). `--out` must not exist yet. On any failure (wrong passphrase,
-a pack that does not verify) nothing is written. Signing an already signed pack replaces
-its dates and signature. The script prints the key fingerprint and a trusted-keys line.
+(`2027-01-31T00:00:00Z`). `--sequence` (optional, since 0.4.0) is written into
+`PACK.json`; raise it every time you publish a new pack (1, 2, 3, …). `--out` must not
+exist yet. On any failure (wrong passphrase, a pack that does not verify) nothing is
+written. Signing an already signed pack replaces its dates, sequence and signature. The
+script prints the key fingerprint, the `--trusted-fingerprint` line to pin it on hosts,
+and a trusted-keys line.
 Keep the private key out of the pack, out of any repository and off shared machines.
 Share only the `.pub` file.
 
 Plain `ssh-keygen -Y sign -f KEY -n verified-memory-pack-v1 pack/SHA256SUMS` still makes
-a valid signature, but the pack then has no expiry date (`freshness: unknown`), and
-`--strict` refuses it.
+a valid signature, but the pack then has no expiry date (`freshness: unknown`) or
+sequence, and `--strict` and `--min-sequence` refuse it.
+
+### Recommended setup: pin the signer
+
+```sh
+verified-memory-mcp --pack /absolute/path/to/pack \
+  --trusted-fingerprint SHA256:…the-fingerprint-sign-pack-printed… \
+  --min-sequence 3 --strict
+```
+
+`--trusted-fingerprint` names the one key allowed to sign your packs, by the
+fingerprint `sign-pack` (or `ssh-keygen -l -f KEY.pub`) prints. Repeat the flag, or
+separate fingerprints with commas, to allow several. When any is set, a pack signed by
+any other key is refused, **even if that key is in `--trusted-keys`**; an unsigned pack is
+refused too (a pin implies `--require-signature`). `--trusted-keys` then only supplies
+your name for the pinned key; without it the signer is reported as `"pinned"`.
+
+Why: in red-team round 4, an attacker bot on a shared machine that could rewrite the
+trusted keys file listed its own key and re-signed a poisoned pack, and a host trusting
+that file served it as `verified`. A pin lives in the host's own configuration (the MCP
+client config or the Claude Desktop setting), not in a file next to the pack, so that
+attack is refused: `pack is signed by SHA256:…, which is not a pinned signer
+fingerprint`. Keep the host configuration writable only by you; nothing here can
+protect a host whose own configuration an attacker can edit.
+
+### Revoking a key: `--revoked-keys`
+
+`--revoked-keys /absolute/path/to/revoked_keys` lists fingerprints you no longer trust,
+one per line, as `ssh-keygen -l` prints them; `#` comments and a trailing comment after
+the fingerprint are allowed:
+
+```text
+# laptop lost 2026-10-15
+SHA256:…the-old-key-fingerprint… old laptop
+```
+
+A pack signed by a revoked key is always refused, even when the key is pinned or
+trusted, and even without any signature requirement: `pack is signed by SHA256:…, which
+is revoked`. Revocation does not by itself require a signature, so unsigned packs still
+load unless you also pin or require one. The file is read once at startup, like the
+trusted keys file; keep it where only you can write.
+
+### Rollback protection: `--min-sequence`
+
+`--min-sequence N` refuses any pack whose signed `PACK.json` `sequence` is missing or
+lower than `N`, so an older pack, however validly signed and unexpired, cannot be
+swapped in for the current one: `pack sequence 3 is lower than the minimum 5; refusing a
+possible rollback to an older pack`. **You set `N`**, and raise it when you install a
+newer pack; the server keeps no state file and never writes anything, so it cannot
+remember the highest sequence it has seen. A sequence counts only when a key you pinned
+or trusted signed it, so `--min-sequence` implies `--require-signature`.
+
+### Order of checks
+
+Every refusal gives one specific error, from the first check that fails:
+
+1. the pack's files, checksums and records (any edit fails here);
+2. the signature, if present, must be valid;
+3. **revoked** (refused whatever else is set), then **pinned** (with pins set, only a
+   pinned signer passes), then **trusted keys** (`verified`, `untrusted` or `unsigned`, and
+   `--require-signature` refuses all but `verified`);
+4. **sequence** against `--min-sequence`;
+5. **expiry** under `--strict` (also judged again on every request).
+
+### Stop on change
+
+The server reads and verifies the pack once, at startup. On every tool call it compares
+the pack folder's file list and each file's size, modification time, change time and
+identity (device and inode) with what it verified. If anything differs (an edit, an
+added or removed file, a file or the whole folder replaced), both tools return
+`isError` with `verified-memory: pack files changed on disk since startup, so the
+verified snapshot no longer matches them; restart to verify the pack again`, and no
+record data, until you restart. The refusal is latched in memory: removing the added
+file or putting the folder back does not resume serving; only a restart, which verifies
+the pack again, does. This is metadata only: no background watchers, no
+re-reads, no writes. Change time cannot be set back by a normal user, so restoring a
+file's modification time does not hide an edit; an administrator who can change the
+system clock or the filesystem itself is outside what this detects.
 
 ### Choosing whom to trust
 
@@ -245,7 +333,8 @@ verified-memory-mcp --pack /absolute/path/to/pack --trusted-keys /absolute/path/
 ```
 
 `--flag=value`, `--require-signature=true|false` and `--strict=true|false` forms are
-accepted too. `--require-signature` keeps its 0.2.0 meaning: a signature by a key you
+accepted too; an empty `--trusted-keys=`, `--trusted-fingerprint=`, `--revoked-keys=` or
+`--min-sequence=` means that setting is off. `--require-signature` keeps its 0.2.0 meaning: a signature by a key you
 listed is required, and freshness is reported but not enforced, so packs signed with
 plain `ssh-keygen` for 0.2.0 keep loading under it. `--strict` requires a trusted
 signature *and* a fresh `PACK.json` (it implies `--require-signature`).
@@ -266,10 +355,23 @@ Freshness is judged against this computer's clock on every call, not only at sta
 | `PACK.json`, expired | Starts; `stale`, plus a warning on stderr | Starts; `stale`, plus a warning | Refuses to start; a running server stops serving (tool error) once it expires |
 | `created_utc` more than 5 minutes in the future | Starts; `not_yet_valid`, plus a warning on stderr | Starts; `not_yet_valid`, plus a warning | Refuses to start |
 | `PACK.json` or its checksum tampered with | Refuses to start | Refuses to start | Refuses to start |
+| Pack folder changes while running | Tools return `isError` until restart | Same | Same |
+
+With the 0.4.0 options, in any of the modes above:
+
+| Pack | Result |
+|---|---|
+| Signed by a key in `--revoked-keys` | Refuses to start, naming the fingerprint, even if pinned or trusted |
+| `--trusted-fingerprint` set; signed by a pinned key | Starts; `verified`, `pinned: true`, `signer` from `--trusted-keys` or `"pinned"` |
+| `--trusted-fingerprint` set; signed by any other key, even one in `--trusted-keys` | Refuses to start |
+| `--trusted-fingerprint` or `--min-sequence` set; unsigned | Refuses to start |
+| `--min-sequence N`; signed `sequence` ≥ N | Starts; `freshness.sequence` reports it |
+| `--min-sequence N`; `sequence` lower than N, or missing | Refuses to start |
+| A `sequence` but no `--min-sequence` | Starts; `freshness.sequence` reported, nothing enforced |
 
 `freshness.authenticated` is `true` only when a key you listed signed the dates; dates in
 an unsigned or untrusted pack could have been written by anyone. `--require-signature`
-or `--strict` with no trusted key, or a trusted key line that is not a single-name `ssh-ed25519` entry,
+or `--strict` with no pinned fingerprint or trusted key, or a trusted key line that is not a single-name `ssh-ed25519` entry,
 refuses to start. The signer name always comes from your file, never from the pack, and
 fingerprints match `ssh-keygen -l`. Anyone can check a pack without this server:
 
@@ -280,9 +382,11 @@ ssh-keygen -Y verify -f trusted_keys -I alice -n verified-memory-pack-v1 -s SHA2
 **A signature proves who signed, not that the content is true.** It shows that the
 holder of that key signed these exact bytes. It does not show that the quotes are
 accurate or complete, or that the key's owner is who you think. "Fresh" means the signer
-set an expiry that has not passed, not that this is their latest pack: an older pack
-from the same key still loads until it expires, and there is no revocation. Freshness
-relies on this computer's clock. Version 0.1.0 refuses signed packs (five files);
+set an expiry that has not passed, not that this is their latest pack: without
+`--min-sequence`, an older pack from the same key still loads until it expires.
+Revocation and the minimum sequence are only as current as your configuration: with no
+network, a newly revoked key or a newer sequence reaches a host only when you edit its
+settings. Freshness relies on this computer's clock. Version 0.1.0 refuses signed packs (five files);
 remove `SHA256SUMS.sig` to load one there.
 
 ## Build and run
@@ -340,7 +444,17 @@ The settings form has these fields:
 |---|---|---|
 | Memory pack folder | yes | `--pack=<folder>` |
 | Trusted keys file | no (blank = none) | `--trusted-keys=<file>` |
-| Require a trusted signature | no (off) | `--require-signature=true\|false` |
+| Pinned signer fingerprint (recommended for signed packs) | no (blank = none) | `--trusted-fingerprint=<SHA256:…[,SHA256:…]>` |
+| Revoked keys file | no (blank = none) | `--revoked-keys=<file>` |
+| Minimum pack sequence | no (blank = off) | `--min-sequence=<N>` |
+| Require a pinned or trusted signature | no (off) | `--require-signature=true\|false` |
+| Strict: require a pinned or trusted signature and an unexpired pack | no (off) | `--strict=true\|false` |
+
+For a signed pack, paste the fingerprint `sign-pack` printed into *Pinned signer
+fingerprint*; you then need no trusted keys file. Raise *Minimum pack sequence* when you
+install a newer pack. Turn on *Strict* for packs signed with an expiry date (`sign-pack`
+always adds one). Every new setting defaults to off, so an add-on upgraded from 0.3.0
+behaves as before (apart from [stop on change](#stop-on-change)).
 
 Change these later in **Settings → Extensions → Verified Memory**. The bundle holds the
 same `dist/` as the npm package plus its production dependencies, and nothing else: no pack,
@@ -383,7 +497,11 @@ refuses to start without `--pack`. To use your own pack, append
 Choose a pack that the connecting client is permitted to read.
 Relative pack paths and unknown CLI flags are rejected. Tools cannot choose paths.
 There is no discovery of home directories, other agents, real memory or configuration.
-There are no watchers or reloads; restart to verify a different snapshot.
+There are no watchers or reloads: if the pack folder changes while the server runs, the
+tools stop answering with an error, even if the change is undone, until you restart to
+verify the new pack. Add
+`--trusted-fingerprint`, `--revoked-keys` (and its `--allow-fs-read`) and
+`--min-sequence` to `args` the same way.
 
 ## Tool contracts
 
@@ -434,13 +552,15 @@ Checks include exact file inventory, SHA-256 hashes over the bytes actually pars
 UTF-8, JSON, unique IDs, citation structure and offsets, date ranges, manifest
 syntax, symlink roots/entries and file-size/count limits. Limits remain 16 MiB per
 data file, 4 KiB manifest, 10,000 records. No permissive fallback. Later disk edits
-cannot change the verified in-memory snapshot; retrieval returns copies.
+cannot change the verified in-memory snapshot, and since 0.4.0 they stop it being served
+(see [Stop on change](#stop-on-change)); retrieval returns copies.
 
 Inherited filesystem checks are not a sandbox against an adversary able to race
 ancestor directories. Use a trusted, stable local directory and the Node read allowlist.
 
 **Integrity is not authenticity or truth.** Replacing both data and checksums can
-produce a passing pack, unless you use `--strict` with a key you trust. Runtime cannot recheck quotations against original messages.
+produce a passing pack, unless you pin the signer (`--trusted-fingerprint`) or list only keys
+whose trust file the attacker cannot write. Runtime cannot recheck quotations against original messages.
 Historical quotes are data, never instructions or permission; that notice accompanies
 every successful result. Host model behavior and automatic tool selection are not
 validated. Ask the host to quote tool text verbatim and cite record and message IDs.
@@ -458,13 +578,15 @@ plugins/verified-memory-mcp/
 ├── LICENSE
 ├── README.md
 ├── VALIDATION.md
+├── RELEASE-NOTES-0.4.0.md      # draft notes for the 0.4.0 release
 ├── package.json
 ├── package-lock.json
 ├── server.json             # MCP Registry metadata
 ├── tsconfig.json
 ├── scripts/
 │   ├── prepare.mjs
-│   └── build-mcpb.mjs          # builds the Claude Desktop bundle into build/
+│   ├── build-mcpb.mjs          # builds the Claude Desktop bundle into build/
+│   └── test-all.mjs            # every automated suite, as CI runs it on macOS and Windows
 ├── mcpb/manifest.json          # Claude Desktop bundle manifest (settings form, tools)
 ├── src/
 │   ├── index.ts
@@ -482,6 +604,7 @@ plugins/verified-memory-mcp/
 │   └── pack/                   # pack built from them
 ├── test/
 │   ├── server.test.mjs
+│   ├── redteam.test.mjs        # red-team rounds R1–R6, revocation, precedence
 │   ├── sign-pack.test.mjs
 │   ├── build-pack.test.mjs
 │   ├── pack-core.test.mjs

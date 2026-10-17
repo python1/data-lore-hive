@@ -47,14 +47,15 @@ site on that account. After a build, *Sign it (optional)* shows the `sign-pack` 
 to run from a checkout on your own computer, where the key stays; `sign-pack` adds the
 dates and runs `ssh-keygen -Y sign` (see the [MCP README](../README.md#signed-and-dated-packs)).
 
-*Check a signed pack* takes a pack and the public keys you trust, and gives the same
-verdict as the MCP server and the OpenClaw plugin, including freshness (by this
+*Check a signed pack* takes a pack and the public keys you trust (and, since 0.4.0,
+pinned signer fingerprints, revoked fingerprints and a minimum sequence), and gives the
+same verdict as the MCP server and the OpenClaw plugin, including freshness (by this
 computer's clock) and the *Strict* option. That's because it runs the same
 `verify.js`. That verifier is synchronous, while Web Crypto is not. So when the verifier
 needs a hash or signature check the page has not computed yet, the run stops, the page
 computes it, and the run starts again. No rule is reimplemented here, and a Node test
 checks that the page reaches the server's verdict on signed, unsigned, dated (fresh,
-expired, future) and broken packs.
+expired, future), sequenced, pinned, revoked and broken packs.
 A browser without Ed25519 in Web Crypto is told it cannot check signatures; it is never
 shown a pass. Current Chrome, Firefox and Safari all have Ed25519 (the browser tests
 cover all three engines).

@@ -67,6 +67,54 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with: { name: verified-memory-mcpb, path: plugins/verified-memory-mcp/build/*.mcpb, retention-days: 7, if-no-files-found: error }
 
+  # Every automated suite through the one script (scripts/test-all.mjs): the shared verifier and
+  # OpenClaw plugin, the MCP server with the red-team rounds R1–R6, sign-pack, the pack maker's
+  # unit tests and the Claude Desktop bundle. Node 24 meets both packages' engine ranges.
+  all-suites:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: { os: [macos-latest, windows-latest] }
+    defaults: { run: { working-directory: plugins/verified-memory-mcp } }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            plugins/verified-memory/package-lock.json
+            plugins/verified-memory-mcp/package-lock.json
+            plugins/verified-memory-mcp/web/package-lock.json
+      - run: npm ci --ignore-scripts --prefix ../verified-memory && npm ci && npm ci --prefix web
+      - run: node scripts/test-all.mjs
+
+  # The MCP package's stated minimum, engines.node >=22.0.0, on both desktop OSes: the server
+  # (with the red-team rounds), sign-pack, the pack maker's unit tests and the bundle.
+  mcp-node-minimum:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: { os: [macos-latest, windows-latest] }
+    defaults: { run: { working-directory: plugins/verified-memory-mcp } }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.0.0'
+          cache: npm
+          cache-dependency-path: |
+            plugins/verified-memory-mcp/package-lock.json
+            plugins/verified-memory-mcp/web/package-lock.json
+      # npm 10.5.1's npm.cmd (bundled with Node 22.0.0) follows the runner's global prefix,
+      # C:\npm\prefix, which has no npm in it; point the prefix at this Node install instead.
+      - if: runner.os == 'Windows'
+        run: node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'NPM_CONFIG_PREFIX=' + require('path').dirname(process.execPath) + '\n')"
+      - run: node --version && npm --version && npm ci && npm ci --prefix web
+      - run: npm test
+      - run: npm test --prefix web
+      - run: npm run test:mcpb
+
   pack-maker-browsers:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: plugins/verified-memory-mcp/web } }

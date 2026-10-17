@@ -1,4 +1,66 @@
-# Validation — 2026-10-13 (v0.3.0: signed and dated packs, Claude Desktop bundle)
+# Validation — 2026-10-17 (v0.4.0: pinned signer, revocation, rollback gate, stop on change)
+
+Version 0.4.0 is not published. These records are for this branch.
+
+| Where | Runtime | Command | Result |
+|---|---|---|---|
+| macOS ARM64 (local) | **Node 22.0.0 (minimum)**, npm 10.5.1, official nodejs.org build, SHA-256 checked | `npm test`, `npm test` in `web/`, `npm run test:mcpb` | MCP 80 passed, 1 skipped; web 35/35; bundle 13/13. Transcript: [tests-node22-min.txt](validation/tests-node22-min.txt) |
+| macOS ARM64 (local) | Node 22.23.3, official build, SHA-256 checked | `npm test` | 80 passed, 1 skipped. Transcript: [tests-node22-current.txt](validation/tests-node22-current.txt) |
+| macOS ARM64 (local) | Node 24.22.0, official build, SHA-256 checked | `node scripts/test-all.mjs` | MCP 80 passed, 1 skipped; bundle 13/13 |
+| macOS ARM64 (local) | Node 25.8.0 | `npm test`, `npm run test:mcpb` | MCP 81/81 (includes the socket-denial probe); bundle 13/13. Transcript: [tests.txt](validation/tests.txt) |
+| GitHub Actions macos-latest, windows-latest | Node 22.0.0 (`mcp-node-minimum` job) | `npm test`, `npm test` in `web/`, `npm run test:mcpb` | macOS: MCP 80 passed, 1 skipped; web 35/35; bundle 13/13. Windows: MCP 80 passed, 1 skipped; web 34 passed, 1 skipped (no system `zip`); bundle 13/13 (run 39065066467, commit ec4bb5b) |
+| macOS ARM64 (local) | Node 25.8.0, Playwright 1.63.0 | `npm run test:e2e` in `web/` | 96/96 (Chromium, Firefox, WebKit; http and file) |
+| GitHub Actions macos-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 90/90; MCP 80 passed, 1 skipped (socket probe); web 35/35; bundle 13/13 (run 39065066467, commit ec4bb5b) |
+| GitHub Actions windows-latest | Node 24 | `node scripts/test-all.mjs` | OpenClaw 90/90; MCP 80 passed, 1 skipped (socket probe); web 34 passed, 1 skipped (no system `zip` tool); bundle 13/13 (run 39065066467, commit ec4bb5b) |
+
+The one skip under Node 24 is the existing socket-denial probe (no network permission
+scope in that runtime). All sign-pack tests, including the passphrase-protected key and
+wrong-passphrase cases, ran and passed on Windows with Windows OpenSSH (it needs the
+runner's full environment and an `askpass.cmd`).
+
+New in 0.4.0 (`test/redteam.test.mjs`, against the real server process over stdio; R2
+under Node's read-only permission mode):
+
+| Round | Attack | Result |
+|---|---|---|
+| R1 | Poisoned `records.jsonl` with recomputed `SHA256SUMS` (signature kept, or removed) | Refused: `pack signature does not verify`, or unsigned with a signature required; unsealed edits fail the checksum |
+| R2 | Edit while running: poisoned file; same-size edit with mtime restored; whole pack re-signed by the attacker | Both tools return `isError` "pack files changed on disk since startup", no record data |
+| R3 | Trusted keys file swapped to the attacker's key, no re-sign | Refused with `--trusted-keys`; with a pin the genuine pack still starts, signer `pinned` |
+| R4 | Key swap + poisoned pack re-signed by the attacker (the round-4 break) | Reproduced as accepted with `--trusted-keys --strict` alone; refused by `--trusted-fingerprint` in every combination, naming the attacker's fingerprint |
+| R5 | Older, validly signed, unexpired pack (sequence 3) | Refused by `--min-sequence 5`; missing sequence refused; raised sequence breaks the signature |
+| R6 | Expired pack under `--strict` | Refused; without `--strict` starts with a warning |
+| Revoked | Signer in `--revoked-keys`, with or without trusted keys and signature requirement | Refused, naming the fingerprint |
+| Revoked + pinned | Same key pinned and revoked | Refused: revocation wins |
+| Precedence | Packs failing several gates at once | One error, from the first gate: revoked, pinned, trusted, sequence, expiry |
+| Compatibility | None of the new flags | 0.3.0 verification keys and decisions unchanged |
+
+Also new: CLI parsing of the new flags (repeated and comma-separated pins, blank
+Desktop values, malformed values), `sign-pack --sequence` (the printed fingerprint pins the
+signed pack; a higher `--min-sequence` refuses it), and the bundle's three new settings
+(pin, revoked keys file, minimum sequence) through `getMcpConfigForManifest`.
+
+Behaviour change without new flags: editing the pack folder while the server runs now
+stops serving (0.3.0 kept serving the old snapshot), and keeps refusing even after the
+change is undone, until a restart. R2 covers five changes (poisoned records, a same-size edit
+with mtime restored, an attacker re-sign, an added file, the folder moved away), each undone
+while the server runs: both tools still refuse, and a restarted server serves the restored
+pack. R6 retrieves a record (search and get) from the expired pack without `--strict`.
+
+Limits: change detection uses file metadata (listing, size, mtime, ctime, device and
+inode), not a re-hash; an administrator who can reset the clock or the filesystem can
+defeat it. Revocation and the minimum sequence are only as current as the host's
+configuration, and nothing protects a host whose own configuration an attacker can write.
+
+**Minimum Node stays 22.0.0**: the whole MCP package (server, red-team rounds, sign-pack,
+pack maker unit tests and bundle) passes on 22.0.0, so `engines.node` remains `>=22.0.0`.
+The Claude Desktop bundle gained an optional *Strict* setting (`--strict=true|false`, off
+by default); its tests cover strict refusing an undated pack and strict with no key, and
+a pinned, sequenced, fresh pack starting under strict with a minimum sequence.
+
+All three transcripts in `validation/` were regenerated for 0.4.0 on 2026-10-17. The
+v0.3.0 records below are kept for history; their counts refer to v0.3.0.
+
+## Validation — 2026-10-13 (v0.3.0: signed and dated packs, Claude Desktop bundle)
 
 Tested on macOS ARM64 with TypeScript 5.9.3, Node 22 type definitions, and
 official MCP TypeScript SDK 1.32.1. **Minimum supported Node: 22.0.0**;

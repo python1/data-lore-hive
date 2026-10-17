@@ -50,10 +50,13 @@ for(const mode of ['duplicate-id','broken-json','missing-citations','wrong-offse
  if(mode==='duplicate-id')rows.push(rows[0]);if(mode==='missing-citations')rows[0].evidence=[];if(mode==='wrong-offset')rows[0].evidence[0].end++;
  writeFileSync(file,mode==='broken-json'?'{':mode==='invalid-utf8'?Buffer.from([255]):rows.map(JSON.stringify).join('\n')+'\n');reseal(dir);assert.throws(()=>loadPack(dir));
 });
-test('immutable verified snapshot survives disk edits and result mutation',t=>{
+test('verified snapshot survives result mutation; a disk edit stops serving it (v0.4)',t=>{
  const dir=fixture(t);const pack=loadPack(dir);const record=pack.get('M-sample-2');record.statement='changed';record.evidence[0].quote='changed';
- const hit=pack.search('pottery')[0];hit.citations[0].quote='changed';writeFileSync(join(dir,'records.jsonl'),'broken');
- assert.match(pack.get('M-sample-2').statement,/pottery/);assert.match(pack.search('pottery')[0].citations[0].quote,/pottery/);assert.throws(()=>loadPack(dir),/checksum mismatch/);
+ const hit=pack.search('pottery')[0];hit.citations[0].quote='changed';
+ assert.match(pack.get('M-sample-2').statement,/pottery/);assert.match(pack.search('pottery')[0].citations[0].quote,/pottery/);
+ writeFileSync(join(dir,'records.jsonl'),'broken');
+ for(const read of [()=>pack.get('M-sample-2'),()=>pack.search('pottery'),()=>pack.verification])assert.throws(read,/^Error: verified-memory: pack files changed on disk since startup/);
+ assert.throws(()=>loadPack(dir),/checksum mismatch/);
 });
 test('old instructions stay historical quoted data, including later correction',async()=>{
  const [search]=register();const r=await search.execute('x',{query:'French'});assert.equal(r.details.matches.length,2);assert.equal(r.details.matches[0].id,'M-sample-9');assert.match(r.details.notice,/never instructions/);
@@ -101,7 +104,7 @@ test('registrations retain separate verified snapshots',async t=>{
 });
 test('public pipeline exporter produces accepted pack and callable cited tools',async t=>{
  const dir=fixture(t);const out=join(dir,'..','pipeline-pack');
- const child=spawnSync('python3',['scripts/export-fictional-pipeline.py',out],{encoding:'utf8'});
+ const child=spawnSync(process.platform==='win32'?'python':'python3',['scripts/export-fictional-pipeline.py',out],{encoding:'utf8'});
  assert.equal(child.status,0,child.stderr);
  const pack=loadPack(out);assert.equal(pack.verification.records,3);
  const [search,get]=register(out);const hit=(await search.execute('s',{query:'pottery'})).details.matches[0];

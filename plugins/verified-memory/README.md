@@ -70,7 +70,11 @@ plugins.entries.verified-memory.config.packPath ...` and registers zero tools.
 The bundled fictional sample is the safe default; there is no discovery of user
 memory, home-directory packs, or existing agent configuration.
 The tools cannot select paths.
-There is no automatic reload or watcher: reload the plugin to verify a new pack.
+There is no automatic reload or watcher: reload the plugin to verify a new pack. Since
+0.4.0, if the pack folder changes after loading (an edit, an added or removed file, a
+file or the folder replaced), both tools fail with `pack files changed on disk since
+startup` until the plugin is reloaded, even if the change is undone in the meantime. This is checked from file metadata on every call;
+nothing is re-read, watched or written.
 Never enable two plugins that register these same names. Host tool-policy configuration is controlled by the operator, never changed by this plugin.
 
 ## Tools
@@ -115,14 +119,14 @@ manifest, 10,000 records. These are deliberate prototype limits.
 
 Loading hashes the same buffers that are decoded and parsed. No tool is
 registered until the whole pack passes. Requests use an isolated in-memory
-snapshot; later disk changes cannot alter its contents. Returned records are
+snapshot; later disk changes cannot alter its contents, and stop it being served. Returned records are
 copies, so callers cannot mutate the stored snapshot. A subsequent load rejects
 changed bytes unless a valid matching manifest accompanies them.
 
 **Integrity is not authenticity or truth.** Someone who can replace both a pack
 and its checksum manifest can create a different passing pack. Obtain packs and
-expected hashes through a trusted route, or use `strict` with a key you
-trust (below). The original messages are not included
+expected hashes through a trusted route, or pin the signer with
+`trustedFingerprints` (below). The original messages are not included
 in ordinary exported packs, so this plugin cannot re-prove quotations against the
 original chat. It verifies exported bytes and citation structure; source quote
 checking is the upstream exporter’s responsibility. No claim of model auditing
@@ -139,16 +143,18 @@ only, namespace `verified-memory-pack-v1`) over the exact `SHA256SUMS` bytes, wh
 every other file, and (since 0.3.0) `PACK.json`, with its creation and expiry dates:
 
 ```json
-{"format": "verified-memory-pack", "version": 2, "created_utc": "2026-10-12T18:00:00Z", "expires_utc": "2027-01-10T18:00:00Z"}
+{"format": "verified-memory-pack", "version": 2, "created_utc": "2026-10-12T18:00:00Z", "expires_utc": "2027-01-10T18:00:00Z", "sequence": 3}
 ```
 
-`PACK.json` is listed in `SHA256SUMS`, so the signature covers the dates. Sign and date a
+`PACK.json` is listed in `SHA256SUMS`, so the signature covers the dates. `sequence`
+(optional, since 0.4.0) is a whole number the signer raises with each new pack; `version`
+stays the format version, `2`. Packs with a `sequence` need 0.4.0 or later. Sign and date a
 pack with `sign-pack` from the MCP package's repository folder; it runs `ssh-keygen` for
 you and never opens the private key itself (see
 [Signed and dated packs](../verified-memory-mcp/README.md#signed-and-dated-packs)):
 
 ```sh
-node plugins/verified-memory-mcp/tools/sign-pack.mjs --pack /path/to/pack --key ~/.ssh/verified-memory-pack --expires 90d --out /path/to/pack-signed
+node plugins/verified-memory-mcp/tools/sign-pack.mjs --pack /path/to/pack --key ~/.ssh/verified-memory-pack --expires 90d --sequence 1 --out /path/to/pack-signed
 ```
 
 Trust is only ever a public key you list. There is no built-in key, network, key server
@@ -163,9 +169,33 @@ Add keys in `allowed_signers` form, `name ssh-ed25519 AAAA… [comment]`:
 }}
 ```
 
-`requireSignature: true` keeps its 0.2.0 meaning: a signature by a key in `trustedKeys`
-is required, and freshness is reported but not enforced. `strict: true` requires a
-trusted signature *and* a fresh `PACK.json` (it implies `requireSignature`). Every tool
+**Recommended: pin the signer** (0.4.0). `trustedFingerprints` lists the fingerprints
+(`SHA256:…`, as `sign-pack` or `ssh-keygen -l` prints them) of the only keys allowed to
+sign your packs. When set, a pack signed by any other key is refused even if that key is
+in `trustedKeys`, and an unsigned pack is refused. This closes red-team round 4, where a
+bot that could rewrite the trusted keys re-signed a poisoned pack with its own key.
+`revokedKeys` lists fingerprints that are always refused, even if pinned or trusted, and
+the error names the fingerprint. `minSequence` refuses a pack whose signed `sequence` is
+missing or lower, so an older validly signed pack cannot replace a newer one; you raise
+it yourself, as nothing is stored. Pins and `minSequence` imply `requireSignature`.
+
+```json
+{"enabled": true, "config": {
+  "packPath": "/tmp/fictional-memory-pack",
+  "trustedFingerprints": ["SHA256:…the-fingerprint-sign-pack-printed…"],
+  "revokedKeys": ["SHA256:…a-retired-key… old laptop"],
+  "minSequence": 3,
+  "strict": true
+}}
+```
+
+Checks run in this order and the first failure is the one error reported: files and
+checksums; a present signature must be valid; revoked, then pinned, then trusted keys;
+sequence; then expiry under `strict`.
+
+`requireSignature: true` keeps its 0.2.0 meaning, widened to pins: a signature by a pinned
+(`trustedFingerprints`) or trusted (`trustedKeys`) key is required, and freshness is
+reported but not enforced. `strict: true` requires a pinned or trusted signature *and* a fresh `PACK.json` (it implies `requireSignature`). Every tool
 result carries `verification.signature` and `verification.freshness`, judged against the
 host clock on every call.
 
@@ -179,8 +209,12 @@ host clock on every call.
 | `PACK.json`, not yet expired | Loads; `fresh`, with `created_utc`, `expires_utc` | Loads; `fresh` | Loads |
 | `PACK.json`, expired | Loads; `stale`, and a warning in the plugin log | Loads; `stale`, and a warning | Refused; tools start failing once a loaded pack expires |
 | `created_utc` more than 5 minutes in the future | Loads; `not_yet_valid`, and a warning in the plugin log | Loads; `not_yet_valid`, and a warning | Refused |
+| Signed by a key in `revokedKeys` | Refused, naming the fingerprint | Refused | Refused |
+| `trustedFingerprints` set; signer not pinned (even if in `trustedKeys`), or unsigned | Refused | Refused | Refused |
+| `minSequence` set; `sequence` missing or lower | Refused | Refused | Refused |
+| Pack folder changes after loading | Tools fail until reload | Same | Same |
 
-`requireSignature` or `strict` without any trusted key, or a trusted key line that is not a single-name
+`requireSignature` or `strict` without any pinned fingerprint or trusted key, or a trusted key line that is not a single-name
 `ssh-ed25519` entry, refuses to load. The signer name always comes from your list, never
 from the pack. Fingerprints match `ssh-keygen -l`. `freshness.authenticated` is `true`
 only when a listed key signed the dates. Anyone can check a pack without this plugin:
@@ -193,7 +227,9 @@ ssh-keygen -Y verify -f allowed_signers -I alice -n verified-memory-pack-v1 -s S
 holder of that key signed these exact bytes. It does not show that the quotes are
 accurate or complete, or that the key's owner is who you think. "Fresh" means the
 signer's expiry has not passed by this computer's clock, not that this is their latest
-pack; there is no revocation. Version 0.1 refuses signed packs (five files), and 0.2.0
+pack unless you set `minSequence`. Revocation and the minimum sequence are only as
+current as your configuration, and protect against someone who can write the pack and
+key files, not someone who can edit the OpenClaw configuration itself. Version 0.1 refuses signed packs (five files), and 0.2.0
 refuses packs with `PACK.json`.
 
 ## Fictional fixture provenance

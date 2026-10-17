@@ -8,13 +8,13 @@
     "source": "github",
     "subfolder": "plugins/verified-memory-mcp"
   },
-  "version": "0.3.0",
+  "version": "0.4.0",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@python1/verified-memory-mcp",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"
@@ -38,8 +38,33 @@
         },
         {
           "type": "named",
+          "name": "--trusted-fingerprint",
+          "valueHint": "fingerprint",
+          "description": "Recommended for signed packs. The SHA256:… fingerprint of a key allowed to sign packs, as ssh-keygen -l prints it; repeat the flag (or separate with commas) for several. If set, only a pack signed by one of these keys is accepted, whatever --trusted-keys says. Implies --require-signature.",
+          "format": "string",
+          "isRequired": false,
+          "isRepeated": true
+        },
+        {
+          "type": "named",
+          "name": "--revoked-keys",
+          "valueHint": "revoked_keys_file",
+          "description": "Absolute path to a file of revoked key fingerprints, one SHA256:… per line. A pack signed by a revoked key is always refused, even if pinned or trusted.",
+          "format": "filepath",
+          "isRequired": false
+        },
+        {
+          "type": "named",
+          "name": "--min-sequence",
+          "valueHint": "N",
+          "description": "Refuse any pack whose signed PACK.json sequence is missing or lower than N, so an older validly signed pack cannot replace a newer one. Implies --require-signature. No state is kept: raise N yourself when you install a newer pack.",
+          "format": "number",
+          "isRequired": false
+        },
+        {
+          "type": "named",
           "name": "--require-signature",
-          "description": "Set to true to refuse to start unless the pack is signed by a key in --trusted-keys. Freshness is reported but not enforced. When false or omitted, unsigned packs load and are reported as unsigned.",
+          "description": "Set to true to refuse to start unless the pack is signed by a pinned (--trusted-fingerprint) or trusted (--trusted-keys) key. Freshness is reported but not enforced. When false or omitted, unsigned packs load and are reported as unsigned.",
           "format": "boolean",
           "default": "false",
           "isRequired": false
@@ -47,7 +72,7 @@
         {
           "type": "named",
           "name": "--strict",
-          "description": "Set to true to refuse to start (and to stop serving) unless the pack is signed by a key in --trusted-keys and is fresh: PACK.json present and not expired. Implies --require-signature. When false or omitted, undated and stale packs load and every result reports their status.",
+          "description": "Set to true to refuse to start (and to stop serving) unless the pack is signed by a pinned (--trusted-fingerprint) or trusted (--trusted-keys) key and is fresh: PACK.json present and not expired. Implies --require-signature. When false or omitted, undated and stale packs load and every result reports their status.",
           "format": "boolean",
           "default": "false",
           "isRequired": false
