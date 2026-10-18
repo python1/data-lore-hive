@@ -13,6 +13,11 @@ const verify = files=>verifyPackEntries(Object.keys(files),n=>files[n],hash);
 test('pure verifier has no imports, so it can run outside Node',()=>{
  assert.doesNotMatch(readFileSync('dist/verify.js','utf8'),/^\s*import\b|\brequire\(|\bimport\(/m);
 });
+test('pure verifier refuses a pack with 0 records',()=>{
+ const files=entries(sample),empty=Buffer.from('');
+ const sums=readFileSync(join(sample,'SHA256SUMS'),'utf8').replace(/^[a-f0-9]{64}(?=  records\.jsonl$)/m,hash(empty));
+ assert.throws(()=>verify({...files,'records.jsonl':empty,SHA256SUMS:Buffer.from(sums)}),/^Error: verified-memory: pack has no records; records\.jsonl must hold at least one record$/);
+});
 test('pure verifier agrees with loadPack on the sample pack',()=>{
  const {records,manifest_sha256}=verify(entries(sample));const pack=loadPack(sample);
  assert.equal(records.size,pack.verification.records);assert.equal(manifest_sha256,pack.verification.manifest_sha256);

@@ -143,9 +143,12 @@ test('refuses bad input before signing, writing nothing', { skip }, (t) => {
   assert.ok(!existsSync(out)); assert.deepEqual(leftovers(env.work), []);
 });
 
-test('sign-pack is not in the npm package and is not an installed command', () => {
+test('sign-pack and build-pack ship in the npm package as installed commands (v0.4.1); no keys or signatures do', () => {
   const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
-  assert.ok(!Object.values(pkg.bin).some((p) => p.includes('sign')));
+  assert.equal(pkg.bin['verified-memory-sign-pack'], 'tools/sign-pack.mjs');
+  assert.equal(pkg.bin['verified-memory-build-pack'], 'tools/build-pack.mjs');
+  for (const bin of Object.values(pkg.bin).filter((p) => p.startsWith('tools/'))) assert.match(readFileSync(bin, 'utf8'), /^#!\/usr\/bin\/env node\n/);
   const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8', shell: process.platform === 'win32' }).stdout)[0].files.map((f) => f.path);
-  assert.ok(files.includes('tools/build-pack.mjs') && !files.some((f) => /sign/.test(f)), files.join(', '));
+  for (const f of ['tools/sign-pack.mjs', 'tools/build-pack.mjs', 'tools/pack-core.mjs', 'dist/pack.js']) assert.ok(files.includes(f), `${f} missing from: ${files.join(', ')}`);
+  assert.ok(!files.some((f) => /\.sig$|trusted_keys|allowed_signers|^test\//.test(f)), files.join(', '));
 });

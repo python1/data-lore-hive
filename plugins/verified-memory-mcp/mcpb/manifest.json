@@ -2,7 +2,7 @@
   "manifest_version": "0.4",
   "name": "verified-memory",
   "display_name": "Verified Memory",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Offline read-only search over a checksum-verified, optionally signed memory pack, with exact quotes",
   "long_description": "Pick a memory pack folder (made with the pack maker at https://python1.github.io/data-lore-hive/) and Claude can search it and quote it exactly. The whole pack is verified when the extension starts; if any check fails, it refuses to start. Read-only and offline: no network, no file writes, no accounts. Optionally require that the pack is signed by a key you pin or trust, refuse revoked keys and older packs, and stop answering if the pack folder changes while running.",
   "author": { "name": "python1", "url": "https://github.com/python1" },

@@ -103,6 +103,14 @@ for (const mode of ['broken-json', 'invalid-utf8', 'duplicate-id', 'missing-cita
   writeFileSync(file, mode === 'broken-json' ? '{' : mode === 'invalid-utf8' ? Buffer.from([255]) : rows.map(JSON.stringify).join('\n') + '\n');
   reseal(dir); refuse(dir);
 });
+test('pack with 0 records: startup refuses with a clear error and exit 1 (v0.4.1)', t => {
+  for (const content of ['', '\n \n']) {
+    const dir = fixture(t); writeFileSync(join(dir, 'records.jsonl'), content); reseal(dir);
+    refuse(dir, /pack has no records/);
+    const p = spawnSync(process.execPath, ['dist/index.js', '--pack', dir], { input: '', encoding: 'utf8', timeout: 5000 });
+    assert.equal(p.stderr, 'verified-memory-mcp: verified-memory: pack has no records; records.jsonl must hold at least one record\n');
+  }
+});
 for (const mode of ['duplicate', 'missing', 'traversal', 'malformed', 'self']) test(`malformed manifest ${mode}: startup refuses`, t => {
   const dir = fixture(t); let sums = readFileSync(join(dir, 'SHA256SUMS'), 'utf8');
   if (mode === 'duplicate') sums += sums.split('\n')[0] + '\n';
