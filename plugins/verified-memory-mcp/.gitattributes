@@ -4,3 +4,6 @@
 examples/** -text
 web/test/fixtures/** -text
 web/test/golden/** -text
+# The npm bin scripts start with a shebang; a CRLF checkout would make it
+# "#!/usr/bin/env node\r", which fails on macOS and Linux if published from Windows.
+tools/*.mjs text eol=lf

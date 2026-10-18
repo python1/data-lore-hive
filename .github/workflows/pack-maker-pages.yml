@@ -1,10 +1,12 @@
 # Publishes the browser pack maker (plugins/verified-memory-mcp/web) to GitHub Pages.
-# Manual only: it never runs on push. Before the first run, enable Pages in the repository
-# settings (Settings -> Pages -> Source: GitHub Actions), then run it from the Actions tab.
+# Runs on every push to master, and can still be run by hand from the Actions tab. Pages
+# must be enabled in the repository settings (Settings -> Pages -> Source: GitHub Actions).
 # The page is one static file; it has no server side and its CSP forbids network requests.
 name: pack maker pages
 
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
 
 permissions:

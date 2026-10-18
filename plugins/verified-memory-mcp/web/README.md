@@ -111,7 +111,7 @@ No real chat data belongs anywhere in this folder.
 ## Publishing
 
 `.github/workflows/pack-maker-pages.yml` builds the page and deploys it to GitHub Pages
-at <https://python1.github.io/data-lore-hive/> (Pages source: GitHub Actions). It runs only when started by hand from the
-Actions tab, so merging to `master` does not update the live page: run the workflow after
-a change is merged. Hosting adds nothing
+at <https://python1.github.io/data-lore-hive/> (Pages source: GitHub Actions). It runs on
+every push to `master`, so merging updates the live page; it can also be started by hand
+from the Actions tab. Hosting adds nothing
 to the page: GitHub serves the one file, and the page cannot contact anything.

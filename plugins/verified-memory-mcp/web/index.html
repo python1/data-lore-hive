@@ -131,7 +131,7 @@
     <textarea id="check-revoked" rows="2" spellcheck="false" autocomplete="off"></textarea>
     <label for="check-min-sequence">Minimum sequence <span class="muted">(optional; refuse a pack whose signed sequence is missing or lower, so an older pack cannot pass for a newer one)</span></label>
     <input id="check-min-sequence" type="text" inputmode="numeric" spellcheck="false" autocomplete="off">
-    <label><input type="checkbox" id="check-require"> Strict: require a signature from one of these keys, and an unexpired pack</label>
+    <label><input type="checkbox" id="check-require"> Strict: require a pinned or trusted signature, and an unexpired pack</label>
     <div class="row"><button type="button" id="check-run" disabled>Check</button></div>
     <p id="check-status" class="status" role="status" aria-live="polite"></p>
   </section>

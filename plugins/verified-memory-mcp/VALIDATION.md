@@ -1,4 +1,33 @@
-# Validation — 2026-10-17 (v0.4.0: pinned signer, revocation, rollback gate, stop on change)
+# Validation — 2026-10-17 (v0.4.1: refuse empty packs, sign-pack in npm)
+
+Version 0.4.1 is not published. Changes from 0.4.0: a pack with 0 records is refused at
+load (exit 1, `pack has no records; records.jsonl must hold at least one record`), in the
+shared verifier, so the OpenClaw plugin and the pack maker's *Check a signed pack* refuse it
+too; `sign-pack` ships in the npm package as `verified-memory-sign-pack`; documentation and
+the pack maker's *Strict* label. Signature, sequence, revocation and stop-on-change
+behaviour are unchanged.
+
+| Where | Runtime | Command | Result |
+|---|---|---|---|
+| macOS ARM64 (local) | Node 25.8.0 | `node scripts/test-all.mjs` | OpenClaw 91/91 (Node 25 is outside the plugin's engine range; CI runs it on 24); MCP 82/82 (includes the socket-denial probe); web 35/35; bundle 13/13. Transcript: [tests.txt](validation/tests.txt) |
+| macOS ARM64 (local) | Node 25.8.0, Playwright 1.63.0 | `npm run test:e2e` in `web/` | 96/96 (Chromium, Firefox, WebKit; http and file) |
+
+New tests: `pack with 0 records: startup refuses with a clear error and exit 1` (MCP, empty
+and whitespace-only `records.jsonl`, resealed), `pure verifier refuses a pack with 0
+records` (OpenClaw), and the `npm pack` check now requires `tools/sign-pack.mjs` and its
+`verified-memory-sign-pack` command.
+
+**Quote checking.** Quotes are checked against their source messages when the pack is
+built (the builder refuses any quote that is not verbatim and computes `message_sha256`
+from the message); after that, `SHA256SUMS` and, for a signed pack, the signature protect
+them. The server does not re-check quotes against `message_sha256` at load or at serve
+time: it never has the source messages, so it checks citation structure, offset
+arithmetic and the hash's format only.
+
+`validation/tests.txt` was regenerated for 0.4.1. The Node 22 transcripts and the table
+below are the 0.4.0 records.
+
+## Validation — 2026-10-17 (v0.4.0: pinned signer, revocation, rollback gate, stop on change)
 
 Version 0.4.0 is not published. These records are for this branch.
 
@@ -116,7 +145,7 @@ deny it, so testing does not open a socket on Node 22.
 | Duplicate flags, missing values, `--strict=yes`, `--require-signature=yes` | Usage error, exit 1, no stdout |
 | `sign-pack` with a passphrase-protected key, under Node permissions that deny reading the private key file | Signs; output passes `--strict` in the server, `loadPack` strict and `ssh-keygen -Y verify`; input untouched |
 | `sign-pack`: wrong passphrase; bad `--expires`, existing `--out`, missing `.pub`, RSA key, tampered input | Each exits 1, writes nothing, leaves no staging folder |
-| `npm pack` file list | Has the funding link; no keys, signatures, test fixtures or `sign-pack` |
+| `npm pack` file list | Has the funding link; no keys, signatures, test fixtures or `sign-pack` (0.4.0; since 0.4.1 it includes `sign-pack`) |
 
 The stdio test launches the server directly with a project filesystem read
 allowlist and an unrelated working directory. It selects `--experimental-permission`

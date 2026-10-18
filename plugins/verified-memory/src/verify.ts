@@ -60,6 +60,7 @@ export function verifyPackEntries(names: string[], read: (name: string, max: num
     requireValue(records.size < 10000, 'too many records');
     records.set(record.record_id,record);
   }
+  requireValue(records.size > 0, 'pack has no records; records.jsonl must hold at least one record');
   return { records, manifest, manifest_sha256: digest(manifest), dates, signature: signed ? read(SIGNATURE_FILE, SIGNATURE_MAX) : undefined };
 }
 

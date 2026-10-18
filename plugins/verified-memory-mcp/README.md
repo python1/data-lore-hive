@@ -138,9 +138,14 @@ Example (one line in the file; wrapped here for reading):
    "message_sha256":"e3aebbd25f7b809dd5b0b8d55b9ad7df6566464dc2a5033d02e3c5aa7ed8eeb2"}]}
 ```
 
-The server cannot see your original messages, so it checks citation structure, offsets'
-arithmetic and hashes' format, not that the quote really came from that message. That
-check happens only when the pack is built (by this builder or by `agent-memory/`).
+**Quotes are checked against their source messages when the pack is built, and after
+that the signature protects them.** The builder (or `agent-memory/`) refuses any quote
+that is not verbatim in its message and computes `message_sha256` from that message. The
+server never sees your original messages, so at load and at serve time it checks only
+citation structure, offsets' arithmetic and the hash's format; it does not re-check
+quotes against `message_sha256`. Once the pack is sealed, `SHA256SUMS` (and, for a signed
+pack, `SHA256SUMS.sig`) is what protects those quotes from later changes. A pack with no
+records is refused at load (since 0.4.1).
 
 ### `MEMORY.md` and the pack `README.md`
 
@@ -209,8 +214,9 @@ never write one, so their packs still load on 0.2.0 hosts; packs with a `PACK.js
 
 ### Signing: `sign-pack`
 
-Sign on a machine you trust with a passphrase-protected key. `tools/sign-pack.mjs` is
-in the repository but not in the npm package. It copies a verified pack to a new folder,
+Sign on a machine you trust with a passphrase-protected key. Since 0.4.1, `sign-pack`
+ships in the npm package as the `verified-memory-sign-pack` command (in a checkout it is
+`tools/sign-pack.mjs`). It copies a verified pack to a new folder,
 writes `PACK.json`, reseals `SHA256SUMS` and runs `ssh-keygen -Y sign`. **It never opens
 the private key itself**: ssh-keygen reads it and asks for the passphrase (or uses
 ssh-agent). Before it moves the result into place, it loads it with the hosts' own
@@ -218,9 +224,12 @@ verifier in strict mode, trusting only your `.pub`. It needs Node 22+ and OpenSS
 
 ```sh
 ssh-keygen -t ed25519 -f ~/.ssh/verified-memory-pack -C "my packs"   # once; set a passphrase
-cd plugins/verified-memory-mcp && npm ci && npm run build            # once per checkout
-node tools/sign-pack.mjs --pack /path/to/pack --key ~/.ssh/verified-memory-pack --expires 90d --sequence 1 --out /path/to/pack-signed
+npx -y -p @python1/verified-memory-mcp verified-memory-sign-pack \
+  --pack /path/to/pack --key ~/.ssh/verified-memory-pack --expires 90d --sequence 1 --out /path/to/pack-signed
 ```
+
+From a repository checkout, run `npm ci && npm run build` once, then
+`node tools/sign-pack.mjs ...` with the same arguments.
 
 `--expires` is a number of days (`90d`, at most `1825d`) or an exact UTC time
 (`2027-01-31T00:00:00Z`). `--sequence` (optional, since 0.4.0) is written into
@@ -578,7 +587,8 @@ plugins/verified-memory-mcp/
 ├── LICENSE
 ├── README.md
 ├── VALIDATION.md
-├── RELEASE-NOTES-0.4.0.md      # draft notes for the 0.4.0 release
+├── RELEASE-NOTES-0.4.0.md      # notes for the 0.4.0 release
+├── RELEASE-NOTES-0.4.1.md      # draft notes for the 0.4.1 release
 ├── package.json
 ├── package-lock.json
 ├── server.json             # MCP Registry metadata
@@ -597,7 +607,7 @@ plugins/verified-memory-mcp/
 ├── tools/
 │   ├── build-pack.mjs          # offline pack builder (ships in npm)
 │   ├── pack-core.mjs           # its import-free building rules (ships in npm)
-│   ├── sign-pack.mjs           # repo-only: signs and dates a pack via ssh-keygen
+│   ├── sign-pack.mjs           # signs and dates a pack via ssh-keygen (ships in npm)
 │   └── export-shape.mjs        # repo-only: prints a chat export's structure, never its text
 ├── examples/
 │   ├── input/                  # invented messages.jsonl + records.jsonl

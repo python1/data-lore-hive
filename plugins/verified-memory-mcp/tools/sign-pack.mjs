@@ -5,14 +5,15 @@
 // SHA256SUMS. This script never opens the private key: ssh-keygen reads it and asks for its
 // passphrase (or uses ssh-agent). The result must pass the hosts' own loader in strict mode,
 // trusting only KEY.pub, before it is renamed into place.
-// Not in the npm package: run it from a checkout, after npm ci && npm run build.
+// Ships in the npm package as verified-memory-sign-pack; from a checkout, run it after
+// npm ci && npm run build.
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 
-const USAGE = 'Usage: node tools/sign-pack.mjs --pack DIR --key ~/.ssh/KEY --expires 90d|2027-01-31T00:00:00Z [--sequence N] --out NEW_DIR';
+const USAGE = 'Usage: verified-memory-sign-pack --pack DIR --key ~/.ssh/KEY --expires 90d|2027-01-31T00:00:00Z [--sequence N] --out NEW_DIR';
 const NAMESPACE = 'verified-memory-pack-v1';
 const MAX_DAYS = 1825;
 const DAY = 24 * 60 * 60 * 1000;
