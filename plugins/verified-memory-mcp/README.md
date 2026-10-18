@@ -9,7 +9,7 @@ attacker. This is vendor-payment fraud moving from fooling clerks to fooling AI.
 Verified Memory serves only facts signed by a key you pin, and refuses anything
 changed after signing. An AI attacker red-teamed it with 12 tampering attacks
 (swapped files, broken signatures, fake clocks, a 5,000-file flood, the folder
-replaced while running). All were refused; none were served
+replaced while running). None got tampered data served
 ([full log](validation/stress-run/2026-10-17.md)).
 Latest release: [Verified Memory 0.4.1](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.4.1).
 
