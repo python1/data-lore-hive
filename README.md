@@ -1,5 +1,9 @@
 # Hive prototype: evidence-gated answers from small local models
 
+> **Verified Memory:** AI agents now pay invoices from what they remember; a swapped account number pays the attacker.
+> Verified Memory serves only facts signed by a key you pin and refuses anything changed after signing.
+> [Why it matters](plugins/verified-memory-mcp/README.md#why) · [0.4.1 release](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.4.1)
+
 A research prototype that asks a small local LLM questions about local documents and **only releases an answer when independent checks agree with the source**. Otherwise it withholds the answer and records why. Everything is append-only and kept as evidence, including failures.
 
 It runs on a single machine with the Python standard library. The optional model mode uses [Ollama](https://ollama.com) on loopback. There are no third-party Python dependencies.
