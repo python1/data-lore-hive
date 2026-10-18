@@ -1,5 +1,18 @@
 # verified-memory-mcp
 
+## Why
+
+AI agents are starting to pay invoices and buy things. An agent pays wherever its
+memory says to pay. If someone swaps a remembered account number, the agent pays the
+attacker. This is vendor-payment fraud moving from fooling clerks to fooling AI.
+
+Verified Memory serves only facts signed by a key you pin, and refuses anything
+changed after signing. An AI attacker red-teamed it with 12 tampering attacks
+(swapped files, broken signatures, fake clocks, a 5,000-file flood, the folder
+replaced while running). None got tampered data served
+([full log](validation/stress-run/2026-10-17.md)).
+Latest release: [Verified Memory 0.4.1](https://github.com/python1/data-lore-hive/releases/tag/verified-memory-v0.4.1).
+
 Free, MIT-licensed local **stdio MCP server** exposing `verified_memory_search`
 and `verified_memory_get` using the official
 [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk/tree/v1.x)
