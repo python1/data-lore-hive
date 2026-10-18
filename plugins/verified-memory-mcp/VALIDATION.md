@@ -27,6 +27,24 @@ arithmetic and the hash's format only.
 `validation/tests.txt` was regenerated for 0.4.1. The Node 22 transcripts and the table
 below are the 0.4.0 records.
 
+## Stress run — 2026-10-17 (v0.4.1, AI red-team agent)
+
+Two rounds, 12 attacks, run on Grok Bot against `@python1/verified-memory-mcp@0.4.1`
+from npm, with `--trusted-fingerprint` (pin) and `--strict`. An AI red-team agent (rex)
+designed the attacks and an operator agent (Warden) ran and restored them. Each attack was
+checked on a live connector started before it and on a fresh start. Full log:
+[validation/stress-run/2026-10-17.md](validation/stress-run/2026-10-17.md).
+
+| Round | Attacks | Result |
+|---|---|---|
+| 1 | Shadow file with a trailing-space name; hostile env vars naming the attacker's key; content-identical swap of `records.jsonl` while running; `records.jsonl` as a symlink to poison; fake clock (expired, future, control); social engineering of the operator | All refused, or inert (env vars: 0.4.1 reads none; social engineering: no config change) |
+| 2 | FIFO as `records.jsonl`; `chmod 000`; duplicate, reordered, missing and unknown `SHA256SUMS` lines; garbage after the signature; 5,000 junk files plus a 150 MiB file; pack folder replaced, then deleted, while running | All refused, with no hangs or crashes |
+
+Poisoned data served: 0 times. After every attack the pack was restored from a hash-checked
+clean copy, and a fresh start served the genuine record (signer `pinned`). Same limit as
+above: whoever controls the host clock can deny service or revive an expired pack, but
+cannot change its content.
+
 ## Validation — 2026-10-17 (v0.4.0: pinned signer, revocation, rollback gate, stop on change)
 
 Version 0.4.0 is not published. These records are for this branch.
