@@ -11,13 +11,15 @@
   "bin": {
     "verified-memory-mcp": "dist/index.js",
     "verified-memory-build-pack": "tools/build-pack.mjs",
-    "verified-memory-sign-pack": "tools/sign-pack.mjs"
+    "verified-memory-sign-pack": "tools/sign-pack.mjs",
+    "verified-memory-review": "tools/review.mjs"
   },
   "files": [
     "dist",
     "tools/build-pack.mjs",
     "tools/pack-core.mjs",
     "tools/sign-pack.mjs",
+    "tools/review.mjs",
     "README.md",
     "LICENSE"
   ],
