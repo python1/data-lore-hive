@@ -149,6 +149,6 @@ test('sign-pack and build-pack ship in the npm package as installed commands (v0
   assert.equal(pkg.bin['verified-memory-build-pack'], 'tools/build-pack.mjs');
   for (const bin of Object.values(pkg.bin).filter((p) => p.startsWith('tools/'))) assert.match(readFileSync(bin, 'utf8'), /^#!\/usr\/bin\/env node\n/);
   const files = JSON.parse(spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8', shell: process.platform === 'win32' }).stdout)[0].files.map((f) => f.path);
-  for (const f of ['tools/sign-pack.mjs', 'tools/build-pack.mjs', 'tools/pack-core.mjs', 'dist/pack.js']) assert.ok(files.includes(f), `${f} missing from: ${files.join(', ')}`);
+  for (const f of ['tools/sign-pack.mjs', 'tools/build-pack.mjs', 'tools/pack-core.mjs', 'tools/review.mjs', 'dist/pack.js']) assert.ok(files.includes(f), `${f} missing from: ${files.join(', ')}`);
   assert.ok(!files.some((f) => /\.sig$|trusted_keys|allowed_signers|^test\//.test(f)), files.join(', '));
 });

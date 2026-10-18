@@ -398,6 +398,75 @@ network, a newly revoked key or a newer sequence reaches a host only when you ed
 settings. Freshness relies on this computer's clock. Version 0.1.0 refuses signed packs (five files);
 remove `SHA256SUMS.sig` to load one there.
 
+## Proposed writes
+
+Agents can suggest new memories; only you can put them in a pack. **The MCP server stays
+read-only**: it has no write tool, never reads proposals, and serves only a pack you
+signed. Proposals are plain files that an agent (or anything else) writes; the
+`verified-memory-review` command, run by you on your signing machine, shows each one and
+signs the ones you approve into your next pack.
+
+1. Keep your pack's inputs privately in one folder, the **source**: the
+   `messages.jsonl` and `records.jsonl` you give `build-pack` (see
+   [Build your own pack](#build-your-own-pack)). Proposals are applied to them, never to a pack.
+2. An agent appends proposals to a JSONL file, one per line. Each holds the
+   `build-pack` inputs for one change, a source message and a record, plus who proposed it
+   and why. A record whose `record_id` is already in your source replaces it (in place); a
+   new `record_id` adds one.
+
+   ```json
+   {"proposer": "studio-assistant", "reason": "Avery said the keypad code changed.",
+    "message": {"id": 4, "date": "2026-10-14T08:30:00Z", "speaker": "Avery", "text": "Heads up: the locksmith reset the Brightline keypad. The new door code is 5521."},
+    "record": {"record_id": "M-brightline-door", "role": "user", "topic": "Door code", "category": "access",
+               "statement": "The Brightline front door keypad code is 5521.", "quotes": [{"message_id": 4, "quote": "The new door code is 5521."}]}}
+   ```
+
+   (One line in the file; wrapped here. A complete invented example is in
+   [`examples/proposals/`](examples/proposals/).)
+3. Review and sign:
+
+   ```sh
+   npx -y -p @python1/verified-memory-mcp verified-memory-review \
+     --source ~/memory-source --proposals ~/agent-proposals.jsonl \
+     --key ~/.ssh/verified-memory-pack --expires 90d \
+     --current /path/to/pack-3 --out /path/to/pack-4
+   ```
+
+Every proposal is checked first exactly as `build-pack` checks a record: each quote must
+be verbatim in its message. A proposal that fails (a quote not in the message, a malformed
+line, or a message whose `id` is already in your source with different text, since
+messages are never rewritten) is listed as `INVALID, never applied` and cannot be approved.
+Each valid proposal is shown with who proposed it, the reason, the statement it replaces
+(with its quotes), the new statement and quotes, and the full message, marked `NEW` when
+it would be added to your source. Agent-written text is shown with control and
+bidirectional characters escaped, so it cannot redraw your terminal. Answer `y` to
+approve; anything else rejects. For scripts, `--approve-ids P1,P3` (proposals are
+numbered `P` + their line number) or `--approve-ids none` skips the questions.
+
+**Approving vouches for the message too.** An agent writes the message it quotes, so a
+proposal can quote words nobody said. The verbatim check only proves the quote is in
+that message. Read the `message` line: approve only what you know was said.
+
+Then, with at least one approval, it applies them to a copy of your source, runs
+`build-pack`, and runs `sign-pack` with `--sequence`. `--sequence auto` (the default)
+uses the sequence of `--current`, the signed pack hosts use now, plus one; `--current`
+counts only if your key (its `.pub`) signed it. `--sequence N` sets it yourself, and
+must still be higher than `--current` when both are given. `--title` and `--description`
+pass through to `build-pack`. Only after the new pack verifies, in strict mode with
+`--min-sequence` set to its sequence, does it replace `messages.jsonl` and
+`records.jsonl` in your source (a replaced record keeps its place; new records and
+messages go at the end). Every decision, approved, rejected or invalid, is appended to
+`review-log.jsonl` in the source folder, with the proposal, the new sequence and, for a
+replacement, the record it overwrote. Rejected and invalid proposals are logged, never
+applied. If nothing is approved, no pack is built and only the log changes. On any
+failure (a wrong passphrase, two approved changes to one record, a stdin that ends before
+every proposal is answered) nothing is written.
+
+The private key is handled as with `sign-pack`: `verified-memory-review` reads only
+`KEY.pub` and passes the key path to `sign-pack`, which hands it to `ssh-keygen` alone.
+Install the new pack, then raise `--min-sequence` on your hosts to its sequence, which the
+command prints.
+
 ## Build and run
 
 From a checkout of this repository, using Node **22.0.0 or newer** (use the
@@ -608,14 +677,17 @@ plugins/verified-memory-mcp/
 │   ├── build-pack.mjs          # offline pack builder (ships in npm)
 │   ├── pack-core.mjs           # its import-free building rules (ships in npm)
 │   ├── sign-pack.mjs           # signs and dates a pack via ssh-keygen (ships in npm)
+│   ├── review.mjs              # reviews proposed writes into the next signed pack (ships in npm)
 │   └── export-shape.mjs        # repo-only: prints a chat export's structure, never its text
 ├── examples/
 │   ├── input/                  # invented messages.jsonl + records.jsonl
-│   └── pack/                   # pack built from them
+│   ├── pack/                   # pack built from them
+│   └── proposals/              # invented source folder + proposals.jsonl for review
 ├── test/
 │   ├── server.test.mjs
 │   ├── redteam.test.mjs        # red-team rounds R1–R6, revocation, precedence
 │   ├── sign-pack.test.mjs
+│   ├── review.test.mjs
 │   ├── build-pack.test.mjs
 │   ├── pack-core.test.mjs
 │   ├── export-shape.test.mjs
